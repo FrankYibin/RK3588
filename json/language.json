@@ -1,0 +1,371 @@
+{
+    "header": {},
+    "leftMenu": {
+        "tags": [
+            "MENU",
+            "RECIPES",
+            "PRODUCTION",
+            "ANALYTICS",
+            "SYSTEM"
+        ]
+    },
+    "rightMenu": {
+        "tags": [
+            "Action Center",
+            "Actuator Setup",
+            "Diagnostics",
+            "Import/ Export",
+            "Logout",
+            "Exit",
+            "Machine"
+        ],
+        "selectLanguage": {
+            "tags": [
+                "Select Language",
+                "CANCEL",
+                "SAVE"
+            ]
+        }
+    },
+    "middlePage": {
+        "Recipes": {
+            "menuName": "Recipes",
+            "tags": [
+                "Recipes",
+                "Sequences",
+                "New Recipe",
+                "New Sequence",
+                "Actions",
+                "PRODUCTION RUN",
+                "EDIT RECIPE",
+                "EDIT SEQUENCE",
+                "RESET CYCLE COUNT",
+                "SET AS ACTIVE",
+                "Cycle Count",
+                "Sequence Count"
+            ],
+            "LowerWeldModeValue": {
+                "tags": [
+                    "Time",
+                    "Energy",
+                    "Peak Power",
+                    "Scrub Time",
+                    "Absolute Distance",
+                    "Collapse Distance"
+                ]
+            },
+            "RecipesLab": {
+                "menuName": "Lab",
+                "RecipeSettings": {
+                    "menuName": "RECIPE SETTINGS",
+                    "tags": [
+                        "Actions",
+                        "New",
+                        "Save",
+                        "Copy",
+                        "Validate",
+                        "QUICK EDIT",
+                        "TIME",
+                        "ENERGY",
+                        "PEAK POWER",
+                        "ABSOLUTE DISTANCE",
+                        "COLLAPSE DISTANCE",
+                        "SCRUB TIME",
+                        "WELD AMPLITUDE",
+                        "HOLD TIME"
+                    ],
+                    "RecipeWeldMode": {
+                        "menuName": "Weld Mode",
+                        "tags": [
+                            "TIME",
+                            "ENERGY",
+                            "PEAK POWER",
+                            "GROUND DETECT",
+                            "ABSOLUTE DISTANCE",
+                            "COLLAPSE DISTANCE"
+                        ]
+                    },
+                    "RecipeWeldProcess": {
+                        "menuName": "Weld Process",
+                        "Pretrigger": {
+                            "menuName": "PRETRIGGER",
+                            "tags": [
+                                "DISTANCE",
+                                "AUTO",
+                                "PRETRIGGER AMPLITUDE",
+                                "Turn all off"
+                            ]
+                        },
+                        "Afterburst": {
+                            "menuName": "AFTERBURST",
+                            "tags": [
+                                "AFTERBURST TIME",
+                                "AFTERBURST DELAY",
+                                "AFTERBURST AMPLITUDE",
+                                "Turn all off"
+                            ]
+                        }
+                    },
+                    "ParametersAZ": {
+                        "menuName": "Parameters A-Z",
+                        "tags": [
+                            "AFTERBURST TIME",
+                            "DISTANCE",
+                            "AUTO",
+                            "EXTRA COOLING",
+                            "HOLD RAMP FORCE TIME",
+                            "MAX TIMEOUT",
+                            "POST-WELD SEEK",
+                            "PRE-WELD SEEK",
+                            "PRETRIGGER",
+                            "PRETRIGGER AMPLITUDE",
+                            "PRETRIGGER DISTANCE"
+                        ]
+                    },
+                    "Limits": {
+                        "menuName": "Limits",
+                        "Setup": {
+                            "menuName": "Setup"
+                        },
+                        "Control": {
+                            "menuName": "Control"
+                        },
+                        "SuspectReject": {
+                            "menuName": "Suspect & Reject"
+                        }
+                    },
+                    "StackRecipe": {
+                        "menuName": "Stack Recipe"
+                    }
+                },
+                "ResultView": {
+                    "menuName": "RESULT VIEW"
+                },
+                "GraphSettings": {
+                    "menuName": "GRAPH SETTINGS"
+                }
+            }
+        },
+        "Production": {
+            "menuName": "Production",
+            "tags": [
+                "Active Recipe",
+                "Total Cycle Time",
+                "Cycle Count",
+                "Peak Power"
+            ]
+        },
+        "Analytics": {
+            "menuName": "Analytics",
+            "tags": [
+                "Results",
+                "Alarms",
+                "EDIT RECIPE",
+                "GENERATE REPORT"
+            ],
+            "Results": {
+                "graphView": {
+                    "tags": ["Cycle Number"],
+                    "graphRightSetting": {
+                        "tags": [
+                            "Left Axis",
+                            "Right Axis",
+                            "Auto Graph Refresh",
+                            "Auto-Scale Time Axis",
+                            "Set Time Scale"
+                        ]
+                    },
+                    "graphHeaderSetting": {
+                        "tags": [
+                            "Left",
+                            "Right"
+                        ]
+                    },
+                    "graphAxis": {
+                        "tags": [
+                            "Phase",
+                            "Energy",
+                            "Frequency",
+                            "Amplitude",
+                            "Current",
+                            "Power",
+                            "Force",
+                            "Velocity",
+                            "Abs Distance",
+                            "Col Distance",
+                            "Time"
+                        ]
+                    }
+                },
+                "recordsView": {
+                    "tags": ["Choose"],
+                    "ChooseParameter": {
+                        "menuName": "CHOOSE PARAMETER",
+                        "tags": [
+                            "Recipe",
+                            "Recipe Version",
+                            "Date Time",
+                            "Stack Serial",
+                            "Cycle Counter",
+                            "Weld Mode",
+                            "Max Weld Force(N)",
+                            "Find Hold Force(N)",
+                            "Weld Absolute(mm)",
+                            "Tool Absolute(mm)",
+                            "Weld Collapse Dist",
+                            "Hold Collapse Dist",
+                            "Total Collapse Dist",
+                            "Trigger Distance(mm)",
+                            "Velocity(mm/s)"
+                        ]
+                    }
+                }
+
+            }
+        },
+        "System": {
+            "menuName": "System",
+            "tags": [
+                "Configuration",
+                "Data",
+                "Information",
+                "Calibration"
+            ],
+            "Configuration": {
+                "menuName": "Configuration",
+                "tags": [
+                    "General",
+                    "User Management",
+                    "User I/O",
+                    "IP Configuration",
+                    "Alarm Management"
+                ]
+            },
+            "Data": {
+                "menuName": "Data",
+                "tags": [
+                    "Generate Report",
+                    "TYPE",
+                    "STORAGE& OUTPUT",
+                    "DATA FILTERS",
+                    "SUMMARY",
+                    "NEXT"
+                ]
+            },
+            "Information": {
+                "menuName": "Information",
+                "tags": [
+                     "Machine Details",
+                     "Model",
+                     "General Alarm",
+                     "Software Versions",
+                     "UI Controller",
+                     "Supervisory Controller",
+                     "Actuator Controller",
+                     "Power Controller",
+                     "SOFTWARE UPGRADE",
+                     "Power Supply",
+                     "Life Time Welds",
+                     "Overloads",
+                     "Type",
+                     "Frequency",
+                     "Wattage",
+                     "Actuator",
+                     "Life time cycle",
+                     "Type",
+                     "Calibration Date",
+                     "Stroke Length",
+                     "Connectivity",
+                     "MAC Address",
+                     "Third Party Software Information",
+                     "Please refer to the following URL for information about third party software(e.g., open source software) used in this product:",
+                     "NIST Calibration",
+                     "NIST Calibration Date",
+                     "Overloads"
+                ],
+                "SoftwareUpgrade": {
+                    "menuName": "SOFTWARE UPGRADE",
+                    "tags": [
+                        "To begin, insert USB drive and click READ USB",
+                        "Insert USB to Welder",
+                        "Insert USB to HMI",
+                        "READ USB",
+                        "READING",
+                        "UPGRADE"
+                    ],
+                    "InsertUSBtoWelder": {
+                        "tags": [
+                            "Actuator Controller",
+                            "Power Controller",
+                            "Supervisory Controller"
+                        ]
+                    },
+                    "InsertUSBtoRaspPi": {
+                        "tags": ["UI Controller"]
+                    }
+                }
+            },
+            "Calibration": {
+               "menuName": "Calibration",
+               "tags": []
+            }
+        },
+        "Actuator Setup": {},
+        "Diagnostics": {},
+        "Import/ Export": {},
+        "Logout": {},
+        "Login": {
+            "menuName": "Login",
+            "tags": [
+                "Enter Passcode",
+                "Login",
+                "Too many failed login attempts. System will be locked for 15 minutes.",
+                "Invalid Passcode. Please re-enter and try again.",
+                "Login Successful",
+                "Please enter a passcode"
+            ]
+        },
+        "NumericKeypad": {
+            "tags": [
+                "CANCEL",
+                "DONE",
+                "Min",
+                "Max",
+                "STEPPING",
+                "Step",
+                "Step Value",
+                "Step@Time",
+                "Step@Energy",
+                "Step@Pk Power",
+                "Step@Absolute",
+                "Step@Collapse",
+                "Step@Ext. Signal",
+                "Invalid value is entered, Reverted to old value"
+            ]
+        }
+    },
+    "alarm": {
+        "menuName": "ALARM",
+        "alarmGeneral": {
+            "tags": [
+                "ERROR DESCRIPTION",
+                "RESET",
+                "HIDE"
+            ]
+        },
+        "alarmName": {
+            "tags": [
+                "External Sonics Delay Timeout",
+                "Part Window Abort",
+                "Part Contact before"
+            ]
+        },
+        "alarmDescription": {
+            "tags": [
+                "Trigger Delay has been turned on, but the assigned input did not become inactive within the 30 seconds allowed.",
+                "The Missing Part Minimum Distance has not been reached before Trigger occurred or the Maximum Distance has been exceeded before Trigger has occurred.",
+                "The Part Contact Distance has been met before the defined Pretrigger Distance."
+            ]
+        }
+    }
+}

@@ -1,0 +1,71 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/LeftMenu.svg</file>
+        <file>images/RightMenu.svg</file>
+        <file>images/Pen.svg</file>
+        <file>images/AlarmNotification.svg</file>
+        <file>images/Connected.svg</file>
+        <file>images/menu_close_arrow.svg</file>
+        <file>images/analytics.svg</file>
+        <file>images/production.svg</file>
+        <file>images/recipe.svg</file>
+        <file>images/system.svg</file>
+        <file>images/menu_close_arrow_rightMenu.svg</file>
+        <file>images/actuatorSetup.svg</file>
+        <file>images/diagnostics.svg</file>
+        <file>images/importExport.svg</file>
+        <file>images/Language2.svg</file>
+        <file>images/Logout Icon.svg</file>
+        <file>images/Power Off Icon.svg</file>
+        <file>images/systemTimer.svg</file>
+        <file>images/crossMark.svg</file>
+        <file>images/Chevron.svg</file>
+        <file>images/Trash.svg</file>
+        <file>images/Info.svg</file>
+        <file>images/Copy.svg</file>
+        <file>images/Add.svg</file>
+        <file>images/true.svg</file>
+        <file>images/close.svg</file>
+        <file>images/checkmark_green.svg</file>
+        <file>images/drop-down-arrow.svg</file>
+        <file>images/drop-down-arrow_blue.svg</file>
+        <file>images/drop-up-arrow.svg</file>
+        <file>images/loginbackground.png</file>
+        <file>images/Password icon.svg</file>
+        <file>images/edit.svg</file>
+        <file>images/ViewIcon.svg</file>
+        <file>images/Right Chevron.svg</file>
+        <file>images/Table.svg</file>
+        <file>images/Graph.svg</file>
+        <file>images/Minimize.svg</file>
+        <file>images/Maximize.svg</file>
+        <file>images/buoy.svg</file>
+        <file>images/part-icon.svg</file>
+        <file>images/part_icon_white.png</file>
+        <file>images/date-time.svg</file>
+        <file>images/Time.png</file>
+        <file>images/Exclaim-Circle-Red30.svg</file>
+        <file>images/systemInformation.svg</file>
+        <file>images/systemData.svg</file>
+        <file>images/systemCalibration.png</file>
+        <file>images/systemConfiguration.svg</file>
+        <file>images/SystemCardBox.svg</file>
+        <file>images/InformationSelectedTab.svg</file>
+        <file>images/InformationRectangle.svg</file>
+        <file>images/softwareUpgrade.svg</file>
+        <file>images/informationSecondNav.svg</file>
+        <file>images/bg1.png</file>
+        <file>images/background.jpg</file>
+        <file>images/velocity.png</file>
+        <file>images/homePage.png</file>
+        <file>images/setting.png</file>
+        <file>images/depth.png</file>
+        <file>images/help.png</file>
+        <file>images/history.png</file>
+        <file>images/parameter.png</file>
+        <file>images/system.png</file>
+        <file>images/tension.png</file>
+        <file>images/user.png</file>
+        <file>images/back.png</file>
+    </qresource>
+</RCC>
