@@ -37,6 +37,8 @@
 #include "c++Source/alarmnotification.h"
 #include "c++Source/login.h"
 #include "c++Source/systemInformationInterface.h"
+#include "c++Source/HBModel/hbhome.h"
+#include "c++Source/HBModel/autotestspeed.h"
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
                     const QString &message)
@@ -77,6 +79,8 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonNumpadDefine.qml"), "NumpadDefine", 1, 0, "NumpadDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonChartViewAxisDefine.qml"), "AxisDefine", 1, 0, "AxisDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/AlarmMessageDefine.qml"), "AlarmDefine", 1, 0, "AlarmDefine");
+
+    //qmlRegisterType<HBHome>("HBHome",1,0,"HBHome");
     UserLevelEnum::registerQMLType();
     UIScreenEnum::registerQMLType();
     LanguageEnum::registerQMLType();
@@ -87,10 +91,13 @@ int main(int argc, char *argv[])
     LoginIndexEnum::registerQMLType();
     SystemTypeDef::registerQMLType();
 
+
     QQmlApplicationEngine engine;
     engine.addImportPath(":/VirtualKeyboardStyles");
     qputenv("QT_VIRTUALKEYBOARD_STYLE", "styleVirtualKeyboard");
     QQmlContext *pQmlContext = engine.rootContext();
+    pQmlContext->setContextProperty("HBHome",new HBHome());
+    pQmlContext->setContextProperty("AutoTestSpeed",new AutoTestSpeed());
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);
 #else
