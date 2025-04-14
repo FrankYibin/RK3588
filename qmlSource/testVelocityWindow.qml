@@ -1,10 +1,11 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_VELOCITY
     Component.onCompleted: {
@@ -105,10 +106,13 @@ Item{
                 HBTextField
                 {
                     id: textVelocitySetting
-                    text: qsTr("255.00")
+                    // text: qsTr("255.00")
+                    //开机获取
+                    text: AutoTestSpeed.SpeedValue
                     width: Math.round(200 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
+                    //输入写入
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
                     }

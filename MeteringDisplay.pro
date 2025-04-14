@@ -1,4 +1,4 @@
-QT += quick gui charts
+QT += quick gui charts serialport serialbus
 CONFIG += c++11
 #qtquickcompiler
 
@@ -34,6 +34,12 @@ static {
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
+    c++Source/HBData/hbdatabase.cpp \
+    c++Source/HBModbus/hbmodbusclient.cpp \
+    c++Source/HBModel/autotestspeed.cpp \
+    c++Source/HBModel/hbhome.cpp \
+    c++Source/HBModel/history.cpp \
+    c++Source/HBModel/rs232.cpp \
         c++Source/alarmnotification.cpp \
         c++Source/clientsocket.cpp \
         c++Source/communicationinterface.cpp \
@@ -55,10 +61,19 @@ SOURCES += main.cpp \
         c++Source/upgradesoftware.cpp \
         c++Source/weldgraphdata.cpp \
         c++Source/weldrecipeparameter.cpp \
-        c++Source/weldresultmodel.cpp
+        c++Source/weldresultmodel.cpp \
+
 
 
 HEADERS += \
+    c++Source/HBData/hbdatabase.h \
+    c++Source/HBDefine.h \
+    c++Source/HBModbus/hbmodbusclient.h \
+    c++Source/HBModel/autotestspeed.h \
+    c++Source/HBModel/hbhome.h \
+    c++Source/HBModel/history.h \
+    c++Source/HBModel/rs232.h \
+    c++Source/HBQmlEnum.h \
     c++Source/alarmindexdef.h \
     c++Source/alarmnotification.h \
     c++Source/clientsocket.h \
@@ -92,7 +107,8 @@ HEADERS += \
     c++Source/version.h \
     c++Source/weldgraphdata.h \
     c++Source/weldrecipeparameter.h \
-    c++Source/weldresultmodel.h
+    c++Source/weldresultmodel.h \
+
 
 RESOURCES += images.qrc \
             data/VirtualKeyboard.qrc \

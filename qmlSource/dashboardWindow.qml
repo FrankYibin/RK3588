@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 import Style 1.0
@@ -76,7 +76,9 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: "1200.00"
+                //text: "1200.00"
+                text: HBHome.Depth
+
             }
             Text
             {
@@ -117,7 +119,8 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: "1200.00"
+                // text: "1200.00"
+                text: HBHome.Speed
             }
             Text
             {
@@ -158,7 +161,8 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: "1200.00"
+                //text: "1200.00"
+                text: HBHome.Tension
             }
             Text
             {
@@ -198,7 +202,8 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: "1200.00"
+                // text: "1200.00"
+                text: HBHome.TensionIncrement
             }
             Text
             {
@@ -274,7 +279,8 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                    text: "100"
+                   // text: "100"
+                    text: HBHome.Pulse
                 }
             }
 
@@ -300,7 +306,8 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                    text: "99.00"
+                    // text: "99.00"
+                    text: HBHome.MaxSpeed
                 }
                 Text
                 {
@@ -334,7 +341,8 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                    text: "101.00"
+                    // text: "101.00"
+                    text: HBHome.HarnessTension
                 }
                 Text
                 {
@@ -373,7 +381,8 @@ Item{
                 HBTextField
                 {
                     id: textMaxTension
-                    text: "255.00"
+                    // text: "255.00"
+                    text: HBHome.MaxTension
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -408,7 +417,8 @@ Item{
                 HBTextField
                 {
                     id: textMaxTensionIncrement
-                    text: qsTr("10.00")
+                    // text: qsTr("10.00")
+                    text: HBHome.MaxTensionIncrement
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -444,6 +454,7 @@ Item{
                 {
                     id: textSensorWeight
                     text: qsTr("自动")
+                    // text: HBHome.MaxParameterStatus
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -479,7 +490,8 @@ Item{
                 HBTextField
                 {
                     id: textTargetDepth
-                    text: "1000.00"
+                    // text: "1000.00"
+                    text: HBHome.TargetDepth
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -515,7 +527,8 @@ Item{
                 HBTextField
                 {
                     id: textK_Value
-                    text: "1"
+                    // text: "1"
+                    text:HBHome.KValue
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -544,6 +557,7 @@ Item{
                 {
                     id: textTensionUnit
                     text: qsTr("未连接")
+                    // text: HBHome.NetworkStatus
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
