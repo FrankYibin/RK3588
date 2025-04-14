@@ -67,5 +67,8 @@
         <file>images/tension.png</file>
         <file>images/user.png</file>
         <file>images/back.png</file>
+        <file>images/userManagement.png</file>
+        <file>images/bg2.png</file>
+        <file>images/bg3.png</file>
     </qresource>
 </RCC>

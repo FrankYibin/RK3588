@@ -291,6 +291,7 @@ Item {
                         width: parent.width
                         height: parent.height
                         color: (model.MenuEnabled === true) ? Style.hbButtonBackgroundColor : Style.backgroundDeepColor
+                        radius: 4
                         Item{
                             width: model.ImageSize
                             height: width + Math.round(20 * Style.scaleHint) + Math.round(3 * Style.scaleHint)

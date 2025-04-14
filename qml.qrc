@@ -80,5 +80,24 @@
         <file>qmlSource/depthSettingsWindow.qml</file>
         <file>qmlSource/userManagementWindow.qml</file>
         <file>qmlSource/helpInfoWindow.qml</file>
+        <file>qmlSource/HBTabButton.qml</file>
+        <file>qmlSource/HistoryGraphWindow.qml</file>
+        <file>qmlSource/HistoryTableWindow.qml</file>
+        <file>qmlSource/HistoryRecordsWindow.qml</file>
+        <file>qmlSource/SystemSerialWindow.qml</file>
+        <file>qmlSource/SystemNetworkWindow.qml</file>
+        <file>qmlSource/SystemThemeWindow.qml</file>
+        <file>qmlSource/SystemLanguageWindow.qml</file>
+        <file>qmlSource/TensionsMeterScaleWindow.qml</file>
+        <file>qmlSource/TensionsMeterSettingsWindow.qml</file>
+        <file>qmlSource/TensionsUpperSettingWindow.qml</file>
+        <file>qmlSource/TensionsConfigurationWindow.qml</file>
+        <file>qmlSource/DepthConfigurationWindow.qml</file>
+        <file>qmlSource/DepthUpperSettingWindow.qml</file>
+        <file>qmlSource/DepthCountDownWindow.qml</file>
+        <file>qmlSource/HelpOperateWindow.qml</file>
+        <file>qmlSource/HelpDeviceWindow.qml</file>
+        <file>qmlSource/HBComboBox.qml</file>
+        <file>qmlSource/HBGroupBox.qml</file>
     </qresource>
 </RCC>

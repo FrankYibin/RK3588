@@ -78,6 +78,7 @@ Item {
     property color frameButtonBackgroundColor: "#E1EAEA"
     property color blueMachineDetails: "#004b9c"
     property color backgroundDeepColor: "#173457"
+    property color backgroundMiddleColor: "#0c3f72"
     property color backgroundLightColor: "#004b8d"
     property color hbFrameBorderColor: "#6699CC"
     property color hbFrameBackgroundColor: "#173457"

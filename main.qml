@@ -266,12 +266,10 @@ Window{
 
     function menuOptionLookAt(index)
     {
-        console.debug("1111111111111111", index)
         var objItem = stackMainView.find(function(item) { return (item.qmlscreenIndicator === index)})
         if(objItem !== null)
         {
             var size = stackMainView.depth
-            console.debug("2222222222222222222222222222", size)
             // while((stackMainView.get(size - 1) !== objItem) && (size > 0))
             // {
             //     stackMainView.pop({immediate: true})
@@ -282,8 +280,6 @@ Window{
                 stackMainView.pop({immediate: true})
             }
         }
-        else
-            console.debug("3333333333333333333333333333")
     }
 
     function showPrimaryNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue)
@@ -535,6 +531,7 @@ Window{
         anchors.centerIn: parent
         width: mainWindow.showWidth
         height: mainWindow.showHeight
+        z: 2
     }
 
     BransonSetupLimitNumpad

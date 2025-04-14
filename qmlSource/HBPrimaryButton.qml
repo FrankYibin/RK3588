@@ -24,12 +24,11 @@ Button {
 
     property int minWidth: 140
     property int maxHeight: 40
-    property int radiusWidth: 3
+    property int radiusWidth: 4
     property color buttonColor: Style.hbButtonBackgroundColor
     property color textColor : Style.whiteFontColor
     property color shadowColor: "#80000000"
     property int fontSize: Math.round(Style.style6 * Style.scaleHint)
-
     contentItem: Text {
         text: qsTr(primaryButton.text)
         font{
@@ -47,7 +46,7 @@ Button {
         id: buttonRect
         implicitWidth: parent.width < minWidth ? minWidth : parent.width
         implicitHeight: parent.height > maxHeight ? maxHeight : parent.height
-        color: buttonColor
+        color: (checked === true) ? Style.frameBorderColor : buttonColor
         radius: radiusWidth
         layer.enabled: primaryButton.pressed ? false : true
         layer.effect: DropShadow {

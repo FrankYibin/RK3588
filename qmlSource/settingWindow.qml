@@ -138,6 +138,7 @@ Item{
                         color: "transparent"
                         border.color: Style.hbFrameBorderColor
                         border.width: 2
+                        radius: 4
                         Row
                         {
                             anchors.centerIn: parent
