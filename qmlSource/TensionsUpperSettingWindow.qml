@@ -7,7 +7,11 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
-
+    readonly property int textWidth: 130
+    readonly property int componentWidth: 60
+    readonly property int rowSpacing: 10
+    readonly property int columnSpacing: 10
+    readonly property int optionHeight: 30
     Rectangle
     {
         id: background
@@ -18,6 +22,594 @@ Item{
         gradient: Gradient {
         GradientStop { position: 0.0; color: Style.backgroundLightColor }
         GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+        }
+    }
+
+    HBGroupBox
+    {
+        id: parameterSetting
+        title: qsTr("参数设置")
+        anchors.top: parent.top
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(10 * Style.scaleHint)
+        width: parent.width - Math.round(20 * Style.scaleHint)
+        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundLightColor
+
+        Grid
+        {
+            anchors.centerIn: parent
+            columns: 3
+            rows: 3
+            rowSpacing: Math.round(20 * Style.scaleHint)
+            columnSpacing: Math.round(20 * Style.scaleHint)
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleWellType
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("油气井类型") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textWellType
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("192")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleHarnessWeightPerEachKilometers
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("电缆每千米重量") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textLocalRemoteIP
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("192")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleWorkType
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("作业类型") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textWorkType
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("192")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleSensorWeight
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("仪器串重量") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textSensorWeight
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8081")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleHarnessPullingStrength
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("电缆拉断力") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textHarnessPullingStrength
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleWeaknessPullingStrength
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("弱点拉断力") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textWeaknessPullingStrength
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleUltimateTension
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("极限张力") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textUltimateTension
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleSafetyTensionFactor
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("安全张力系数") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textSafetyTensionFactor
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+        }
+    }
+
+    HBGroupBox
+    {
+        id: parameterView
+        title: qsTr("参数预览")
+        anchors.top: parameterSetting.bottom
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(10 * Style.scaleHint)
+        width: parent.width - Math.round(20 * Style.scaleHint)
+        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundMiddleColor
+
+        Grid
+        {
+            anchors.centerIn: parent
+            columns: 3
+            rows: 3
+            rowSpacing: Math.round(20 * Style.scaleHint)
+            columnSpacing: Math.round(20 * Style.scaleHint)
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleCurrentSafetyTension
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("当前安全张力") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCurrentSafetyTension
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("192")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleHarnessTensionTrend
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("缆头张力变化趋势") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textHarnessTensionTrend
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("192")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleCurrentDepth1
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("当前深度1") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCurrentDepth1
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("192")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleMaxSafetyTension
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("最大安全张力") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textMaxSafetyTension
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8081")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleSafetyStopTime
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("安全停车时间") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textSafetyStopTime
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleCurrentDepth2
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("当前深度2") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCurrentDepth2
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleCurrentHarnessTension
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("当前缆头张力") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCurrentHarnessTension
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleDepthTolerance
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("深度误差") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textDepthTolerance
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleCurrentDepth3
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("当前深度3") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCurrentDepth3
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: qsTr("8080")
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+                }
+            }
         }
     }
 }

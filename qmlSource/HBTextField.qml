@@ -21,6 +21,7 @@ TextField {
     id: hbTextField
     property bool onlyForNumpad: false
     property bool isSelectedAll: false
+    property int fontSize: Math.round(Style.style6 * Style.scaleHint)
     signal signalClickedEvent()
     implicitWidth: parent.width
     implicitHeight: parent.height
@@ -41,7 +42,7 @@ TextField {
     /*TextField style*/
     style: TextFieldStyle {
         id: textStyleId
-        font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+        font.pixelSize: fontSize
         textColor: Style.whiteFontColor
         background: Rectangle {
             id:backGroundId
