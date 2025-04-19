@@ -18,6 +18,27 @@ Item{
         GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
+    HBGroupBox
+    {
+        id: info
+        title: qsTr("信息")
+        anchors.top: parent.top
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(5 * Style.scaleHint)
+        width: parent.width - Math.round(10 * Style.scaleHint)
+        height: parent.height / 3 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundLightColor
+
+
+    }
+
+    HBCalendar{
+        id: startDate
+        anchors.centerIn: parent
+        width: Math.round(400 * Style.scaleHint)
+        height: Math.round(300 * Style.scaleHint)
+    }
 
 }
 

@@ -99,5 +99,6 @@
         <file>qmlSource/HelpDeviceWindow.qml</file>
         <file>qmlSource/HBComboBox.qml</file>
         <file>qmlSource/HBGroupBox.qml</file>
+        <file>qmlSource/HBCalendar.qml</file>
     </qresource>
 </RCC>

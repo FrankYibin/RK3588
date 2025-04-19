@@ -71,6 +71,16 @@ Item{
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
                     }
                 }
+                Text {
+                    id: unitTargetLayerDepth
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: "m"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
             }
 
             Row{
@@ -125,6 +135,16 @@ Item{
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
                     }
                 }
+                Text {
+                    id: unitMeterDepth
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: "m"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
             }
 
             Row{
@@ -178,6 +198,16 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
                     }
+                }
+                Text {
+                    id: unitCurrentDepth
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: "m"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
                 }
             }
 

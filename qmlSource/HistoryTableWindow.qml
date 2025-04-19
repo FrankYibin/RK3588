@@ -19,6 +19,18 @@ Item{
         }
     }
 
+    HBGroupBox
+    {
+        id: info
+        title: qsTr("信息")
+        anchors.top: parent.top
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(5 * Style.scaleHint)
+        width: parent.width - Math.round(10 * Style.scaleHint)
+        height: parent.height / 3 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundLightColor
+    }
 }
 
 
