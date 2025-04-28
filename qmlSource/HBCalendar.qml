@@ -2,8 +2,10 @@ import QtQuick 2.0
 import Style 1.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
-Rectangle
+Item
 {
+    id: hbCalendar
+    property date selectedDate: new Date()
     width: parent.width
     height: parent.height
     SystemPalette {
@@ -15,24 +17,75 @@ Rectangle
         // Convert the timestamp to QDateTime
         property date todayDate: new Date()
         width: parent.width
+        // height: parent.height - Math.round(50 * Style.scaleHint)
         height: parent.height
         frameVisible: false
         // weekNumbersVisible: true
         selectedDate: todayDate
         focus: true
+        onClicked:{
+            hbCalendar.selectedDate = date
+        }
 
         style: CalendarStyle {
-            dayOfWeekDelegate: Item {
-                readonly property var strWeekDays: [qsTr("周日"), qsTr("周一"), qsTr("周二"), qsTr("周三"), qsTr("周四"), qsTr("周五"), qsTr("周六")]
+            background: Rectangle
+            {
+                anchors.fill: parent
+                color: Style.hbButtonBackgroundColor
+            }
+            navigationBar: Item {
+                readonly property var strMonths: [qsTr("一月"), qsTr("二月"), qsTr("三月"),
+                    qsTr("四月"), qsTr("五月"), qsTr("六月"),
+                    qsTr("七月"), qsTr("八月"), qsTr("九月"),
+                    qsTr("十月"), qsTr("十一月"), qsTr("十二月")]
                 width: parent.width
                 height: Math.round(30 * Style.scaleHint)
                 Rectangle
                 {
                     anchors.fill: parent
-                    color: Style.hbButtonBackgroundColor
-                // anchors.margins: -1
-                // border.color: Style.hbButtonBackgroundColor
+                    color: Style.backgroundDeepColor
                 }
+                HBPrimaryButton {
+                    text: "<"
+                    width: Math.round(25 * Style.scaleHint)
+                    height: width
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    onClicked: {
+                        calendar.showPreviousMonth()
+                    }
+                }
+
+                HBPrimaryButton {
+                    text: ">"
+                    onClicked: calendar.showNextMonth()
+                    width: Math.round(25 * Style.scaleHint)
+                    height: width
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                // Current month and year label
+                Label {
+                    height: parent.height
+                    width: Math.round(50 * Style.scaleHint)
+                    anchors.centerIn: parent
+                     text: qsTr("%1  %2").arg(strMonths[calendar.visibleMonth]).arg(calendar.visibleYear)
+                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+            }
+
+            dayOfWeekDelegate: Item {
+                readonly property var strWeekDays: [qsTr("周日"), qsTr("周一"), qsTr("周二"),
+                    qsTr("周三"), qsTr("周四"), qsTr("周五"), qsTr("周六")]
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
                 Label {
                     anchors.centerIn: parent
                     text: strWeekDays[styleData.dayOfWeek]
@@ -83,6 +136,36 @@ Rectangle
             }
         }
     }
+
+    // Rectangle {
+    //     anchors.left: calendar.left
+    //     anchors.top: calendar.bottom
+    //     height: Math.round(50 * Style.scaleHint)
+    //     width: parent.width
+    //     color: Style.backgroundDeepColor
+    //     Row{
+    //         anchors.centerIn: parent
+    //         height: Math.round(30 * Style.scaleHint)
+    //         width: Math.round((105 + 105 + 100) * Style.scaleHint)
+    //         spacing: Math.round(100 * Style.scaleHint)
+    //         HBPrimaryButton
+    //         {
+    //             id: buttonConfirm
+    //             height: parent.height
+    //             width: Math.round(105 * Style.scaleHint)
+    //             text: qsTr("确定")
+    //         }
+    //         HBPrimaryButton
+    //         {
+    //             id: buttonCancle
+    //             height: parent.height
+    //             width: Math.round(105 * Style.scaleHint)
+    //             text: qsTr("取消")
+    //         }
+    //     }
+    // }
+
+
 }
 
 

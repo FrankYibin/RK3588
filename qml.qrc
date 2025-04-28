@@ -100,5 +100,6 @@
         <file>qmlSource/HBComboBox.qml</file>
         <file>qmlSource/HBGroupBox.qml</file>
         <file>qmlSource/HBCalendar.qml</file>
+        <file>qmlSource/HBTableView.qml</file>
     </qresource>
 </RCC>
