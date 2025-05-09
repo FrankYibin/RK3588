@@ -1,8 +1,19 @@
 ﻿#include "hbhome.h"
 
+HBHome* HBHome::m_home = nullptr;
+
 HBHome::HBHome(QObject *parent)
     : QObject{parent}
 {}
+
+HBHome *HBHome::getInstance()
+{
+    if (!m_home) {
+        m_home = new HBHome();
+    }
+    return m_home;
+
+}
 
 int HBHome::Depth() const
 {
@@ -96,7 +107,7 @@ void HBHome::setTargetDepth(int newTargetDepth)
     if ( m_targetDepth == newTargetDepth )
         return;
     m_targetDepth = newTargetDepth;
-    emit MaxTensionIncrementChanged();
+    emit   TargetDepthChanged();
 }
 
 int HBHome::MaxSpeed() const
@@ -109,7 +120,7 @@ void HBHome::setMaxSpeed(int newMaxSpeed)
     if ( m_maxSpeed == newMaxSpeed )
         return;
     m_maxSpeed = newMaxSpeed;
-    emit MaxTensionIncrementChanged();
+    emit MaxSpeedChanged();
 }
 
 int HBHome::MaxTensionIncrement() const
@@ -134,7 +145,7 @@ void HBHome::setKValue(int newKValue)
 {
     if ( m_kValue == newKValue )
         return;
-    newKValue = newKValue;
+    m_kValue = newKValue;
     emit KValueChanged();
 }
 

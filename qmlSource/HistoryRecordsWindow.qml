@@ -12,6 +12,11 @@ Item{
     readonly property int buttonWidth: 100
     readonly property int rowSpacing: 10
     readonly property int componentHeight: 30
+    Component.onCompleted:
+    {
+        dataModel.resetModel()
+    }
+
     Rectangle
     {
         id: background
@@ -191,6 +196,72 @@ Item{
                 }
             }
         }
+    }
+
+    ListModel
+    {
+        id: dataModel
+        function resetModel()
+        {
+            dataModel.clear()
+            dataModel.append({"Index": 0,               "WellNumber": "井号001",
+                              "OperateType": "修改",    "Operater": "操作员A",         "Date": "2025-4-22 15：00",
+                              "Description": "修改设备设置，调整阀门压力到500PSI"})
+            dataModel.append({"Index": 1,               "WellNumber": "井号002",
+                              "OperateType": "修改",    "Operater": "操作员B",         "Date": "2025-4-22 16：05",
+                              "Description": "查看井口压力，记录异常值"})
+            dataModel.append({"Index": 2,               "WellNumber": "井号003",
+                              "OperateType": "修改",    "Operater": "操作员A",         "Date": "2025-4-22 15：00",
+                              "Description": "修改设备设置，调整阀门压力到500PSI"})
+            dataModel.append({"Index": 3,               "WellNumber": "井号004",
+                              "OperateType": "修改",    "Operater": "操作员B",         "Date": "2025-4-22 16：05",
+                              "Description": "查看井口压力，记录异常值"})
+            dataModel.append({"Index": 4,               "WellNumber": "井号003",
+                              "OperateType": "修改",    "Operater": "操作员A",         "Date": "2025-4-22 15：00",
+                              "Description": "修改设备设置，调整阀门压力到500PSI"})
+            dataModel.append({"Index": 5,               "WellNumber": "井号004",
+                              "OperateType": "修改",    "Operater": "操作员B",         "Date": "2025-4-22 16：05",
+                              "Description": "查看井口压力，记录异常值"})
+            dataModel.append({"Index": 6,               "WellNumber": "井号003",
+                              "OperateType": "修改",    "Operater": "操作员A",         "Date": "2025-4-22 15：00",
+                              "Description": "修改设备设置，调整阀门压力到500PSI"})
+            dataModel.append({"Index": 7,               "WellNumber": "井号004",
+                              "OperateType": "修改",    "Operater": "操作员B",         "Date": "2025-4-22 16：05",
+                              "Description": "查看井口压力，记录异常值"})
+            dataModel.append({"Index": 8,               "WellNumber": "井号003",
+                              "OperateType": "修改",    "Operater": "操作员A",         "Date": "2025-4-22 15：00",
+                              "Description": "修改设备设置，调整阀门压力到500PSI"})
+            dataModel.append({"Index": 9,               "WellNumber": "井号004",
+                              "OperateType": "修改",    "Operater": "操作员B",         "Date": "2025-4-22 16：05",
+                              "Description": "查看井口压力，记录异常值"})
+            dataModel.append({"Index": 10,               "WellNumber": "井号004",
+                              "OperateType": "修改",    "Operater": "操作员B",         "Date": "2025-4-22 16：05",
+                              "Description": "查看井口压力，记录异常值"})
+
+
+
+
+
+        }
+
+    }
+
+    HBTableView {
+        id: gridParentFrame
+        anchors.left: info.left
+        anchors.right: info.right
+        anchors.top: info.bottom
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Math.round(5 * Style.scaleHint)
+        model: dataModel
+
+        TableViewColumn { role: "Index";                title: qsTr("");            width: 30}
+        TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
+        TableViewColumn { role: "OperateType";          title: qsTr("操作类型");    width: 80}
+        TableViewColumn { role: "Operater";             title: qsTr("操作员");      width: 80}
+        TableViewColumn { role: "Date";                 title: qsTr("日期");        width: 200}
+        TableViewColumn { role: "Description";          title: qsTr("操作");        width: 600}
     }
 }
 

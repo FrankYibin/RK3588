@@ -47,7 +47,8 @@ class HBHome : public QObject
     Q_PROPERTY(int NetworkStatus READ NetworkStatus WRITE setNetworkStatus NOTIFY NetworkStatusChanged);
 
 public:
-    explicit HBHome(QObject *parent = nullptr);
+
+    static HBHome* getInstance();
 
     Q_INVOKABLE int Depth() const;
     Q_INVOKABLE void setDepth(int newDepth);
@@ -117,6 +118,13 @@ signals:
     void MaxParameterStatusChanged();
 
     void NetworkStatusChanged();
+
+private:
+    explicit HBHome(QObject *parent = nullptr);
+
+    HBHome(const HBHome&) = delete;              // 禁止拷贝
+    HBHome& operator=(const HBHome&) = delete;   // 禁止赋值
+    static HBHome* m_home;
 
 private:
 

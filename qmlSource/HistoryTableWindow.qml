@@ -128,20 +128,20 @@ Item{
         function resetModel()
         {
             headerModel.clear()
-            headerModel.append({"Role": "Index",                "Title": qsTr("序号"),      "HeaderWidth": 50})
-            headerModel.append({"Role": "WellNumber",           "Title": qsTr("井号"),      "HeaderWidth": 100})
-            headerModel.append({"Role": "Date",                 "Title": qsTr("日期"),      "HeaderWidth": 100})
-            headerModel.append({"Role": "OperateType",          "Title": qsTr("操作类型"),  "HeaderWidth": 100})
-            headerModel.append({"Role": "Operater",             "Title": qsTr("操作员"),    "HeaderWidth": 100})
-            headerModel.append({"Role": "Depth",                "Title": qsTr("深度"),      "HeaderWidth": 100})
-            headerModel.append({"Role": "Velocity",             "Title": qsTr("速度"),      "HeaderWidth": 100})
-            headerModel.append({"Role": "VelocityUnit",         "Title": qsTr("速度单位"),  "HeaderWidth": 100})
-            headerModel.append({"Role": "Tensions",             "Title": qsTr("张力"),      "HeaderWidth": 100})
-            headerModel.append({"Role": "TensionIncreament",    "Title": qsTr("张力增量"),  "HeaderWidth": 100})
-            headerModel.append({"Role": "TensionUnit",          "Title": qsTr("张力单位"),  "HeaderWidth": 100})
-            headerModel.append({"Role": "MaxTension",           "Title": qsTr("最大张力"),  "HeaderWidth": 100})
-            headerModel.append({"Role": "HarnessTension",       "Title": qsTr("缆头张力"),  "HeaderWidth": 100})
-            headerModel.append({"Role": "SafetyTension",        "Title": qsTr("安全张力"),  "HeaderWidth": 100})
+            headerModel.append({"role": "Index",                "title": qsTr("序号"),      "headerWidth": 50})
+            headerModel.append({"role": "WellNumber",           "title": qsTr("井号"),      "headerWidth": 100})
+            headerModel.append({"role": "Date",                 "title": qsTr("日期"),      "headerWidth": 100})
+            headerModel.append({"role": "OperateType",          "title": qsTr("操作类型"),  "headerWidth": 100})
+            headerModel.append({"role": "Operater",             "title": qsTr("操作员"),    "headerWidth": 100})
+            headerModel.append({"role": "Depth",                "title": qsTr("深度"),      "headerWidth": 100})
+            headerModel.append({"role": "Velocity",             "title": qsTr("速度"),      "headerWidth": 100})
+            headerModel.append({"role": "VelocityUnit",         "title": qsTr("速度单位"),  "headerWidth": 100})
+            headerModel.append({"role": "Tensions",             "title": qsTr("张力"),      "headerWidth": 100})
+            headerModel.append({"role": "TensionIncreament",    "title": qsTr("张力增量"),  "headerWidth": 100})
+            headerModel.append({"role": "TensionUnit",          "title": qsTr("张力单位"),  "headerWidth": 100})
+            headerModel.append({"role": "MaxTension",           "title": qsTr("最大张力"),  "headerWidth": 100})
+            headerModel.append({"role": "HarnessTension",       "title": qsTr("缆头张力"),  "headerWidth": 100})
+            headerModel.append({"role": "SafetyTension",        "title": qsTr("安全张力"),  "headerWidth": 100})
 
 
         }
@@ -154,22 +154,82 @@ Item{
         {
             dataModel.clear()
             dataModel.append({"Index": 0,               "WellNumber": "陕30H-3",    "Date": "2025-4-22",
-                              "OperateType": "射孔",    "Operator": 1,              "Depth": 100.0,
+                              "OperateType": "射孔",    "Operater": "1",              "Depth": 100.0,
                               "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
                               "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
                               "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
             dataModel.append({"Index": 1,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-                              "OperateType": "射孔",      "Operator": 1,              "Depth": 100.0,
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
                               "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
                               "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
                               "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
             dataModel.append({"Index": 2,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-                              "OperateType": "射孔",      "Operator": 1,              "Depth": 100.0,
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
                               "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
                               "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
                               "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
             dataModel.append({"Index": 3,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-                              "OperateType": "射孔",      "Operator": 1,              "Depth": 100.0,
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 4,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 5,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 6,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 7,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 8,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 9,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 10,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 11,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 12,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 13,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 14,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+            dataModel.append({"Index": 15,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
                               "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
                               "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
                               "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
@@ -185,6 +245,24 @@ Item{
         anchors.top: info.bottom
         anchors.topMargin: Math.round(10 * Style.scaleHint)
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: Math.round(5 * Style.scaleHint)
+        model: dataModel
+
+        TableViewColumn { role: "Index";                title: qsTr("");            width: 30}
+        TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
+        TableViewColumn { role: "Date";                 title: qsTr("日期");        width: 100}
+        TableViewColumn { role: "OperateType";          title: qsTr("操作类型");    width: 80}
+        TableViewColumn { role: "Operater";             title: qsTr("操作员");      width: 80}
+        TableViewColumn { role: "Depth";                title: qsTr("深度");        width: 80}
+        TableViewColumn { role: "Velocity";             title: qsTr("速度");        width: 80}
+        TableViewColumn { role: "VelocityUnit";         title: qsTr("速度单位");    width: 80}
+        TableViewColumn { role: "Tensions";             title: qsTr("张力");        width: 80}
+        TableViewColumn { role: "TensionIncreament";    title: qsTr("张力增量");    width: 80}
+        TableViewColumn { role: "TensionUnit";          title: qsTr("张力单位");    width: 80}
+        TableViewColumn { role: "MaxTension";           title: qsTr("最大张力");    width: 80}
+        TableViewColumn { role: "HarnessTension";       title: qsTr("缆头张力");    width: 80}
+        TableViewColumn { role: "SafetyTension";        title: qsTr("安全张力");    width: 80}
+        TableViewColumn { role: "Exception";            title: qsTr("异常数据标识");  width: 100}
     }
 }
 

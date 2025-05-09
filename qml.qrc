@@ -101,5 +101,8 @@
         <file>qmlSource/HBGroupBox.qml</file>
         <file>qmlSource/HBCalendar.qml</file>
         <file>qmlSource/HBTableView.qml</file>
+        <file>qmlSource/HBTableViewNew.qml</file>
+        <file>qmlSource/HBChartView.qml</file>
+        <file>qmlSource/HBChartViewAxisDefine.qml</file>
     </qresource>
 </RCC>

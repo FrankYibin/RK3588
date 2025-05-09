@@ -37,8 +37,12 @@
 #include "c++Source/alarmnotification.h"
 #include "c++Source/login.h"
 #include "c++Source/systemInformationInterface.h"
-#include "c++Source/HBModel/hbhome.h"
-#include "c++Source/HBModel/autotestspeed.h"
+#include "c++Source/HBScreen/hbhome.h"
+#include "c++Source/HBScreen/autotestspeed.h"
+#include "c++Source/HBModbus/hbmodbusclient.h"
+#include "c++Source/HBData/hbdatabase.h"
+#include "c++Source/HBModbus/modbusutils.h"
+#include "c++Source/HBGraph/GraphAxisDefineHB.h"
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
                     const QString &message)
@@ -62,6 +66,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
+//HB
+    HBDatabase hbdata;
+    HBModbusClient modbusClient;
+    ModbusUtils modbusUtils;
 
     QString strOSIndicator = "None";
 #ifdef WIN32
@@ -78,15 +86,20 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonStyle.qml"), "Style", 1, 0, "Style");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonNumpadDefine.qml"), "NumpadDefine", 1, 0, "NumpadDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonChartViewAxisDefine.qml"), "AxisDefine", 1, 0, "AxisDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HBChartViewAxisDefine.qml"), "HBAxisDefine", 1, 0, "HBAxisDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/AlarmMessageDefine.qml"), "AlarmDefine", 1, 0, "AlarmDefine");
 
-    //qmlRegisterType<HBHome>("HBHome",1,0,"HBHome");
+    //HB
+    qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", &modbusClient);
+
+
     UserLevelEnum::registerQMLType();
     UIScreenEnum::registerQMLType();
     LanguageEnum::registerQMLType();
     RecipeEnum::registerQMLType();
     UpgradeSoftwareEnum::registerQMLType();
     GraphAxisEnum::registerQMLType();
+    HBGraphAxisEnum::registerQMLType();
     AlarmIndexEnum::registerQMLType();
     LoginIndexEnum::registerQMLType();
     SystemTypeDef::registerQMLType();
@@ -96,7 +109,8 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/VirtualKeyboardStyles");
     qputenv("QT_VIRTUALKEYBOARD_STYLE", "styleVirtualKeyboard");
     QQmlContext *pQmlContext = engine.rootContext();
-    pQmlContext->setContextProperty("HBHome",new HBHome());
+    pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
+    pQmlContext->setContextProperty("HBHome", HBHome::getInstance());
     pQmlContext->setContextProperty("AutoTestSpeed",new AutoTestSpeed());
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

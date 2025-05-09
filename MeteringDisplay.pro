@@ -1,4 +1,4 @@
-QT += quick gui charts serialport serialbus
+QT += quick gui charts serialport serialbus sql
 CONFIG += c++11
 #qtquickcompiler
 
@@ -35,11 +35,20 @@ static {
 
 SOURCES += main.cpp \
     c++Source/HBData/hbdatabase.cpp \
+    c++Source/HBGraph/SensorGraphData.cpp \
     c++Source/HBModbus/hbmodbusclient.cpp \
-    c++Source/HBModel/autotestspeed.cpp \
-    c++Source/HBModel/hbhome.cpp \
-    c++Source/HBModel/history.cpp \
-    c++Source/HBModel/rs232.cpp \
+    c++Source/HBModbus/modbusutils.cpp \
+    c++Source/HBScreen/autotestspeed.cpp \
+    c++Source/HBScreen/depth.cpp \
+    c++Source/HBScreen/depthmeter.cpp \
+    c++Source/HBScreen/depthsafe.cpp \
+    c++Source/HBScreen/hbhome.cpp \
+    c++Source/HBScreen/history.cpp \
+    c++Source/HBScreen/network.cpp \
+    c++Source/HBScreen/rs232.cpp \
+    c++Source/HBScreen/tensiometer.cpp \
+    c++Source/HBScreen/tensionsafe.cpp \
+    c++Source/HBScreen/wellparameter.cpp \
         c++Source/alarmnotification.cpp \
         c++Source/clientsocket.cpp \
         c++Source/communicationinterface.cpp \
@@ -68,12 +77,23 @@ SOURCES += main.cpp \
 HEADERS += \
     c++Source/HBData/hbdatabase.h \
     c++Source/HBDefine.h \
+    c++Source/HBGraph/GraphAxisDefineHB.h \
+    c++Source/HBGraph/SensorGraphData.h \
+    c++Source/HBGraph/SensorGraphData.h \
     c++Source/HBModbus/hbmodbusclient.h \
-    c++Source/HBModel/autotestspeed.h \
-    c++Source/HBModel/hbhome.h \
-    c++Source/HBModel/history.h \
-    c++Source/HBModel/rs232.h \
+    c++Source/HBModbus/modbusutils.h \
     c++Source/HBQmlEnum.h \
+    c++Source/HBScreen/autotestspeed.h \
+    c++Source/HBScreen/depth.h \
+    c++Source/HBScreen/depthmeter.h \
+    c++Source/HBScreen/depthsafe.h \
+    c++Source/HBScreen/hbhome.h \
+    c++Source/HBScreen/history.h \
+    c++Source/HBScreen/network.h \
+    c++Source/HBScreen/rs232.h \
+    c++Source/HBScreen/tensiometer.h \
+    c++Source/HBScreen/tensionsafe.h \
+    c++Source/HBScreen/wellparameter.h \
     c++Source/alarmindexdef.h \
     c++Source/alarmnotification.h \
     c++Source/clientsocket.h \

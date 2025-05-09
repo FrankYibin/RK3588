@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.Modbus 1.0
+
 
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_VELOCITY
@@ -81,6 +83,12 @@ Item{
                         {
                             // nCurrentLanguageIndex = model.itemIndex
                             console.debug("index: ", index)
+
+                            if(index===0){
+                                ModbusClient.writeRegister(55,[0x01])
+                            }else{
+                                ModbusClient.writeRegister(55,[0x02])
+                            }
                         }
                     }
                 }
@@ -115,6 +123,18 @@ Item{
                     //输入写入
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    }
+
+                    onFocusChanged: {
+                        if (!focus) {  // 失去焦点时处理
+                            var velocityValue = parseFloat(textVelocitySetting.text);
+                            if (!isNaN(velocityValue) && velocityValue > 0) {
+                                var modbusRegisters = ModbusUtils.floatToModbusRegisters(velocityValue);
+                                // 将转换后的寄存器值写入 Modbus
+                                ModbusClient.writeRegister(55, modbusRegisters);
+
+                            }
+                        }
                     }
                 }
                 Text
@@ -161,6 +181,7 @@ Item{
             onClicked:
             {
                 // controlLimitNumpad.visible = false
+                ModbusClient.writeRegister(56,[0x01])
             }
         }
 
@@ -175,6 +196,7 @@ Item{
                 // controlLimitNumpad.visible = false
                 profileLayout.visible = false
                 mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
+                ModbusClient.writeRegister(55,[0x03])
             }
         }
     }
