@@ -381,6 +381,7 @@ Window{
                 mainWindow.showHeight = Screen.height
             }
             var str = "Screen resolution:" + Screen.width + "X" + Screen.height
+            console.debug("scale: ", Style.scaleHint)
             console.debug(str)
             // leftMenuLoader.source = ""
             // leftMenuLoader.source = "qrc:/qmlSource/leftActionMenu.qml"

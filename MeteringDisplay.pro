@@ -79,7 +79,6 @@ HEADERS += \
     c++Source/HBDefine.h \
     c++Source/HBGraph/GraphAxisDefineHB.h \
     c++Source/HBGraph/SensorGraphData.h \
-    c++Source/HBGraph/SensorGraphData.h \
     c++Source/HBModbus/hbmodbusclient.h \
     c++Source/HBModbus/modbusutils.h \
     c++Source/HBQmlEnum.h \

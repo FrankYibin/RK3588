@@ -30,7 +30,7 @@ Item {
     readonly property int style9: 72
     readonly property int style10: 115
 
-    readonly property int style0: 12
+    readonly property int style0: 10
 
     readonly property string qmltextEnglish:                qsTr("English")
     readonly property string qmltextGerman:                 qsTr("Deutsche")
