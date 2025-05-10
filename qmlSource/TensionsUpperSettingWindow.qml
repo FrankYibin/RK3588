@@ -73,6 +73,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("192")
+//                    text:TensionSafe.WellType
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -105,6 +106,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("192")
+//                    text: TensionSafe.CableWeight
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -147,6 +149,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("192")
+//                    text: WellParameter.WorkType
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -179,6 +182,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8081")
+//                    text: WellParameter.SensorWeight
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -221,6 +225,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text: WellParameter.HarnessForce
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -263,6 +268,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text: TensionSafe.WeakForce
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -305,6 +311,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text: HBHome.MaxTension
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -347,6 +354,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text: TensionSafe.TensionSafeFactor
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -401,6 +409,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("192")
+//                    text: TensionSafe.CurrentTensionSafe
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -443,6 +452,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("192")
+                    //                    text: TensionSafe.CableTensionTrend
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -475,6 +485,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("192")
+//                    text: TensionSafe.CurrentDepth1
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -517,6 +528,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8081")
+//                    text: TensionSafe.MAXTensionSafe
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -559,6 +571,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text: TensionSafe.Ptime
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -601,6 +614,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text: TensionSafe.CurrentDepth2
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -643,6 +657,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text: HBHome.HarnessTension
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -685,6 +700,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text:TensionSafe.DepthLoss
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -727,6 +743,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("8080")
+//                    text:TensionSafe.CurrentDepth3
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")

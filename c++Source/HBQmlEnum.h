@@ -123,7 +123,7 @@ public:
         WEAK_FORCE,
         CABLE_UINT,
         SENSOR_WEIGHT,
-        TENSION_SAFE,
+        TENSION_SAFE_FACTOR,
         CURRENT_TENSION_SAFE_H,
         CURRENT_TENSION_SAFE_L,
         CIRRENT_TENSION_MAX_H,

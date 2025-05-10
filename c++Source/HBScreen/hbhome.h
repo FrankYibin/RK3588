@@ -122,8 +122,8 @@ signals:
 private:
     explicit HBHome(QObject *parent = nullptr);
 
-    HBHome(const HBHome&) = delete;              // 禁止拷贝
-    HBHome& operator=(const HBHome&) = delete;   // 禁止赋值
+    HBHome(const HBHome&) = delete;
+    HBHome& operator=(const HBHome&) = delete;
     static HBHome* m_home;
 
 private:

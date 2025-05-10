@@ -43,6 +43,8 @@ class TensionSafe : public QObject
     //MAX Tension Safe
     Q_PROPERTY(QString MAXTensionSafe READ MAXTensionSafe WRITE setMAXTensionSafe NOTIFY MAXTensionSafeChanged);
 
+//    Q_PROPERTY(QString CurrentHarnessTension READ CurrentHarnessTension WRITE setCurrentHarnessTension NOTIFY CurrentHarnessTensionChanged);
+
     //Trend of tension variation of the cable head  揽头张力变化趋势
     Q_PROPERTY(QString CableTensionTrend READ CableTensionTrend WRITE setCableTensionTrend NOTIFY CableTensionTrendChanged );
 
@@ -62,7 +64,7 @@ class TensionSafe : public QObject
     Q_PROPERTY(QString CurrentDepth3 READ CurrentDepth3 WRITE setCurrentDepth3 NOTIFY CurrentDepth3Changed);
 
 public:
-    explicit TensionSafe(QObject *parent = nullptr);
+    static TensionSafe* getInstance();
 
     QString WellType() const;
     // QString MaxTension() const;
@@ -70,6 +72,7 @@ public:
     QString TensionSafeFactor() const;
     QString WeakForce() const;
     QString CurrentTensionSafe() const;
+//    QString CurrentHarnessTension() const;
     QString MAXTensionSafe() const;
     QString CableTensionTrend() const;
     QString Ptime() const;
@@ -83,6 +86,7 @@ public:
     void setCableWeight(const QString &value);
     void setTensionSafeFactor(const QString &value);
     void setWeakForce(const QString &value);
+//    void setCurrentHarnessTension(const QString &value);
     void setCurrentTensionSafe(const QString &value);
     void setMAXTensionSafe(const QString &value);
     void setCableTensionTrend(const QString &value);
@@ -109,7 +113,15 @@ signals:
     void CurrentDepth1Changed();
     void CurrentDepth2Changed();
     void CurrentDepth3Changed();
+//    void CurrentHarnessTensionChanged();
 
+private:
+
+    explicit TensionSafe(QObject *parent = nullptr);
+
+    TensionSafe(const TensionSafe&) = delete;              // 禁止拷贝
+    TensionSafe& operator=(const TensionSafe&) = delete;   // 禁止赋值
+    static TensionSafe* m_tensionSafe;
 
 
 private:
@@ -119,6 +131,7 @@ private:
     QString m_cableWeight;
     QString m_TensionSafeFactor;
     QString m_weakForce;
+//    QString m_currentHarnessTension;
     QString m_currentTensionSafe;
     QString m_maxTensionSafe;
     QString m_cableTensionTrend;

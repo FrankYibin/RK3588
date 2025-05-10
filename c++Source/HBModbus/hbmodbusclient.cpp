@@ -4,6 +4,7 @@
 #include <QModbusReply>
 #include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBScreen/hbhome.h"
+#include "c++Source/HBScreen/tensionsafe.h"
 
 HBModbusClient::HBModbusClient(QObject *parent)
     : QObject{parent}
@@ -35,9 +36,10 @@ void HBModbusClient::connectToServer()
     if (!modbus)
         return;
 
-    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM7");
-    // modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "ttyS0");
-    modbus->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud9600);
+//    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM7");
+    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "ttyS0");
+//    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "usbmon3");
+    modbus->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud115200);
     modbus->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
     modbus->setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
     modbus->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
@@ -204,7 +206,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             TargetDepth_L = value;
             targetDepth = (TargetDepth_H << 16) | TargetDepth_L;
             HBHome::getInstance()->setTargetDepth(targetDepth);
-            qDebug() << "Address" << currentAddress << "- Updated maxSpeed:" << maxSpeed;
+            qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
         case HQmlEnum::CABLE_TENSION_H: // CABLE_TENSION_H
             CableTension_H = value;
@@ -216,11 +218,96 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             qDebug() << "Address" << currentAddress << "- Updated cableTension:" << cableTension;
             break;
 
+        case HQmlEnum::CURRENT_TENSION_SAFE_H: // CURRENT_TENSION_SAFE_H
+            currentTensionSafe_H = value;
+            break;
+        case HQmlEnum::CURRENT_TENSION_SAFE_L: // CURRENT_TENSION_SAFE_L
+            currentTensionSafe_L = value;
+            currentTensionSafe = (currentTensionSafe_H << 16) | currentTensionSafe_L;
+            TensionSafe::getInstance()->setCurrentTensionSafe( QString::number(currentTensionSafe));
+            qDebug() << "Address" << currentAddress << "- Updated currentTensionSafe:" << currentTensionSafe;
+            break;
+
+        case HQmlEnum::CIRRENT_TENSION_MAX_H: // CIRRENT_TENSION_MAX_H
+            maxTensionSafe_H = value;
+            break;
+        case HQmlEnum::CIRRENT_TENSION_MAX_L: // CIRRENT_TENSION_MAX_L
+            maxTensionSafe_L = value;
+            maxTensionSafe = (maxTensionSafe_H << 16) | maxTensionSafe_L;
+            TensionSafe::getInstance()->setMAXTensionSafe(QString::number(maxTensionSafe));
+            qDebug() << "Address" << currentAddress << "- Updated maxTensionSafe:" << maxTensionSafe;
+            break;
+
+//        case HQmlEnum::CABLE_TENSION_H: // CIRRENT_TENSION_MAX_H
+//            currentHarnessTension_H = value;
+//            break;
+//        case HQmlEnum::CABLE_TENSION_L: // CIRRENT_TENSION_MAX_L
+//            currentHarnessTension_L = value;
+//            currentHarnessTension = (currentHarnessTension_H << 16) | currentHarnessTension_L;
+//            TensionSafe::getInstance()->setMAXTensionSafe(QString::number(currentHarnessTension));
+//            qDebug() << "Address" << currentAddress << "- Updated currentHarnessTension:" << currentHarnessTension;
+//            break;
+
+        case HQmlEnum::HARNESS_TENSION_TREND: // HARNESS_TENSION_TREND
+            cableTensionTrend = value;
+            TensionSafe::getInstance()->setCableTensionTrend(QString::number(cableTensionTrend));
+            qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
+            break;
+
+        case HQmlEnum::PARKING_SAFE_TIME: // PARKING_SAFE_TIME
+            ptime = value;
+            TensionSafe::getInstance()->setPtime(QString::number(ptime));
+            qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
+            break;
+
+        case HQmlEnum::CODE_COUNT_H: // CODE_COUNT_H
+            depthLoss_H = value;
+            break;
+
+        case HQmlEnum::CODE_COUNT_L: // CODE_COUNT_L
+            depthLoss_L = value;
+            depthLoss = (depthLoss_H << 16) | depthLoss_L;
+            TensionSafe::getInstance()->setDepthLoss(QString::number(depthLoss));
+            qDebug() << "Address" << currentAddress << "- Updated depthLoss:" << depthLoss;
+            break;
+
+        case HQmlEnum::DEPTH_CODE1_H: // DEPTH_CODE1_H
+            currentDepth1_H = value;
+            break;
+
+        case HQmlEnum::DEPTH_CODE1_L: // DEPTH_CODE1_L
+            currentDepth1_L = value;
+            currentDepth1 = (currentDepth1_H << 16) | currentDepth1_L;
+            TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth1));
+            qDebug() << "Address" << currentAddress << "- Updated currentDepth1:" << currentDepth1;
+            break;
+
+        case HQmlEnum::DEPTH_CODE2_H: // DEPTH_CODE2_H
+            currentDepth2_H = value;
+            break;
+
+        case HQmlEnum::DEPTH_CODE2_L: // DEPTH_CODE2_L
+            currentDepth2_L = value;
+            currentDepth2 = (currentDepth2_H << 16) | currentDepth2_L;
+            TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth2));
+            qDebug() << "Address" << currentAddress << "- Updated currentDepth2:" << currentDepth2;
+            break;
+
+        case HQmlEnum::DEPTH_CODE3_H: // DEPTH_CODE3_H
+            currentDepth3_H = value;
+            break;
+
+        case HQmlEnum::DEPTH_CODE3_L: // DEPTH_CODE3_L
+            currentDepth3_L = value;
+            currentDepth3 = (currentDepth3_H << 16) | currentDepth3_L;
+            TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth3));
+            qDebug() << "Address" << currentAddress << "- Updated currentDepth3:" << currentDepth3;
+            break;
+
         default:
             // 其他地址不处理
             break;
         }
-
     }
 }
 

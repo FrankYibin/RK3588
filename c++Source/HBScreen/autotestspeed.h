@@ -11,10 +11,11 @@ class AutoTestSpeed : public QObject
     Q_PROPERTY(int Direction READ Direction WRITE setDirection NOTIFY DirectionChanged FINAL);
 
     //Control speed
-    Q_PROPERTY(int SpeedValue READ SpeedValue WRITE setSpeedValue NOTIFY SpeedValueChanged FINAL)
+    Q_PROPERTY(int SpeedValue READ SpeedValue WRITE setSpeedValue NOTIFY SpeedValueChanged FINAL);
 
 public:
-    explicit AutoTestSpeed(QObject *parent = nullptr);
+
+    static AutoTestSpeed* getInstance();
 
     Q_INVOKABLE int Direction() const;
 
@@ -25,7 +26,12 @@ public:
 
     Q_INVOKABLE void setSpeedValue(int newSpeedValue);
 
+private:
+    explicit AutoTestSpeed(QObject *parent = nullptr);
 
+    AutoTestSpeed(const AutoTestSpeed&) = delete;
+    AutoTestSpeed& operator=(const AutoTestSpeed&) = delete;
+    static AutoTestSpeed* m_autoTestSpeed;
 
 signals:
 

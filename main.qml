@@ -33,11 +33,13 @@ Window{
     title: qsTr("UIController")
 //    flags: Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Window
     flags: Qt.FramelessWindowHint | Qt.Window
-    // visibility: Window.FullScreen
+     visibility: Window.FullScreen
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
-    property int showWidth: 1280
-    property int showHeight: 800
+    property int showWidth: 800
+    property int showHeight: 480
+//     property int showWidth: 1280
+//     property int showHeight: 800
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -381,8 +383,8 @@ Window{
                 mainWindow.showHeight = Screen.height
             }
             var str = "Screen resolution:" + Screen.width + "X" + Screen.height
-            console.debug("scale: ", Style.scaleHint)
             console.debug(str)
+            console.debug("scale: ", Style.scaleHint)
             // leftMenuLoader.source = ""
             // leftMenuLoader.source = "qrc:/qmlSource/leftActionMenu.qml"
             // rightMenuLoader.source = ""
