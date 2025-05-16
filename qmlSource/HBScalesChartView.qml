@@ -21,13 +21,9 @@ Item {
     id: weldGraph
     property bool flagDragDrop: false
     property bool isNormalScreen: true
-    property int fontsize: Math.round(Style.style1 * Style.scaleHint)
-    property double timemax: 1
+    property int fontsize: Math.round(Style.style3 * Style.scaleHint)
 
-    readonly property string depthLeftPlotName:             "depthLeftPlot"
-    readonly property string velocityLeftPlotName:          "velocityLeftPlot"
     readonly property string tensionsLeftPlotName:          "tensionsLeftPlot"
-    readonly property string tensionIncrementPlotName:      "tensionIncrementLeftPlot"
     readonly property string qmltextSecUnit:                "s"
 
     /**
@@ -60,119 +56,165 @@ Item {
     function plotGraph()
     {
         clearGraph()
-        var tensionPoint
 
-        weldGraphObj.appendSamples(graphChartView.series(collapseDistLeftPlotName), GraphAxisEnum.COLLAPSEDIST_IDX);
+        // weldGraphObj.appendSamples(graphChartView.series(collapseDistLeftPlotName), GraphAxisEnum.COLLAPSEDIST_IDX);
+        tensionLeftAxisPlot.append(10, 0.5)
+        tensionLeftAxisPlot.append(20, 1.0)
+        tensionLeftAxisPlot.append(30, 1.5)
+        tensionLeftAxisPlot.append(40, 2.0)
+        tensionLeftAxisPlot.append(50, 2.5)
+        tensionLeftAxisPlot.append(60, 3.0)
 
 
         /* Update the Min and Max values */
-        var axisMinValues = weldGraphObj.getAxisMinParameters();
-        var axisMaxValues = weldGraphObj.getAxisMaxParameters();
-        timeAxis.min                    = axisMinValues[HBGraphAxisEnum.TIME_IDX];
-        depthLeftAxis.min               = axisMinValues[HBGraphAxisEnum.DEPTH_IDX];
-        velocityLeftAxis.min            = axisMinValues[HBGraphAxisEnum.VELOCITY_IDX]
-        tensionsLeftAxisPlot.min        = axisMinValues[HBGraphAxisEnum.TENSIONS_IDX]
-        tensionIncrementLeftAxis.min    = axisMinValues[HBGraphAxisEnum.TENSION_INCREMENT_IDX]
+        // var axisMinValues = weldGraphObj.getAxisMinParameters();
+        // var axisMaxValues = weldGraphObj.getAxisMaxParameters();
+        var axisMinValues = [0, 0]
+        var axisMaxValues = [60, 3.0]
+        scaleAxis.min                    = axisMinValues[0];
+        tensionLeftAxis.min              = axisMinValues[1];
 
-        timeAxis.max                    = axisMaxValues[HBGraphAxisEnum.TIME_IDX];
-        depthLeftAxis.max               = axisMaxValues[HBGraphAxisEnum.DEPTH_IDX];
-        velocityLeftAxis.max            = axisMaxValues[HBGraphAxisEnum.VELOCITY_IDX];
-        tensionsLeftAxisPlot.max        = axisMaxValues[HBGraphAxisEnum.TENSIONS_IDX];
-        tensionIncrementLeftAxis.max    = axisMaxValues[HBGraphAxisEnum.TENSION_INCREMENT_IDX];
+        scaleAxis.max                    = axisMaxValues[0];
+        tensionLeftAxis.max               = axisMaxValues[1];
+
 
         /* Rounding of axis values for proper representation */
-        // timeAxis.max                    = roundAxisValues(timeAxis.max,                 timeAxis.min);
-        depthLeftAxis.max               = roundAxisValues(depthLeftAxis.max,            depthLeftAxis.min);
-        velocityLeftAxis.max            = roundAxisValues(velocityLeftAxis.max,         velocityLeftAxis.min);
-        tensionsLeftAxisPlot.max        = roundAxisValues(tensionsLeftAxisPlot.max,     tensionsLeftAxisPlot.min);
-        tensionIncrementLeftAxis.max    = roundAxisValues(tensionIncrementLeftAxis.max, tensionIncrementLeftAxis.min);
+        scaleAxis.max               = roundAxisValues(scaleAxis.max,            scaleAxis.min);
     }
 
     function clearGraph()
     {
-        timeAxis.min = 0;
-        timeAxis.max = timemax;
-
-        depthLeftAxisPlot.clear()
+        tensionLeftAxisPlot.clear()
     }
 
-    Rectangle {
-        id: graphFrame
+    Component.onCompleted: {
+        plotGraph()
+
+    }
+
+    Rectangle
+    {
         anchors.fill: parent
         color: "transparent"
-        ScrollView{
-            id:cotaingraphChartView
+        border.color: Style.hbFrameBorderColor
+        ChartView {
+            id: graphChartView
+            legend.visible: true
+            legend.color : Style.hbFrameBorderColor
+            legend.font.family: "宋体"
+            legend.font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+            legend.font.bold: true
+            legend.labelColor : "#ffffff"
+            anchors.top: parent.top
+            anchors.topMargin: Math.round(10  * Style.scaleHint)
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            property real myWidth: 2
+
+            backgroundColor: "transparent"
+            transformOrigin: Item.Center
+
+            ValueAxis {
+                id: scaleAxis
+                color: "#ffffff"
+                gridVisible: false
+                labelsVisible: true
+                labelsFont.family: "宋体"
+                labelsFont.pixelSize: fontsize
+                labelsColor: Style.whiteFontColor
+                lineVisible: true
+                minorGridVisible: false
+                titleText: qsTr("刻度值")
+                titleFont.family: "宋体"
+                titleFont.pixelSize: Math.round(Style.style2 * Style.scaleHint)
+                titleVisible: false
+                labelFormat: "%d"
+                max: 100
+                min: 0
+                tickCount: 7
+            }
+
+            ValueAxis {
+                id: tensionLeftAxis
+                color: "#ffffff"
+                visible: true
+                gridVisible: false
+                labelsVisible: true
+                labelsFont.family: "宋体"
+                labelsFont.pixelSize: fontsize
+                labelsColor: Style.whiteFontColor
+                lineVisible: true
+                minorGridVisible: false
+                titleText: qsTr("张力(kg)")
+                titleFont.family: "宋体"
+                titleFont.pixelSize: Math.round(Style.style2 * Style.scaleHint)
+                titleVisible: false
+                max: 10
+                min: 0
+                tickCount: 7
+                labelFormat: "%.1f"
+            }
+
+            LineSeries{
+                id: tensionLeftAxisPlot
+                width: graphChartView.myWidth
+                name: qsTr("张力 Vs 距离")
+                axisX: scaleAxis
+                axisY: tensionLeftAxis
+                color: Style.hbFrameBorderColor
+                visible: true
+                useOpenGL: false
+                pointsVisible: true
+            }
+
+        }
+        Item{
             width: parent.width
-            height: parent.height
-            clip: true
-            ChartView {
-                id: graphChartView
-                legend.visible: false
-                margins.top: Math.round(10  * Style.scaleHint)
-                margins.right: 0
-                margins.left: 0
-                margins.bottom: 0
-                // property real deltaX: plotArea.width / (timeAxis.max - timeAxis.min)
-                property real myWidth: 1
-//                plotAreaColor: "red"
-                width: parent.width
-                height: parent.height
-                transformOrigin: Item.Center
-
-                ValueAxis {
-                    id: scaleAxis
-                    color: "#ffffff"
-                    gridVisible: false
-                    labelsVisible: true
-                    labelsFont.family: "宋体"
-                    labelsFont.pixelSize: fontsize
-                    labelsColor: Style.whiteFontColor
-                    lineVisible: true
-                    minorGridVisible: false
-                    titleText: qsTr("刻度值")
-                    titleFont.family: "宋体"
-                    titleFont.pixelSize: Math.round(Style.style2 * Style.scaleHint)
-                    titleVisible: true
-                    labelFormat: "%d"
-                    max: timemax
-                    min: 0
-                    tickCount: 6
-                }
-
-                ValueAxis {
-                    id: tensionLeftAxis
-                    color: "#ffffff"
-                    visible: true
-                    gridVisible: false
-                    labelsVisible: true
-                    labelsFont.family: "宋体"
-                    labelsFont.pixelSize: fontsize
-                    labelsColor: Style.whiteFontColor
-                    lineVisible: true
-                    minorGridVisible: false
-                    titleText: qsTr("张力(kg)")
-                    titleFont.family: "宋体"
-                    titleFont.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-                    titleVisible: false
-                    max: 10
-                    min: 0
-                    tickCount: 6
-                    labelFormat: "%.1f"
-                }
-
-                LineSeries{
-                    id: depthLeftAxisPlot
-                    width: graphChartView.myWidth
-                    name: depthLeftPlotName
-                    axisX: timeAxis
-                    axisY: depthLeftAxis
-                    color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.DEPTH_IDX)
-                    visible: isDepthLeftAxisVisible
-                    useOpenGL: true
-                    pointsVisible: true
-                }
-
+            height: Math.round(30 * Style.scaleHint)
+            anchors.top: parent.top
+            anchors.left: parent.left
+            Text {
+                anchors.centerIn: parent
+                font.family: "宋体"
+                font.pixelSize: Math.round(Math.round(Style.style4 * Style.scaleHint))
+                color: Style.whiteFontColor
+                text: qsTr("张力与刻度值关系图")
             }
         }
+        Item{
+            width: parent.width
+            height: Math.round(30 * Style.scaleHint)
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            Text {
+                anchors.centerIn: parent
+                font.family: "宋体"
+                font.pixelSize: Math.round(Math.round(Style.style3 * Style.scaleHint))
+                color: Style.whiteFontColor
+                text: qsTr("刻度值")
+            }
+        }
+
+        Item{
+            width: Math.round(30 * Style.scaleHint)
+            height: parent.height
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.leftMargin: -Math.round(5 * Style.scaleHint)
+            rotation: -90
+            Text {
+                anchors.centerIn: parent
+                font.family: "宋体"
+                font.pixelSize: Math.round(Math.round(Style.style3 * Style.scaleHint))
+                color: Style.whiteFontColor
+                text: "张力 (kg)" // 竖排显示
+            }
+        }
+
+
     }
+
+
 }

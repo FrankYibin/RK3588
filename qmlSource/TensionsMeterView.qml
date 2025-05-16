@@ -84,6 +84,20 @@ Item{
     }
 
     Item {
+        id: graphView
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        width: parent.width / 2
+        HBScalesChartView {
+            id: tensionScaleChart
+            width: Math.round(300 * Style.scaleHint)
+            height: Math.round(280 * Style.scaleHint)
+            anchors.centerIn: parent
+        }
+    }
+
+    Item {
         id: itemTensiometer
         anchors.left: parent.left
         anchors.leftMargin: Math.round(20 * Style.scaleHint)

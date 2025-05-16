@@ -176,6 +176,12 @@ Item{
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         width: parent.width / 2
+        HBScalesChartView {
+            id: tensionScaleChart
+            width: Math.round(300 * Style.scaleHint)
+            height: Math.round(280 * Style.scaleHint)
+            anchors.centerIn: parent
+        }
     }
 
     Item {
