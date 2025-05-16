@@ -160,12 +160,14 @@ Item{
                 HBTextField
                 {
                     id: textHarnessWeight
-                    text: qsTr("500.00")
+                    property int tmpValue: 30
+                    text: tmpValue
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, tmpValue, textHarnessWeight)
+                        console.debug("2222222222222222222222222")
                     }
                 }
                 Text

@@ -9,6 +9,8 @@
  ---------------------------- MODULE DESCRIPTION ----------------------------
  
  Main
+ If you want to run the code on windows you shall run code with debug mode;
+ If you want to run the code on target board RK3588, you shall run code with release mode.
  
  **********************************************************************************************************/
 
@@ -36,6 +38,7 @@ Window{
     // visibility: Window.FullScreen
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
+    /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
     property int showWidth: 1280
     property int showHeight: 800
 
@@ -282,7 +285,7 @@ Window{
         }
     }
 
-    function showPrimaryNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue)
+    function showPrimaryNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue, targetObj)
     {
         primaryNumpad.headertext = strTitle
         primaryNumpad.suffix = strUnit
@@ -290,6 +293,7 @@ Window{
         primaryNumpad.minimumValue = realMinimum
         primaryNumpad.maximumValue = realMaximum
         primaryNumpad.value = strCurrentValue
+        primaryNumpad.targetTextField = targetObj
         primaryNumpad.visible = true
     }
 

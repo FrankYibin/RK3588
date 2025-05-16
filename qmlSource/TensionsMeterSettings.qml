@@ -6,12 +6,17 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 Item{
+    id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidth: 50
     readonly property int comboBoxWidth: 150
     readonly property int rowSpacing: 100
     readonly property int columnSpacing: 30
     readonly property int optionHeight: 30
+    readonly property var tensionsTypeModel: [qsTr("数字无线"), qsTr("数字有线"), qsTr("模拟有线")]
+    readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
+    readonly property var analogRangeModel: [qsTr("无"), "0-30mV", "0-1.5V", "0-5V"]
+    signal signalSaveTensometer()
     Rectangle
     {
         id: background
@@ -27,6 +32,7 @@ Item{
 
     Column
     {
+        id: tensionsSettings
         anchors.centerIn: parent
         width: Math.round((textWidth + comboBoxWidth + rowSpacing) * Style.scaleHint)
         height: Math.round((optionHeight * 4 + columnSpacing * 3) * Style.scaleHint)
@@ -38,7 +44,7 @@ Item{
             spacing: Math.round(rowSpacing * Style.scaleHint)
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
-                id: titlePort
+                id: titleTensionsNumber
                 width: Math.round(textWidth * Style.scaleHint)
                 height: parent.height
                 text: qsTr("张力计编号") + ":"
@@ -47,11 +53,16 @@ Item{
                 verticalAlignment: Text.AlignVCenter
                 color: Style.whiteFontColor
             }
-            HBComboBox
+            HBTextField
             {
-                id:comboBoxPort
-                width: Math.round(comboBoxWidth * Style.scaleHint)
-                height: parent.height
+                id: txtTensionsNumber
+                text: qsTr("2412001")
+                width: Math.round(100 * Style.scaleHint)
+                height: Math.round(25 * Style.scaleHint)
+                onlyForNumpad: true
+                onSignalClickedEvent: {
+                    mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                }
             }
         }
 
@@ -62,7 +73,7 @@ Item{
             spacing: Math.round(rowSpacing * Style.scaleHint)
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
-                id: titleBaudrate
+                id: titleTensionsType
                 width: Math.round(textWidth * Style.scaleHint)
                 height: parent.height
                 text: qsTr("张力计类型") + ":"
@@ -73,9 +84,11 @@ Item{
             }
             HBComboBox
             {
-                id: comboBoxBaudrate
+                id: comboTensionsType
+                model: tensionsTypeModel
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
+                fontFamily: "宋体"
             }
         }
 
@@ -86,7 +99,7 @@ Item{
             spacing: Math.round(rowSpacing * Style.scaleHint)
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
-                id: titleDataBits
+                id: titleSensorRange
                 width: Math.round(textWidth * Style.scaleHint)
                 height: parent.height
                 text: qsTr("张力计量程") + ":"
@@ -97,7 +110,8 @@ Item{
             }
             HBComboBox
             {
-                id: comboBoxDataBits
+                id: comboSensorRange
+                model: sensorRangeModel
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
             }
@@ -110,7 +124,7 @@ Item{
             spacing: Math.round(rowSpacing * Style.scaleHint)
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
-                id: titleStandard
+                id: titleAnalogRange
                 width: Math.round(textWidth * Style.scaleHint)
                 height: parent.height
                 text: qsTr("张力计输出信号") + ":"
@@ -121,13 +135,36 @@ Item{
             }
             HBComboBox
             {
-                id: comboBoxStandard
+                id: comboAnalogRange
+                model: analogRangeModel
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
             }
         }
     }
 
+
+    Item{
+        anchors.top: tensionsSettings.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: tensionsSettings.left
+        anchors.right: tensionsSettings.right
+
+        HBPrimaryButton
+        {
+            id: newSensor
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            width: Math.round(100 * Style.scaleHint)
+            height: Math.round(30 * Style.scaleHint)
+            text: qsTr("保存")
+            fontSize: Math.round(Style.style5 * Style.scaleHint)
+            onClicked:
+            {
+                signalSaveTensometer()
+            }
+        }
+    }
 }
 
 

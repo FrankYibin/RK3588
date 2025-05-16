@@ -30,6 +30,7 @@ RadioButton {
     property color radioDisableColor: Style.backgroundDeepColor
 
     property int circleSize: Math.round(20 * Style.scaleHint)
+    property int borderWidth: Math.round(5 * Style.scaleHint)
 
     text: labelText
 
@@ -40,7 +41,7 @@ RadioButton {
             implicitHeight: circleSize
             radius: 5
             border.color: Style.hbRadioButtonBorderColor
-            border.width: Math.round(5 * Style.scaleHint)
+            border.width: borderWidth
             color: "transparent"
             Rectangle {
                 anchors.fill: parent

@@ -256,6 +256,25 @@ Item{
         anchors.bottomMargin: Math.round(5 * Style.scaleHint)
         model: dataModel
 
+        fontSize: Math.round(Style.style0 * Style.scaleHint)
+        rowHeight: Math.round(25 * Style.scaleHint)
+        itemDelegate: Rectangle {
+            height: gridParentFrame.rowHeight
+            width: styleData.columnWidth
+            color: styleData.column === 0 ? Style.backgroundLightColor : "0x000000"
+            border.color: Style.hbFrameBorderColor
+            Text {
+                anchors.centerIn: parent
+                color: Style.whiteFontColor
+                text: styleData.value
+                font.family: "宋体"
+                font.pixelSize: gridParentFrame.fontSize
+            }
+        }
+        rowDelegate: Rectangle{
+            height: gridParentFrame.rowHeight
+        }
+
         TableViewColumn { role: "Index";                title: qsTr("");            width: 30}
         TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
         TableViewColumn { role: "OperateType";          title: qsTr("操作类型");    width: 80}

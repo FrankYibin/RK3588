@@ -1,6 +1,7 @@
 import Style 1.0
 import QtQuick 2.15
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 TableView {
     id: tableView
     height: parent.height
@@ -8,12 +9,14 @@ TableView {
     frameVisible: true
     horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
     verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
-    // backgroundVisible: true
+    backgroundVisible: true
     property int headerHeight: Math.round(25 * Style.scaleHint)
     property int rowHeight: Math.round(25 * Style.scaleHint)
-
-    model: dataModel
-    selectionMode: SelectionMode.NoSelection
+    property int fontSize: Math.round(Style.style0 * Style.scaleHint)
+    property bool isMouseMoving: true
+    property int handleWidth: Math.round(10 * Style.scaleHint)
+    // model: dataModel
+    // selectionMode: SelectionMode.NoSelection
     headerDelegate: Rectangle {
         id: headerTabelView
         height: headerHeight
@@ -26,31 +29,23 @@ TableView {
             color: Style.whiteFontColor
             font.bold: true
             font.family: "宋体"
-            font.pixelSize: Math.round(Style.style0 * Style.scaleHint)
+            font.pixelSize: fontSize
         }
     }
 
-    itemDelegate: Rectangle {
-        height: rowHeight
-        width: styleData.columnWidth
-        color: styleData.column === 0 ? Style.backgroundLightColor : "0x000000"
-        border.color: Style.hbFrameBorderColor
-        Text {
-            anchors.centerIn: parent
-            color: Style.whiteFontColor
-            text: styleData.value
-            font.family: "宋体"
-            font.pixelSize: Math.round(Style.style0 * Style.scaleHint)
+    style: TableViewStyle{
+        backgroundColor : Style.backgroundDeepColor
+        scrollBarBackground: Rectangle{
+            implicitWidth: tableView.handleWidth
+            implicitHeight: tableView.handleWidth
+            color: Style.backgroundDeepColor
         }
-    }
-
-    rowDelegate: Rectangle{
-        height: rowHeight
     }
 
     MouseArea{
         id: controlArea
         anchors.fill: parent
+        enabled: isMouseMoving
 
         property int previousX: 0
         property int previousY: 0

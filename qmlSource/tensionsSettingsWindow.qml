@@ -7,7 +7,6 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
-
     Component.onCompleted:
     {
         tensionsSettingModel.resetModel()
@@ -15,9 +14,8 @@ Item{
     QtObject {
         id: tensionsScreenIndex
         readonly property int meterScale:       0
-        readonly property int meterSettings:    1
-        readonly property int upperSetting:     2
-        readonly property int configuration:    3
+        readonly property int upperSetting:     1
+        readonly property int configuration:    2
     }
 
     function updateTabBar(index)
@@ -27,9 +25,6 @@ Item{
         {
         case tensionsScreenIndex.meterScale:
             screenLoader.source = "qrc:/qmlSource/TensionsMeterScaleWindow.qml"
-            break;
-        case tensionsScreenIndex.meterSettings:
-            screenLoader.source = "qrc:/qmlSource/TensionsMeterSettingsWindow.qml"
             break;
         case tensionsScreenIndex.upperSetting:
             screenLoader.source = "qrc:/qmlSource/TensionsUpperSettingWindow.qml"
@@ -50,9 +45,6 @@ Item{
             tensionsSettingModel.append({"Title":      "张力计刻度",
                                         "Width":      100,
                                         "Index":      tensionsScreenIndex.meterScale})
-            tensionsSettingModel.append({"Title":      "张力计设置",
-                                        "Width":      100,
-                                        "Index":      tensionsScreenIndex.meterSettings})
             tensionsSettingModel.append({"Title":      "安全张力",
                                         "Width":      100,
                                         "Index":      tensionsScreenIndex.upperSetting})

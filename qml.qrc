@@ -89,7 +89,7 @@
         <file>qmlSource/SystemThemeWindow.qml</file>
         <file>qmlSource/SystemLanguageWindow.qml</file>
         <file>qmlSource/TensionsMeterScaleWindow.qml</file>
-        <file>qmlSource/TensionsMeterSettingsWindow.qml</file>
+        <file>qmlSource/TensionsMeterSettings.qml</file>
         <file>qmlSource/TensionsUpperSettingWindow.qml</file>
         <file>qmlSource/TensionsConfigurationWindow.qml</file>
         <file>qmlSource/DepthConfigurationWindow.qml</file>
@@ -104,5 +104,10 @@
         <file>qmlSource/HBTableViewNew.qml</file>
         <file>qmlSource/HBChartView.qml</file>
         <file>qmlSource/HBChartViewAxisDefine.qml</file>
+        <file>qmlSource/HBSpinBox.qml</file>
+        <file>qmlSource/TensionsMeterScaleTable.qml</file>
+        <file>qmlSource/TensionsMeterView.qml</file>
+        <file>qmlSource/TensionsMeterScale.qml</file>
+        <file>qmlSource/HBScalesChartView.qml</file>
     </qresource>
 </RCC>

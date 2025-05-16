@@ -83,6 +83,7 @@ public:
         HB_SYSTEM_CONFIG,
         HB_WELL_PARAMETERS,
         HB_TENSIONS_SETTING,
+        HB_TENSIONS_VIEW,
         HB_DEPTH_SETTING,
         HB_USER_MANAGEMENT,
         HB_HELP,

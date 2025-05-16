@@ -29,6 +29,7 @@ Item {
     property real minimumValue: 10
     property real maximumValue: 100
     property alias value: input.text
+    property var targetTextField // allow the external object to register into Component
 
     function slotDigitalKeyPressed(data)
     {
@@ -226,9 +227,8 @@ Item {
             font.family: Style.regular.name
             onClicked:
             {
-                //var validatedValue = recipe.ValidateParamRange(paramIndex, input.text)
-                // recipe.updateParam(paramIndex, validateValue)
                 primaryNumpad.visible = false
+                targetTextField.text = value
             }
         }
     }

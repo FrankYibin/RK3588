@@ -32,6 +32,8 @@ ComboBox {
     property alias dropDownImg:img
     property alias dropDownText:combo_text
     property string comboBoxText
+    property int fontSize: Math.round(Style.style5 * Style.scaleHint)
+    property string fontFamily: Style.regular.name
     enabled: true
     implicitWidth: minWidth
     implicitHeight: minHeight
@@ -96,8 +98,8 @@ ComboBox {
         anchors.leftMargin: Math.round(10 * Style.scaleHint)
         verticalAlignment: Text.AlignVCenter
         font{
-            family: Style.regular.name
-            pixelSize: Math.round(Style.style5 * Style.scaleHint)
+            family: fontFamily
+            pixelSize: fontSize
         }
     }
 
@@ -112,8 +114,8 @@ ComboBox {
                 anchors.fill: parent
                 text: modelData
                 color: hovered === true ? "#ffffff" : Style.blackFontColor
-                font.family: Style.regular.name
-                font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                font.family: fontFamily
+                font.pixelSize: fontSize
 //                elide: Text.ElideRight
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter

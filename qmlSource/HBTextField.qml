@@ -22,6 +22,7 @@ TextField {
     property bool onlyForNumpad: false
     property bool isSelectedAll: false
     property int fontSize: Math.round(Style.style6 * Style.scaleHint)
+    property string backgroundColor: Style.hbFrameBackgroundColor
     signal signalClickedEvent()
     implicitWidth: parent.width
     implicitHeight: parent.height
@@ -47,7 +48,7 @@ TextField {
         background: Rectangle {
             id:backGroundId
             radius: 2
-            color: (enabled === true) ? Style.hbFrameBackgroundColor : "#ffffff"
+            color: (enabled === true) ? backgroundColor : "#ffffff"
             border.color: Style.hbFrameBorderColor
             border.width: 2
         }
