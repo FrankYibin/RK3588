@@ -194,6 +194,8 @@ Rectangle{
                 {
                     mainWindow.loginProcess()
                 }
+                else if(debug === false)
+                    mainWindow.loginProcess()
                 else
                 {
                     if(textFildPassword.text === "")

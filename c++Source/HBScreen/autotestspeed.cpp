@@ -1,9 +1,20 @@
 ﻿#include "autotestspeed.h"
 
+AutoTestSpeed* AutoTestSpeed::m_autoTestSpeed = nullptr;
+
+
 AutoTestSpeed::AutoTestSpeed(QObject *parent)
     : QObject{parent}
 {}
 
+AutoTestSpeed *AutoTestSpeed::getInstance()
+{
+    if (!m_autoTestSpeed) {
+        m_autoTestSpeed = new AutoTestSpeed();
+    }
+    return m_autoTestSpeed;
+
+}
 int AutoTestSpeed::Direction() const
 {
     return m_direction;

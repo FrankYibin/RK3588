@@ -39,6 +39,12 @@
 #include "c++Source/systemInformationInterface.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/autotestspeed.h"
+#include "c++Source/HBScreen/depth.h"
+#include "c++Source/HBScreen/depthmeter.h"
+#include "c++Source/HBScreen/depthsafe.h"
+#include "c++Source/HBScreen/tensiometer.h"
+#include "c++Source/HBScreen/tensionsafe.h"
+#include "c++Source/HBScreen/wellparameter.h"
 #include "c++Source/HBModbus/hbmodbusclient.h"
 #include "c++Source/HBData/hbdatabase.h"
 #include "c++Source/HBModbus/modbusutils.h"
@@ -111,7 +117,14 @@ int main(int argc, char *argv[])
     QQmlContext *pQmlContext = engine.rootContext();
     pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
     pQmlContext->setContextProperty("HBHome", HBHome::getInstance());
-    pQmlContext->setContextProperty("AutoTestSpeed",new AutoTestSpeed());
+    pQmlContext->setContextProperty("AutoTestSpeed", AutoTestSpeed::getInstance());
+    pQmlContext->setContextProperty("Depth", Depth::getInstance());
+    pQmlContext->setContextProperty("DepthMeter", DepthMeter::getInstance());
+    pQmlContext->setContextProperty("DepthSafe", DepthSafe::getInstance());
+    pQmlContext->setContextProperty("Tensiometer", Tensiometer::getInstance());
+    pQmlContext->setContextProperty("TensionSafe", TensionSafe::getInstance());
+    pQmlContext->setContextProperty("WellParameter", WellParameter::getInstance());
+
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);
 #else

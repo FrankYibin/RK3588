@@ -1,8 +1,20 @@
 ﻿#include "tensionsafe.h"
 
+TensionSafe* TensionSafe::m_tensionSafe = nullptr;
+
 TensionSafe::TensionSafe(QObject *parent)
     : QObject{parent}
 {}
+
+TensionSafe *TensionSafe::getInstance()
+{
+    if (!m_tensionSafe) {
+        m_tensionSafe = new TensionSafe();
+    }
+    return m_tensionSafe;
+
+}
+
 
 QString TensionSafe::WellType() const { return m_wellType; }
 void TensionSafe::setWellType(const QString &value) {
@@ -11,6 +23,7 @@ void TensionSafe::setWellType(const QString &value) {
         emit WellTypeChanged();
     }
 }
+
 
 // QString TensionSafe::MaxTension() const { return m_maxTension; }
 // void TensionSafe::setMaxTension(const QString &value) {
@@ -44,7 +57,20 @@ void TensionSafe::setWeakForce(const QString &value) {
     }
 }
 
+//void TensionSafe::setCurrentHarnessTension(const QString &value)
+//{
+//    if (m_currentHarnessTension != value) {
+//        m_currentHarnessTension = value;
+//        emit CurrentHarnessTensionChanged();
+//    }
+//}
+//QString TensionSafe::CurrentHarnessTension() const
+//{
+//    return m_currentHarnessTension;
+//}
+
 QString TensionSafe::CurrentTensionSafe() const { return m_currentTensionSafe; }
+
 void TensionSafe::setCurrentTensionSafe(const QString &value) {
     if (m_currentTensionSafe != value) {
         m_currentTensionSafe = value;

@@ -1,4 +1,4 @@
-#ifndef MODBUSUTILS_H
+﻿#ifndef MODBUSUTILS_H
 #define MODBUSUTILS_H
 
 #include <QObject>

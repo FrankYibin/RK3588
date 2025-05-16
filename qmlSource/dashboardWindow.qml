@@ -77,7 +77,8 @@ Item{
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
                 //text: "1200.00"
-                text: HBHome.Depth
+//                text: ModbusUtils.modbusRegistersToFloat(HBHome.Depth)
+                text:(HBHome.Depth / 100.0).toFixed(2)
 
             }
             Text
@@ -118,9 +119,10 @@ Item{
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-                validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
+                validator: RegularExpressionValidator{ regularExpression: /^\d{1,5}(\.\d{1,2})?$/ }
                 // text: "1200.00"
-                text: HBHome.Speed
+//                text: HBHome.Speed
+                text:(HBHome.Speed / 100.0).toFixed(2)
             }
             Text
             {
@@ -162,7 +164,9 @@ Item{
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
                 //text: "1200.00"
-                text: HBHome.Tension
+//                text: HBHome.Tension
+                text:(HBHome.Tension / 100.0).toFixed(2)
+
             }
             Text
             {
@@ -203,7 +207,9 @@ Item{
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
                 // text: "1200.00"
-                text: HBHome.TensionIncrement
+//                text: HBHome.TensionIncrement
+                 text:(HBHome.TensionIncrement / 100.0).toFixed(2)
+
             }
             Text
             {

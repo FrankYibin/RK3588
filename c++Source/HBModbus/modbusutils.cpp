@@ -1,4 +1,4 @@
-#include "modbusutils.h"
+﻿#include "modbusutils.h"
 
 ModbusUtils::ModbusUtils(QObject *parent)
     : QObject{parent}

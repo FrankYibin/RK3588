@@ -35,7 +35,7 @@ Window{
     title: qsTr("UIController")
 //    flags: Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Window
     flags: Qt.FramelessWindowHint | Qt.Window
-    // visibility: Window.FullScreen
+     visibility: Window.FullScreen
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
@@ -385,8 +385,8 @@ Window{
                 mainWindow.showHeight = Screen.height
             }
             var str = "Screen resolution:" + Screen.width + "X" + Screen.height
-            console.debug("scale: ", Style.scaleHint)
             console.debug(str)
+            console.debug("scale: ", Style.scaleHint)
             // leftMenuLoader.source = ""
             // leftMenuLoader.source = "qrc:/qmlSource/leftActionMenu.qml"
             // rightMenuLoader.source = ""
