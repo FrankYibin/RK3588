@@ -109,5 +109,6 @@
         <file>qmlSource/TensionsMeterView.qml</file>
         <file>qmlSource/TensionsMeterScale.qml</file>
         <file>qmlSource/HBScalesChartView.qml</file>
+        <file>qmlSource/HBDepthCountDown.qml</file>
     </qresource>
 </RCC>

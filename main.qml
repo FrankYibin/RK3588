@@ -308,6 +308,11 @@ Window{
         steppingNumpad.visible = true
     }
 
+    function showDepthCountDown()
+    {
+        depthCountDown.visible = true
+    }
+
     Connections {
         target: languageConfig
         function onSignalCurrentLanguageChanged()
@@ -326,16 +331,6 @@ Window{
             signalCurrentLanguageChanged()
         }
     }
-
-    // Connections {
-    //     target: headerLoader.item
-    //     function onSignalCurrentScreenIndexChanged(index)
-    //     {
-    //         menuOptionLookAt(index)
-    //         headerLoader.item.removeChildrenTitleModel(index)
-    //         signalCurrentScreenChanged(index)
-    //     }
-    // }
 
     QtObject {
         id: textEnum
@@ -643,5 +638,14 @@ Window{
 //            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
             VirtualKeyboardSettings.locale = "en_US"
         }
+    }
+
+    HBDepthCountDown {
+        id: depthCountDown
+        width: showWidth / 2
+        height: showHeight / 2
+        visible: false
+        x: parent.width / 2
+        y: parent.height / 2
     }
 }
