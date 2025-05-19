@@ -38,21 +38,24 @@ struct _Cloud_Network
     int CRemoteIP;        //remote ip
     QString CRemotePort;  //remote ip
 };
-struct _WellParameter{
 
-    QString WellNumber;       //well number
-    QString AreaBlock;        //AreaBlock
-    int WellType;         //WellType
-    QString WellDepth;        //WellDepth
-    QString HarnessWeight;    //HarnessWeight
-    QString SensorWeight;     //SensorWeight
-    int HarnessType;      //HarnessType
-    QString HarnessForce;      //HarnessForce
-    int WorkType;         //WorkType
-    QString UserName;         //UserName
-    QString OperatorType;     //OperatorType
+ struct _WellParameter {
 
-};
+        int id= 0;
+        QString wellNumber;
+        QString areaBlock;
+        int wellType = 0;
+        QString wellDepth;
+        QString harnessWeight;
+        QString sensorWeight;
+        int harnessType = 0;
+        QString harnessForce;
+        int tensionUnit = 0;
+        int workType = 0;
+        QString userName;
+        QString operatorType;
+
+ };
 
 struct _Measurements_data{
     int id;                                // id

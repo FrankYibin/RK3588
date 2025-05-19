@@ -44,15 +44,15 @@ void WellParameter::setAreaBlock(const QString &value)
 
 }
 
-QString WellParameter::WellType() const
+int WellParameter::WellType() const
 {
     return m_wellType;
 }
 
-void WellParameter::setWellType(const QString &value)
+void WellParameter::setWellType(const int newWellType)
 {
-    if (m_wellType != value) {
-        m_wellType = value;
+    if (m_wellType != newWellType) {
+        m_wellType = newWellType;
         emit WellTypeChanged();
     }
 }
@@ -99,15 +99,15 @@ void WellParameter::setSensorWeight(const QString &value)
 
 }
 
-QString WellParameter::HarnessType() const
+int WellParameter::HarnessType() const
 {
     return m_harnessType;
 }
 
-void WellParameter::setHarnessType(const QString &value)
+void WellParameter::setHarnessType(const int newHarnessType)
 {
-    if (m_harnessType != value) {
-        m_harnessType = value;
+    if (m_harnessType != newHarnessType) {
+        m_harnessType = newHarnessType;
         emit HarnessTypeChanged();
     }
 
@@ -126,29 +126,29 @@ void WellParameter::setHarnessForce(const QString &value)
 
 }
 
-QString WellParameter::TensionUnit() const
+int WellParameter::TensionUnit() const
 {
     return m_tensionUnit;
 }
 
-void WellParameter::setTensionUnit(const QString &value)
+void WellParameter::setTensionUnit(const int newTensionUnit)
 {
-    if (m_tensionUnit != value) {
-        m_tensionUnit = value;
+    if (m_tensionUnit != newTensionUnit) {
+        m_tensionUnit = newTensionUnit;
         emit TensionUnitChanged();
     }
 
 }
 
-QString WellParameter::WorkType() const
+int WellParameter::WorkType() const
 {
     return m_workType;
 }
 
-void WellParameter::setWorkType(const QString &value)
+void WellParameter::setWorkType(const int newWorkType)
 {
-    if (m_workType != value) {
-        m_workType = value;
+    if (m_workType != newWorkType) {
+        m_workType = newWorkType;
         emit WorkTypeChanged();
     }
 
@@ -182,134 +182,134 @@ void WellParameter::setOperatorType(const QString &value)
 
 }
 
-QString WellParameter::csvHeader()
-{
-    return "WellNumber,AreaBlock,WellType,WellDepth,HarnessWeight,SensorWeight,HarnessType,HarnessForce,TensionUnit,WorkType,UserName,OperatorType";
-}
+//QString WellParameter::csvHeader()
+//{
+//    return "WellNumber,AreaBlock,WellType,WellDepth,HarnessWeight,SensorWeight,HarnessType,HarnessForce,TensionUnit,WorkType,UserName,OperatorType";
+//}
 
 
 
-QString WellParameter::toCSVLine() const
-{
-    QStringList fields = {
-        m_wellNumber,
-        m_areaBlock,
-        m_wellType,
-        m_wellDepth,
-        m_harnessWeight,
-        m_sensorWeight,
-        m_harnessType,
-        m_harnessForce,
-        m_tensionUnit,
-        m_workType,
-        m_userName,
-        m_operatorType
-    };
+//QString WellParameter::toCSVLine() const
+//{
+//    QStringList fields = {
+//        m_wellNumber,
+//        m_areaBlock,
+//        m_wellType,
+//        m_wellDepth,
+//        m_harnessWeight,
+//        m_sensorWeight,
+//        m_harnessType,
+//        m_harnessForce,
+//        m_tensionUnit,
+//        m_workType,
+//        m_userName,
+//        m_operatorType
+//    };
 
-    for(QString &field : fields){
-        field.replace("\"","\"\""); //escape quotes
-        if(field.contains(',') || field.contains('"') || field.contains('\n')){
-            field = "\"" + field + "\"";
-        }
-    }
+//    for(QString &field : fields){
+//        field.replace("\"","\"\""); //escape quotes
+//        if(field.contains(',') || field.contains('"') || field.contains('\n')){
+//            field = "\"" + field + "\"";
+//        }
+//    }
 
-    return fields.join(',');
-}
+//    return fields.join(',');
+//}
 
 
 //CSV Import
-WellParameter *WellParameter::fromCSVLine(const QString &line, QObject *parent)
-{
-    QStringList fields;
-    QString field;
-    bool inQuotes = false;
+//WellParameter *WellParameter::fromCSVLine(const QString &line, QObject *parent)
+//{
+//    QStringList fields;
+//    QString field;
+//    bool inQuotes = false;
 
-    for(int i = 0; i< line.length(); ++i){
-        QChar c = line[i];
+//    for(int i = 0; i< line.length(); ++i){
+//        QChar c = line[i];
 
-        if (c == '"'){
-            if(inQuotes && i +1 < line.length() && line[i + 1] == '"'){
-                field += '"';
-                ++i;
-            }else{
-                inQuotes = !inQuotes;
-            }
-        }else if (c == ',' && !inQuotes){
-            fields << field;
-            field.clear();
-        }else{
-            field +=c;
-        }
-    }
+//        if (c == '"'){
+//            if(inQuotes && i +1 < line.length() && line[i + 1] == '"'){
+//                field += '"';
+//                ++i;
+//            }else{
+//                inQuotes = !inQuotes;
+//            }
+//        }else if (c == ',' && !inQuotes){
+//            fields << field;
+//            field.clear();
+//        }else{
+//            field +=c;
+//        }
+//    }
 
-    fields << field;
+//    fields << field;
 
-    if (fields.size() != 12)
-        return nullptr;
+//    if (fields.size() != 12)
+//        return nullptr;
 
-    WellParameter * param = new WellParameter(parent);
+//    WellParameter * param = new WellParameter(parent);
 
-    param->setWellNumber(fields[0]);
-    param->setAreaBlock(fields[1]);
-    param->setWellType(fields[2]);
-    param->setWellDepth(fields[3]);
-    param->setHarnessWeight(fields[4]);
-    param->setSensorWeight(fields[5]);
-    param->setHarnessType(fields[6]);
-    param->setHarnessForce(fields[7]);
-    param->setTensionUnit(fields[8]);
-    param->setWorkType(fields[9]);
-    param->setUserName(fields[10]);
-    param->setOperatorType(fields[11]);
+//    param->setWellNumber(fields[0]);
+//    param->setAreaBlock(fields[1]);
+//    param->setWellType(fields[2]);
+//    param->setWellDepth(fields[3]);
+//    param->setHarnessWeight(fields[4]);
+//    param->setSensorWeight(fields[5]);
+//    param->setHarnessType(fields[6]);
+//    param->setHarnessForce(fields[7]);
+//    param->setTensionUnit(fields[8]);
+//    param->setWorkType(fields[9]);
+//    param->setUserName(fields[10]);
+//    param->setOperatorType(fields[11]);
 
-    return param;
-}
+//    return param;
+//}
 
-QList<WellParameter *> WellParameter::loadFromCSV(const QString &filePath, QObject *parent)
-{
-    QList<WellParameter*> list;
-    QFile file(filePath);
-    if (!file.open(QIODevice :: ReadOnly | QIODevice :: Text))
-        return list;
-
-
-    QTextStream in(&file);
-    in.setCodec("UTF-8");
-
-    if(!in.atEnd())
-        in.readLine(); //skip header
-
-    while(!in.atEnd()){
-        QString line = in.readLine().trimmed();
-        if(line.isEmpty()) continue;
+//QList<WellParameter *> WellParameter::loadFromCSV(const QString &filePath, QObject *parent)
+//{
+//    QList<WellParameter*> list;
+//    QFile file(filePath);
+//    if (!file.open(QIODevice :: ReadOnly | QIODevice :: Text))
+//        return list;
 
 
-        WellParameter *param = fromCSVLine(line,parent);
-        if(param)
-            list.append(param);
-    }
+//    QTextStream in(&file);
+//    in.setCodec("UTF-8");
 
-    file.close();
-    return list;
-}
+//    if(!in.atEnd())
+//        in.readLine(); //skip header
 
-//save list to csv
-bool WellParameter::saveToCSV(const QString &filePath, const QList<WellParameter *> &list)
-{
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice :: Text))
-        return false;
+//    while(!in.atEnd()){
+//        QString line = in.readLine().trimmed();
+//        if(line.isEmpty()) continue;
 
-    QTextStream out(&file);
-    out.setCodec("UTF-8");
-    out << csvHeader() << "\n";
 
-    for (WellParameter *param : list){
-        out << param->toCSVLine() << "\n";
+//        WellParameter *param = fromCSVLine(line,parent);
+//        if(param)
+//            list.append(param);
+//    }
 
-    }
+//    file.close();
+//    return list;
+//}
 
-    file.close();
-    return true;
-}
+////save list to csv
+//bool WellParameter::saveToCSV(const QString &filePath, const QList<WellParameter *> &list)
+//{
+//    QFile file(filePath);
+//    if (!file.open(QIODevice::WriteOnly | QIODevice :: Text))
+//        return false;
+
+//    QTextStream out(&file);
+//    out.setCodec("UTF-8");
+//    out << csvHeader() << "\n";
+
+//    for (WellParameter *param : list){
+//        out << param->toCSVLine() << "\n";
+
+//    }
+
+//    file.close();
+//    return true;
+//}
 

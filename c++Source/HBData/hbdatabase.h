@@ -9,8 +9,10 @@ class HBDatabase : public QObject
 {
     Q_OBJECT
 public:
-    explicit HBDatabase(QObject *parent = nullptr);
-    ~HBDatabase();
+    static HBDatabase& getInstance();
+    HBDatabase(const HBDatabase&) = delete;
+    HBDatabase& operator=(const HBDatabase&) = delete;
+
 
     _Measurements_data queryMeasurementById(int id);
     //wellnum
@@ -18,7 +20,22 @@ public:
 
     _USER_DATA queryUsertById(int id);
 
+
+   //wellparameter
+    void loadDataFromDatabase();
+    bool loadWellParameter(_WellParameter &param);
+    Q_INVOKABLE bool updateWellParameterFromInstance();
+    bool updateWellParameter(const _WellParameter &param);
+
+    //test
+    bool testUpdate();
+
+
 signals:
+
+private:
+    explicit HBDatabase(QObject *parent = nullptr);
+    ~HBDatabase();
 
 private:
     void init();  // 初始化数据库连

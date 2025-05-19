@@ -5,15 +5,21 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QSqlDriver>
+#include "c++Source/HBDefine.h"
+#include "c++Source/HBScreen/wellparameter.h"
+#include <QVariant>
 
 HBDatabase::HBDatabase(QObject *parent)
     : QObject{parent}
 {
     init();
+    //    loadDataFromDatabase();
+
 }
 
 HBDatabase::~HBDatabase()
 {
+
     closeTransaction();
 }
 
@@ -21,6 +27,7 @@ void HBDatabase::init()
 {
     m_database = QSqlDatabase::addDatabase("QSQLITE");
     QString dbPath = QCoreApplication::applicationDirPath() + "/DVTT.db";
+    qDebug() << "DB Path: " << dbPath;
     m_database.setDatabaseName(dbPath);
 
     if (!m_database.open())
@@ -40,212 +47,173 @@ void HBDatabase::closeTransaction()
 
 }
 
-_USER_DATA HBDatabase::queryUsertById(int id){
 
-
-    _USER_DATA data;
-    QSqlQuery query;
-
-    query.prepare("SELECT * FROM user WHERE id = :id");
-    query.bindValue(":id", id);
-    // QString sql = QString("SELECT * FROM %1 WHERE id = %2").arg("user").arg(id);
-    // query.prepare(sql);
-
-    if (!query.exec()) {
-        qDebug() << "Query error:" << query.lastError().text();
-        qDebug() << "Query executed: " << query.lastQuery();
-        return data; // 返回空结构体
-    }
-
-
-    if (query.next()) {
-        data.id = query.value("id").toInt();
-        data.username = query.value("username").toString();
-        data.password = query.value("password").toInt();
-
-    }else{
-        qDebug() << "No data found for ID:" << id;
-    }
-    return data;
-
-}
-
-_Measurements_data HBDatabase::queryMeasurementById(int id)
+HBDatabase &HBDatabase::getInstance()
 {
-
-    _Measurements_data data;  // 创建一个结构体实例来存储查询结果
-    QSqlQuery query;
-
-    QString sql = QString("SELECT * FROM %1 WHERE id = %2").arg("measurements").arg(id);
-    query.prepare(sql);
-
-    if (!query.exec()) {
-        qDebug() << "Query error:" << query.lastError().text();
-        qDebug() << "Query executed: " << query.lastQuery();
-        return data; // 返回空结构体
-    }
-
-    // 获取查询结果的字段名
-    QSqlRecord record = query.record();
-    int fieldCount = record.count();
-
-    qDebug() << "Field count: " << fieldCount;
-
-    // 输出字段名
-    for (int i = 0; i < fieldCount; ++i) {
-        qDebug() << "Field " << i << ": " << record.fieldName(i);
-    }
-
-    if (query.next()) {
-
-        data.id = query.value("id").toInt();
-        data.wellnum = query.value("wellnum").toString();
-        data.depth = query.value("depth").toDouble();
-        data.speed = query.value("speed").toDouble();
-        data.target_depth = query.value("target_depth").toDouble();
-        data.surface_depth = query.value("surface_depth").toDouble();
-        data.pulse_count = query.value("pulse_count").toDouble();
-        data.depth_dir = query.value("depth_dir").toDouble();
-        data.depth_calcu = query.value("depth_calcu").toDouble();
-        data.coder_cho = query.value("coder_cho").toDouble();
-        data.coder1_depth = query.value("coder1_depth").toDouble();
-        data.coder2_depth = query.value("coder2_depth").toDouble();
-        data.coder3_depth = query.value("coder3_depth").toDouble();
-        data.coder_error = query.value("coder_error").toDouble();
-        data.depth_countdown = query.value("depth_countdown").toDouble();
-        data.cumulative_depth = query.value("cumulative_depth").toDouble();
-        data.tension = query.value("tension").toDouble();
-        data.tension_increment = query.value("tension_increment").toDouble();
-        data.K_value = query.value("K_value").toDouble();
-        data.tensioner_status = query.value("tensioner_status").toDouble();
-        data.tension_meter_bat = query.value("tension_meter_bat").toDouble();
-        data.tensioner_num = query.value("tensioner_num").toDouble();
-        data.scale_end_num = query.value("scale_end_num").toDouble();
-        data.end_scale = query.value("end_scale").toDouble();
-        data.end_tension = query.value("end_tension").toDouble();
-        data.end_nums = query.value("end_nums").toDouble();
-        data.calibrate_or = query.value("calibrate_or").toDouble();
-        data.limit_tension = query.value("limit_tension").toDouble();
-        data.limit_tension_increment = query.value("limit_tension_increment").toDouble();
-        data.limit_speed = query.value("limit_speed").toDouble();
-        data.head_tension = query.value("head_tension").toDouble();
-        data.cv_status = query.value("cv_status").toDouble();
-        data.cv_let = query.value("cv_let").toDouble();
-        data.cv_speed = query.value("cv_speed").toDouble();
-        data.pump_down_current = query.value("pump_down_current").toDouble();
-        data.pump_up_current = query.value("pump_up_current").toDouble();
-        data.motor_current = query.value("motor_current").toDouble();
-        data.invalid_reservation = query.value("invalid_reservation").toDouble();
-        data.volt = query.value("volt").toDouble();
-        data.tension_channel = query.value("tension_channel").toDouble();
-        data.pump_speed_potentiometer = query.value("pump_speed_potentiometer").toDouble();
-        data.speed_trimmer_potentiometer = query.value("speed_trimmer_potentiometer").toDouble();
-        data.tension_bar_m = query.value("tension_bar_m").toDouble();
-        data.cable_specification = query.value("cable_specification").toDouble();
-        data.well_depth = query.value("well_depth").toDouble();
-        data.well_deviation = query.value("well_deviation").toDouble();
-        data.work_type = query.value("work_type").toDouble();
-        data.cable_breaking_f = query.value("cable_breaking_f").toDouble();
-        data.weak_pull_f = query.value("weak_pull_f").toDouble();
-        data.m_per_km = query.value("m_per_km").toDouble();
-        data.instruments_m = query.value("instruments_m").toDouble();
-        data.safe_tension_paras = query.value("safe_tension_paras").toDouble();
-        data.now_safe_tension = query.value("now_safe_tension").toDouble();
-        data.now_limit_tension = query.value("now_limit_tension").toDouble();
-        data.cable_tension_changing = query.value("cable_tension_changing").toDouble();
-        data.safe_stop_time = query.value("safe_stop_time").toDouble();
-        data.depth_tension_status = query.value("depth_tension_status").toDouble();
-        data.timestamp = query.value("timestamp").toString();
-        data.current_user = query.value("current_user").toString();
-        data.speed_unit = query.value("speed_unit").toString();
-        data.tension_unit = query.value("tension_unit").toString();
-    } else {
-        qDebug() << "No data found for ID:" << id;
-    }
-
-    return data;
+    static HBDatabase instance; // 局部静态，线程安全单例
+    return instance;
 }
 
-_Measurements_data HBDatabase::queryWellDataByWellnum(QString wellnum)
+bool HBDatabase::loadWellParameter(_WellParameter &param)
 {
-    _Measurements_data data;  // 创建一个结构体实例来存储查询结果
-    QSqlQuery query;
-
-    // 准备 SQL 查询语句，查询指定 ID 的数据
-    query.prepare("SELECT * FROM measurements WHERE wellnum = :wellnum");
-    query.bindValue(":wellnum", wellnum);
+    QSqlQuery query(m_database);
+    query.prepare("SELECT * FROM wellparameter LIMIT 1");
 
     if (!query.exec()) {
-        qDebug() << "Query error:" << query.lastError().text();
-        return data; // 返回空结构体
+        qDebug() << "Load failed:" << query.lastError();
+        return false;
     }
 
-
-    if (query.next()) {
-        data.id = query.value("id").toInt();
-        data.wellnum = query.value("wellnum").toString();
-        data.depth = query.value("depth").toDouble();
-        data.speed = query.value("speed").toDouble();
-        data.target_depth = query.value("target_depth").toDouble();
-        data.surface_depth = query.value("surface_depth").toDouble();
-        data.pulse_count = query.value("pulse_count").toDouble();
-        data.depth_dir = query.value("depth_dir").toDouble();
-        data.depth_calcu = query.value("depth_calcu").toDouble();
-        data.coder_cho = query.value("coder_cho").toDouble();
-        data.coder1_depth = query.value("coder1_depth").toDouble();
-        data.coder2_depth = query.value("coder2_depth").toDouble();
-        data.coder3_depth = query.value("coder3_depth").toDouble();
-        data.coder_error = query.value("coder_error").toDouble();
-        data.depth_countdown = query.value("depth_countdown").toDouble();
-        data.cumulative_depth = query.value("cumulative_depth").toDouble();
-        data.tension = query.value("tension").toDouble();
-        data.tension_increment = query.value("tension_increment").toDouble();
-        data.K_value = query.value("K_value").toDouble();
-        data.tensioner_status = query.value("tensioner_status").toDouble();
-        data.tension_meter_bat = query.value("tension_meter_bat").toDouble();
-        data.tensioner_num = query.value("tensioner_num").toDouble();
-        data.scale_end_num = query.value("scale_end_num").toDouble();
-        data.end_scale = query.value("end_scale").toDouble();
-        data.end_tension = query.value("end_tension").toDouble();
-        data.end_nums = query.value("end_nums").toDouble();
-        data.calibrate_or = query.value("calibrate_or").toDouble();
-        data.limit_tension = query.value("limit_tension").toDouble();
-        data.limit_tension_increment = query.value("limit_tension_increment").toDouble();
-        data.limit_speed = query.value("limit_speed").toDouble();
-        data.head_tension = query.value("head_tension").toDouble();
-        data.cv_status = query.value("cv_status").toDouble();
-        data.cv_let = query.value("cv_let").toDouble();
-        data.cv_speed = query.value("cv_speed").toDouble();
-        data.pump_down_current = query.value("pump_down_current").toDouble();
-        data.pump_up_current = query.value("pump_up_current").toDouble();
-        data.motor_current = query.value("motor_current").toDouble();
-        data.invalid_reservation = query.value("invalid_reservation").toDouble();
-        data.volt = query.value("volt").toDouble();
-        data.tension_channel = query.value("tension_channel").toDouble();
-        data.pump_speed_potentiometer = query.value("pump_speed_potentiometer").toDouble();
-        data.speed_trimmer_potentiometer = query.value("speed_trimmer_potentiometer").toDouble();
-        data.tension_bar_m = query.value("tension_bar_m").toDouble();
-        data.cable_specification = query.value("cable_specification").toDouble();
-        data.well_depth = query.value("well_depth").toDouble();
-        data.well_deviation = query.value("well_deviation").toDouble();
-        data.work_type = query.value("work_type").toDouble();
-        data.cable_breaking_f = query.value("cable_breaking_f").toDouble();
-        data.weak_pull_f = query.value("weak_pull_f").toDouble();
-        data.m_per_km = query.value("m_per_km").toDouble();
-        data.instruments_m = query.value("instruments_m").toDouble();
-        data.safe_tension_paras = query.value("safe_tension_paras").toDouble();
-        data.now_safe_tension = query.value("now_safe_tension").toDouble();
-        data.now_limit_tension = query.value("now_limit_tension").toDouble();
-        data.cable_tension_changing = query.value("cable_tension_changing").toDouble();
-        data.safe_stop_time = query.value("safe_stop_time").toDouble();
-        data.depth_tension_status = query.value("depth_tension_status").toDouble();
-        data.timestamp = query.value("timestamp").toString();
-        data.current_user = query.value("current_user").toString();
-        data.speed_unit = query.value("speed_unit").toString();
-        data.tension_unit = query.value("tension_unit").toString();
-    } else {
-        qDebug() << "No data found for wellnum:" << wellnum;
+    if (!query.next()) {
+        qDebug() << "No data found in wellparameter table";
+        return false;
     }
-    return data;
 
+    param.id = query.value("id").toInt();
+    param.wellNumber = query.value("wellNumber").toString();
+    param.areaBlock = query.value("areaBlock").toString();
+    param.wellType = query.value("wellType").toInt();
+    param.wellDepth = query.value("wellDepth").toString();
+    param.harnessWeight = query.value("harnessWeight").toString();
+    param.sensorWeight = query.value("sensorWeight").toString();
+    param.harnessType = query.value("harnessType").toInt();
+    param.harnessForce = query.value("harnessForce").toString();
+    param.tensionUnit = query.value("tensionUnit").toInt();
+    param.workType = query.value("workType").toInt();
+    param.userName = query.value("userName").toString();
+    param.operatorType = query.value("operatorType").toString();
+
+    WellParameter* wp = WellParameter::getInstance();
+    wp->setWellNumber(param.wellNumber);
+    wp->setAreaBlock(param.areaBlock);
+    wp->setWellType(param.wellType);
+    wp->setWellDepth(param.wellDepth);
+    wp->setHarnessWeight(param.harnessWeight);
+    wp->setSensorWeight(param.sensorWeight);
+    wp->setHarnessType(param.harnessType);
+    wp->setHarnessForce(param.harnessForce);
+    wp->setTensionUnit(param.tensionUnit);
+    wp->setWorkType(param.workType);
+    wp->setUserName(param.userName);
+    wp->setOperatorType(param.operatorType);
+
+    return true;
 }
+
+void HBDatabase::loadDataFromDatabase()
+{
+    _WellParameter param;
+    bool ok = HBDatabase::getInstance().loadWellParameter(param);
+    if (ok) {
+
+        qDebug() << "Loaded data:";
+        qDebug() << "Updating record id:" << param.id;
+        qDebug() << "WellNumber:" << param.wellNumber;
+        qDebug() << "AreaBlock:" << param.areaBlock;
+
+    } else {
+        qDebug() << "Failed to load data from database";
+    }
+}
+
+bool HBDatabase::updateWellParameter(const _WellParameter &param)
+{
+    if (!m_database.isOpen()) {
+        qDebug() << "Database is not open";
+        return false;
+    }
+
+    if (!m_database.transaction()) {
+        qDebug() << "Failed to start transaction:" << m_database.lastError();
+        return false;
+    }
+
+    QSqlQuery query(m_database);
+    query.prepare(R"(
+                  UPDATE wellparameter SET
+                  wellNumber = :wellNumber,
+                  areaBlock = :areaBlock,
+                  wellType = :wellType,
+                  wellDepth = :wellDepth,
+                  harnessWeight = :harnessWeight,
+                  sensorWeight = :sensorWeight,
+                  harnessType = :harnessType,
+                  harnessForce = :harnessForce,
+                  tensionUnit = :tensionUnit,
+                  workType = :workType,
+                  userName = :userName,
+                  operatorType = :operatorType
+                  WHERE id = :id
+                  )");
+
+    query.bindValue(":wellNumber", param.wellNumber,QSql::In);
+    query.bindValue(":areaBlock", param.areaBlock,QSql::In);
+    query.bindValue(":wellType", param.wellType,QSql::In);
+    query.bindValue(":wellDepth", param.wellDepth,QSql::In);
+    query.bindValue(":harnessWeight", param.harnessWeight,QSql::In);
+    query.bindValue(":sensorWeight", param.sensorWeight,QSql::In);
+    query.bindValue(":harnessType", param.harnessType,QSql::In);
+    query.bindValue(":harnessForce", param.harnessForce,QSql::In);
+    query.bindValue(":tensionUnit", param.tensionUnit,QSql::In);
+    query.bindValue(":workType", param.workType,QSql::In);
+    query.bindValue(":userName", param.userName,QSql::In);
+    query.bindValue(":operatorType", param.operatorType,QSql::In);
+    query.bindValue(":id", param.id,QSql::In);
+
+    if (!query.exec()) {
+        qDebug() << "Update failed:" << query.lastError();
+        m_database.rollback();
+        return false;
+    }
+
+    m_database.commit();
+    qDebug() << "Update successful";
+    return true;
+}
+
+bool HBDatabase::updateWellParameterFromInstance()
+{
+    WellParameter* wp = WellParameter::getInstance();
+    _WellParameter param;
+    param.id = 1;
+    param.wellNumber = wp->WellNumber();
+    param.areaBlock = wp->AreaBlock();
+    param.wellType = wp->WellType();
+    param.wellDepth = wp->WellDepth();
+    param.harnessWeight = wp->HarnessWeight();
+    param.sensorWeight = wp->SensorWeight();
+    param.harnessType = wp->HarnessType();
+    param.harnessForce = wp->HarnessForce();
+    param.tensionUnit = wp->TensionUnit();
+    param.workType = wp->WorkType();
+    param.userName = wp->UserName();
+    param.operatorType = wp->OperatorType();
+
+    qDebug() << "Updating record id:" << param.id;
+    qDebug() << "wellNumber:" << param.wellNumber;
+    qDebug() << "areaBlock:" << param.areaBlock;
+    qDebug() << "wellType:" << param.wellType;
+    qDebug() << "wellDepth:" << param.wellDepth;
+    qDebug() << "harnessWeight:" << param.harnessWeight;
+    qDebug() << "sensorWeight:" << param.sensorWeight;
+    qDebug() << "harnessType:" << param.harnessType;
+    qDebug() << "harnessForce:" << param.harnessForce;
+    qDebug() << "tensionUnit:" << param.tensionUnit;
+    qDebug() << "workType:" << param.workType;
+    qDebug() << "userName:" << param.userName;
+    qDebug() << "operatorType:" << param.operatorType;
+
+    return updateWellParameter(param);
+}
+
+//bool HBDatabase::testUpdate()
+//{
+//    QSqlQuery query(m_database);
+//    query.prepare("UPDATE wellparameter SET wellNumber = 'Test123' WHERE id = 1");
+//    if (!query.exec()) {
+//        qDebug() << "Test update failed:" << query.lastError();
+//        return false;
+//    }
+//    qDebug() << "Test update successful, rows affected:" << query.numRowsAffected();
+//    return true;
+//}

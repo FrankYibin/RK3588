@@ -88,7 +88,7 @@ ComboBox {
         }
 
     }
-    onCurrentIndexChanged:changeIndex(currentIndex)
+//    onCurrentIndexChanged:changeIndex(currentIndex)
 
     contentItem: Text {
         id: combo_text

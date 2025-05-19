@@ -73,7 +73,9 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 //HB
-    HBDatabase hbdata;
+    HBDatabase& db = HBDatabase::getInstance();
+       db.loadDataFromDatabase();
+//       db.testUpdate();
     HBModbusClient modbusClient;
     ModbusUtils modbusUtils;
 
@@ -97,6 +99,8 @@ int main(int argc, char *argv[])
 
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", &modbusClient);
+//    qmlRegisterSingletonInstance<HBDatabase>("HBDatabase", 1, 0, "HBDatabase", &dbInstance);
+    qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::getInstance());
 
 
     UserLevelEnum::registerQMLType();

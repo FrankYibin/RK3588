@@ -66,6 +66,7 @@ class TensionSafe : public QObject
 public:
     static TensionSafe* getInstance();
 
+
     QString WellType() const;
     // QString MaxTension() const;
     QString CableWeight() const;
