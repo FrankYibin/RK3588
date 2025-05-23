@@ -129,6 +129,20 @@ Window{
         languageSelectView.visible = true
     }
 
+    function showFaceLogin()
+    {
+        inputPanel.active = false
+        loginLayout.visible = false
+        faceRecognition.visible = true
+    }
+
+    function showPasswordLogin()
+    {
+        faceRecognition.visible = false
+        // inputPanel.active = true
+        loginLayout.visible = true
+    }
+
     function loginProcess()
     {
         loginLayout.visible = false
@@ -595,6 +609,15 @@ Window{
         height: mainWindow.showHeight
     }
 
+    LoginFaceRecognition
+    {
+        id: faceRecognition
+        visible: false
+        anchors.centerIn: parent
+        width: mainWindow.showWidth
+        height: mainWindow.showHeight
+    }
+
     ProfileWindow
     {
         id: profileLayout
@@ -611,29 +634,32 @@ Window{
         y: windowArea.y + windowArea.height
         anchors.left: windowArea.left
         anchors.right: windowArea.right
-
-        states: State {
-            name: "visible"
-            when: inputPanel.active
-            PropertyChanges {
-                target: inputPanel
-                y: windowArea.y + windowArea.height - inputPanel.height
-                visible: true
-            }
-        }
-
-        transitions: Transition {
-            from: ""
-            to: "visible"
-            reversible: true
-            ParallelAnimation {
-                NumberAnimation {
-                    properties: "y"
-                    duration: 250
-                    easing.type: Easing.OutQuart
+        // active: false
+        states:
+            State {
+                name: "visible"
+                when: (inputPanel.active === true) ? true : false
+                PropertyChanges {
+                    target: inputPanel
+                    y: windowArea.y + windowArea.height - inputPanel.height
+                    visible: true
                 }
             }
-        }
+
+        transitions:
+            Transition {
+                from: ""
+                to: "visible"
+                reversible: true
+                ParallelAnimation {
+                    NumberAnimation {
+                        properties: "y"
+                        duration: 250
+                        easing.type: Easing.OutQuart
+                    }
+                }
+            }
+
         Component.onCompleted: {
 //            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
             VirtualKeyboardSettings.locale = "en_US"

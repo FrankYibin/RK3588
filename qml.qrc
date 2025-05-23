@@ -110,5 +110,7 @@
         <file>qmlSource/TensionsMeterScale.qml</file>
         <file>qmlSource/HBScalesChartView.qml</file>
         <file>qmlSource/HBDepthCountDown.qml</file>
+        <file>qmlSource/LoginFaceRecognition.qml</file>
+        <file>qmlSource/HBLoginFaceBoard.qml</file>
     </qresource>
 </RCC>

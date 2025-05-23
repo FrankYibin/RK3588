@@ -72,7 +72,9 @@ Item {
     enum EnumKeyboard{
         Delete,
         Clear,
-        Login
+        Login,
+        FaceLogin,
+        PasswordLogin
     }
 
     QtObject {

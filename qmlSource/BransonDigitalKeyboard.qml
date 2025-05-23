@@ -23,6 +23,7 @@ Button{
     property int minHeight: Math.round(50 * Style.scaleHint)
     property int radiusWidth: 3
     property int fontSize: Math.round(Style.style6 * Style.scaleHint)
+    property string fontFamily: Style.regular.name
     property bool operator: false
     property string buttonColor: "#6699CC"
     property string textColor: "#FFFFFF"
@@ -33,7 +34,7 @@ Button{
         text: digiaal.text
         color: textColor
         font{
-            family: Style.regular.name
+            family: fontFamily
             pixelSize: fontSize
         }
         horizontalAlignment: Text.AlignHCenter

@@ -220,7 +220,12 @@ Rectangle{
                     textFildPassword.text = ""
                 }
             }
-            else{
+            else if(data === BransonNumpadDefine.EnumKeyboard.FaceLogin)
+            {
+                mainWindow.showFaceLogin()
+            }
+            else
+            {
                 textFildPassword.insert(textFildPassword.cursorPosition, data)
             }
         }

@@ -252,6 +252,32 @@ Item {
         font.family: buttonLoginFontFamily
         onClicked:  signalButtonFunc(BransonNumpadDefine.EnumKeyboard.Login)
     }
+
+    Item{
+        anchors.top: buttonLogin.bottom
+        anchors.topMargin: Math.round(5 * Style.scaleHint)
+        anchors.left: buttonLogin.left
+        height: Math.round(30 * Style.scaleHint)
+        width: buttonLogin.width
+        Text{
+            id: faceLogin
+            text: qsTr("人脸登录")
+            anchors.centerIn: parent
+            font.family: "宋体"
+            font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+            font.underline: true
+            color: Style.whiteFontColor
+            verticalAlignment: Text.AlignVCenter
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked: signalButtonFunc(BransonNumpadDefine.EnumKeyboard.FaceLogin)
+        }
+    }
+
+
+
+
 }
 
 
