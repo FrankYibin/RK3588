@@ -21,11 +21,57 @@ public:
     _USER_DATA queryUsertById(int id);
 
 
-   //wellparameter
+    //wellparameter
     void loadDataFromDatabase();
     bool loadWellParameter(_WellParameter &param);
     Q_INVOKABLE bool updateWellParameterFromInstance();
     bool updateWellParameter(const _WellParameter &param);
+
+
+    //Depthset
+
+    bool loadDepthSet(_DepthSet &param);
+    bool updateDepthSet(const _DepthSet &param);
+    Q_INVOKABLE bool updateDepthSetFromInstance();
+
+    //DepthSafe
+    bool loadDepthSafe(_DepthSafe &param);
+    bool updateDepthSafe(const _DepthSafe &param);
+    Q_INVOKABLE bool updateDepthSafeFromInstance();
+
+
+    //tensionsafe
+    bool loadTensionSafe(_TensionSafe &param);
+    bool updateTensionSafe(const _TensionSafe &param);
+    Q_INVOKABLE bool updateTensionSafeFromInstance();
+
+    //tensionset
+    bool loadTensionSet(_TensionSet &param);
+    bool updateTensionSet(const _TensionSet &param);
+    bool updateTensionSetFromInstance();
+
+
+    //tensiometer
+    // 加载单条 Tensiometer 数据
+    bool loadTensiometerData(int id, TensiometerData &data);
+
+    // 插入新的 Tensiometer 数据（返回新 id）
+    bool insertTensiometerData(TensiometerData &data);
+
+    // 更新现有 Tensiometer 数据
+    bool updateTensiometerData(const TensiometerData &data);
+
+    // 删除 Tensiometer 数据
+    bool deleteTensiometerData(int id);
+
+    // 加载所有 Tensiometer 数据（用于列表展示）
+    bool loadAllTensiometerData(QList<TensiometerData> &list);
+
+
+
+
+    void closeTransaction();
+
 
     //test
     bool testUpdate();
@@ -39,7 +85,13 @@ private:
 
 private:
     void init();  // 初始化数据库连
-    void closeTransaction();
+
+
+    bool isDatabaseReady() const;
+    bool beginTransaction();
+    bool commitTransaction();
+
+private:
     QSqlDatabase m_database;
 };
 

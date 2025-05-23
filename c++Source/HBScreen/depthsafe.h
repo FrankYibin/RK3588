@@ -7,23 +7,25 @@ class DepthSafe : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int DepthPreset READ DepthPreset WRITE setDepthPreset NOTIFY DepthPresetChanged);
+    //井口段
+    //深度预置
+    Q_PROPERTY(int DepthPreset READ DepthPreset WRITE setDepthPreset NOTIFY DepthPresetChanged)
+    //报警
+    Q_PROPERTY(int WellWarnig READ WellWarnig WRITE setWellWarnig NOTIFY WellWarnigChanged)
+    //刹车
+    Q_PROPERTY(int Brake READ Brake WRITE setBrake NOTIFY BrakeChanged)
+    //限速
+    Q_PROPERTY(int VelocityLimit READ VelocityLimit WRITE setVelocityLimit NOTIFY VelocityLimitChanged)
 
-    Q_PROPERTY(int WellWarnig READ WellWarnig WRITE setWellWarnigNOTIFY NOTIFY WellWarnigChanged);
 
-    Q_PROPERTY(int Brake READ Brake WRITE setBrake NOTIFY BrakeChanged);
-
-    Q_PROPERTY(int VelocityLimit READ VelocityLimit WRITE setVelocityLimit NOTIFY VelocityLimitChanged);
-
-
-
-    Q_PROPERTY(int DepthWarning READ DepthWarning WRITE setDepthWarning NOTIFY DepthWarningChanged);
-
-    Q_PROPERTY(int TotalDepth READ TotalDepth WRITE setTotalDepth NOTIFY TotalDepthhanged);
-
-    Q_PROPERTY(int Depthbrake READ Depthbrake WRITE setDepthbrake NOTIFY DepthbrakeChanged);
-
-    Q_PROPERTY(int DepthVelocityLimit READ DepthVelocityLimit WRITE setDepthVelocityLimit NOTIFY DepthVelocityLimitChanged);
+    //报警
+    Q_PROPERTY(int DepthWarning READ DepthWarning WRITE setDepthWarning NOTIFY DepthWarningChanged)
+    //总深度
+    Q_PROPERTY(int TotalDepth READ TotalDepth WRITE setTotalDepth NOTIFY TotalDepthhanged)
+    //刹车
+    Q_PROPERTY(int DepthBrake READ DepthBrake WRITE setDepthBrake NOTIFY DepthBrakeChanged)
+    //井低限速
+    Q_PROPERTY(int DepthVelocityLimit READ DepthVelocityLimit WRITE setDepthVelocityLimit NOTIFY DepthVelocityLimitChanged)
 
 public:
 
@@ -35,7 +37,7 @@ public:
 
     Q_INVOKABLE int WellWarnig() const;
 
-    Q_INVOKABLE void setWellWarnigNOTIFY(int newDepthPreset);
+    Q_INVOKABLE void setWellWarnig(int newDepthPreset);
 
 
     Q_INVOKABLE int Brake() const;
@@ -58,9 +60,9 @@ public:
     Q_INVOKABLE void setTotalDepth(int newTotalDepth);
 
 
-    Q_INVOKABLE int Depthbrake() const;
+    Q_INVOKABLE int DepthBrake() const;
 
-    Q_INVOKABLE void setDepthbrake(int newDepthbrake);
+    Q_INVOKABLE void setDepthBrake(int newDepthbrake);
 
     Q_INVOKABLE int DepthVelocityLimit() const;
 
@@ -88,7 +90,7 @@ signals:
 
     void TotalDepthhanged();
 
-    void DepthbrakeChanged();
+    void DepthBrakeChanged();
 
     void DepthVelocityLimitChanged();
 
@@ -103,7 +105,7 @@ private:
 
     int m_depthWarning;
     int m_totalDepth;
-    int m_depthbrake;
+    int m_depthBrake;
     int m_depthVelocityLimit;
 
 

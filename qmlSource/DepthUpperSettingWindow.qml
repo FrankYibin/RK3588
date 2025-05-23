@@ -1,10 +1,11 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.Database 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
     readonly property int textWidthColumn1: 100
@@ -24,8 +25,8 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -73,10 +74,13 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
+                    // text: qsTr("192")
+                    text: DepthSafe.DepthPreset
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输入深度预置值", "s", 3, 0, 5, textDepthPreset.text,textDepthPreset,function(val){
+                            DepthSafe.DepthPreset = val;
+                        })
                     }
                 }
                 Text {
@@ -115,10 +119,13 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
+                    // text: qsTr("192")
+                    text: DepthSafe.WellWarnig
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输入报警值", "s", 3, 0, 5, textWarning.text,textWarning,function(val){
+                            DepthSafe.WellWarnig = val;
+                        })
                     }
                 }
                 Text {
@@ -157,10 +164,13 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
+                    // text: qsTr("192")
+                    text:DepthSafe.Brake
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输入刹车值", "s", 3, 0, 5, textBrake.text,textBrake,function(val){
+                            DepthSafe.Brake = val;
+                        })
                     }
                 }
                 Text {
@@ -199,10 +209,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8081")
+                    // text: qsTr("8081")
+                    text:DepthSafe.VelocityLimit
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输入井口段限速值", "s", 3, 0, 5, textVelocityLimit.text,textVelocityLimit,function(val){
+                            DepthSafe.VelocityLimit = val;})
                     }
                 }
                 Text {
@@ -226,6 +238,7 @@ Item{
                 onClicked:
                 {
                     // controlLimitNumpad.visible = false
+                    HBDatabase.updateDepthSafeFromInstance()
                 }
             }
         }
@@ -276,10 +289,13 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
+                    // text: qsTr("192")
+                    text:DepthSafe.DepthWarning
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输入报警值", "s", 3, 0, 5, textDepthWarning.text,textDepthWarning,function(val){
+                            DepthSafe.DepthWarning = val;
+                        })
                     }
                 }
                 Text {
@@ -318,10 +334,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
+                    // text: qsTr("192")
+                    text:DepthSafe.TotalDepth
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输入总深度值", "s", 3, 0, 5, textTotalDepth.text,textTotalDepth,function(val){
+                            DepthSafe.TotalDepth = val;})
                     }
                 }
                 Text {
@@ -356,15 +374,24 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    // maximumLength: 16
+                    // validator: RegularExpressionValidator{
+                    //     regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    // }
+                    maximumLength: 5
+                    validator: IntValidator {
+                        bottom: 0
+                        top: 9999
                     }
-                    text: qsTr("192")
+                    // text: qsTr("192")
+                    text:DepthSafe.DepthBrake
                     onlyForNumpad: true
+
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输入总深度值", "s", 3, 0, 5, textDepthBrake.text,textDepthBrake,function(val){
+                            DepthSafe.DepthBrake = val;})
                     }
+
                 }
                 Text {
                     id: unitDepthBrake
@@ -402,10 +429,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8081")
+                    // text: qsTr("8081")
+                    text: DepthSafe.DepthVelocityLimit
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("请输井底段限速值", "s", 5, 0, 3, textDepthVelocityLimit.text,textDepthVelocityLimit,function(val){
+                            DepthSafe.DepthVelocityLimit = val;})
                     }
                 }
                 Text {

@@ -30,6 +30,8 @@ Item {
     property real maximumValue: 100
     property alias value: input.text
     property var targetTextField // allow the external object to register into Component
+    signal valueUpdated(string newValue)
+    property var confirmCallback
 
     function slotDigitalKeyPressed(data)
     {
@@ -229,6 +231,12 @@ Item {
             {
                 primaryNumpad.visible = false
                 targetTextField.text = value
+
+                if (confirmCallback) {
+                    confirmCallback(value)
+                }
+
+                valueUpdated(value)
             }
         }
     }

@@ -39,23 +39,69 @@ struct _Cloud_Network
     QString CRemotePort;  //remote ip
 };
 
- struct _WellParameter {
+struct _WellParameter {
 
-        int id= 0;
-        QString wellNumber;
-        QString areaBlock;
-        int wellType = 0;
-        QString wellDepth;
-        QString harnessWeight;
-        QString sensorWeight;
-        int harnessType = 0;
-        QString harnessForce;
-        int tensionUnit = 0;
-        int workType = 0;
-        QString userName;
-        QString operatorType;
+    int id= 0;
+    QString wellNumber;
+    QString areaBlock;
+    int wellType = 0;
+    QString wellDepth;
+    QString harnessWeight;
+    QString sensorWeight;
+    int harnessType = 0;
+    QString harnessForce;
+    int tensionUnit = 0;
+    int workType = 0;
+    QString userName;
+    QString operatorType;
 
- };
+};
+
+struct _DepthSet {
+    int id;
+    int targetLayerDepth;
+    int depthOrientation;
+    int meterDepth;
+    int depthCalculateType;
+    int codeOption;
+    int pulse;
+};
+
+struct _DepthSafe {
+    int id;
+    int depthPreset;
+    int wellWarnig;
+    int brake;
+    int velocityLimit;
+    int depthWarning;
+    int totalDepth;
+    int depthBrake;
+    int depthVelocityLimit;
+};
+
+struct _TensionSafe {
+    int id;
+    QString wellType;
+    int maxTension;
+    QString weakForce;
+    QString tensionSafeFactor;
+};
+
+struct _TensionSet {
+    int id;
+    int kValue;
+    int tensionUnit;
+};
+
+struct TensiometerData {
+    int id;
+    QString tensiometerNumber;
+    int tensiometerType;           //0 数字无线  1 数字有线   2 模拟有线
+    int tensiometerRange;          //0 10T      1 15T       2 20T           3  30T
+    int tensiometerSignal;         //0 无       1 30mV      2 0-1.5V 3      3 0-5V
+
+};
+
 
 struct _Measurements_data{
     int id;                                // id

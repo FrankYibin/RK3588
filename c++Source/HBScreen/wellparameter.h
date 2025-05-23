@@ -10,40 +10,40 @@ class WellParameter : public QObject
 {
     Q_OBJECT
     //well number        井号
-    Q_PROPERTY(QString WellNumber READ WellNumber WRITE setWellNumber NOTIFY WellNumberChanged);
+    Q_PROPERTY(QString WellNumber READ WellNumber WRITE setWellNumber NOTIFY WellNumberChanged)
 
     //area block         区块
-    Q_PROPERTY(QString AreaBlock READ AreaBlock WRITE setAreaBlock NOTIFY AreaBlockChanged);
+    Q_PROPERTY(QString AreaBlock READ AreaBlock WRITE setAreaBlock NOTIFY AreaBlockChanged)
 
     //WellType           井斜
-    Q_PROPERTY(int WellType READ WellType WRITE setWellType NOTIFY WellTypeChanged);
+    Q_PROPERTY(int WellType READ WellType WRITE setWellType NOTIFY WellTypeChanged)
 
-    //WellDepth          井深
-    Q_PROPERTY(QString WellDepth READ WellDepth WRITE setWellDepth NOTIFY WellDepthChanged);
+    //WellDepth          井深（作业井深度）
+    Q_PROPERTY(QString WellDepth READ WellDepth WRITE setWellDepth NOTIFY WellDepthChanged)
 
     //HarnessWeight      电缆自重
-    Q_PROPERTY(QString HarnessWeight READ HarnessWeight WRITE setHarnessWeight NOTIFY HarnessWeightChanged);
+    Q_PROPERTY(QString HarnessWeight READ HarnessWeight WRITE setHarnessWeight NOTIFY HarnessWeightChanged)
 
     //SensorWeight       仪器串重量
-    Q_PROPERTY(QString SensorWeight READ SensorWeight WRITE setSensorWeight NOTIFY SensorWeightChanged);
+    Q_PROPERTY(QString SensorWeight READ SensorWeight WRITE setSensorWeight NOTIFY SensorWeightChanged)
 
     //HarnessType        电缆规格
-    Q_PROPERTY(int HarnessType READ HarnessType WRITE setHarnessType NOTIFY HarnessTypeChanged);
+    Q_PROPERTY(int HarnessType READ HarnessType WRITE setHarnessType NOTIFY HarnessTypeChanged)
 
     //HarnessForce       电缆拉断力
-    Q_PROPERTY(QString HarnessForce READ HarnessForce WRITE setHarnessForce NOTIFY HarnessForceChanged);
+    Q_PROPERTY(QString HarnessForce READ HarnessForce WRITE setHarnessForce NOTIFY HarnessForceChanged)
 
     //TensionUnit        拉力磅吨位
-    Q_PROPERTY(int TensionUnit READ TensionUnit WRITE setTensionUnit NOTIFY TensionUnitChanged);
+    Q_PROPERTY(int TensionUnit READ TensionUnit WRITE setTensionUnit NOTIFY TensionUnitChanged)
 
     //WorkType           作业类型
-    Q_PROPERTY(int WorkType READ WorkType WRITE setWorkType NOTIFY WorkTypeChanged);
+    Q_PROPERTY(int WorkType READ WorkType WRITE setWorkType NOTIFY WorkTypeChanged)
 
     //UserName           操作员姓名
-    Q_PROPERTY(QString UserName READ UserName WRITE setUserName NOTIFY UserNameChanged);
+    Q_PROPERTY(QString UserName READ UserName WRITE setUserName NOTIFY UserNameChanged)
 
     //OperatorType       操作员工种
-    Q_PROPERTY(QString OperatorType READ OperatorType WRITE setOperatorType NOTIFY OperatorTypeChanged);
+    Q_PROPERTY(QString OperatorType READ OperatorType WRITE setOperatorType NOTIFY OperatorTypeChanged)
 
 
 public:
@@ -130,15 +130,15 @@ private:
     QString m_wellNumber;
     QString m_areaBlock;
     int m_wellType = 0;
-    QString m_wellDepth;
-    QString m_harnessWeight;
-    QString m_sensorWeight;
+    QString m_wellDepth = 0;
+    QString m_harnessWeight = 0;
+    QString m_sensorWeight = 0;
     int m_harnessType = 0;
     QString m_harnessForce;
     int m_tensionUnit = 0;
     int m_workType = 0;
-    QString m_userName;
-    QString m_operatorType;
+    QString m_userName = "";
+    QString m_operatorType = "";
 };
 
 #endif // WELLPARAMETER_H

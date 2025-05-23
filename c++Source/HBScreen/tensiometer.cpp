@@ -3,7 +3,11 @@
 Tensiometer* Tensiometer::m_tensiometer = nullptr;
 
 Tensiometer::Tensiometer(QObject *parent)
-    : QObject{parent}
+    : QObject{parent},m_tensiometerNumber(""),
+    m_tensiometerType(0),
+    m_tensiometerRange(0),
+    m_tensiometerSignal(0),
+    m_tensionUnits(0)
 {}
 
 Tensiometer *Tensiometer::getInstance()
@@ -30,9 +34,9 @@ int Tensiometer::TensiometerRange() const
     return m_tensiometerRange;
 }
 
-int Tensiometer::TensionSignal() const
+int Tensiometer::TensiometerSignal() const
 {
-    return m_tensionSignal;
+    return m_tensiometerSignal;
 }
 
 void Tensiometer::setTensiometerNumber(const QString &number)
@@ -43,39 +47,39 @@ void Tensiometer::setTensiometerNumber(const QString &number)
     }
 }
 
-void Tensiometer::setTensiometerType(int type)
+void Tensiometer::setTensiometerType(int newTensiometerType)
 {
-    if (m_tensiometerType != type) {
-        m_tensiometerType = type;
+    if (m_tensiometerType != newTensiometerType) {
+        m_tensiometerType = newTensiometerType;
         emit TensiometerTypeChanged();
     }
 }
 
-void Tensiometer::setTensiometerRange(int range)
+void Tensiometer::setTensiometerRange(int newTensiometerRange)
 {
-    if (m_tensiometerRange != range) {
-        m_tensiometerRange = range;
+    if (m_tensiometerRange != newTensiometerRange) {
+        m_tensiometerRange = newTensiometerRange;
         emit TensiometerRangeChanged();
     }
 }
 
-void Tensiometer::setTensionSignal(int signal)
+void Tensiometer::setTensiometerSignal(int newTensiometerSignal)
 {
-    if (m_tensionSignal != signal) {
-        m_tensionSignal = signal;
-        emit TensionSignalChanged();
+    if (m_tensiometerSignal != newTensiometerSignal) {
+        m_tensiometerSignal = newTensiometerSignal;
+        emit TensiometerSignalChanged();
     }
 }
 
-int Tensiometer::TensionUnit() const
+int Tensiometer::TensionUnits() const
 {
-    return m_tensiometerType;
+    return m_tensionUnits;
 }
 
-void Tensiometer::setTensionUnit(int tensionUnit)
+void Tensiometer::setTensionUnits(int newTensionUnits)
 {
-    if (m_tensionUnit != tensionUnit) {
-        m_tensionUnit = tensionUnit;
-        emit TensionUnitChanged();
+    if (m_tensionUnits != newTensionUnits) {
+        m_tensionUnits = newTensionUnits;
+        emit TensionUnitsChanged();
     }
 }

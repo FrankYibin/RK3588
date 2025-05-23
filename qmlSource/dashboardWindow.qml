@@ -76,8 +76,6 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                //text: "1200.00"
-//                text: ModbusUtils.modbusRegistersToFloat(HBHome.Depth)
                 text:(HBHome.Depth / 100.0).toFixed(2)
 
             }

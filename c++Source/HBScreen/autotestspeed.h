@@ -8,10 +8,10 @@ class AutoTestSpeed : public QObject
     Q_OBJECT
 
     //Speed control direction
-    Q_PROPERTY(int Direction READ Direction WRITE setDirection NOTIFY DirectionChanged FINAL);
+    Q_PROPERTY(int Direction READ Direction WRITE setDirection NOTIFY DirectionChanged)
 
     //Control speed
-    Q_PROPERTY(int SpeedValue READ SpeedValue WRITE setSpeedValue NOTIFY SpeedValueChanged FINAL);
+    Q_PROPERTY(int SpeedValue READ SpeedValue WRITE setSpeedValue NOTIFY SpeedValueChanged)
 
 public:
 

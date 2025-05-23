@@ -32,7 +32,7 @@ int DepthSafe::WellWarnig() const
     return m_wellWarnig;
 }
 
-void DepthSafe::setWellWarnigNOTIFY(int newDWellWarnig)
+void DepthSafe::setWellWarnig(int newDWellWarnig)
 {
     if ( m_wellWarnig == newDWellWarnig )
         return;
@@ -77,7 +77,7 @@ void DepthSafe::setDepthWarning(int newDepthWarning)
     if ( m_depthWarning == newDepthWarning )
         return;
     m_depthWarning = newDepthWarning;
-    emit DepthPresetChanged();
+    emit DepthWarningChanged();
 
 }
 
@@ -94,17 +94,17 @@ void DepthSafe::setTotalDepth(int newTotalDepth)
     emit TotalDepthhanged();
 }
 
-int DepthSafe::Depthbrake() const
+int DepthSafe::DepthBrake() const
 {
-    return m_depthbrake;
+    return m_depthBrake;
 }
 
-void DepthSafe::setDepthbrake(int newDepthbrake)
+void DepthSafe::setDepthBrake(int newDepthbrake)
 {
-    if ( m_depthbrake == newDepthbrake )
+    if ( m_depthBrake == newDepthbrake )
         return;
-    m_depthPreset = newDepthbrake;
-    emit DepthPresetChanged();
+    m_depthBrake = newDepthbrake;
+    emit DepthBrakeChanged();
 }
 
 int DepthSafe::DepthVelocityLimit() const
@@ -112,12 +112,12 @@ int DepthSafe::DepthVelocityLimit() const
     return m_depthVelocityLimit;
 }
 
-void DepthSafe::setDepthVelocityLimit(int newDDepthVelocityLimit)
+void DepthSafe::setDepthVelocityLimit(int newDepthVelocityLimit)
 {
-    if ( m_depthVelocityLimit == newDDepthVelocityLimit )
+    if ( m_depthVelocityLimit == newDepthVelocityLimit )
         return;
-    m_depthVelocityLimit = newDDepthVelocityLimit;
-    emit DepthPresetChanged();
+    m_depthVelocityLimit = newDepthVelocityLimit;
+    emit DepthVelocityLimitChanged();
 }
 
 

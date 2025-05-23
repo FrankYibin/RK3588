@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -77,7 +77,8 @@ Item{
         validator: RegularExpressionValidator{
             regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
         }
-        text: "8081"
+        // text: "8081"
+        text:DepthMeter.CurrentDepth
         onlyForNumpad: true
         onSignalClickedEvent: {
             mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
