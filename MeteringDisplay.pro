@@ -47,6 +47,7 @@ SOURCES += main.cpp \
     c++Source/HBScreen/network.cpp \
     c++Source/HBScreen/rs232.cpp \
     c++Source/HBScreen/tensiometer.cpp \
+    c++Source/HBScreen/tensiometermanager.cpp \
     c++Source/HBScreen/tensionsafe.cpp \
     c++Source/HBScreen/wellparameter.cpp \
         c++Source/alarmnotification.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     c++Source/HBScreen/network.h \
     c++Source/HBScreen/rs232.h \
     c++Source/HBScreen/tensiometer.h \
+    c++Source/HBScreen/tensiometermanager.h \
     c++Source/HBScreen/tensionsafe.h \
     c++Source/HBScreen/wellparameter.h \
     c++Source/alarmindexdef.h \

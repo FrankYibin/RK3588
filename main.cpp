@@ -49,6 +49,7 @@
 #include "c++Source/HBData/hbdatabase.h"
 #include "c++Source/HBModbus/modbusutils.h"
 #include "c++Source/HBGraph/GraphAxisDefineHB.h"
+#include "c++Source/HBScreen/tensiometermanager.h"
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
                     const QString &message)
@@ -72,10 +73,14 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
-//HB
-    HBDatabase hbdata;
+    //HB
+    HBDatabase& db = HBDatabase::getInstance();
+    db.loadDataFromDatabase();
+    //       db.testUpdate();
     HBModbusClient modbusClient;
     ModbusUtils modbusUtils;
+    modbusUtils.setModbusClient(&modbusClient);
+    TensiometerManager *manager = new TensiometerManager();
 
     QString strOSIndicator = "None";
 #ifdef WIN32
@@ -95,8 +100,12 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HBChartViewAxisDefine.qml"), "HBAxisDefine", 1, 0, "HBAxisDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/AlarmMessageDefine.qml"), "AlarmDefine", 1, 0, "AlarmDefine");
 
+
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", &modbusClient);
+    //    qmlRegisterSingletonInstance<HBDatabase>("HBDatabase", 1, 0, "HBDatabase", &dbInstance);
+    qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::getInstance());
+    // qmlRegisterType<TensiometerManager>("HB.TensiometerManager", 1, 0, "TensiometerManager");
 
 
     UserLevelEnum::registerQMLType();
@@ -124,6 +133,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("Tensiometer", Tensiometer::getInstance());
     pQmlContext->setContextProperty("TensionSafe", TensionSafe::getInstance());
     pQmlContext->setContextProperty("WellParameter", WellParameter::getInstance());
+    pQmlContext->setContextProperty("tensiometerManager", manager);
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

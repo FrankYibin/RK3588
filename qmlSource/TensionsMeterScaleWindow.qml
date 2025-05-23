@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -22,8 +22,8 @@ Item{
                 width: parent.width
                 height: parent.height
                 gradient: Gradient {
-                GradientStop { position: 0.0; color: Style.backgroundLightColor }
-                GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+                    GradientStop { position: 0.0; color: Style.backgroundLightColor }
+                    GradientStop { position: 1.0; color: Style.backgroundDeepColor }
                 }
             }
         }
@@ -50,6 +50,12 @@ Item{
                 anchors.fill: parent
                 onSignalSaveTensometer:
                 {
+                    let number = Tensiometer.TensionsNumber;
+                    let type = Tensiometer.TensiometerType;
+                    let range = Tensiometer.TensiometerRange;
+                    let signal = Tensiometer.TensiometerSignal;
+
+                    tensiometerManager.addTensiometer(number, type, range, signal);
                     tensionMeterFeatures.currentIndex = 0
                 }
             }

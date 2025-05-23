@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -56,12 +56,18 @@ Item{
             HBTextField
             {
                 id: txtTensionsNumber
-                text: qsTr("2412001")
+                // text: qsTr("2412001")
+                text:Tensiometer.TensionsNumber
                 width: Math.round(100 * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 onSignalClickedEvent: {
-                    mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    console.log("txtTensionsNumber.text =", txtTensionsNumber.text);
+                     console.log("txtTensionsNumber =", txtTensionsNumber);
+                    mainWindow.showPrimaryNumpad("请输入张力计编号", "s", 3, 0, 5, txtTensionsNumber.text,txtTensionsNumber,function(val) {
+                        Tensiometer.TensionsNumber = val;
+                        ModbusClient.writeRegister(39,[parseInt(val)])
+                    })
                 }
             }
         }
@@ -86,9 +92,15 @@ Item{
             {
                 id: comboTensionsType
                 model: tensionsTypeModel
+                currentIndex: Tensiometer.TensiometerType
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
+                onCurrentIndexChanged: {
+                    ModbusClient.writeRegister(37, [currentIndex])
+                    Tensiometer.TensiometerType = currentIndex
+                    console.log("init Tensiometer:" + currentIndex)
+                }
             }
         }
 
@@ -112,8 +124,15 @@ Item{
             {
                 id: comboSensorRange
                 model: sensorRangeModel
+                currentIndex:Tensiometer.TensiometerRange
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
+                onCurrentIndexChanged: {
+                    // ModbusClient.writeRegister(37, [currentIndex])
+                    // ModbusUtils.writeScaledValue()
+                    Tensiometer.TensiometerRange = currentIndex
+                    console.log("init TensiometerRange:" + currentIndex)
+                }
             }
         }
 
@@ -137,8 +156,16 @@ Item{
             {
                 id: comboAnalogRange
                 model: analogRangeModel
+                currentIndex: Tensiometer.TensiometerSignal
                 width: Math.round(comboBoxWidth * Style.scaleHint)
-                height: parent.height
+                height: parent
+
+                onCurrentIndexChanged: {
+                    // ModbusClient.writeRegister(37, [currentIndex])
+                    // ModbusUtils.writeScaledValue()
+                    Tensiometer.TensiometerRange = currentIndex
+                    console.log("init TensiometerSignal:" + currentIndex)
+                }
             }
         }
     }
@@ -165,6 +192,7 @@ Item{
             }
         }
     }
+
 }
 
 

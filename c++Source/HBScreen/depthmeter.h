@@ -7,10 +7,11 @@ class DepthMeter : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int DepthPreset READ DepthPreset WRITE setDepthPreset NOTIFY DepthPresetChanged FINAL);
+    //深度预设
+    Q_PROPERTY(int DepthPreset READ DepthPreset WRITE setDepthPreset NOTIFY DepthPresetChanged)
 
-
-    Q_PROPERTY(int CurrentDepth READ CurrentDepth WRITE setCurrentDepth NOTIFY CurrentDepthChanged FINAL);
+   //当前深度
+    Q_PROPERTY(int CurrentDepth READ CurrentDepth WRITE setCurrentDepth NOTIFY CurrentDepthChanged)
 
 public:
 

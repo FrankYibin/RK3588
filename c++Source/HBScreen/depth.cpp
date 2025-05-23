@@ -1,4 +1,5 @@
 ﻿#include "depth.h"
+#include <QtDebug>
 
 
 Depth* Depth::m_depth = nullptr;
@@ -34,11 +35,11 @@ int Depth::DepthOrientation() const
     return m_depthOrientation;
 }
 
-void Depth::setDepthOrientation(int newTargetLayerDepth)
+void Depth::setDepthOrientation(int newDepthOrientation)
 {
-    if ( m_targetLayerDepth == newTargetLayerDepth )
+    if ( m_depthOrientation == newDepthOrientation )
         return;
-    m_targetLayerDepth = newTargetLayerDepth;
+    m_depthOrientation = newDepthOrientation;
     emit DepthOrientationChanged();
 }
 
@@ -84,6 +85,22 @@ void Depth::setVelocityUnit(int newTVelocityUnit)
         return;
     m_velocityUnit = newTVelocityUnit;
     emit VelocityUnitChanged();
+}
+
+int Depth::CodeOption() const
+{
+
+    return m_codeOption;
+}
+
+void Depth::setCodeOption(int newTCodeOption)
+{
+    qDebug() << "Set CodeOption called. New value:" << newTCodeOption;
+
+    if ( m_codeOption == newTCodeOption )
+        return;
+    m_codeOption = newTCodeOption;
+    emit CodeOptionChanged();
 }
 
 

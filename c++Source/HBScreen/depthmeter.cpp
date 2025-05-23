@@ -34,11 +34,11 @@ int DepthMeter::CurrentDepth() const
     return m_currentDepth;
 }
 
-void DepthMeter::setCurrentDepth(int newDepthPreset)
+void DepthMeter::setCurrentDepth(int newCurrentDepth)
 {
 
-    if(m_currentDepth != newDepthPreset){
-        m_currentDepth = newDepthPreset;
+    if(m_currentDepth != newCurrentDepth){
+        m_currentDepth = newCurrentDepth;
         emit CurrentDepthChanged();
     }
 }

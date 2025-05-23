@@ -1,10 +1,11 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     signal signalCreateTensometer()
@@ -40,6 +41,7 @@ Item{
             operateModel.append({"Index": 2, "Name": qsTr("删除")})
         }
     }
+
 
     ListModel
     {
@@ -89,7 +91,8 @@ Item{
         headerHeight: Math.round(40 * Style.scaleHint)
         rowHeight: Math.round(35 * Style.scaleHint)
         fontSize: Math.round(Style.style2 * Style.scaleHint)
-        model: dataModel
+        // model: dataModel
+        model: tensiometerManager
         // selectionMode: SelectionMode.SingleSelection
         isMouseMoving: false
         rowDelegate: Rectangle{
@@ -113,7 +116,7 @@ Item{
             }
         }
         TableViewColumn {
-            role: "SensorNumber";         title: qsTr("张力计编号");        width: 150
+           role: "SensorNumber";         title: qsTr("张力计编号");        width: 150
             delegate: Rectangle {
                 height: tensionMeterTable.rowHeight
                 width: styleData.columnWidth
@@ -139,19 +142,19 @@ Item{
                         // previousX = mouseX
                         previousY = mouseY
                     }
-                    // onMouseXChanged: {
-                    //     var moveToX = tensionMeterTable.flickableItem.contentX - (mouseX - previousX)
-                    //     if(moveToX >= 0 && moveToX <= tensionMeterTable.flickableItem.contentWidth - tensionMeterTable.flickableItem.width)
-                    //         tensionMeterTable.flickableItem.contentX = moveToX
-                    //     previousX = mouseX
-                    // }
-
-                    onMouseYChanged: {
-                        var moveToY = tensionMeterTable.flickableItem.contentY - (mouseY - previousY)
-                        if(moveToY >= -tensionMeterTable.headerHeight && moveToY <= tensionMeterTable.flickableItem.contentHeight - tensionMeterTable.flickableItem.height - tensionMeterTable.headerHeight)
-                            tensionMeterTable.flickableItem.contentY = moveToY
-                        previousY = mouseY
+                    onMouseXChanged: {
+                        var moveToX = tensionMeterTable.flickableItem.contentX - (mouseX - previousX)
+                        if(moveToX >= 0 && moveToX <= tensionMeterTable.flickableItem.contentWidth - tensionMeterTable.flickableItem.width)
+                            tensionMeterTable.flickableItem.contentX = moveToX
+                        previousX = mouseX
                     }
+
+                    // onMouseYChanged: {
+                    //     var moveToY = tensionMeterTable.flickableItem.contentY - (mouseY - previousY)
+                    //     if(moveToY >= -tensionMeterTable.headerHeight && moveToY <= tensionMeterTable.flickableItem.contentHeight - tensionMeterTable.flickableItem.height - tensionMeterTable.headerHeight)
+                    //         tensionMeterTable.flickableItem.contentY = moveToY
+                    //     previousY = mouseY
+                    // }
                 }
             }
         }
@@ -233,6 +236,12 @@ Item{
                                     signalScaleTensometer()
                                     break;
                                 case 2:
+                                    if (tensionMeterTable.currentRow >= 0) {
+                                           tensiometerManager.removeTensiometer(tensionMeterTable.currentRow)
+                                           tensionMeterTable.currentRow = -1 // 清除选择状态
+                                       } else {
+                                           console.warn("未选择要删除的行")
+                                       }
                                     break;
                                 default:
                                     break;

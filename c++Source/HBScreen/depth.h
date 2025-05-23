@@ -6,15 +6,21 @@
 class Depth : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int TargetLayerDepth READ TargetLayerDepth WRITE setTargetLayerDepth NOTIFY TargetLayerDepthChanged);
+    //目的层深度
+    Q_PROPERTY(int TargetLayerDepth READ TargetLayerDepth WRITE setTargetLayerDepth NOTIFY TargetLayerDepthChanged)
 
-    Q_PROPERTY(int DepthOrientation READ DepthOrientation WRITE setDepthOrientation NOTIFY DepthOrientationChanged);
+    //深度方向
+    Q_PROPERTY(int DepthOrientation READ DepthOrientation WRITE setDepthOrientation NOTIFY DepthOrientationChanged)
 
-    Q_PROPERTY(int MeterDepth READ MeterDepth WRITE setMeterDepth NOTIFY MeterDepthChanged);
+    //表套深度
+    Q_PROPERTY(int MeterDepth READ MeterDepth WRITE setMeterDepth NOTIFY MeterDepthChanged)
+    //深度计算方式
+    Q_PROPERTY(int DepthCalculateType READ DepthCalculateType WRITE setDepthCalculateType NOTIFY DepthCalculateTypeChanged)
+    //编码器编号
+    Q_PROPERTY(int CodeOption READ CodeOption WRITE setCodeOption NOTIFY CodeOptionChanged)
 
-    Q_PROPERTY(int DepthCalculateType READ DepthCalculateType WRITE setDepthCalculateType NOTIFY DepthCalculateTypeChanged);
-
-    Q_PROPERTY(int VelocityUnit READ VelocityUnit WRITE setVelocityUnit NOTIFY VelocityUnitChanged);
+    //速度单位
+    Q_PROPERTY(int VelocityUnit READ VelocityUnit WRITE setVelocityUnit NOTIFY VelocityUnitChanged)
 
 public:
     static Depth* getInstance();
@@ -43,6 +49,11 @@ public:
 
     Q_INVOKABLE void setVelocityUnit(int newTVelocityUnit);
 
+    Q_INVOKABLE int CodeOption() const;
+
+    Q_INVOKABLE void setCodeOption(int newTCodeOption);
+
+
 
 
 
@@ -58,6 +69,8 @@ signals:
 
     void VelocityUnitChanged();
 
+    void CodeOptionChanged();
+
 
 private:
 
@@ -69,11 +82,12 @@ private:
 
 private:
 
-    int m_targetLayerDepth;
-    int m_depthOrientation;
-    int m_meterDepth;
-    int m_depthCalculateType;
-    int m_velocityUnit;
+    int m_targetLayerDepth = 0;
+    int m_depthOrientation = 0;
+    int m_meterDepth = 0;
+    int m_depthCalculateType = 0;
+    int m_velocityUnit = 0;
+    int m_codeOption = 0;
 
 };
 

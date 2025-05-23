@@ -39,8 +39,8 @@ Window{
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
-    property int showWidth: 1280
-    property int showHeight: 800
+    property int showWidth: 800
+    property int showHeight: 480
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -299,7 +299,7 @@ Window{
         }
     }
 
-    function showPrimaryNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue, targetObj)
+    function showPrimaryNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue, targetObj,onConfirmCallback)
     {
         primaryNumpad.headertext = strTitle
         primaryNumpad.suffix = strUnit
@@ -308,6 +308,7 @@ Window{
         primaryNumpad.maximumValue = realMaximum
         primaryNumpad.value = strCurrentValue
         primaryNumpad.targetTextField = targetObj
+        primaryNumpad.confirmCallback = onConfirmCallback
         primaryNumpad.visible = true
     }
 

@@ -8,20 +8,20 @@ class Tensiometer : public QObject
     Q_OBJECT
 
     //Tensiometer number
-    Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY TensiometerNumberChanged);
+    Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY TensiometerNumberChanged)
 
     //Tensiometer Type
-    Q_PROPERTY(int TensiometerType READ TensiometerType WRITE setTensiometerType NOTIFY TensiometerTypeChanged);
+    Q_PROPERTY(int TensiometerType READ TensiometerType WRITE setTensiometerType NOTIFY TensiometerTypeChanged)
 
     //Tesiometer range
-    Q_PROPERTY(int TensiometerRange READ TensiometerRange WRITE setTensiometerRange NOTIFY TensiometerRangeChanged);
+    Q_PROPERTY(int TensiometerRange READ TensiometerRange WRITE setTensiometerRange NOTIFY TensiometerRangeChanged)
 
     //Tension output signal
-    Q_PROPERTY(int TensionSignal READ TensionSignal WRITE setTensionSignal NOTIFY TensionSignalChanged);
+    Q_PROPERTY(int TensiometerSignal READ TensiometerSignal WRITE setTensiometerSignal NOTIFY TensiometerSignalChanged)
 
 
-    //Tension Unit
-    Q_PROPERTY(int TensionUnit READ TensionUnit WRITE setTensionUnit NOTIFY TensionUnitChanged);
+    //Tension Units  张力单位
+    Q_PROPERTY(int TensionUnits READ TensionUnits WRITE setTensionUnits NOTIFY TensionUnitsChanged)
 
 
 public:
@@ -32,17 +32,17 @@ public:
     Q_INVOKABLE void setTensiometerNumber(const QString &number);
 
     Q_INVOKABLE int TensiometerType() const;
-    Q_INVOKABLE void setTensiometerType(int type);
+    Q_INVOKABLE void setTensiometerType(int newTensiometerType);
 
     Q_INVOKABLE int TensiometerRange() const;
-    Q_INVOKABLE void setTensiometerRange(int range);
+    Q_INVOKABLE void setTensiometerRange(int newTensiometerRange);
 
-    Q_INVOKABLE int TensionSignal() const;
-    Q_INVOKABLE void setTensionSignal(int signal);
+    Q_INVOKABLE int TensiometerSignal() const;
+    Q_INVOKABLE void setTensiometerSignal(int TensiometerSignal);
 
 
-    Q_INVOKABLE int TensionUnit() const;
-    Q_INVOKABLE void setTensionUnit(int signal);
+    Q_INVOKABLE int TensionUnits() const;
+    Q_INVOKABLE void setTensionUnits(int newTensionUnits);
 
 
 signals:
@@ -50,8 +50,8 @@ signals:
     void TensiometerNumberChanged();
     void TensiometerTypeChanged();
     void TensiometerRangeChanged();
-    void TensionSignalChanged();
-    void TensionUnitChanged();
+    void TensiometerSignalChanged();
+    void TensionUnitsChanged();
 
 private:
     explicit Tensiometer(QObject *parent = nullptr);
@@ -67,9 +67,9 @@ private:
     QString m_tensiometerNumber;
     int m_tensiometerType;
     int m_tensiometerRange;
-    int m_tensionSignal;
+    int m_tensiometerSignal;
 
-    int m_tensionUnit;
+    int m_tensionUnits = 0;
 };
 
 #endif // TENSIOMETER_H

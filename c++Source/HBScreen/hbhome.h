@@ -8,43 +8,43 @@ class HBHome : public QObject
     Q_OBJECT
 
     //depth        深度
-    Q_PROPERTY(int Depth READ Depth WRITE setDepth NOTIFY DepthChanged);
+    Q_PROPERTY(int Depth READ Depth WRITE setDepth NOTIFY DepthChanged)
 
     //speed        速度
-    Q_PROPERTY(int Speed READ Speed WRITE setSpeed NOTIFY SpeedChanged);
+    Q_PROPERTY(int Speed READ Speed WRITE setSpeed NOTIFY SpeedChanged)
 
     //tension      张力
-    Q_PROPERTY(int Tension READ Tension WRITE setTension NOTIFY TensionChanged);
+    Q_PROPERTY(int Tension READ Tension WRITE setTension NOTIFY TensionChanged)
 
     //tensionIncrement  张力增量
-    Q_PROPERTY(int TensionIncrement READ TensionIncrement WRITE setTensionIncrement NOTIFY TensionIncrementChanged);
+    Q_PROPERTY(int TensionIncrement READ TensionIncrement WRITE setTensionIncrement NOTIFY TensionIncrementChanged)
 
     //pulse count  脉冲数
-    Q_PROPERTY(int Pulse READ Pulse WRITE setPulse NOTIFY PulseChanged);
+    Q_PROPERTY(int Pulse READ Pulse WRITE setPulse NOTIFY PulseChanged)
 
     //MaxTension 极限张力
-    Q_PROPERTY(int MaxTension READ MaxTension WRITE setMaxTension NOTIFY MaxTensionChanged);
+    Q_PROPERTY(int MaxTension READ MaxTension WRITE setMaxTension NOTIFY MaxTensionChanged)
 
     //TargetDepth   目的深度
-    Q_PROPERTY(int TargetDepth READ TargetDepth WRITE setTargetDepth NOTIFY TargetDepthChanged);
+    Q_PROPERTY(int TargetDepth READ TargetDepth WRITE setTargetDepth NOTIFY TargetDepthChanged)
 
     //MaxSpeed    极限速度
-    Q_PROPERTY(int MaxSpeed READ MaxSpeed WRITE setMaxSpeed NOTIFY MaxSpeedChanged);
+    Q_PROPERTY(int MaxSpeed READ MaxSpeed WRITE setMaxSpeed NOTIFY MaxSpeedChanged)
 
     //MaxTensionIncrement  极限张力增量
-    Q_PROPERTY(int MaxTensionIncrement READ MaxTensionIncrement WRITE setMaxTensionIncrement NOTIFY MaxTensionIncrementChanged );
+    Q_PROPERTY(int MaxTensionIncrement READ MaxTensionIncrement WRITE setMaxTensionIncrement NOTIFY MaxTensionIncrementChanged )
 
     //K_Value           k值
-    Q_PROPERTY(int KValue READ KValue WRITE setKValue NOTIFY KValueChanged );
+    Q_PROPERTY(int KValue READ KValue WRITE setKValue NOTIFY KValueChanged )
 
     //HarnessTension
-    Q_PROPERTY(int HarnessTension READ HarnessTension WRITE setHarnessTension NOTIFY HarnessTensionChanged );
+    Q_PROPERTY(int HarnessTension READ HarnessTension WRITE setHarnessTension NOTIFY HarnessTensionChanged )
 
     //MaxParameterStatus  极限参数状态
-    Q_PROPERTY(int MaxParameterStatus READ MaxParameterStatus WRITE setMaxParameterStatus NOTIFY MaxParameterStatusChanged);
+    Q_PROPERTY(int MaxParameterStatus READ MaxParameterStatus WRITE setMaxParameterStatus NOTIFY MaxParameterStatusChanged)
 
     //NetworkStatus   网络状态
-    Q_PROPERTY(int NetworkStatus READ NetworkStatus WRITE setNetworkStatus NOTIFY NetworkStatusChanged);
+    Q_PROPERTY(int NetworkStatus READ NetworkStatus WRITE setNetworkStatus NOTIFY NetworkStatusChanged)
 
 public:
 

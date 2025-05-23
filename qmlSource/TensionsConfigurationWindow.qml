@@ -1,10 +1,11 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.Modbus 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidth: 50
@@ -12,6 +13,7 @@ Item{
     readonly property int rowSpacing: 100
     readonly property int columnSpacing: 30
     readonly property int optionHeight: 30
+    readonly property var tensionModel: [qsTr("LB"),qsTr("KG"),qsTr("KN")]
     Rectangle
     {
         id: background
@@ -38,7 +40,7 @@ Item{
             spacing: Math.round(rowSpacing * Style.scaleHint)
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
-                id: titlePort
+                id: titleKvalue
                 width: Math.round(textWidth * Style.scaleHint)
                 height: parent.height
                 text: qsTr("K值") + ":"
@@ -47,11 +49,29 @@ Item{
                 verticalAlignment: Text.AlignVCenter
                 color: Style.whiteFontColor
             }
-            HBComboBox
+            // HBComboBox
+            // {
+            //     id:comboBoxPort
+            //     width: Math.round(comboBoxWidth * Style.scaleHint)
+            //     height: parent.height
+            // }
+            HBTextField
             {
-                id:comboBoxPort
-                width: Math.round(comboBoxWidth * Style.scaleHint)
-                height: parent.height
+                id: textKvalue
+                //                    text: qsTr("4000.00")
+                text: HBHome.KValue
+                width: Math.round(150 * Style.scaleHint)
+                height: Math.round(25 * Style.scaleHint)
+                onlyForNumpad: true
+
+                onSignalClickedEvent: {
+                    console.log("textKvalue.text =", textKvalue.text);
+                     console.log("textKvalue =", textKvalue);
+                    mainWindow.showPrimaryNumpad("请输入K值", "s", 3, 0, 5, textKvalue.text,textKvalue,function(val) {
+                        HBHome.KValue = val;
+                        ModbusClient.writeRegister(36,[parseInt(val)])
+                    })
+                }
             }
         }
 
@@ -62,7 +82,7 @@ Item{
             spacing: Math.round(rowSpacing * Style.scaleHint)
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
-                id: titleBaudrate
+                id: titleTensionUnit
                 width: Math.round(textWidth * Style.scaleHint)
                 height: parent.height
                 text: qsTr("张力单位") + ":"
@@ -70,13 +90,25 @@ Item{
                 font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                 verticalAlignment: Text.AlignVCenter
                 color: Style.whiteFontColor
+
             }
             HBComboBox
             {
-                id: comboBoxBaudrate
+                id: comboBoxTensionUnits
+                model:tensionModel
+                // currentIndex: Tensiometer.TensionUnits
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
+                Component.onCompleted: {
+                      comboBoxTensionUnits.currentIndex = Tensiometer.TensionUnits
+                  }
+
+                onCurrentIndexChanged: {
+                    Tensiometer.TensionUnits = currentIndex
+                    console.log("TensionUnit" + currentIndex)
+                }
             }
+
         }
     }
 

@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -50,6 +50,7 @@ Item{
         }
     }
 
+
     Item {
         id: tensionScaleFrame
         anchors.top: parent.top
@@ -65,6 +66,7 @@ Item{
             rowHeight: Math.round(35 * Style.scaleHint)
             fontSize: Math.round(Style.style2 * Style.scaleHint)
             model: dataModel
+            // model: tensiometerModel
             isMouseMoving: false
 
             rowDelegate: Rectangle{

@@ -1,10 +1,12 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.Modbus 1.0
+import HB.Database 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidthColumn1: 100
@@ -23,8 +25,8 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -72,11 +74,16 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
-//                    text:TensionSafe.WellType
+                    // text: qsTr("192")
+                    text:TensionSafe.WellType
                     onlyForNumpad: true
+
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        console.log("textWellType.text =", textWellType.text);
+                        console.log("textWellType =", textWellType);
+                        mainWindow.showPrimaryNumpad("请输入油气井类型", "s", 3, 0, 5, textWellType.text,textWellType,function(val) {
+                            TensionSafe.WellType = val;
+                        })
                     }
                 }
             }
@@ -97,7 +104,7 @@ Item{
                 }
                 HBTextField
                 {
-                    id: textLocalRemoteIP
+                    id: textCableWeight
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
@@ -105,11 +112,16 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
-//                    text: TensionSafe.CableWeight
+                    // text: qsTr("192")
+                    text: WellParameter.HarnessWeight
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        console.log("textCableWeight.text =", textCableWeight.text);
+                        console.log("textCableWeight =", textCableWeight);
+                        mainWindow.showPrimaryNumpad("请输入电缆每千米重量值", "s", 3, 0, 5, textCableWeight.text,textCableWeight,function(val) {
+                            WellParameter.HarnessWeight = val;
+                            ModbusClient.writeRegister(75,[parseInt(val)])
+                        })
                     }
                 }
                 Text {
@@ -148,12 +160,17 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
-//                    text: WellParameter.WorkType
+                    // text: qsTr("192")
+                    text: WellParameter.WorkType
                     onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
-                    }
+                    // onSignalClickedEvent: {
+                    //     console.log("textCableWeight.text =", textCableWeight.text);
+                    //     console.log("textCableWeight =", textCableWeight);
+                    //     mainWindow.showPrimaryNumpad("请输入作业类型", "s", 3, 0, 5, textCableWeight.text,textCableWeight,function(val) {
+                    //         WellParameter.HarnessWeight = val;
+                    //         ModbusClient.writeRegister(75,[parseInt(val)])
+                    //     })
+                    // }
                 }
             }
 
@@ -173,7 +190,7 @@ Item{
                 }
                 HBTextField
                 {
-                    id: textSensorWeight
+                    id: textSensorWeightValue
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
@@ -181,11 +198,16 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8081")
-//                    text: WellParameter.SensorWeight
+                    // text: qsTr("8081")
+                    text: WellParameter.SensorWeight
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        console.log("textSensorWeightValue.text =", textSensorWeightValue.text);
+                         console.log("textSensorWeightValue =", textSensorWeight);
+                        mainWindow.showPrimaryNumpad("请输入仪器串重量值", "s", 3, 0, 5, textSensorWeightValue.text,textSensorWeightValue,function(val) {
+                            WellParameter.SensorWeight = val;
+                            ModbusClient.writeRegister(76, [parseInt(val)])
+                        })
                     }
                 }
                 Text {
@@ -224,11 +246,16 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text: WellParameter.HarnessForce
+                    // text: qsTr("8080")
+                    text: WellParameter.HarnessForce
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        console.log("textHarnessPullingStrength.text =", textHarnessPullingStrength.text);
+                         console.log("textHarnessPullingStrength =", textHarnessPullingStrength);
+                        mainWindow.showPrimaryNumpad("请输入电缆拉断力值", "s", 3, 0, 5, textHarnessPullingStrength.text,textHarnessPullingStrength,function(val) {
+                            WellParameter.HarnessForce = val;
+                            ModbusClient.writeRegister(73,[parseInt(val)])
+                        })
                     }
                 }
                 Text {
@@ -267,11 +294,17 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text: TensionSafe.WeakForce
+                    // text: qsTr("8080")
+                    text: TensionSafe.WeakForce
                     onlyForNumpad: true
+
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        console.log("textWeaknessPullingStrength.text =", textWeaknessPullingStrength.text);
+                         console.log("textWeaknessPullingStrength =", textWeaknessPullingStrength);
+                        mainWindow.showPrimaryNumpad("请输入弱点拉断力值", "s", 3, 0, 5, textWeaknessPullingStrength.text,textWeaknessPullingStrength,function(val) {
+                            TensionSafe.WeakForce = val;
+                            ModbusClient.writeRegister(74,[parseInt(val)])
+                        })
                     }
                 }
                 Text {
@@ -310,11 +343,16 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text: HBHome.MaxTension
+                    // text: qsTr("8080")
+                    text: HBHome.MaxTension
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        console.log("textUltimateTension.text =", textUltimateTension.text);
+                         console.log("textUltimateTension =", textUltimateTension);
+                        mainWindow.showPrimaryNumpad("请输入极限张力值", "s", 3, 0, 5, textUltimateTension.text,textUltimateTension,function(val) {
+                            HBHome.MaxTension = val;
+                            ModbusUtils.writeScaledValue(val,47,100.0);
+                        })
                     }
                 }
                 Text {
@@ -353,11 +391,16 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text: TensionSafe.TensionSafeFactor
+                    // text: qsTr("8080")
+                    text: TensionSafe.TensionSafeFactor
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        console.log("textSafetyTensionFactor.text =", textSafetyTensionFactor.text);
+                         console.log("textSafetyTensionFactor =", textSafetyTensionFactor);
+                        mainWindow.showPrimaryNumpad("请输入极限张力值", "s", 3, 0, 5, textSafetyTensionFactor.text,textSafetyTensionFactor,function(val) {
+                            TensionSafe.TensionSafe = val;
+                            ModbusUtils.writeScaledValue(77,[parseInt(val)]);
+                        })
                     }
                 }
             }
@@ -408,12 +451,18 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
-//                    text: TensionSafe.CurrentTensionSafe
+                    // text: qsTr("192")
+                    text: TensionSafe.CurrentTensionSafe
                     onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
-                    }
+
+                    // onSignalClickedEvent: {
+                    //     console.log("textCurrentSafetyTension.text =", textCurrentSafetyTension.text);
+                    //      console.log("textCurrentSafetyTension =", textCurrentSafetyTension);
+                    //     mainWindow.showPrimaryNumpad("请输入极限张力值", "s", 3, 0, 5, textCurrentSafetyTension.text,textCurrentSafetyTension,function(val) {
+                    //         TensionSafe.TensionSafe = val;
+                    //         ModbusUtils.writeScaledValue(77,[parseInt(val)]);
+                    //     })
+                    // }
                 }
                 Text {
                     id: unitCurrentSafetyTension
@@ -451,8 +500,8 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
-                    //                    text: TensionSafe.CableTensionTrend
+                    // text: qsTr("192")
+                    text: TensionSafe.CableTensionTrend
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -484,8 +533,8 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("192")
-//                    text: TensionSafe.CurrentDepth1
+                    // text: qsTr("192")
+                    text: TensionSafe.CurrentDepth1
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -527,8 +576,8 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8081")
-//                    text: TensionSafe.MAXTensionSafe
+                    // text: qsTr("8081")
+                    text: TensionSafe.MAXTensionSafe
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -570,8 +619,8 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text: TensionSafe.Ptime
+                    // text: qsTr("8080")
+                    text: TensionSafe.Ptime
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -613,12 +662,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text: TensionSafe.CurrentDepth2
+                    // text: qsTr("8080")
+                    text: TensionSafe.CurrentDepth2
                     onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
-                    }
+                    // onSignalClickedEvent: {
+                    //     mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    // }
                 }
                 Text {
                     id: unitCurrentDepth2
@@ -656,8 +705,8 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text: HBHome.HarnessTension
+                    // text: qsTr("8080")
+                    text: HBHome.HarnessTension
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -699,8 +748,8 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text:TensionSafe.DepthLoss
+                    // text: qsTr("8080")
+                    text:TensionSafe.DepthLoss
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
@@ -742,8 +791,8 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: qsTr("8080")
-//                    text:TensionSafe.CurrentDepth3
+                    // text: qsTr("8080")
+                    text:TensionSafe.CurrentDepth3
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
