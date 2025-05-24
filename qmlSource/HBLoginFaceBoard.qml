@@ -13,6 +13,8 @@
  **********************************************************************************************************/
 import QtQuick 2.15
 import QtQuick.Layouts 1.12
+import QtMultimedia 5.15
+
 import Style 1.0
 Item {
     property int minWidthNumpad: Math.round(50 * Style.scaleHint)
@@ -33,11 +35,40 @@ Item {
         id: faceArea
         height: 4 * buttonLoginSize + 3 * gridRowColumnSpaceing
         width: 4 * buttonLoginSize + 3 * gridRowColumnSpaceing
-        // Image {
-        //     id: name
-        //     source: "file"
-        // }
 
+        Camera {
+            id: camera
+
+            imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
+
+            exposure {
+                exposureCompensation: -1.0
+                exposureMode: Camera.ExposurePortrait
+            }
+
+            flash.mode: Camera.FlashRedEyeReduction
+
+            imageCapture {
+                onImageCaptured: {
+                    // photoPreview.source = preview  // Show the preview in an Image
+                }
+            }
+        }
+
+        VideoOutput {
+            source: camera
+            anchors.top: faceArea.top
+            anchors.bottom: faceArea.bottom
+            anchors.left: faceArea.left
+            anchors.right: faceArea.right
+            fillMode: Image.PreserveAspectFit
+            focus : visible // to receive focus and capture key events when visible
+        }
+
+        // Image {
+        //     id: photoPreview
+        //     anchors.fill: parent
+        // }
     }
 
     BransonDigitalKeyboard
