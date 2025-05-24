@@ -1,4 +1,4 @@
-QT += quick gui charts serialport serialbus sql
+QT += quick gui charts serialport serialbus sql multimedia
 CONFIG += c++11
 #qtquickcompiler
 
@@ -50,9 +50,11 @@ SOURCES += main.cpp \
     c++Source/HBScreen/tensiometermanager.cpp \
     c++Source/HBScreen/tensionsafe.cpp \
     c++Source/HBScreen/wellparameter.cpp \
+#    c++Source/HBVideoCapture/videocaptureitem.cpp \
         c++Source/alarmnotification.cpp \
         c++Source/clientsocket.cpp \
         c++Source/communicationinterface.cpp \
+    c++Source/HBVoice/hbvoice.cpp \
         c++Source/heartbeatformat.cpp \
         c++Source/jsontreeitem.cpp \
         c++Source/jsontreeitemhash.cpp \
@@ -95,12 +97,14 @@ HEADERS += \
     c++Source/HBScreen/tensiometermanager.h \
     c++Source/HBScreen/tensionsafe.h \
     c++Source/HBScreen/wellparameter.h \
+#    c++Source/HBVideoCapture/videocaptureitem.h \
     c++Source/alarmindexdef.h \
     c++Source/alarmnotification.h \
     c++Source/clientsocket.h \
     c++Source/communicationinterface.h \
     c++Source/definition.h \
     c++Source/graphaxisdef.h \
+    c++Source/HBVoice/hbvoice.h \
     c++Source/heartbeatformat.h \
     c++Source/jsontreeitem.h \
     c++Source/jsontreeitemhash.h \
@@ -136,7 +140,8 @@ RESOURCES += images.qrc \
             fonts.qrc \
             jsonfile.qrc \
             misc.qrc \
-            qml.qrc
+            qml.qrc \
+            voice.qrc
 
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -150,34 +155,56 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-contains(DEFINES, WIN32){
-#    LIBS += -L$$PWD/../Win32Path/ -lxxx
-#    INCLUDEPATH += $$PWD/../Win32Path
-#    DEPENDPATH += $$PWD/../Win32Path
-#    PRE_TARGETDEPS += $$PWD/../Win32Path/libxxx.a
+
+contains(DEFINES, RK3588){
+#    QMAKE_LFLAGS += -Wl,-rpath, -L$$PWD/../opencv_arm/
+#    LIBS += -L$$PWD/../opencv_arm/ -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_videoio -lc
+#    LIBS += -L$$PWD/../opencv_arm/ -lz -ltbb -lgtk-3 -lgdk-3 -lcairo -lgdk_pixbuf-2.0
+#    LIBS += -L$$PWD/../opencv_arm/ -lgobject-2.0 -lopencv_imgcodecs -ldc1394 -lgstbase-1.0 -lgstreamer-1.0 -lgstapp-1.0 -lgstriff-1.0 -lgstpbutils-1.0
+#    LIBS += -L$$PWD/../opencv_arm/ -lavcodec -lavformat -lavutil -lswscale -lgphoto2 -lgphoto2_port -lgmodule-2.0 -lpangocairo-1.0 -lXi -lXfixes -lcairo-gobject
+#    LIBS += -L$$PWD/../opencv_arm/ -latk-1.0 -latk-bridge-2.0 -lepoxy -lfribidi -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lharfbuzz -lfontconfig -lfreetype
+#    LIBS += -L$$PWD/../opencv_arm/ -lXinerama -lXrandr -lXcursor -lXcomposite -lXdamage -lwayland-cursor -lwayland-egl -lwayland-client -lXext
+#    LIBS += -L$$PWD/../opencv_arm/ -lrt -lpixman-1 -lpng16 -lxcb-shm -lxcb-render -lXrender -ljpeg
+#    LIBS += -L$$PWD/../opencv_arm/ -lgstvideo-1.0 -lgstaudio-1.0 -lgsttag-1.0
+#    LIBS += -L$$PWD/../opencv_arm/  -lavcodec  -ltiff
+#    LIBS += -L$$PWD/../opencv_arm/   -lavformat -lavutil -lswscale -lgdcmMSFF -lIlmImf-2_5 -lgdcmDSED
+#    INCLUDEPATH += $$PWD/../opencv_arm/
+#    DEPENDPATH += $$PWD/../opencv_arm
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libc.so.6
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libc_nonshared.a
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libopencv_core.a
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libopencv_imgproc.a
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libopencv_imgcodecs.a
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libopencv_highgui.a
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libopencv_videoio.a
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libz.so.1
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libtbb.so.2
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgtk-3.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgdk-3.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libcairo.so.2
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgdk_pixbuf-2.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgobject-2.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgstbase-1.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgstreamer-1.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgstapp-1.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgstpbutils-1.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgstvideo-1.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgstaudio-1.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libgsttag-1.0.so.0
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/librt.so.1
+#    PRE_TARGETDEPS += $$PWD/../opencv_arm/libwebp.so.6
+
 }
-
-contains(DEFINES, linux){
-    contains(DEFINES, RASPBERRY){
-#       LIBS += -L$$PWD/../RaspberryPath/ -lxxx
-#       INCLUDEPATH += $$PWD/../RaspberryPath
-#       DEPENDPATH += $$PWD/../RaspberryPath
-#       PRE_TARGETDEPS += $$PWD/../RaspberryPath/libxxx.a
-    }
-    else
-    {
-#        LIBS += -L$$PWD/../linuxPath/ -lxxx
-#        INCLUDEPATH += $$PWD/../linuxPath
-#        DEPENDPATH += $$PWD/../linuxPath
-#        PRE_TARGETDEPS += $$PWD/../linuxPath/libxxx.a
-    }
+else
+{
+#    LIBS += -L$$PWD/../opencv/ -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_videoio
+#    INCLUDEPATH += $$PWD/../opencv/
+#    DEPENDPATH += $$PWD/../opencv
+#    PRE_TARGETDEPS += $$PWD/../opencv/libopencv_core.so
+#    PRE_TARGETDEPS += $$PWD/../opencv/libopencv_imgproc.so
+#    PRE_TARGETDEPS += $$PWD/../opencv/libopencv_highgui.so
+#    PRE_TARGETDEPS += $$PWD/../opencv/libopencv_videoio.so
 }
-
-DEFINES += COMMUNICATION_TEST
-DEFINES += RASPBERRY
-DEFINES += SYSTEMINFODATA
-
-DISTFILES +=
 
 
 

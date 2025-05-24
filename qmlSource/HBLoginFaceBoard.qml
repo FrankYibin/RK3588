@@ -35,10 +35,14 @@ Item {
         id: faceArea
         height: 4 * buttonLoginSize + 3 * gridRowColumnSpaceing
         width: 4 * buttonLoginSize + 3 * gridRowColumnSpaceing
+        Component.onCompleted: {
+            console.debug("Device: ", camera.deviceId)
+            console.debug("DisplayName: ", camera.displayName)
+        }
 
         Camera {
             id: camera
-
+            deviceId: "/dev/video1"
             imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
 
             exposure {
@@ -50,25 +54,25 @@ Item {
 
             imageCapture {
                 onImageCaptured: {
-                    // photoPreview.source = preview  // Show the preview in an Image
+                     photoPreview.source = preview  // Show the preview in an Image
                 }
             }
         }
 
-        VideoOutput {
-            source: camera
-            anchors.top: faceArea.top
-            anchors.bottom: faceArea.bottom
-            anchors.left: faceArea.left
-            anchors.right: faceArea.right
-            fillMode: Image.PreserveAspectFit
-            focus : visible // to receive focus and capture key events when visible
-        }
+//        VideoOutput {
+//            source: camera
+//            anchors.top: faceArea.top
+//            anchors.bottom: faceArea.bottom
+//            anchors.left: faceArea.left
+//            anchors.right: faceArea.right
+//            fillMode: Image.PreserveAspectFit
+//            focus : visible // to receive focus and capture key events when visible
+//        }
 
-        // Image {
-        //     id: photoPreview
-        //     anchors.fill: parent
-        // }
+        Image {
+            id: photoPreview
+            anchors.fill: parent
+        }
     }
 
     BransonDigitalKeyboard

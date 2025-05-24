@@ -1,4 +1,4 @@
-﻿#include "TensiometerManager.h"
+﻿#include "tensiometermanager.h"
 #include <QDebug>
 
 TensiometerManager::TensiometerManager(QObject *parent)

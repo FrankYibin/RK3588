@@ -50,6 +50,8 @@
 #include "c++Source/HBModbus/modbusutils.h"
 #include "c++Source/HBGraph/GraphAxisDefineHB.h"
 #include "c++Source/HBScreen/tensiometermanager.h"
+//#include "c++Source/HBVideoCapture/videocaptureitem.h"
+//#include "opencv2/opencv.hpp"
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
                     const QString &message)
@@ -107,6 +109,8 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::getInstance());
     // qmlRegisterType<TensiometerManager>("HB.TensiometerManager", 1, 0, "TensiometerManager");
 
+//    qmlRegisterType<VideoCaptureItem>("HB.VideoCapture", 1, 0, "CV");
+
 
     UserLevelEnum::registerQMLType();
     UIScreenEnum::registerQMLType();
@@ -150,6 +154,9 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("login", Login::getInstance());
     pQmlContext->setContextProperty("communicationInterface", CommunicationInterface::getInstance(&app));
     pQmlContext->setContextProperty("systemInformationModel", SystemInformationInterface::getInstance());
+
+//    qDebug() << "OPENCV Version: " << CV_VERSION;
+//    std::cout << "Video I/O support: " << cv::getBuildInformation() << std::endl;
 
     if(QFile::exists(logUrl) == true)
         QFile::remove(logUrl);

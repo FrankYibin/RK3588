@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>voice/00Well.mp3</file>
+        <file>voice/01Target.mp3</file>
+        <file>voice/02Velocity.mp3</file>
+        <file>voice/03Locked.mp3</file>
+        <file>voice/04Blocked.mp3</file>
+        <file>voice/05Tension.mp3</file>
+        <file>voice/06Surface.mp3</file>
+        <file>voice/07Encoder1.mp3</file>
+        <file>voice/08Encoder2.mp3</file>
+    </qresource>
+</RCC>

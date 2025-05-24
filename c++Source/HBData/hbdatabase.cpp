@@ -644,7 +644,7 @@ bool HBDatabase::updateTensionSetFromInstance()
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
-#include "HBDatabase.h"
+#include "hbdatabase.h"
 
 // 加载单条数据
 bool HBDatabase::loadTensiometerData(int id, TensiometerData &data)
