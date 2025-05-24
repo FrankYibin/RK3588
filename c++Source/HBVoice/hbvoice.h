@@ -10,7 +10,8 @@ class HBVoice : public QObject
     Q_OBJECT
 private:
     static QStringList m_VoiceList;
-    static QMediaPlayer m_ptrPlayer;
+    static QMediaPlayer* m_ptrPlayer;
+    static HBVoice* m_objVoice;
 public:
     enum VOICE_EXCEPTION_INDEX
     {
@@ -27,7 +28,7 @@ public:
 public:
     explicit HBVoice(QObject *parent = nullptr);
     virtual ~HBVoice();
-    bool PlayVoice(VOICE_EXCEPTION_INDEX index);
+    static bool PlayVoice(VOICE_EXCEPTION_INDEX index);
 
 signals:
 };

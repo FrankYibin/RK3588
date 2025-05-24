@@ -50,6 +50,7 @@
 #include "c++Source/HBModbus/modbusutils.h"
 #include "c++Source/HBGraph/GraphAxisDefineHB.h"
 #include "c++Source/HBScreen/tensiometermanager.h"
+#include "c++Source/HBVoice/hbvoice.h"
 //#include "c++Source/HBVideoCapture/videocaptureitem.h"
 //#include "opencv2/opencv.hpp"
 void messageHandler(QtMsgType type,
@@ -83,6 +84,9 @@ int main(int argc, char *argv[])
     ModbusUtils modbusUtils;
     modbusUtils.setModbusClient(&modbusClient);
     TensiometerManager *manager = new TensiometerManager();
+    HBVoice voicePlayer;
+    HBVoice::PlayVoice(HBVoice::BLOCKED_EXCEPTION);
+    HBVoice::PlayVoice(HBVoice::ENCODER_1_EXCEPTION);
 
     QString strOSIndicator = "None";
 #ifdef WIN32

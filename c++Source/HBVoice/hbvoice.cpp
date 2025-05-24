@@ -1,6 +1,10 @@
 #include "hbvoice.h"
+#include <QAudioOutput>
+#include <QStandardPaths>
+#include <QFile>
 QStringList HBVoice::m_VoiceList;
 QMediaPlayer* HBVoice::m_ptrPlayer = nullptr;
+HBVoice* HBVoice::m_objVoice = nullptr;
 HBVoice::HBVoice(QObject *parent)
     : QObject{parent}
 {
@@ -15,6 +19,8 @@ HBVoice::HBVoice(QObject *parent)
     m_VoiceList.append(":/voice/07Encoder1.mp3");
     m_VoiceList.append(":/voice/08Encoder2.mp3");
     m_ptrPlayer = new QMediaPlayer;
+    m_ptrPlayer->setVolume(100);
+    m_objVoice = this;
 }
 
 HBVoice::~HBVoice()
@@ -24,6 +30,27 @@ HBVoice::~HBVoice()
 
 bool HBVoice::PlayVoice(HBVoice::VOICE_EXCEPTION_INDEX index)
 {
-    m_ptrPlayer->setMedia(QUrl(m_VoiceList.at(index)));
-    m_ptrPlayer->play();
+    bool bResult = false;
+    if(m_objVoice == nullptr)
+        return false;
+    if(m_VoiceList.size() == 0)
+        return false;
+    if(m_ptrPlayer->state() == QMediaPlayer::StoppedState)
+    {
+        QString resourcePath = m_VoiceList.at(index);
+        QStringList tmpList = resourcePath.split("/");
+        for(int i = 0; i < tmpList.size(); i++)
+        {
+            qDebug() << "tmp: " << tmpList.at(i);
+        }
+        QString tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + + "/" + tmpList.at(2);
+        if (!QFile::exists(tempPath)) {
+            QFile::copy(resourcePath, tempPath);
+        }
+        m_ptrPlayer->setMedia(QUrl::fromLocalFile(tempPath));
+        m_ptrPlayer->play();
+        qDebug() << "111111111111111: " << tempPath;
+        bResult = true;
+    }
+    return bResult;
 }
