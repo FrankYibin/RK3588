@@ -5,15 +5,21 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.TensionScaleManager 1.0
+
 Item{
     id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_VIEW
     property int totalScales: 0
     signal signalSaveTensometerScale()
-    Component.onCompleted:
-    {
-        dataModel.resetModel()
+//    Component.onCompleted:
+//    {
+//        dataModel.resetModel()
 
+//    }
+    TensionScaleManager{
+        id:scalemodel
+        Component.onCompleted:scalemodel.resetModel()
     }
 
     Rectangle
@@ -29,26 +35,26 @@ Item{
         }
     }
 
-    ListModel
-    {
-        id: dataModel
-        function resetModel()
-        {
-            dataModel.clear()
-            dataModel.append({"Checked": true,  "Index": 1,   "ScaleValue": 10,   "TensionValue": 0.5})
-            dataModel.append({"Checked": true,  "Index": 2,   "ScaleValue": 20,   "TensionValue": 1.0})
-            dataModel.append({"Checked": false, "Index": 3,   "ScaleValue": 30,   "TensionValue": 1.5})
-            dataModel.append({"Checked": false, "Index": 4,   "ScaleValue": 40,   "TensionValue": 2.0})
-            dataModel.append({"Checked": false, "Index": 5,   "ScaleValue": 50,   "TensionValue": 2.5})
-            dataModel.append({"Checked": true,  "Index": 6,   "ScaleValue": 60,   "TensionValue": 3.0})
-            dataModel.append({"Checked": true,  "Index": 7,   "ScaleValue": 70,   "TensionValue": 0.5})
-            dataModel.append({"Checked": true,  "Index": 8,   "ScaleValue": 80,   "TensionValue": 1.0})
-            dataModel.append({"Checked": false, "Index": 9,   "ScaleValue": 90,   "TensionValue": 1.5})
-            dataModel.append({"Checked": false, "Index": 10,   "ScaleValue": 100,   "TensionValue": 2.0})
-            dataModel.append({"Checked": false, "Index": 11,   "ScaleValue": 110,   "TensionValue": 2.5})
-            dataModel.append({"Checked": true,  "Index": 12,   "ScaleValue": 120,   "TensionValue": 3.0})
-        }
-    }
+//    ListModel
+//    {
+//        id: dataModel
+//        function resetModel()
+//        {
+//            dataModel.clear()
+//            dataModel.append({"Checked": true,  "Index": 1,   "ScaleValue": 10,   "TensionValue": 0.5})
+//            dataModel.append({"Checked": true,  "Index": 2,   "ScaleValue": 20,   "TensionValue": 1.0})
+//            dataModel.append({"Checked": false, "Index": 3,   "ScaleValue": 30,   "TensionValue": 1.5})
+//            dataModel.append({"Checked": false, "Index": 4,   "ScaleValue": 40,   "TensionValue": 2.0})
+//            dataModel.append({"Checked": false, "Index": 5,   "ScaleValue": 50,   "TensionValue": 2.5})
+//            dataModel.append({"Checked": true,  "Index": 6,   "ScaleValue": 60,   "TensionValue": 3.0})
+//            dataModel.append({"Checked": true,  "Index": 7,   "ScaleValue": 70,   "TensionValue": 0.5})
+//            dataModel.append({"Checked": true,  "Index": 8,   "ScaleValue": 80,   "TensionValue": 1.0})
+//            dataModel.append({"Checked": false, "Index": 9,   "ScaleValue": 90,   "TensionValue": 1.5})
+////            dataModel.append({"Checked": false, "Index": 10,   "ScaleValue": 100,   "TensionValue": 2.0})
+////            dataModel.append({"Checked": false, "Index": 11,   "ScaleValue": 110,   "TensionValue": 2.5})
+////            dataModel.append({"Checked": true,  "Index": 12,   "ScaleValue": 120,   "TensionValue": 3.0})
+//        }
+//    }
 
 
     Item {
@@ -65,7 +71,7 @@ Item{
             headerHeight: Math.round(40 * Style.scaleHint)
             rowHeight: Math.round(35 * Style.scaleHint)
             fontSize: Math.round(Style.style2 * Style.scaleHint)
-            model: dataModel
+            model: scalemodel
             // model: tensiometerModel
             isMouseMoving: false
 
@@ -157,6 +163,7 @@ Item{
                     border.color: Style.hbFrameBorderColor
                     HBTextField
                     {
+                        id:tensionInput
                         text: styleData.value
                         width: parent.width
                         height: parent.height
@@ -164,7 +171,10 @@ Item{
                         fontSize: tensionScaleTable.fontSize
                         onlyForNumpad: true
                         onSignalClickedEvent: {
-                            mainWindow.showPrimaryNumpad(qsTr("张力值(kN)"), " ", 3, 0, 99999, "0.123")
+                            mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, tensionInput.text,tensionInput,function(val){
+//                                tensionScaleTable.model.set(styleData.row, "TensionValue", parseFloat(val))
+//                                ModbusClient
+                            })
                         }
                     }
                 }

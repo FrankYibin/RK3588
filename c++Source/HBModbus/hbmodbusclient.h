@@ -43,6 +43,7 @@ public:
     int currentDepth3;
 
 
+
 public:
     explicit HBModbusClient(QObject *parent = nullptr);
     ~HBModbusClient();
@@ -50,6 +51,14 @@ public:
     void readRegister(int address, int count = 1);
     Q_INVOKABLE void writeRegister(int address, const QVector<quint16> &values);
     Q_INVOKABLE void writeRegister(int address, const QVariantList &values);
+
+    void readCoils();
+    void handleCoilResult(const QModbusDataUnit &result);
+    void handleAlarm(int address, bool value);
+
+    //historydata
+    void insertDataToDatabase();
+
 
 private:
     void connectToServer();

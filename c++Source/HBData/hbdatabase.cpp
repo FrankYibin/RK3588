@@ -639,12 +639,6 @@ bool HBDatabase::updateTensionSetFromInstance()
 }
 
 
-////
-
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QDebug>
-#include "hbdatabase.h"
 
 // 加载单条数据
 bool HBDatabase::loadTensiometerData(int id, TensiometerData &data)
@@ -811,7 +805,181 @@ bool HBDatabase::loadAllTensiometerData(QList<TensiometerData> &list)
 }
 
 
+bool HBDatabase::loadScalesForTensiometer(int tensioId,QList<ScaleData> &outRecords)
+
+{
+    QSqlQuery q(m_database);
+    q.prepare(R"SQL(
+              SELECT id, point_index, scale_value, tension_value, selected
+              FROM tension_scale
+              WHERE tensiometer_id = ?
+              ORDER BY point_index
+              )SQL");
+    q.addBindValue(tensioId);
+    if (!q.exec()) {
+        qWarning() << "Failed to load scales for tensioId" << tensioId
+                   << ":" << q.lastError().text();
+        return false;
+    }
+    outRecords.clear();
+    while (q.next()) {
+        ScaleData r;
+        r.id            = q.value(0).toInt();
+        r.tensiometerId = tensioId;
+        r.pointIndex         = q.value(1).toInt();
+        r.rawScaleValue    = q.value(2).toInt();
+        r.rawTensionValue  = q.value(3).toInt();
+        r.selected      = q.value(4).toInt();
+        outRecords.append(r);
+    }
+    return true;
+}
+
+//// 插入默认的 5 条刻度点
+bool HBDatabase::insertDefaultScales(int tensioId)
+{
+    QSqlQuery q(m_database);
+    q.prepare(R"SQL(
+              INSERT INTO tension_scale
+              (tensiometer_id, point_index, scale_value, tension_value)
+              VALUES (?, ?, ?, ?)
+              )SQL");
+    for (int i = 1; i <= 5; ++i) {
+        q.bindValue(0, tensioId);
+        q.bindValue(1, i);
+        q.bindValue(2, i * 100);   // 默认刻度值 ×100 存储
+        q.bindValue(3, 0);         // 默认张力值 0
+        if (!q.exec()) {
+            qWarning() << "Failed to insert default scale for tensioId" << tensioId
+                       << "point" << i << ":" << q.lastError().text();
+            return false;
+        }
+    }
+    return true;
+}
+
+////  更新某条刻度的张力值
+bool HBDatabase::updateTensionScale(int scaleId, int rawValue)
+{
+    QSqlQuery q(m_database);
+    q.prepare(R"SQL(
+              UPDATE tension_scale
+              SET tension_value = ?
+              WHERE id = ?
+              )SQL");
+    q.addBindValue(rawValue);
+    q.addBindValue(scaleId);
+    if (!q.exec()) {
+        qWarning() << "Failed to update tension_scale id" << scaleId
+                   << ":" << q.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+// 删除某台张力计的所有刻度点
+bool HBDatabase::deleteScalesByTensiometerId(int tensioId)
+{
+    QSqlQuery q(m_database);
+    q.prepare(R"SQL(
+              DELETE FROM tension_scale
+              WHERE tensiometer_id = ?
+              )SQL");
+    q.addBindValue(tensioId);
+    if (!q.exec()) {
+        qWarning() << "Failed to delete scales for tensioId" << tensioId
+                   << ":" << q.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+QList<HistoryData> HBDatabase::loadHistoryData()
+{
+    QList<HistoryData> dataList;
+
+    if (!m_database.isOpen()) {
+        qDebug() << "Database is not open!";
+        return dataList;
+    }
+
+    QSqlQuery query(m_database);
+
+    QString sql = "SELECT wellNumber, date, operateType, operater, depth, velocity, velocityUnit, "
+                  "tensions, tensionIncrement, tensionUnit, maxTension, harnessTension, safetyTension, exception "
+                  "FROM history_table";
+
+    if (!query.exec(sql)) {
+        qDebug() << "Failed to load history data:" << query.lastError();
+        return dataList;
+    }
+
+    while (query.next()) {
+        HistoryData item;
+        item.wellNumber = query.value("wellNumber").toString();
+        //        item.date = query.value("date").toString();
+        QString fullDate = query.value("date").toString();
+        if (fullDate.length() >= 7) {
+            item.date = fullDate.left(10);
+        } else {
+            item.date = "";
+        }
+        item.operateType = query.value("operateType").toString();
+        item.operater = query.value("operater").toString();
+        item.depth = query.value("depth").toInt();
+        item.velocity = query.value("velocity").toInt();
+        item.velocityUnit = query.value("velocityUnit").toString();
+        item.tensions = query.value("tensions").toInt();
+        item.tensionIncrement = query.value("tensionIncrement").toInt();
+        item.tensionUnit = query.value("tensionUnit").toString();
+        item.maxTension = query.value("maxTension").toInt();
+        item.harnessTension = query.value("harnessTension").toInt();
+        item.safetyTension = query.value("safetyTension").toInt();
+        item.exception = query.value("exception").toString();
+
+        dataList.append(item);
+    }
+
+    return dataList;
+}
 
 
+
+bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
+{
+    if (!m_database.isOpen()) {
+        qDebug() << "Database is not open!";
+        return false;
+    }
+    QSqlQuery query(m_database);
+    QString sql = "INSERT INTO history_table (wellNumber, date, operateType, operater, depth, velocity, "
+                  "velocityUnit, tensions, tensionUnit, maxTension, harnessTension, safetyTension, exception) "
+                  "VALUES (:wellNumber, CURRENT_DATE, :operateType, :operater, :depth, :velocity, "
+                  ":velocityUnit, :tensions, :tensionUnit, :maxTension, :harnessTension, :safetyTension, :exception)";
+    query.prepare(sql);
+
+
+    query.bindValue(":wellNumber", modbusData.wellNumber);
+    query.bindValue(":operateType", modbusData.operateType);            // 固定数据 - 操作类型
+    query.bindValue(":operater", modbusData.operater);                  // 固定数据 - 操作员
+    query.bindValue(":depth", modbusData.depth);                       // 从 Modbus 获取深度
+    query.bindValue(":velocity", modbusData.velocity);                 // 从 Modbus 获取速度
+    query.bindValue(":velocityUnit", "m/min");                           // 固定单位 - 速度
+    query.bindValue(":tensions", modbusData.tensions);                 // 从 Modbus 获取张力
+    query.bindValue(":tensionUnit", "kg");                              // 固定单位 - 张力
+    query.bindValue(":maxTension", modbusData.maxTension);             // 从 Modbus 获取最大张力
+    query.bindValue(":harnessTension", modbusData.harnessTension);     // 从 Modbus 获取吊索张力
+    query.bindValue(":safetyTension", modbusData.safetyTension);       // 从 Modbus 获取安全张力
+    query.bindValue(":exception", "无");
+
+    // 执行插入
+    if (!query.exec()) {
+        qDebug() << "Failed to insert data:" << query.lastError();
+        return false;
+    }
+
+    qDebug() << "Data inserted successfully!";
+    return true;
+}
 
 

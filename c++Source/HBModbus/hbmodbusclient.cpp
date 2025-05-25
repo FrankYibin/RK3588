@@ -5,6 +5,9 @@
 #include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/tensionsafe.h"
+#include "c++Source/HBDefine.h"
+#include "c++Source/HBData/hbdatabase.h"
+#include "c++Source/HBScreen/wellparameter.h"
 
 HBModbusClient::HBModbusClient(QObject *parent)
     : QObject{parent}
@@ -37,7 +40,7 @@ void HBModbusClient::connectToServer()
         return;
 
 //    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM7");
-    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "ttyS0");
+    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "ttyS3");
 //    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "usbmon3");
     modbus->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud115200);
     modbus->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
@@ -107,10 +110,9 @@ void HBModbusClient::readRegister(int address, int count)
 
 void HBModbusClient::startBatchRead()
 {
-    // 每次定时器触发，连续发三次读取
-    readRegister(HQmlEnum::DEPTH_H,HQmlEnum::DEPTH_L); //9-29
-    readRegister(HQmlEnum::TENSION_H,HQmlEnum::SPEED_CONTROL_L); //32-58
-    readRegister(HQmlEnum::TENSION_BAR_TONNAGE,HQmlEnum::DEPTH_TENSION_STATE); //67-84
+    readRegister(HQmlEnum::DEPTH_H,HQmlEnum::HIGH_ANGLE_WELL);
+
+    readCoils();
 
 }
 
@@ -143,6 +145,34 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             speed = (Speed_H << 16) | Speed_L;
             HBHome::getInstance()->setSpeed(speed);
             qDebug() << "Address" << currentAddress << "- Updated speed:" << speed;
+            break;
+        case HQmlEnum::MAX_SPEED_H: // MAX_SPEED_H
+            MaxSpeed_H = value;
+            break;
+        case HQmlEnum::MAX_SPEED_L: // MAX_SPEED_L
+            MaxSpeed_L = value;
+            maxSpeed = (MaxSpeed_H << 16) | MaxSpeed_L;
+            HBHome::getInstance()->setMaxSpeed(maxSpeed);
+            qDebug() << "Address" << currentAddress << "- Updated maxSpeed:" << maxSpeed;
+            break;
+        case HQmlEnum::TARGET_DEPTH_H: // MAX_SPEED_H
+            TargetDepth_H = value;
+            break;
+        case HQmlEnum::TARGET_DEPTH_L: // MAX_SPEED_L
+            TargetDepth_L = value;
+            targetDepth = (TargetDepth_H << 16) | TargetDepth_L;
+            HBHome::getInstance()->setTargetDepth(targetDepth);
+            qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
+            break;
+
+        case HQmlEnum::METER_DEPTH_H: // 表套深度高
+            TargetDepth_H = value;
+            break;
+        case HQmlEnum::METER_DEPTH_L: //
+            TargetDepth_L = value;
+            targetDepth = (TargetDepth_H << 16) | TargetDepth_L;
+            HBHome::getInstance()->setTargetDepth(targetDepth);
+            qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
         case HQmlEnum::PULSE: // PULSE
             plus = value;
@@ -190,24 +220,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             HBHome::getInstance()->setMaxTensionIncrement(maxTensionIncrement);
             qDebug() << "Address" << currentAddress << "- Updated maxTensionIncrement:" << maxTensionIncrement;
             break;
-        case HQmlEnum::MAX_SPEED_H: // MAX_SPEED_H
-            MaxSpeed_H = value;
-            break;
-        case HQmlEnum::MAX_SPEED_L: // MAX_SPEED_L
-            MaxSpeed_L = value;
-            maxSpeed = (MaxSpeed_H << 16) | MaxSpeed_L;
-            HBHome::getInstance()->setMaxSpeed(maxSpeed);
-            qDebug() << "Address" << currentAddress << "- Updated maxSpeed:" << maxSpeed;
-            break;
-        case HQmlEnum::MAX_DEPTH_H: // MAX_SPEED_H
-            TargetDepth_H = value;
-            break;
-        case HQmlEnum::MAX_DEPTH_L: // MAX_SPEED_L
-            TargetDepth_L = value;
-            targetDepth = (TargetDepth_H << 16) | TargetDepth_L;
-            HBHome::getInstance()->setTargetDepth(targetDepth);
-            qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
-            break;
+
         case HQmlEnum::CABLE_TENSION_H: // CABLE_TENSION_H
             CableTension_H = value;
             break;
@@ -347,3 +360,193 @@ void HBModbusClient::writeRegister(int address, const QVariantList &values)
     }
     writeRegister(address, data);
 }
+
+void HBModbusClient::readCoils()
+{
+    if (!modbus || modbus->state() != QModbusDevice::ConnectedState) {
+        qWarning() << "Modbus not connected";
+        return;
+    }
+
+    QModbusDataUnit request(QModbusDataUnit::Coils, HQmlEnum::ALARM_SPEED, 12);
+
+    if (auto *reply = modbus->sendReadRequest(request, 1)) {
+        connect(reply, &QModbusReply::finished, this, [this, reply]() {
+            if (reply->error() == QModbusDevice::NoError) {
+                handleCoilResult(reply->result());
+            } else {
+                qWarning() << "Coil read failed:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+    } else {
+        qWarning() << "Failed to send coil read request:" << modbus->errorString();
+    }
+}
+
+void HBModbusClient::handleCoilResult(const QModbusDataUnit &result)
+{
+    int startAddress = result.startAddress();
+    int count = result.valueCount();
+
+    for (int i = 0; i < count; ++i) {
+        int address = startAddress + i;
+        bool val = result.value(i);
+        handleAlarm(address, val);
+    }
+}
+
+void HBModbusClient::handleAlarm(int address, bool value)
+{
+    QString alarmName;
+    bool alarmActive = value;
+
+    switch (address) {
+    case HQmlEnum::ALARM_SPEED:
+        alarmName = "速度报警";
+        if (alarmActive) {
+
+            qDebug() << alarmName << "触发 - 限速或者停止设备";
+
+        } else {
+            qDebug() << alarmName << "解除 - 恢复正常运行";
+
+        }
+        break;
+
+    case HQmlEnum::ALARM_WELL:
+        alarmName = "井口报警";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 井口异常，执行安全停机";
+
+        } else {
+            qDebug() << alarmName << "解除 - 井口正常";
+        }
+        break;
+
+    case HQmlEnum::ALARM_TARGETLAYERDEPTH:
+        alarmName = "目的层报警";
+
+        qDebug() << alarmName << (alarmActive ? "触发" : "解除");
+        break;
+
+    case HQmlEnum::ALARM_METERDEPTH:
+        alarmName = "表套深度报警";
+        if (alarmActive) {
+
+
+        } else {
+            qDebug() << alarmName << "解除";
+
+        }
+        break;
+
+    case HQmlEnum::ALARM_TENSION:
+        alarmName = "张力报警";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 检查张力状态";
+
+        } else {
+            qDebug() << alarmName << "解除";
+        }
+        break;
+
+
+    case HQmlEnum::ALARM_TENSIONINC_1:
+        alarmName = "张力增量报警（遇阻）";
+        qDebug() << alarmName << (alarmActive ? "触发" : "解除");
+        break;
+
+    case HQmlEnum::ALARM_TENSIONINC_2:
+        alarmName = "张力增量报警（遇卡）";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 检查张力状态";
+
+        } else {
+            qDebug() << alarmName << "解除";
+        }
+        break;
+
+    case HQmlEnum::ALARM_CABLETENSION_1:
+        alarmName = "揽头张力遇阻报警";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 检查张力状态";
+
+        } else {
+            qDebug() << alarmName << "解除";
+        }
+
+        break;
+
+    case HQmlEnum::ALARM_CABLETENSION_2:
+        alarmName = "揽头张力遇卡报警";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 检查张力状态";
+
+        } else {
+            qDebug() << alarmName << "解除";
+        }
+
+        break;
+
+    case HQmlEnum::ALARM_CODE1:
+        alarmName = "编码器1报警";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 检查张力状态";
+
+        } else {
+            qDebug() << alarmName << "解除";
+        }
+
+        break;
+
+    case HQmlEnum::ALARM_CODE2:
+        alarmName = "编码器2报警";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 检查张力状态";
+
+        } else {
+            qDebug() << alarmName << "解除";
+        }
+
+        break;
+
+    case HQmlEnum::ALARM_CODE3:
+        alarmName = "编码器3报警";
+        if (alarmActive) {
+            qDebug() << alarmName << "触发 - 检查张力状态";
+
+        } else {
+            qDebug() << alarmName << "解除";
+        }
+
+        break;
+
+    default:
+        break;
+    }
+
+
+}
+
+
+
+void HBModbusClient::insertDataToDatabase()
+{
+
+    ModbusData modData;
+    modData.wellNumber = WellParameter::getInstance()->WellNumber();
+    modData.operateType = WellParameter::getInstance()->OperatorType();
+    modData.operater = WellParameter::getInstance()->UserName();
+    modData.depth = depth;
+    modData.velocity = speed;
+    modData.tensions = tension;
+    modData.tensionIncrement = tensionIncrement;
+    modData.harnessTension = cableTension;
+    modData.maxTension = maxTension;
+    modData.safetyTension = currentTensionSafe;
+    modData.exception = "无";
+
+    HBDatabase::getInstance().insertHistoryData(modData);
+}
+

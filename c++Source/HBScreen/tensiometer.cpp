@@ -3,7 +3,7 @@
 Tensiometer* Tensiometer::m_tensiometer = nullptr;
 
 Tensiometer::Tensiometer(QObject *parent)
-    : QObject{parent},m_tensiometerNumber(""),
+    : QObject{parent},m_tensiometerNumber("2512001"),
     m_tensiometerType(0),
     m_tensiometerRange(0),
     m_tensiometerSignal(0),
