@@ -102,6 +102,57 @@ struct TensiometerData {
 
 };
 
+struct ScaleData  {
+    int id             = 0;
+    int tensiometerId  = 0;
+    int pointIndex     = 0;    // 刻度点序号 1～5
+    int rawScaleValue  = 0;    // 存库时 ×100 的刻度值整数
+    int rawTensionValue= 0;    // 存库时 ×100 的张力值整数
+    int selected       = 0;    // 0 = 未选中；1 = 选中
+};
+
+struct TensionScaleData {
+
+    bool checked;
+    int index;
+    int scaleValue;
+    int tensionValue;
+};
+
+
+
+struct HistoryData {
+    QString wellNumber;
+    QString date;
+    QString operateType;
+    QString operater;
+    int depth;
+    int velocity;
+    QString velocityUnit;
+    int tensions;
+    int tensionIncrement;
+    QString tensionUnit;
+    int maxTension;
+    int harnessTension;
+    int safetyTension;
+    QString exception;
+};
+
+struct ModbusData {
+
+    QString wellNumber;   //
+    QString operateType;
+    QString operater;
+    int depth;
+    int velocity;
+    int tensions;
+    int tensionIncrement;
+    int maxTension;
+    int harnessTension;
+    int safetyTension;
+    QString exception;
+};
+
 
 struct _Measurements_data{
     int id;                                // id

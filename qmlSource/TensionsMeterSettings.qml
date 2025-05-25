@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.Modbus 1.0
 Item{
     id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
@@ -13,9 +14,9 @@ Item{
     readonly property int rowSpacing: 100
     readonly property int columnSpacing: 30
     readonly property int optionHeight: 30
-    readonly property var tensionsTypeModel: [qsTr("数字无线"), qsTr("数字有线"), qsTr("模拟有线")]
-    readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
-    readonly property var analogRangeModel: [qsTr("无"), "0-30mV", "0-1.5V", "0-5V"]
+//    readonly property var tensionsTypeModel: [qsTr("数字无线"), qsTr("数字有线"), qsTr("模拟有线")]
+//    readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
+//    readonly property var analogRangeModel: [qsTr("无"), "0-30mV", "0-1.5V", "0-5V"]
     signal signalSaveTensometer()
     Rectangle
     {
@@ -158,12 +159,12 @@ Item{
                 model: analogRangeModel
                 currentIndex: Tensiometer.TensiometerSignal
                 width: Math.round(comboBoxWidth * Style.scaleHint)
-                height: parent
+                height:  parent.height
 
                 onCurrentIndexChanged: {
                     // ModbusClient.writeRegister(37, [currentIndex])
                     // ModbusUtils.writeScaledValue()
-                    Tensiometer.TensiometerRange = currentIndex
+                    Tensiometer.TensiometerSignal = currentIndex
                     console.log("init TensiometerSignal:" + currentIndex)
                 }
             }

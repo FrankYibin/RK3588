@@ -37,7 +37,7 @@ class HBHome : public QObject
     //K_Value           k值
     Q_PROPERTY(int KValue READ KValue WRITE setKValue NOTIFY KValueChanged )
 
-    //HarnessTension
+    //HarnessTension  缆头张力
     Q_PROPERTY(int HarnessTension READ HarnessTension WRITE setHarnessTension NOTIFY HarnessTensionChanged )
 
     //MaxParameterStatus  极限参数状态
@@ -132,7 +132,7 @@ private:
     int m_speed = 0;
     int m_tension = 0;
     int m_tensionIncrement = 0;
-    int m_pulse = 0;
+    int m_pulse = 1280;
     int m_maxTension = 0;
     int m_targetDepth = 0;
     int m_maxSpeed = 0;

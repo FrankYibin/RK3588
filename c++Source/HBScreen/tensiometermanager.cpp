@@ -1,5 +1,6 @@
 ﻿#include "tensiometermanager.h"
 #include <QDebug>
+#include "c++Source/HBData/hbdatabase.h"
 
 TensiometerManager::TensiometerManager(QObject *parent)
     : QAbstractListModel(parent), m_db(&HBDatabase::getInstance())
@@ -24,7 +25,7 @@ QVariant TensiometerManager::data(const QModelIndex &index, int role) const {
         return QVariant();
 
     if (role == IndexRole)
-        return index.row() + 1;  // 1-based index
+        return index.row();
 
     const TensiometerData &item = m_items.at(index.row());
 
@@ -61,27 +62,41 @@ void TensiometerManager::addTensiometer(const QString &number, int type, int ran
     data.tensiometerSignal = signal;
 
     if (m_db->insertTensiometerData(data)) {
+        qDebug() << "Insert tensiometer data successful, id:" << data.id;
+                    m_db->insertDefaultScales(data.id);
+        qDebug()<< "number:" << data.tensiometerNumber;
         beginInsertRows(QModelIndex(), m_items.count(), m_items.count());
         m_items.append(data);
         endInsertRows();
     } else {
         qDebug() << "Failed to insert tensiometer data.";
     }
+    emit countChanged();
+
 }
 
 void TensiometerManager::removeTensiometer(int index) {
-    if (index < 0 || index >= m_items.size())
+    if (index < 0 || index >= m_items.size()) {
+        qDebug() << "Invalid index for removal:" << index;
         return;
+    }
 
     int id = m_items[index].id;
+    qDebug() << "Trying to remove tensiometer at index" << index << "with id" << id;
+
+
     if (m_db->deleteTensiometerData(id)) {
+        m_db->deleteScalesByTensiometerId(id);
         beginRemoveRows(QModelIndex(), index, index);
         m_items.removeAt(index);
         endRemoveRows();
+        emit countChanged();
     } else {
         qDebug() << "Failed to delete tensiometer data with id:" << id;
     }
+
 }
+
 
 void TensiometerManager::clear() {
     beginResetModel();
@@ -90,6 +105,7 @@ void TensiometerManager::clear() {
     }
     m_items.clear();
     endResetModel();
+    emit countChanged();
 }
 
 void TensiometerManager::updateTensiometer(int index, const QString &number, int type, int range, int signal) {
@@ -103,6 +119,7 @@ void TensiometerManager::updateTensiometer(int index, const QString &number, int
     data.tensiometerSignal = signal;
 
     if (m_db->updateTensiometerData(data)) {
+        QVector<int> roles = {NumberRole, TypeRole, RangeRole, SignalRole};
         emit dataChanged(this->index(index), this->index(index));
     } else {
         qDebug() << "Failed to update tensiometer data at index:" << index;

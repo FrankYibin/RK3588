@@ -9,6 +9,8 @@
 
 class TensiometerManager : public QAbstractListModel {
     Q_OBJECT
+
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 public:
     enum TensiometerRoles {
         NumberRole = Qt::UserRole + 1,
@@ -20,7 +22,7 @@ public:
 
     explicit TensiometerManager(QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
@@ -30,6 +32,9 @@ public:
     Q_INVOKABLE void updateTensiometer(int index, const QString &number, int type, int range, int signal);
 
     const QList<TensiometerData>& items() const;
+
+signals:
+    void countChanged();
 
 private:
     QList<TensiometerData> m_items;

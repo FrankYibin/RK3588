@@ -5,17 +5,28 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.Modbus 1.0
 
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     signal signalCreateTensometer()
     signal signalViewTensometer()
     signal signalScaleTensometer()
-    Component.onCompleted:
-    {
-        dataModel.resetModel()
-        operateModel.resetModel()
-    }
+
+
+    //    function deleteAllTensiometers(index) {
+    //        if (index < 0) {
+    //            tensionMeterTable.currentRow = -1
+    //            return
+    //        }
+
+    //        console.log("Deleting row:", index)
+    //        tensiometerManager.removeTensiometer(index)
+
+    //        Qt.callLater(function() {
+    //            deleteAllTensiometers(index - 1)
+    //        })
+    //    }
 
     Rectangle
     {
@@ -30,55 +41,11 @@ Item{
         }
     }
 
-    ListModel
-    {
-        id: operateModel
-        function resetModel()
-        {
-            operateModel.clear()
-            operateModel.append({"Index": 0, "Name": qsTr("查看")})
-            operateModel.append({"Index": 1, "Name": qsTr("刻度")})
-            operateModel.append({"Index": 2, "Name": qsTr("删除")})
-        }
-    }
-
-
-    ListModel
-    {
-        id: dataModel
-        function resetModel()
-        {
-            dataModel.clear()
-            dataModel.append({"Index": 0,               "SensorNumber": 2412001,   "SensorType": qsTr("数字无线"),
-                              "SensorRange": "10T",      "AnalogRange": qsTr("无"),         "Operating": ""})
-            dataModel.append({"Index": 1,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 2,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 3,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 4,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 5,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 6,               "SensorNumber": 2412001,   "SensorType": qsTr("数字无线"),
-                              "SensorRange": "10T",      "AnalogRange": qsTr("无"),         "Operating": ""})
-            dataModel.append({"Index": 7,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 8,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 9,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 10,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-            dataModel.append({"Index": 11,               "SensorNumber": 2412002,   "SensorType": qsTr("模拟有线"),
-                              "SensorRange": "30T",      "AnalogRange": "0-5V",         "Operating": ""})
-        }
-
-    }
-
     HBTableView {
         id: tensionMeterTable
+        property var tensionsTypeModel: []
+        property var sensorRangeModel: []
+        property var analogRangeModel: []
         property int selectedRow: -1
         anchors.left: parent.left
         anchors.leftMargin: Math.round(10 * Style.scaleHint)
@@ -91,17 +58,19 @@ Item{
         headerHeight: Math.round(40 * Style.scaleHint)
         rowHeight: Math.round(35 * Style.scaleHint)
         fontSize: Math.round(Style.style2 * Style.scaleHint)
-        // model: dataModel
         model: tensiometerManager
         // selectionMode: SelectionMode.SingleSelection
         isMouseMoving: false
         rowDelegate: Rectangle{
             height: tensionMeterTable.rowHeight
+            color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
+
         }
 
         TableViewColumn {
             role: "Index";              title: qsTr("");                width: 30;
             delegate: Rectangle {
+
                 height: tensionMeterTable.rowHeight
                 width: styleData.columnWidth
                 color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
@@ -109,15 +78,17 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    text: styleData.value
+                    //                    text: styleData.value +1
+                    text: styleData.row + 1
                     font.family: Style.regular.name
                     font.pixelSize: tensionMeterTable.fontSize
                 }
             }
         }
         TableViewColumn {
-           role: "SensorNumber";         title: qsTr("张力计编号");        width: 150
+            role: "SensorNumber";         title: qsTr("张力计编号");        width: 150
             delegate: Rectangle {
+
                 height: tensionMeterTable.rowHeight
                 width: styleData.columnWidth
                 color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
@@ -128,6 +99,8 @@ Item{
                     text: styleData.value
                     font.family: Style.regular.name
                     font.pixelSize: tensionMeterTable.fontSize
+                    Component.onCompleted: console.log("SensorNumber cell:", styleData.value)
+
                 }
                 MouseArea {
                     anchors.fill: parent
@@ -135,6 +108,7 @@ Item{
                     property int previousY: 0
                     onClicked: {
                         tensionMeterTable.currentRow = styleData.row // Update the current row
+                        //                        tensionMeterTable.currentRow = model.index
                         console.debug("Selected Row: ", tensionMeterTable.currentRow)
                     }
 
@@ -168,7 +142,10 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    text: styleData.value
+                    //                    text: styleData.value
+                    text: tensionsTypeModel[styleData.value] !== undefined
+                          ? tensionsTypeModel[styleData.value]
+                          : ""
                     font.family: "宋体"
                     font.pixelSize: tensionMeterTable.fontSize
                 }
@@ -184,7 +161,10 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    text: styleData.value
+                    //                    text: styleData.value
+                    text: sensorRangeModel[styleData.value] !== undefined
+                          ? sensorRangeModel[styleData.value]
+                          : ""
                     font.family: Style.regular.name
                     font.pixelSize: tensionMeterTable.fontSize
                 }
@@ -200,58 +180,106 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    text: styleData.value
+                    //                    text: styleData.value
+                    text: analogRangeModel[styleData.value] !== undefined
+                          ? analogRangeModel[styleData.value]
+                          : ""
                     font.family: "宋体"
                     font.pixelSize: tensionMeterTable.fontSize
                 }
             }
         }
         TableViewColumn {
-            role: "Operating";            title: qsTr("操作");             width: 430
+            title: qsTr("操作")
+            width: Math.round(270 * Style.scaleHint)
+
             delegate: Rectangle {
-                height: tensionMeterTable.rowHeight
-                width: styleData.columnWidth
+
                 color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
                 border.color: Style.hbFrameBorderColor
-                Row{
-                    anchors.centerIn: parent
+                height: Math.round(40 * Style.scaleHint)
+                width: parent.width
+
+                Row {
                     spacing: Math.round(10 * Style.scaleHint)
-                    Repeater
-                    {
-                        model: operateModel
-                        HBPrimaryButton
-                        {
-                            width: Math.round(80 * Style.scaleHint)
-                            height: Math.round(25 * Style.scaleHint)
-                            text: model.Name
-                            fontSize: tensionMeterTable.fontSize
-                            onClicked:
-                            {
-                                switch(model.Index)
-                                {
-                                case 0:
-                                    signalViewTensometer()
-                                    break;
-                                case 1:
-                                    signalScaleTensometer()
-                                    break;
-                                case 2:
-                                    if (tensionMeterTable.currentRow >= 0) {
-                                           tensiometerManager.removeTensiometer(tensionMeterTable.currentRow)
-                                           tensionMeterTable.currentRow = -1 // 清除选择状态
-                                       } else {
-                                           console.warn("未选择要删除的行")
-                                       }
-                                    break;
-                                default:
-                                    break;
-                                }
+                    anchors.centerIn: parent
+
+                    HBPrimaryButton {
+                        text: qsTr("查看")
+                        width: Math.round(80 * Style.scaleHint)
+                        height: Math.round(25 * Style.scaleHint)
+                        fontSize: tensionMeterTable.fontSize
+                        onClicked: {
+                            tensionMeterTable.currentRow = styleData.row
+                            signalViewTensometer()
+                        }
+                    }
+
+                    HBPrimaryButton {
+                        text: qsTr("刻度")
+                        width: Math.round(80 * Style.scaleHint)
+                        height: Math.round(25 * Style.scaleHint)
+                        fontSize: tensionMeterTable.fontSize
+                        onClicked: {
+                            tensionMeterTable.currentRow = styleData.row
+                            signalScaleTensometer()
+                        }
+                    }
+
+                    HBPrimaryButton {
+                        text: qsTr("删除")
+                        width: Math.round(80 * Style.scaleHint)
+                        height: Math.round(25 * Style.scaleHint)
+                        fontSize: tensionMeterTable.fontSize
+                        onClicked: {
+
+                            //                            console.log("Delete clicked at delegate row:", styleData.row);
+                            //                            console.log("tensionMeterTable currentRow:", tensionMeterTable.currentRow);
+                            //                            console.log("tensiometerManager rowCount:", tensiometerManager.count)
+                            //                            const row = styleData.row
+                            //                            console.log("Row to delete:", row)
+                            //                            if (row >= 0) {
+                            //                                tensionMeterTable.currentRow = -1
+                            //                                Qt.callLater(() => {
+                            //                                                 tensiometerManager.removeTensiometer(row)
+                            //                                             })
+                            //                            } else {
+                            //                                console.warn("Invalid row for deletion:", row)
+                            //                            }
+                            //                            const index = styleData.row;
+                            //                             console.log("Request delete at index:", index);
+                            //                             if (index >= 0 && index < tensiometerManager.count) {
+                            //                                 tensionMeterTable.currentRow = -1;
+                            //                                 tensiometerManager.removeTensiometer(index);
+                            //                                 Qt.callLater(() => {
+                            //                                     if (tensiometerManager.count > 0) {
+                            //                                         tensionMeterTable.currentRow = Math.min(index, tensiometerManager.count - 1);
+                            //                                     } else {
+                            //                                         tensionMeterTable.currentRow = -1;
+                            //                                     }
+                            //                                 });
+                            //                             } else {
+                            //                                 console.warn("Invalid index for deletion:", index);
+                            //                             }
+                            //                            }
+                            const index = styleData.row;
+                            if (index >= 0 && index < tensiometerManager.count) {
+                                tensionMeterTable.currentRow = -1;
+                                tensiometerManager.removeTensiometer(index);
+                                Qt.callLater(() => {
+                                                 if (tensiometerManager.count > 0) {
+                                                     tensionMeterTable.currentRow = Math.min(index, tensiometerManager.count - 1);
+                                                 } else {
+                                                     tensionMeterTable.currentRow = -1;
+                                                 }
+                                             });
                             }
                         }
                     }
                 }
             }
         }
+
     }
 
     Item{

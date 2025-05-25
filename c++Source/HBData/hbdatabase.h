@@ -69,6 +69,27 @@ public:
 
 
 
+    // 加载某台张力计的所有刻度点
+    bool loadScalesForTensiometer(int tensioId,QList<ScaleData> &outRecords);
+
+
+    // 插入默认的 5 条刻度点（在 addTensiometer 后调用）
+    bool insertDefaultScales(int tensioId);
+
+
+    bool updateTensionScale(int scaleId, int rawValue);
+
+
+    bool deleteScalesByTensiometerId(int tensioId);
+
+
+
+
+
+    ///加载历史数据
+    QList<HistoryData> loadHistoryData();
+
+    bool insertHistoryData(const ModbusData& modbusData);
 
     void closeTransaction();
 
