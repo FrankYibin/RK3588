@@ -6,6 +6,7 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
+import HB.Enums 1.0
 
 
 Item{
@@ -85,9 +86,9 @@ Item{
                             console.debug("index: ", index)
 
                             if(index===0){
-                                ModbusClient.writeRegister(55,[0x01])
+                                ModbusClient.writeRegister(HQmlEnum.SPEED_CONTROL_STATE,[0x01])
                             }else{
-                                ModbusClient.writeRegister(55,[0x02])
+                                ModbusClient.writeRegister(HQmlEnum.SPEED_CONTROL_STATE,[0x02])
                             }
                         }
                     }
@@ -124,21 +125,21 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入控速值"), " ", 2, 0, 99999, textVelocitySetting.text, textVelocitySetting, function(val) {
                             AutoTestSpeed.SpeedValue = val;
-                            ModbusUtils.writeScaledValue(val,67,100.0)
+                            ModbusUtils.writeScaledValue(val,HQmlEnum.CONTROL_SPEED_H,100.0)
                         })
                     }
 
-                    onFocusChanged: {
-                        if (!focus) {  // 失去焦点时处理
-                            var velocityValue = parseFloat(textVelocitySetting.text);
-                            if (!isNaN(velocityValue) && velocityValue > 0) {
-                                var modbusRegisters = ModbusUtils.floatToModbusRegisters(velocityValue);
-                                // 将转换后的寄存器值写入 Modbus
-                                ModbusClient.writeRegister(55, modbusRegisters);
+                    // onFocusChanged: {
+                    //     if (!focus) {  // 失去焦点时处理
+                    //         var velocityValue = parseFloat(textVelocitySetting.text);
+                    //         if (!isNaN(velocityValue) && velocityValue > 0) {
+                    //             var modbusRegisters = ModbusUtils.floatToModbusRegisters(velocityValue);
+                    //             // 将转换后的寄存器值写入 Modbus
+                    //             ModbusClient.writeRegister(55, modbusRegisters);
 
-                            }
-                        }
-                    }
+                    //         }
+                    //     }
+                    // }
                 }
                 Text
                 {
@@ -184,7 +185,7 @@ Item{
             onClicked:
             {
                 // controlLimitNumpad.visible = false
-                ModbusClient.writeRegister(56,[0x01])
+                // ModbusClient.writeRegister(HQmlEnum.SPEED_CONTROL_STATE,[0x01])
             }
         }
 
@@ -199,7 +200,7 @@ Item{
                 // controlLimitNumpad.visible = false
                 profileLayout.visible = false
                 mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
-                ModbusClient.writeRegister(55,[0x03])
+                // ModbusClient.writeRegister(55,[0x03])
             }
         }
     }

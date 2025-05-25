@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -7,6 +7,7 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Database 1.0
+import HB.Enums 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_WELL_PARAMETERS
     readonly property int comboBoxWidth: 100
@@ -136,7 +137,7 @@ Item{
                     onCurrentIndexChanged: {
                         var valueMap = [0x0000, 0x0002, 0x0003]
                         var val = valueMap[currentIndex];
-                        ModbusClient.writeRegister(71, [val])
+                        ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, [val])
                         WellParameter.WellType = currentIndex
                         console.log("init valu：" + valueMap[currentIndex])
                     }
@@ -172,7 +173,7 @@ Item{
                          console.log("textWellDepth =", textWellDepth);
                         mainWindow.showPrimaryNumpad(qsTr("请输入井深值"), " ", 3, 0, 999999, textWellDepth.text,textWellDepth,function(val) {
                             WellParameter.WellDepth = val;
-                            ModbusUtils.writeScaledValue(val, 69,100.0)
+                            ModbusUtils.writeScaledValue(val,HQmlEnum.WORK_WELL_H ,100.0)
                         })
                     }
 
@@ -216,7 +217,7 @@ Item{
                          console.log("textHarnessWeight =", textHarnessWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆自重值"), " ", 3, 0, 99999, textHarnessWeight.text,textHarnessWeight,function(val) {
                             WellParameter.HarnessWeight = val;
-                            ModbusClient.writeRegister(75,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.CABLE_UINT,[parseInt(val)])
                         })
                     }
                 }
@@ -259,7 +260,7 @@ Item{
                          console.log("textHarnessWeight =", textSensorWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeight.text,textSensorWeight,function(val) {
                             WellParameter.SensorWeight = val;
-                            ModbusClient.writeRegister(76, [parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.SENSOR_WEIGHT, [parseInt(val)])
                         })
                     }
 
@@ -318,7 +319,7 @@ Item{
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(68, [currentIndex])
+                        ModbusClient.writeRegister(HQmlEnum.CABLE_TYPE, [currentIndex])
                         WellParameter.HarnessType = currentIndex
                         console.log("HarnessType value：" + [currentIndex])
                     }
@@ -353,9 +354,9 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textHarnessForce.text =", textHarnessForce.text);
                          console.log("textHarnessForce =", textHarnessForce);
-                        mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textHarnessForce.text,textHarnessForce,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessForce.text,textHarnessForce,function(val) {
                             WellParameter.HarnessForce = val;
-                            ModbusClient.writeRegister(73,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.HARNESS_FORCE,[parseInt(val)])
                         })
                     }
                 }
@@ -395,7 +396,7 @@ Item{
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(67, [currentIndex])
+                        ModbusClient.writeRegister(HQmlEnum.TENSION_BAR_TONNAGE, [currentIndex])
                         WellParameter.TensionUnit = currentIndex
                         console.log("init HarnessType:" + currentIndex)
                     }
@@ -448,7 +449,7 @@ Item{
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(72, [currentIndex])
+                        ModbusClient.writeRegister(HQmlEnum.WOKE_TYPE, [currentIndex])
                          WellParameter.WorkType = currentIndex
                         console.log("init WorkType:" + currentIndex)
                     }

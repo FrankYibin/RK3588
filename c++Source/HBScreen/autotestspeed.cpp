@@ -40,3 +40,30 @@ void AutoTestSpeed::setSpeedValue(int newSpeedValue)
     m_speedVlue = newSpeedValue;
     emit SpeedValueChanged();
 }
+
+
+int AutoTestSpeed::DepthCountDown()
+{
+    return m_direction;
+}
+
+void AutoTestSpeed::setDepthCountDown(int newDepthCountDown)
+{
+    if ( m_direction == newDepthCountDown )
+        return;
+    m_direction = newDepthCountDown;
+    emit DepthCurrentChanged();
+}
+
+int AutoTestSpeed::DepthCurrent()
+{
+    return m_depthCount;
+}
+
+void AutoTestSpeed::setDepthCurrent(int newDepthCurrent)
+{
+    if ( m_depthCount == newDepthCurrent )
+        return;
+    m_depthCount = newDepthCurrent;
+    emit DepthCurrentChanged();
+}

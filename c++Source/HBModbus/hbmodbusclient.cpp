@@ -110,7 +110,7 @@ void HBModbusClient::readRegister(int address, int count)
 
 void HBModbusClient::startBatchRead()
 {
-    readRegister(HQmlEnum::DEPTH_H,HQmlEnum::HIGH_ANGLE_WELL);
+    readRegister(HQmlEnum::HOLOD_DEPTH_H,HQmlEnum::HIGH_ANGLE_WELL);
 
     readCoils();
 
@@ -128,10 +128,10 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
         quint16 value = result.value(i);
 
         switch (currentAddress) {
-        case HQmlEnum::DEPTH_H: // DEPTH_H
+        case HQmlEnum::HOLOD_DEPTH_H: // DEPTH_H
             Depth_H = value;
             break;
-        case HQmlEnum::DEPTH_L: // DEPTH_L
+        case HQmlEnum::HOLOD_DEPTH_L: // DEPTH_L
             Depth_L = value;
             depth = (Depth_H << 16) | Depth_L;
             HBHome::getInstance()->setDepth(depth);
@@ -550,3 +550,28 @@ void HBModbusClient::insertDataToDatabase()
     HBDatabase::getInstance().insertHistoryData(modData);
 }
 
+void HBModbusClient::writeCoil(int address, int value)
+{
+    if (!modbus || modbus->state() != QModbusDevice::ConnectedState) {
+        qWarning() << "Modbus not connected";
+        return;
+    }
+
+    QModbusDataUnit writeUnit(QModbusDataUnit::Coils, address, 1);
+    writeUnit.setValue(0, value ? 1 : 0); // 确保是 0 或 1
+
+    int serverAddress = 1;
+
+    if (auto *reply = modbus->sendWriteRequest(writeUnit, serverAddress)) {
+        connect(reply, &QModbusReply::finished, this, [reply]() {
+            if (reply->error() == QModbusDevice::NoError) {
+                qDebug() << "Coil write successful";
+            } else {
+                qWarning() << "Failed to write coil:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+    } else {
+        qWarning() << "Failed to send coil write request:" << modbus->errorString();
+    }
+}

@@ -59,7 +59,8 @@ public:
     Q_INVOKABLE void writeRegister(int address, const QVector<quint16> &values);
     Q_INVOKABLE void writeRegister(int address, const QVariantList &values);
 
-    void readCoils();
+    Q_INVOKABLE void readCoils();
+    Q_INVOKABLE void writeCoil(int address, int value);
     void handleCoilResult(const QModbusDataUnit &result);
     void handleAlarm(int address, bool value);
 
