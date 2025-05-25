@@ -58,7 +58,7 @@ Item{
             {
                 id: txtTensionsNumber
                 // text: qsTr("2412001")
-                text:Tensiometer.TensionsNumber
+                text:Tensiometer.TensiometerNumber
                 width: Math.round(100 * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
@@ -66,7 +66,7 @@ Item{
                     console.log("txtTensionsNumber.text =", txtTensionsNumber.text);
                      console.log("txtTensionsNumber =", txtTensionsNumber);
                     mainWindow.showPrimaryNumpad(qsTr("请输入张力计编号"), " ", 3, 0, 99999, txtTensionsNumber.text,txtTensionsNumber,function(val) {
-                        Tensiometer.TensionsNumber = val;
+                        Tensiometer.TensiometerNumber = val;
                         ModbusClient.writeRegister(39,[parseInt(val)])
                     })
                 }
@@ -92,7 +92,7 @@ Item{
             HBComboBox
             {
                 id: comboTensionsType
-                model: tensionsTypeModel
+                model: mainWindow.tensionsTypeModel
                 currentIndex: Tensiometer.TensiometerType
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
@@ -124,7 +124,7 @@ Item{
             HBComboBox
             {
                 id: comboSensorRange
-                model: sensorRangeModel
+                model: mainWindow.sensorRangeModel
                 currentIndex:Tensiometer.TensiometerRange
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
@@ -156,7 +156,7 @@ Item{
             HBComboBox
             {
                 id: comboAnalogRange
-                model: analogRangeModel
+                model: mainWindow.analogRangeModel
                 currentIndex: Tensiometer.TensiometerSignal
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height:  parent.height

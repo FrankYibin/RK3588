@@ -51,9 +51,9 @@ Window{
     property var qmlTextArray: [qmltextTimeMode, qmltextEnergyMode, qmltextPeakPowerMode,
                                 qmltextGroundDetectMode, qmltextAbsoluteDistanceMode, qmltextCollapseDistanceMode]
 
-     readonly property var tensionsTypeModel: [qsTr("数字无线"), qsTr("数字有线"), qsTr("模拟有线")]
-     readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
-     readonly property var analogRangeModel: [qsTr("无"), "0-30mV", "0-1.5V", "0-5V"]
+    readonly property var tensionsTypeModel: [qsTr("数字无线"), qsTr("数字有线"), qsTr("模拟有线")]
+    readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
+    readonly property var analogRangeModel: [qsTr("无"), "0-30mV", "0-1.5V", "0-5V"]
 
     signal signalCurrentLanguageChanged()
     signal signalCurrentScreenChanged(int index)

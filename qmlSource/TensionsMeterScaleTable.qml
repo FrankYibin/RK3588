@@ -13,21 +13,6 @@ Item{
     signal signalViewTensometer()
     signal signalScaleTensometer()
 
-
-    //    function deleteAllTensiometers(index) {
-    //        if (index < 0) {
-    //            tensionMeterTable.currentRow = -1
-    //            return
-    //        }
-
-    //        console.log("Deleting row:", index)
-    //        tensiometerManager.removeTensiometer(index)
-
-    //        Qt.callLater(function() {
-    //            deleteAllTensiometers(index - 1)
-    //        })
-    //    }
-
     Rectangle
     {
         id: background
@@ -232,47 +217,11 @@ Item{
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: tensionMeterTable.fontSize
                         onClicked: {
-
-                            //                            console.log("Delete clicked at delegate row:", styleData.row);
-                            //                            console.log("tensionMeterTable currentRow:", tensionMeterTable.currentRow);
-                            //                            console.log("tensiometerManager rowCount:", tensiometerManager.count)
-                            //                            const row = styleData.row
-                            //                            console.log("Row to delete:", row)
-                            //                            if (row >= 0) {
-                            //                                tensionMeterTable.currentRow = -1
-                            //                                Qt.callLater(() => {
-                            //                                                 tensiometerManager.removeTensiometer(row)
-                            //                                             })
-                            //                            } else {
-                            //                                console.warn("Invalid row for deletion:", row)
-                            //                            }
-                            //                            const index = styleData.row;
-                            //                             console.log("Request delete at index:", index);
-                            //                             if (index >= 0 && index < tensiometerManager.count) {
-                            //                                 tensionMeterTable.currentRow = -1;
-                            //                                 tensiometerManager.removeTensiometer(index);
-                            //                                 Qt.callLater(() => {
-                            //                                     if (tensiometerManager.count > 0) {
-                            //                                         tensionMeterTable.currentRow = Math.min(index, tensiometerManager.count - 1);
-                            //                                     } else {
-                            //                                         tensionMeterTable.currentRow = -1;
-                            //                                     }
-                            //                                 });
-                            //                             } else {
-                            //                                 console.warn("Invalid index for deletion:", index);
-                            //                             }
-                            //                            }
-                            const index = styleData.row;
-                            if (index >= 0 && index < tensiometerManager.count) {
-                                tensionMeterTable.currentRow = -1;
+                            var index = styleData.row;
+                            if (index >= 0 && index < tensiometerManager.rowCount())
+                            {
                                 tensiometerManager.removeTensiometer(index);
-                                Qt.callLater(() => {
-                                                 if (tensiometerManager.count > 0) {
-                                                     tensionMeterTable.currentRow = Math.min(index, tensiometerManager.count - 1);
-                                                 } else {
-                                                     tensionMeterTable.currentRow = -1;
-                                                 }
-                                             });
+                                tensionMeterTable.currentRow = -1;
                             }
                         }
                     }

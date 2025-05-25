@@ -10,7 +10,7 @@
 class TensiometerManager : public QAbstractListModel {
     Q_OBJECT
 
-    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
+    // Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 public:
     enum TensiometerRoles {
         NumberRole = Qt::UserRole + 1,

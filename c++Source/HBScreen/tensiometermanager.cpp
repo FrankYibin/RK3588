@@ -80,21 +80,16 @@ void TensiometerManager::removeTensiometer(int index) {
         qDebug() << "Invalid index for removal:" << index;
         return;
     }
-
+    beginResetModel();
     int id = m_items[index].id;
-    qDebug() << "Trying to remove tensiometer at index" << index << "with id" << id;
-
-
     if (m_db->deleteTensiometerData(id)) {
         m_db->deleteScalesByTensiometerId(id);
-        beginRemoveRows(QModelIndex(), index, index);
+
         m_items.removeAt(index);
-        endRemoveRows();
-        emit countChanged();
     } else {
         qDebug() << "Failed to delete tensiometer data with id:" << id;
     }
-
+    endResetModel();
 }
 
 
