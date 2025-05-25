@@ -550,3 +550,28 @@ void HBModbusClient::insertDataToDatabase()
     HBDatabase::getInstance().insertHistoryData(modData);
 }
 
+void HBModbusClient::writeCoil(int address, int value)
+{
+    if (!modbus || modbus->state() != QModbusDevice::ConnectedState) {
+        qWarning() << "Modbus not connected";
+        return;
+    }
+
+    QModbusDataUnit writeUnit(QModbusDataUnit::Coils, address, 1);
+    writeUnit.setValue(0, value ? 1 : 0); // 确保是 0 或 1
+
+    int serverAddress = 1;
+
+    if (auto *reply = modbus->sendWriteRequest(writeUnit, serverAddress)) {
+        connect(reply, &QModbusReply::finished, this, [reply]() {
+            if (reply->error() == QModbusDevice::NoError) {
+                qDebug() << "Coil write successful";
+            } else {
+                qWarning() << "Failed to write coil:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+    } else {
+        qWarning() << "Failed to send coil write request:" << modbus->errorString();
+    }
+}

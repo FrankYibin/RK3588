@@ -6,6 +6,7 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
+import HB.Enums 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
     readonly property int textWidth: 80
@@ -79,7 +80,7 @@ Item{
                          console.log("textTargetLayerDepth =", textTargetLayerDepth);
                         mainWindow.showPrimaryNumpad(qsTr("请输入目标层深度"), " ", 2, 0, 99999, textTargetLayerDepth.text, textTargetLayerDepth, function(val) {
                             Depth.TargetLayerDepth = val;
-                            ModbusUtils.writeScaledValue(val,13,100.0)
+                            ModbusUtils.writeScaledValue(val,HQmlEnum.TARGET_DEPTH_H,100.0)
 
                         })
 
@@ -123,7 +124,7 @@ Item{
                     // }
 
                     onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(18, [currentIndex])
+                        ModbusClient.writeCoil(HQmlEnum.DEPTHORIENTATION,currentIndex)
                         Depth.DepthOrientation = currentIndex
                         console.log("DepthOrientation：" + currentIndex)
                     }
@@ -163,7 +164,7 @@ Item{
                          console.log("textMeterDepth =", textMeterDepth);
                         mainWindow.showPrimaryNumpad(qsTr("请输入表套深度"), " ", 3, 0, 99999, textMeterDepth.text,textMeterDepth,function(val) {
                             Depth.MeterDepth = val;
-                            ModbusUtils.writeScaledValue(val,15,100.0)
+                            ModbusUtils.writeScaledValue(val,HQmlEnum.METER_DEPTH_H,100.0)
                         })
 
                     }
@@ -243,7 +244,7 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入瞬时深度"), " ", 3, 0, 99999, textCurrentDepth.text, textCurrentDepth,function(val) {
                             HBHome.Depth = val;
-                            ModbusUtils.writeScaledValue(val,15,100.0)
+                            ModbusUtils.writeScaledValue(val,HQmlEnum.HOLOD_DEPTH_H,100.0)
                         })
                     }
                 }
@@ -286,7 +287,7 @@ Item{
 
                     onCurrentIndexChanged: {
                         Depth.CodeOption = currentIndex
-                        ModbusClient.writeRegister(20, [currentIndex+1])
+                        ModbusClient.writeRegister(HQmlEnum.DEPTHCALCULATETYPE, [currentIndex+1])
                         console.log("CodeOption" + currentIndex)
                     }
                 }
@@ -357,7 +358,7 @@ Item{
                          console.log("textPulseCount =", textPulseCount);
                         mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text,textPulseCount,function(val) {
                             HBHome.Pulse = val;
-                            ModbusClient.writeRegister(17,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.PULSE,[parseInt(val)])
                         })
 
                     }
@@ -397,7 +398,7 @@ Item{
                          console.log("textPulseCount =", textUpperVelocityLimit);
                         mainWindow.showPrimaryNumpad(qsTr("请输入极限速度"), " ", 2, 0, 20000, textUpperVelocityLimit.text, textUpperVelocityLimit, function(val) {
                             HBHome.MaxSpeed = val;
-                            ModbusClient.writeRegister(17,[parseInt(val)])
+                            ModbusUtils.writeScaledValue(val,HQmlEnum.MAX_SPEED_H,100.0)
                         })
 
                     }

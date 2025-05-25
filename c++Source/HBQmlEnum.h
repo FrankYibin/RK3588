@@ -20,6 +20,14 @@ public:
 
     enum COILS_REGISTERS
     {
+        // 静音
+        DEPTHORIENTATION = 2, //     深度方向
+        //         自动控速使能
+        //             张力计校准使能
+        //                 保护
+        //                     张力清零标识位
+        //                         张力计在线状态
+
         ALARM_SPEED = 16,                //速度报警
         ALARM_WELL,                      //井口报警
         ALARM_TARGETLAYERDEPTH,          //目的层报警
