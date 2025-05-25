@@ -28,7 +28,7 @@ Item {
 
     Camera {
         id: camera
-        // deviceId: "/dev/video1"
+        deviceId: "/dev/video1"
         imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
 
         exposure {
