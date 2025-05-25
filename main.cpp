@@ -84,9 +84,7 @@ int main(int argc, char *argv[])
     ModbusUtils modbusUtils;
     modbusUtils.setModbusClient(&modbusClient);
     TensiometerManager *manager = new TensiometerManager();
-    HBVoice voicePlayer;
-    HBVoice::PlayVoice(HBVoice::BLOCKED_EXCEPTION);
-    HBVoice::PlayVoice(HBVoice::ENCODER_1_EXCEPTION);
+    HBVoice VoicePlayer;
 
     QString strOSIndicator = "None";
 #ifdef WIN32

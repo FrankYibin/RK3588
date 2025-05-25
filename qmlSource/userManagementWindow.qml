@@ -1,130 +1,111 @@
-import QtQuick 2.0
-import QtGraphicalEffects 1.15
+﻿import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.15
+import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_USER_MANAGEMENT
-
-    Rectangle
+    Component.onCompleted:
     {
-        id: background
-        anchors.top: parent.top
+        userTabModel.resetModel()
+    }
+    QtObject {
+        id: userScreenIndex
+        readonly property int currentUser:      0
+        readonly property int userManagement:   1
+        readonly property int seriseID:         2
+        readonly property int createNewUser:    3
+        readonly property int superUser:        4
+    }
+
+    function updateTabBar(index)
+    {
+        screenLoader.source = ""
+        switch(index)
+        {
+        case userScreenIndex.currentUser:
+            screenLoader.source = "qrc:/qmlSource/UserCurrentWindow.qml"
+            break;
+        case userScreenIndex.userManagement:
+            screenLoader.source = "qrc:/qmlSource/UserTableWindow.qml"
+            break;
+        case userScreenIndex.seriseID:
+            screenLoader.source = "qrc:/qmlSource/UserSystemIDWindow.qml"
+            break;
+        case userScreenIndex.createNewUser:
+            screenLoader.source = "qrc:/qmlSource/UserNewWindow.qml"
+            break;
+        case userScreenIndex.superUser:
+            screenLoader.source = "qrc:/qmlSource/UserSuperWindow.qml"
+            break;
+        default:
+            screenLoader.source = "qrc:/qmlSource/UserCurrentWindow.qml"
+            break;
+        }
+    }
+
+    ListModel {
+        id: userTabModel
+        function resetModel()
+        {
+            userTabModel.clear()
+            userTabModel.append({"Title":     "当前用户",
+                                "Width":      100,
+                                "Index":      userScreenIndex.currentUser})
+            userTabModel.append({"Title":     "用户信息管理",
+                                "Width":      100,
+                                "Index":      userScreenIndex.userManagement})
+            userTabModel.append({"Title":     "设置仪器ID",
+                                "Width":      100,
+                                "Index":      userScreenIndex.seriseID})
+            userTabModel.append({"Title":     "创建新用户",
+                                "Width":      100,
+                                "Index":      userScreenIndex.createNewUser})
+            userTabModel.append({"Title":     "查看超级用户",
+                                "Width":      100,
+                                "Index:":     userScreenIndex.superUser})
+        }
+    }
+
+
+    TabBar {
+        id: userTabBar
         anchors.left: parent.left
+        anchors.top: parent.top
         width: parent.width
-        height: parent.height
-        gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
-        }
-    }
-
-    Item
-    {
-        anchors.centerIn: parent
-        width: Math.round(175 * Style.scaleHint)
-        height: Math.round((200 + 20 +  40 * 2 + 30)* Style.scaleHint)
-        Image
-        {
-            id: iconUser
-            width: Math.round(175 * Style.scaleHint)
-            height: Math.round(200 * Style.scaleHint)
-            source: "qrc:/images/userManagement.png"
-            fillMode: Image.PreserveAspectFit
+        height: Math.round(30 * Style.scaleHint)
+        spacing: 20
+        background: Image {
+            source: "qrc:/images/bg1.png"
+            anchors.fill: parent
             smooth: true
-            sourceSize.width: width
-            sourceSize.height: height
         }
-        Row{
-            id: currentUser
-            spacing: Math.round(100 * Style.scaleHint)
-            anchors.horizontalCenter: iconUser.horizontalCenter
-            anchors.top: iconUser.bottom
-            anchors.topMargin: Math.round(20 * Style.scaleHint)
-            width: Math.round(200 * Style.scaleHint)
-            height: Math.round(20 * Style.scaleHint)
-            Text{
+
+        Repeater {
+            id: tabbtn
+            model: userTabModel
+            delegate: HBTabButton {
+                anchors.top: parent.top
+                width: Math.round(model.Width * Style.scaleHint)
                 height: parent.height
-                width: Math.round(50 * Style.scaleHint)
-                color: Style.whiteFontColor
-                font.family: "宋体"
-                text: "当前用户："
-                font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-            }
-
-            Text{
-                height: parent.height
-                width: Math.round(50 * Style.scaleHint)
-                color: Style.whiteFontColor
-                font.family: "宋体"
-                text: "何文斌"
-                font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-            }
-        }
-
-        Grid
-        {
-            id: menuOptionLayout
-            anchors.top: currentUser.bottom
-            anchors.topMargin: Math.round(20 * Style.scaleHint)
-            anchors.horizontalCenter: currentUser.horizontalCenter
-            columns: 2
-            rows: 2
-            columnSpacing: Math.round(80 * Style.scaleHint)
-            rowSpacing: Math.round(30 * Style.scaleHint)
-            width: Math.round((150 * 2 + 100) * Style.scaleHint)
-            height: Math.round((40 * 2 + 30) * Style.scaleHint)
-            HBPrimaryButton
-            {
-                id: buttonInfoManagement
-                width: Math.round(150 * Style.scaleHint)
-                height: Math.round(40 * Style.scaleHint)
-                text: qsTr("用户信息管理")
-                onClicked:
-                {
-                    // controlLimitNumpad.visible = false
-                }
-            }
-
-            HBPrimaryButton
-            {
-                id: buttonViewSuperUser
-                width: Math.round(150 * Style.scaleHint)
-                height: Math.round(40 * Style.scaleHint)
-                text: qsTr("查看超级用户")
-                onClicked:
-                {
-                    // controlLimitNumpad.visible = false
-                }
-            }
-
-            HBPrimaryButton
-            {
-                id: buttonDeviceIDSetting
-                width: Math.round(150 * Style.scaleHint)
-                height: Math.round(40 * Style.scaleHint)
-                text: qsTr("设置仪器ID")
-                onClicked:
-                {
-                    // controlLimitNumpad.visible = false
-                }
-            }
-
-            HBPrimaryButton
-            {
-                id: buttonExit
-                width: Math.round(150 * Style.scaleHint)
-                height: Math.round(40 * Style.scaleHint)
-                text: qsTr("退出登录")
-                onClicked:
-                {
-                    // controlLimitNumpad.visible = false
+                tabbtnText: model.Title
+                onClicked: {
+                    updateTabBar(model.Index)
                 }
             }
         }
-
     }
 
-
+    Loader{
+        id: screenLoader
+        width: parent.width
+        anchors.top: userTabBar.bottom
+        anchors.topMargin: Math.round(20 * Style.scaleHint)
+        anchors.bottom: parent.bottom
+        source:  "qrc:/qmlSource/UserCurrentWindow.qml"
+    }
 }
 
 

@@ -49,7 +49,6 @@ bool HBVoice::PlayVoice(HBVoice::VOICE_EXCEPTION_INDEX index)
         }
         m_ptrPlayer->setMedia(QUrl::fromLocalFile(tempPath));
         m_ptrPlayer->play();
-        qDebug() << "111111111111111: " << tempPath;
         bResult = true;
     }
     return bResult;

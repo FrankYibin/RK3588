@@ -78,7 +78,7 @@
         <file>qmlSource/wellParametersWindow.qml</file>
         <file>qmlSource/tensionsSettingsWindow.qml</file>
         <file>qmlSource/depthSettingsWindow.qml</file>
-        <file>qmlSource/userManagementWindow.qml</file>
+        <file>qmlSource/UserCurrentWindow.qml</file>
         <file>qmlSource/helpInfoWindow.qml</file>
         <file>qmlSource/HBTabButton.qml</file>
         <file>qmlSource/HistoryGraphWindow.qml</file>
@@ -112,5 +112,11 @@
         <file>qmlSource/HBDepthCountDown.qml</file>
         <file>qmlSource/LoginFaceRecognition.qml</file>
         <file>qmlSource/HBLoginFaceBoard.qml</file>
+        <file>qmlSource/userManagementWindow.qml</file>
+        <file>qmlSource/UserSuperWindow.qml</file>
+        <file>qmlSource/UserTableWindow.qml</file>
+        <file>qmlSource/UserSystemIDWindow.qml</file>
+        <file>qmlSource/UserNewWindow.qml</file>
+        <file>qmlSource/HBFaceDetector.qml</file>
     </qresource>
 </RCC>

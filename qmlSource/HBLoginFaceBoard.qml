@@ -16,7 +16,7 @@ import QtQuick.Layouts 1.12
 import QtMultimedia 5.15
 
 import Style 1.0
-Item {
+Rectangle {
     property int minWidthNumpad: Math.round(50 * Style.scaleHint)
     property int minHeightNumpad: Math.round(290 * Style.scaleHint)
     property int gridRowColumnSpaceing: Math.round(12 * Style.scaleHint)
@@ -31,47 +31,34 @@ Item {
     property int buttonLoginFontSize: Math.round(Style.style5  * Style.scaleHint)
     signal signalButtonFunc(int funcBtn)
 
-    Rectangle {
+    Item{
+        id: loadingVisible
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: parent.width
+        height: Math.round(30 * Style.scaleHint)
+        visible: false
+        clip: true
+        AnimatedImage{
+            anchors.centerIn: parent
+            source: "qrc:/images/loading.gif"
+            playing: loadingVisible.visible
+        }
+    }
+
+    Item {
         id: faceArea
+        anchors.top: loadingVisible.bottom
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.horizontalCenter: parent.horizontalCenter
         height: 4 * buttonLoginSize + 3 * gridRowColumnSpaceing
         width: 4 * buttonLoginSize + 3 * gridRowColumnSpaceing
-        Component.onCompleted: {
-            console.debug("Device: ", camera.deviceId)
-            console.debug("DisplayName: ", camera.displayName)
-        }
 
-        Camera {
-            id: camera
-            deviceId: "/dev/video1"
-            imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
-
-            exposure {
-                exposureCompensation: -1.0
-                exposureMode: Camera.ExposurePortrait
-            }
-
-            flash.mode: Camera.FlashRedEyeReduction
-
-            imageCapture {
-                onImageCaptured: {
-                     photoPreview.source = preview  // Show the preview in an Image
-                }
-            }
-        }
-
-//        VideoOutput {
-//            source: camera
-//            anchors.top: faceArea.top
-//            anchors.bottom: faceArea.bottom
-//            anchors.left: faceArea.left
-//            anchors.right: faceArea.right
-//            fillMode: Image.PreserveAspectFit
-//            focus : visible // to receive focus and capture key events when visible
-//        }
-
-        Image {
-            id: photoPreview
+        HBFaceDetector{
+            id: faceDetector
             anchors.fill: parent
+            height: parent.height
+            width: parent.width
         }
     }
 
@@ -88,7 +75,20 @@ Item {
         buttonColor: buttonLoginColor
         fontSize: buttonLoginFontSize
         fontFamily: "宋体"
-        onClicked:  signalButtonFunc(BransonNumpadDefine.EnumKeyboard.Login)
+        onClicked:  {
+            if(faceDetector.showPreview == false)
+            {
+                faceDetector.imageCapture.capture()
+                signalButtonFunc(BransonNumpadDefine.EnumKeyboard.Login)
+                faceDetector.showPreview = true // 切换为显示图片
+                loadingVisible.visible = true
+            }
+            else
+            {
+                faceDetector.showPreview = false
+                loadingVisible.visible = false
+            }
+        }
     }
 
     Item{

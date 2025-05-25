@@ -75,5 +75,7 @@
         <file>images/left.png</file>
         <file>images/right.png</file>
         <file>images/up.png</file>
+        <file>images/password.png</file>
+        <file>images/userIcon.png</file>
     </qresource>
 </RCC>
