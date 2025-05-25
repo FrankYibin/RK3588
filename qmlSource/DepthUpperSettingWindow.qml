@@ -13,9 +13,11 @@ Item{
     readonly property int textWidthColumn3: 80
     readonly property int textWidthUnit: 20
     readonly property int componentWidth: 100
-    readonly property int rowSpacing: 10
+    readonly property int rowSpacing: 5
     readonly property int columnSpacing: 10
     readonly property int optionHeight: 30
+    readonly property int switchHeight: 25
+    readonly property int switchWidth: 80
 
     Rectangle
     {
@@ -32,23 +34,22 @@ Item{
 
     HBGroupBox
     {
-        id: parameterSetting
+        id: parameterUpperSetting
         title: qsTr("井口段")
         anchors.top: parent.top
         anchors.topMargin: Math.round(10 * Style.scaleHint)
         anchors.left: parent.left
         anchors.leftMargin: Math.round(5 * Style.scaleHint)
-        width: parent.width - Math.round(10 * Style.scaleHint)
+        width: parent.width / 2 - Math.round(10 * Style.scaleHint)
         height: parent.height / 2 - Math.round(15 * Style.scaleHint)
         backgroundColor: Style.backgroundLightColor
 
-        Grid
+        Column
         {
-            anchors.centerIn: parent
-            columns: 2
-            rows: 3
-            rowSpacing: Math.round(20 * Style.scaleHint)
-            columnSpacing: Math.round(80 * Style.scaleHint)
+            anchors.left: parent.left
+            anchors.leftMargin: (20 * Style.scaleHint)
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Math.round(10 * Style.scaleHint)
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
@@ -58,7 +59,7 @@ Item{
                     id: titleDepthPreset
                     width: Math.round(textWidthColumn1 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("深度预置") + ":"
+                    text: qsTr("距井口距离") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -78,7 +79,7 @@ Item{
                     text: DepthSafe.DepthPreset
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入深度预置值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
                             DepthSafe.DepthPreset = val;
                         })
                     }
@@ -97,103 +98,13 @@ Item{
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + componentWidth + textWidthUnit + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Text {
-                    id: titleWarning
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    text: qsTr("报警") + ":"
-                    font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-                HBTextField
-                {
-                    id: textWarning
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    // text: qsTr("192")
-                    text: DepthSafe.WellWarnig
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入报警值"), " ", 3, 0, 99999, textWarning.text,textWarning,function(val){
-                            DepthSafe.WellWarnig = val;
-                        })
-                    }
-                }
-                Text {
-                    id: unitWarning
-                    width: Math.round(textWidthUnit * Style.scaleHint)
-                    height: parent.height
-                    text: "m"
-                    font.family: Style.regular.name
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Text {
-                    id: titleBrake
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    text: qsTr("刹车") + ":"
-                    font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-                HBTextField
-                {
-                    id: textBrake
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    // text: qsTr("192")
-                    text:DepthSafe.Brake
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入刹车值"), " ", 3, 0, 99999, textBrake.text,textBrake,function(val){
-                            DepthSafe.Brake = val;
-                        })
-                    }
-                }
-                Text {
-                    id: unitBrake
-                    width: Math.round(textWidthUnit * Style.scaleHint)
-                    height: parent.height
-                    text: "m"
-                    font.family: Style.regular.name
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidthColumn1 + textWidthUnit+ componentWidth + rowSpacing) * Style.scaleHint)
                 spacing: rowSpacing
                 Text {
                     id: titleVelocityLimit
                     width: Math.round(textWidthColumn1 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("井口段限速") + ":"
+                    text: qsTr("稳速") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -229,51 +140,107 @@ Item{
                 }
             }
 
-            HBPrimaryButton
-            {
-                id: buttonConfirm
-                width: Math.round(105 * Style.scaleHint)
+            Row{
                 height: Math.round(optionHeight * Style.scaleHint)
-                text: qsTr("确定")
-                onClicked:
-                {
-                    // controlLimitNumpad.visible = false
-                    HBDatabase.updateDepthSafeFromInstance()
+                width: Math.round((textWidthColumn1 + componentWidth + textWidthUnit + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Item{
+                    id: titleWarning
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("报警") + ":"
+                        font.family: "宋体"
+                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                        // verticalAlignment: Text.AlignVCenter
+                        color: Style.whiteFontColor
+                    }
+                }
+
+                BransonSwitch{
+                    id: switchWarning
+                    anchors.verticalCenter: titleWarning.verticalCenter
+                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
+                    rectHeight: Math.round(switchHeight * Style.scaleHint)
+                    maxWidth: Math.round(optionHeight * Style.scaleHint)
+                    maxHeight: maxWidth
                 }
             }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Item{
+                    id: titleBrake
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("停车") + ":"
+                        font.family: "宋体"
+                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                        color: Style.whiteFontColor
+                    }
+                }
+
+                BransonSwitch{
+                    id: switchBrake
+                    anchors.verticalCenter: titleBrake.verticalCenter
+                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
+                    rectHeight: Math.round(switchHeight * Style.scaleHint)
+                    maxWidth: Math.round(optionHeight * Style.scaleHint)
+                    maxHeight: maxWidth
+                }
+
+
+            }
+
+            // HBPrimaryButton
+            // {
+            //     id: buttonConfirm
+            //     width: Math.round(105 * Style.scaleHint)
+            //     height: Math.round(optionHeight * Style.scaleHint)
+            //     text: qsTr("确定")
+            //     onClicked:
+            //     {
+            //         // controlLimitNumpad.visible = false
+            //         HBDatabase.updateDepthSafeFromInstance()
+            //     }
+            // }
         }
 
     }
 
     HBGroupBox
     {
-        id: parameterView
-        title: qsTr("总深度")
-        anchors.top: parameterSetting.bottom
+        id: parameterLowerSetting
+        title: qsTr("井底段")
+        anchors.top: parent.top
         anchors.topMargin: Math.round(10 * Style.scaleHint)
-        anchors.left: parent.left
-        anchors.leftMargin: Math.round(5 * Style.scaleHint)
-        width: parent.width - Math.round(10 * Style.scaleHint)
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(5 * Style.scaleHint)
+        width: parent.width / 2 - Math.round(10 * Style.scaleHint)
         height: parent.height / 2 - Math.round(15 * Style.scaleHint)
-        backgroundColor: Style.backgroundMiddleColor
+        backgroundColor: Style.backgroundLightColor
 
-        Grid
+        Column
         {
-            anchors.centerIn: parent
-            columns: 2
-            rows: 3
-            rowSpacing: Math.round(40 * Style.scaleHint)
-            columnSpacing: Math.round(80 * Style.scaleHint)
+            anchors.left: parent.left
+            anchors.leftMargin: (20 * Style.scaleHint)
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Math.round(10 * Style.scaleHint)
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
                 spacing: rowSpacing
                 Text {
-                    id: titleDepthWarning
+                    id: titleDepthLowerPreset
                     width: Math.round(textWidthColumn1 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("报警") + ":"
+                    text: qsTr("距井口距离") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -281,7 +248,7 @@ Item{
                 }
                 HBTextField
                 {
-                    id: textDepthWarning
+                    id: textDepthLowerPreset
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
@@ -290,16 +257,16 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     // text: qsTr("192")
-                    text:DepthSafe.DepthWarning
+                    text: DepthSafe.DepthPreset
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入报警值"), " ", 3, 0, 99999, textDepthWarning.text,textDepthWarning,function(val){
-                            DepthSafe.DepthWarning = val;
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                            DepthSafe.DepthPreset = val;
                         })
                     }
                 }
                 Text {
-                    id: unitDepthWarning
+                    id: unitDepthLowerPreset
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
                     text: "m"
@@ -312,13 +279,147 @@ Item{
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + textWidthUnit+ componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleVelocityLowerLimit
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("稳速") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textVelocityLowerLimit
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    // text: qsTr("8081")
+                    text:DepthSafe.VelocityLimit
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口段限速值"), " ", 3, 0, 99999, textVelocityLimit.text,textVelocityLimit,function(val){
+                            DepthSafe.VelocityLimit = val;})
+                    }
+                }
+                Text {
+                    id: unitVelocityLowerLimit
+                    width: Math.round(textWidthUnit * Style.scaleHint)
+                    height: parent.height
+                    text: "m/min"
+                    font.family: Style.regular.name
+                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + componentWidth + textWidthUnit + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Item{
+                    id: titleLowerWarning
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("报警") + ":"
+                        font.family: "宋体"
+                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                        // verticalAlignment: Text.AlignVCenter
+                        color: Style.whiteFontColor
+                    }
+                }
+
+                BransonSwitch{
+                    id: switchLowerWarning
+                    anchors.verticalCenter: titleLowerWarning.verticalCenter
+                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
+                    rectHeight: Math.round(switchHeight * Style.scaleHint)
+                    maxWidth: Math.round(optionHeight * Style.scaleHint)
+                    maxHeight: maxWidth
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Item{
+                    id: titleLowerBrake
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("停车") + ":"
+                        font.family: "宋体"
+                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                        color: Style.whiteFontColor
+                    }
+                }
+
+                BransonSwitch{
+                    id: switchLowerBrake
+                    anchors.verticalCenter: titleLowerBrake.verticalCenter
+                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
+                    rectHeight: Math.round(switchHeight * Style.scaleHint)
+                    maxWidth: Math.round(optionHeight * Style.scaleHint)
+                    maxHeight: maxWidth
+                }
+            }
+
+            // HBPrimaryButton
+            // {
+            //     id: buttonConfirm
+            //     width: Math.round(105 * Style.scaleHint)
+            //     height: Math.round(optionHeight * Style.scaleHint)
+            //     text: qsTr("确定")
+            //     onClicked:
+            //     {
+            //         // controlLimitNumpad.visible = false
+            //         HBDatabase.updateDepthSafeFromInstance()
+            //     }
+            // }
+        }
+
+    }
+
+    HBGroupBox
+    {
+        id: parameterView
+        title: qsTr("大斜度井段")
+        anchors.top: parameterUpperSetting.bottom
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(5 * Style.scaleHint)
+        width: parent.width / 2 - Math.round(10 * Style.scaleHint)
+        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundMiddleColor
+
+        Column
+        {
+            anchors.left: parent.left
+            anchors.leftMargin: (20 * Style.scaleHint)
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Math.round(10 * Style.scaleHint)
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidthColumn1 + componentWidth + textWidthUnit + rowSpacing) * Style.scaleHint)
                 spacing: rowSpacing
                 Text {
                     id: titleTotalDepth
                     width: Math.round(textWidthColumn1 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("总深度") + ":"
+                    text: qsTr("斜度") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -356,64 +457,13 @@ Item{
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Text {
-                    id: titleDepthBrake
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    text: qsTr("刹车") + ":"
-                    font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-                HBTextField
-                {
-                    id: textDepthBrake
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    // maximumLength: 16
-                    // validator: RegularExpressionValidator{
-                    //     regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    // }
-                    maximumLength: 5
-                    validator: IntValidator {
-                        bottom: 0
-                        top: 9999
-                    }
-                    // text: qsTr("192")
-                    text:DepthSafe.DepthBrake
-                    onlyForNumpad: true
-
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入总深度值"), " ", 3, 0, 99999, textDepthBrake.text,textDepthBrake,function(val){
-                            DepthSafe.DepthBrake = val;})
-                    }
-
-                }
-                Text {
-                    id: unitDepthBrake
-                    width: Math.round(textWidthUnit * Style.scaleHint)
-                    height: parent.height
-                    text: "m"
-                    font.family: Style.regular.name
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidthColumn1 + textWidthUnit+ componentWidth + rowSpacing) * Style.scaleHint)
                 spacing: rowSpacing
                 Text {
                     id: titleDepthVelocityLimit
                     width: Math.round(textWidthColumn1 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("井底段限速") + ":"
+                    text: qsTr("稳速") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -433,7 +483,7 @@ Item{
                     text: DepthSafe.DepthVelocityLimit
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输井底段限速值"), " ", 3, 0, 99999, textDepthVelocityLimit.text,textDepthVelocityLimit,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("稳速"), " ", 3, 0, 99999, textDepthVelocityLimit.text,textDepthVelocityLimit,function(val){
                             DepthSafe.DepthVelocityLimit = val;})
                     }
                 }
@@ -448,8 +498,78 @@ Item{
                     color: Style.whiteFontColor
                 }
             }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Item
+                {
+                    id: titleDepthWarning
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("报警") + ":"
+                        font.family: "宋体"
+                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                        verticalAlignment: Text.AlignVCenter
+                        color: Style.whiteFontColor
+                    }
+                }
+                BransonSwitch{
+                    id: switchDepthWarning
+                    anchors.verticalCenter: titleDepthWarning.verticalCenter
+                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
+                    rectHeight: Math.round(switchHeight * Style.scaleHint)
+                    maxWidth: Math.round(optionHeight * Style.scaleHint)
+                    maxHeight: maxWidth
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Item
+                {
+                    id: titleDepthBrake
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("停车") + ":"
+                        font.family: "宋体"
+                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                        verticalAlignment: Text.AlignVCenter
+                        color: Style.whiteFontColor
+                    }
+                }
+                BransonSwitch{
+                    id: switchDepthBrake
+                    anchors.verticalCenter: titleDepthBrake.verticalCenter
+                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
+                    rectHeight: Math.round(switchHeight * Style.scaleHint)
+                    maxWidth: Math.round(optionHeight * Style.scaleHint)
+                    maxHeight: maxWidth
+                }
+            }
         }
 
+    }
+
+
+    HBGroupBox
+    {
+        id: parameterComplicatedSetting
+        title: qsTr("复杂井段")
+        anchors.top: parameterUpperSetting.bottom
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(5 * Style.scaleHint)
+        width: parent.width / 2 - Math.round(10 * Style.scaleHint)
+        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundLightColor
     }
 }
 

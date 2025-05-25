@@ -45,13 +45,13 @@ Item{
         function resetModel()
         {
             depthSettingModel.clear()
-            depthSettingModel.append({"Title":      "深度设置",
+            depthSettingModel.append({"Title":      qsTr("深度设置"),
                                         "Width":      100,
                                         "Index":      0})
-            depthSettingModel.append({"Title":      "深度安全设置",
+            depthSettingModel.append({"Title":      qsTr("四慢设置"),
                                         "Width":      100,
                                         "Index":      1})
-            depthSettingModel.append({"Title":      "深度倒计",
+            depthSettingModel.append({"Title":      qsTr("深度倒计"),
                                         "Width":      100,
                                         "Index":      2})
 
