@@ -81,7 +81,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textWellType.text =", textWellType.text);
                         console.log("textWellType =", textWellType);
-                        mainWindow.showPrimaryNumpad("请输入油气井类型", "s", 3, 0, 5, textWellType.text,textWellType,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入油气井类型"), " ", 3, 0, 99999, textWellType.text,textWellType,function(val) {
                             TensionSafe.WellType = val;
                         })
                     }
@@ -118,7 +118,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textCableWeight.text =", textCableWeight.text);
                         console.log("textCableWeight =", textCableWeight);
-                        mainWindow.showPrimaryNumpad("请输入电缆每千米重量值", "s", 3, 0, 5, textCableWeight.text,textCableWeight,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入电缆每千米重量值"), " ", 3, 0, 99999, textCableWeight.text,textCableWeight,function(val) {
                             WellParameter.HarnessWeight = val;
                             ModbusClient.writeRegister(75,[parseInt(val)])
                         })
@@ -166,7 +166,7 @@ Item{
                     // onSignalClickedEvent: {
                     //     console.log("textCableWeight.text =", textCableWeight.text);
                     //     console.log("textCableWeight =", textCableWeight);
-                    //     mainWindow.showPrimaryNumpad("请输入作业类型", "s", 3, 0, 5, textCableWeight.text,textCableWeight,function(val) {
+                    //     mainWindow.showPrimaryNumpad(qsTr("请输入作业类型"), " ", 3, 0, 5, textCableWeight.text,textCableWeight,function(val) {
                     //         WellParameter.HarnessWeight = val;
                     //         ModbusClient.writeRegister(75,[parseInt(val)])
                     //     })
@@ -204,7 +204,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textSensorWeightValue.text =", textSensorWeightValue.text);
                          console.log("textSensorWeightValue =", textSensorWeight);
-                        mainWindow.showPrimaryNumpad("请输入仪器串重量值", "s", 3, 0, 5, textSensorWeightValue.text,textSensorWeightValue,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeightValue.text,textSensorWeightValue,function(val) {
                             WellParameter.SensorWeight = val;
                             ModbusClient.writeRegister(76, [parseInt(val)])
                         })
@@ -252,7 +252,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textHarnessPullingStrength.text =", textHarnessPullingStrength.text);
                          console.log("textHarnessPullingStrength =", textHarnessPullingStrength);
-                        mainWindow.showPrimaryNumpad("请输入电缆拉断力值", "s", 3, 0, 5, textHarnessPullingStrength.text,textHarnessPullingStrength,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessPullingStrength.text,textHarnessPullingStrength,function(val) {
                             WellParameter.HarnessForce = val;
                             ModbusClient.writeRegister(73,[parseInt(val)])
                         })
@@ -301,7 +301,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textWeaknessPullingStrength.text =", textWeaknessPullingStrength.text);
                          console.log("textWeaknessPullingStrength =", textWeaknessPullingStrength);
-                        mainWindow.showPrimaryNumpad("请输入弱点拉断力值", "s", 3, 0, 5, textWeaknessPullingStrength.text,textWeaknessPullingStrength,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入弱点拉断力值"), " ", 3, 0, 99999, textWeaknessPullingStrength.text,textWeaknessPullingStrength,function(val) {
                             TensionSafe.WeakForce = val;
                             ModbusClient.writeRegister(74,[parseInt(val)])
                         })
@@ -349,7 +349,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textUltimateTension.text =", textUltimateTension.text);
                          console.log("textUltimateTension =", textUltimateTension);
-                        mainWindow.showPrimaryNumpad("请输入极限张力值", "s", 3, 0, 5, textUltimateTension.text,textUltimateTension,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入极限张力值"), " ", 3, 0, 99999, textUltimateTension.text,textUltimateTension,function(val) {
                             HBHome.MaxTension = val;
                             ModbusUtils.writeScaledValue(val,47,100.0);
                         })
@@ -397,7 +397,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textSafetyTensionFactor.text =", textSafetyTensionFactor.text);
                          console.log("textSafetyTensionFactor =", textSafetyTensionFactor);
-                        mainWindow.showPrimaryNumpad("请输入极限张力值", "s", 3, 0, 5, textSafetyTensionFactor.text,textSafetyTensionFactor,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入极限张力值"), " ", 3, 0, 99999, textSafetyTensionFactor.text,textSafetyTensionFactor,function(val) {
                             TensionSafe.TensionSafe = val;
                             ModbusUtils.writeScaledValue(77,[parseInt(val)]);
                         })
@@ -504,7 +504,7 @@ Item{
                     text: TensionSafe.CableTensionTrend
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", " ", 3, 0, 99999, "0.123")
                     }
                 }
             }
@@ -537,7 +537,7 @@ Item{
                     text: TensionSafe.CurrentDepth1
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", " ", 3, 0, 99999, "0.123")
                     }
                 }
                 Text {
@@ -580,7 +580,7 @@ Item{
                     text: TensionSafe.MAXTensionSafe
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", " ", 3, 0, 99999, "0.123")
                     }
                 }
                 Text {
@@ -623,7 +623,7 @@ Item{
                     text: TensionSafe.Ptime
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", " ", 3, 0, 99999, "0.123")
                     }
                 }
                 Text {
@@ -709,7 +709,7 @@ Item{
                     text: HBHome.HarnessTension
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 99999, "0.123")
                     }
                 }
                 Text {
@@ -752,7 +752,7 @@ Item{
                     text:TensionSafe.DepthLoss
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", " ", 3, 0, 99999, "0.123")
                     }
                 }
                 Text {
@@ -795,7 +795,7 @@ Item{
                     text:TensionSafe.CurrentDepth3
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad("Time Scale Setting", " ", 3, 0, 99999, "0.123")
                     }
                 }
                 Text {

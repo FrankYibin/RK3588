@@ -164,7 +164,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textWellDepth.text =", textWellDepth.text);
                          console.log("textWellDepth =", textWellDepth);
-                        mainWindow.showPrimaryNumpad("请输入井深值", "s", 3, 0, 5, textWellDepth.text,textWellDepth,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井深值"), " ", 3, 0, 999999, textWellDepth.text,textWellDepth,function(val) {
                             WellParameter.WellDepth = val;
                             ModbusUtils.writeScaledValue(val, 69,100.0)
                         })
@@ -208,7 +208,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textHarnessWeight.text =", textHarnessWeight.text);
                          console.log("textHarnessWeight =", textHarnessWeight);
-                        mainWindow.showPrimaryNumpad("请输入电缆自重值", "s", 3, 0, 5, textHarnessWeight.text,textHarnessWeight,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入电缆自重值"), " ", 3, 0, 99999, textHarnessWeight.text,textHarnessWeight,function(val) {
                             WellParameter.HarnessWeight = val;
                             ModbusClient.writeRegister(75,[parseInt(val)])
                         })
@@ -251,7 +251,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textHarnessWeight.text =", textSensorWeight.text);
                          console.log("textHarnessWeight =", textSensorWeight);
-                        mainWindow.showPrimaryNumpad("请输入仪器串重量值", "s", 3, 0, 5, textSensorWeight.text,textSensorWeight,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeight.text,textSensorWeight,function(val) {
                             WellParameter.SensorWeight = val;
                             ModbusClient.writeRegister(76, [parseInt(val)])
                         })
@@ -300,7 +300,7 @@ Item{
                 //                    height: Math.round(25 * Style.scaleHint)
                 //                    onlyForNumpad: true
                 //                    onSignalClickedEvent: {
-                //                        mainWindow.showPrimaryNumpad("请输入电缆规格", "s", 3, 0, 5, "0.123")
+                //                        mainWindow.showPrimaryNumpad("请输入电缆规格", " ", 3, 0, 5, "0.123")
                 //                    }
                 //                }
                 HBComboBox
@@ -347,7 +347,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textHarnessForce.text =", textHarnessForce.text);
                          console.log("textHarnessForce =", textHarnessForce);
-                        mainWindow.showPrimaryNumpad("请输入仪器串重量值", "s", 3, 0, 5, textHarnessForce.text,textHarnessForce,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textHarnessForce.text,textHarnessForce,function(val) {
                             WellParameter.HarnessForce = val;
                             ModbusClient.writeRegister(73,[parseInt(val)])
                         })
@@ -403,7 +403,7 @@ Item{
                 //                    height: Math.round(25 * Style.scaleHint)
                 //                    onlyForNumpad: true
                 //                    onSignalClickedEvent: {
-                //                        mainWindow.showPrimaryNumpad("请输入拉力磅吨位", "s", 3, 0, 5, "0.123")
+                //                        mainWindow.showPrimaryNumpad("请输入拉力磅吨位", " ", 3, 0, 5, "0.123")
                 //                    }
                 //                }
 

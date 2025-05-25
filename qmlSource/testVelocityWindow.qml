@@ -122,7 +122,7 @@ Item{
                     onlyForNumpad: true
                     //输入写入
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("请输入控速值："), " ", 3, 0, 99999, "0.123")
                     }
 
                     onFocusChanged: {

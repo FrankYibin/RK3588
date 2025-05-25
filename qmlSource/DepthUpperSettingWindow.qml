@@ -78,7 +78,7 @@ Item{
                     text: DepthSafe.DepthPreset
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入深度预置值", "s", 3, 0, 5, textDepthPreset.text,textDepthPreset,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入深度预置值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
                             DepthSafe.DepthPreset = val;
                         })
                     }
@@ -123,7 +123,7 @@ Item{
                     text: DepthSafe.WellWarnig
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入报警值", "s", 3, 0, 5, textWarning.text,textWarning,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入报警值"), " ", 3, 0, 99999, textWarning.text,textWarning,function(val){
                             DepthSafe.WellWarnig = val;
                         })
                     }
@@ -168,7 +168,7 @@ Item{
                     text:DepthSafe.Brake
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入刹车值", "s", 3, 0, 5, textBrake.text,textBrake,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入刹车值"), " ", 3, 0, 99999, textBrake.text,textBrake,function(val){
                             DepthSafe.Brake = val;
                         })
                     }
@@ -213,7 +213,7 @@ Item{
                     text:DepthSafe.VelocityLimit
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入井口段限速值", "s", 3, 0, 5, textVelocityLimit.text,textVelocityLimit,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口段限速值"), " ", 3, 0, 99999, textVelocityLimit.text,textVelocityLimit,function(val){
                             DepthSafe.VelocityLimit = val;})
                     }
                 }
@@ -293,7 +293,7 @@ Item{
                     text:DepthSafe.DepthWarning
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入报警值", "s", 3, 0, 5, textDepthWarning.text,textDepthWarning,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入报警值"), " ", 3, 0, 99999, textDepthWarning.text,textDepthWarning,function(val){
                             DepthSafe.DepthWarning = val;
                         })
                     }
@@ -338,7 +338,7 @@ Item{
                     text:DepthSafe.TotalDepth
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入总深度值", "s", 3, 0, 5, textTotalDepth.text,textTotalDepth,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入总深度值"), " ", 3, 0, 99999, textTotalDepth.text,textTotalDepth,function(val){
                             DepthSafe.TotalDepth = val;})
                     }
                 }
@@ -388,7 +388,7 @@ Item{
                     onlyForNumpad: true
 
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入总深度值", "s", 3, 0, 5, textDepthBrake.text,textDepthBrake,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入总深度值"), " ", 3, 0, 99999, textDepthBrake.text,textDepthBrake,function(val){
                             DepthSafe.DepthBrake = val;})
                     }
 
@@ -433,7 +433,7 @@ Item{
                     text: DepthSafe.DepthVelocityLimit
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输井底段限速值", "s", 5, 0, 3, textDepthVelocityLimit.text,textDepthVelocityLimit,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输井底段限速值"), " ", 3, 0, 99999, textDepthVelocityLimit.text,textDepthVelocityLimit,function(val){
                             DepthSafe.DepthVelocityLimit = val;})
                     }
                 }

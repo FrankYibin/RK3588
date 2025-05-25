@@ -81,7 +81,7 @@ Item{
         text:DepthMeter.CurrentDepth
         onlyForNumpad: true
         onSignalClickedEvent: {
-            mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+            mainWindow.showPrimaryNumpad(qsTr("深度倒计"), " ", 3, 0, 99999, "0.123")
         }
     }
 

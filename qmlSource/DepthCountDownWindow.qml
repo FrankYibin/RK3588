@@ -71,7 +71,7 @@ Item{
                 text:DepthMeter.DepthPreset
                 onlyForNumpad: true
                 onSignalClickedEvent: {
-                    mainWindow.showPrimaryNumpad("请输入深度倒计值", "s", 3, 0, 5, textSDepthPreset.text,textSDepthPreset,function(val) {
+                    mainWindow.showPrimaryNumpad(qsTr("请输入深度倒计值"), " ", 3, 0, 99999, textSDepthPreset.text,textSDepthPreset,function(val) {
                         DepthMeter.DepthPreset = val;
                         ModbusClient.writeRegister(29,[parseInt(val)])
                     })
@@ -141,7 +141,7 @@ Item{
                 text: DepthMeter.CurrentDepth
                 onlyForNumpad: true
                 onSignalClickedEvent: {
-                    mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                    mainWindow.showPrimaryNumpad("请输入深度倒计值", " ", 3, 0, 99999, "0.123")
                 }
             }
             Text {

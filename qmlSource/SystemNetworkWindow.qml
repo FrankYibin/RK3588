@@ -94,7 +94,7 @@ Item{
                     text: qsTr("192.168.111.101")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("远程IP"), "IPV4", 3, 0, 255, "0.123")
                     }
                 }
             }
@@ -125,7 +125,7 @@ Item{
                     text: qsTr("192.168.111.101")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("本地IP"), "IPV4", 3, 0, 255, "0.123")
                     }
                 }
             }
@@ -156,7 +156,7 @@ Item{
                     text: qsTr("8081")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("远程端口"), " ", 3, 1, 99999, "0.123")
                     }
                 }
             }
@@ -187,7 +187,7 @@ Item{
                     text: qsTr("8080")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("本地端口"), " ", 3, 0, 99999, "0.123")
                     }
                 }
             }
@@ -291,7 +291,7 @@ Item{
                     text: qsTr("192.168.111.101")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("远程IP"), "IPV4", 3, 0, 255, "0.123")
                     }
                 }
             }
@@ -322,7 +322,7 @@ Item{
                     text: qsTr("192.168.111.101")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("本地IP"), "IPV4", 3, 0, 255, "0.123")
                     }
                 }
             }
@@ -353,7 +353,7 @@ Item{
                     text: qsTr("8081")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("远程端口"), " ", 3, 0, 99999, "0.123")
                     }
                 }
             }
@@ -384,7 +384,7 @@ Item{
                     text: qsTr("8080")
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("本地端口"), " ", 3, 0, 99999, "0.123")
                     }
                 }
             }

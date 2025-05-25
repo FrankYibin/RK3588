@@ -164,7 +164,7 @@ Item{
                         fontSize: tensionScaleTable.fontSize
                         onlyForNumpad: true
                         onSignalClickedEvent: {
-                            mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
+                            mainWindow.showPrimaryNumpad(qsTr("张力值(kN)"), " ", 3, 0, 99999, "0.123")
                         }
                     }
                 }

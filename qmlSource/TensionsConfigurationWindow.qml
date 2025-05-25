@@ -67,7 +67,7 @@ Item{
                 onSignalClickedEvent: {
                     console.log("textKvalue.text =", textKvalue.text);
                      console.log("textKvalue =", textKvalue);
-                    mainWindow.showPrimaryNumpad("请输入K值", "s", 3, 0, 5, textKvalue.text,textKvalue,function(val) {
+                    mainWindow.showPrimaryNumpad(qsTr("请输入K值"), " ", 3, 0, 99999, textKvalue.text,textKvalue,function(val) {
                         HBHome.KValue = val;
                         ModbusClient.writeRegister(36,[parseInt(val)])
                     })

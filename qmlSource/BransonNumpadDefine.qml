@@ -167,7 +167,7 @@ Item {
         var bResult = false
         if(strUnit.toUpperCase() === "S")
         {
-            validator = /^\d{0,2}(\.\d{0,3})?$/
+            validator = /^\d{0,6}(\.\d{0,3})?$/
         }
         else if(strUnit.toUpperCase() === "%")
         {
@@ -191,7 +191,7 @@ Item {
         }
         else
         {
-            validator = /^\d{0,6}?$/
+            validator = /^\d{1,7}(\.\d{1,2})?$/
         }
 
         if (validator.test(strInputText))

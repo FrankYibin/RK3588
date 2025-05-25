@@ -299,7 +299,7 @@ Window{
         }
     }
 
-    function showPrimaryNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue, targetObj,onConfirmCallback)
+    function showPrimaryNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue, targetObj, onConfirmCallback)
     {
         primaryNumpad.headertext = strTitle
         primaryNumpad.suffix = strUnit

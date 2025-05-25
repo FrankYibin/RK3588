@@ -64,7 +64,7 @@ Item{
                 onSignalClickedEvent: {
                     console.log("txtTensionsNumber.text =", txtTensionsNumber.text);
                      console.log("txtTensionsNumber =", txtTensionsNumber);
-                    mainWindow.showPrimaryNumpad("请输入张力计编号", "s", 3, 0, 5, txtTensionsNumber.text,txtTensionsNumber,function(val) {
+                    mainWindow.showPrimaryNumpad(qsTr("请输入张力计编号"), " ", 3, 0, 99999, txtTensionsNumber.text,txtTensionsNumber,function(val) {
                         Tensiometer.TensionsNumber = val;
                         ModbusClient.writeRegister(39,[parseInt(val)])
                     })

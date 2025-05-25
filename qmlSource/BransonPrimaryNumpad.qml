@@ -77,7 +77,7 @@ Item {
                 text: headertext
                 color: Style.whiteFontColor
                 font{
-                    family: Style.regular.name
+                    family: "宋体"
                     pixelSize: Math.round(Style.style2 * Style.scaleHint)
                 }
             }

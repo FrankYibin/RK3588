@@ -43,7 +43,7 @@ Item{
         {
             anchors.centerIn: parent
             columns: 2
-            rows: 4
+            rows: 5
             rowSpacing: Math.round(50 * Style.scaleHint)
             columnSpacing: Math.round(50 * Style.scaleHint)
 
@@ -55,7 +55,7 @@ Item{
                     id: titleTargetLayerDepth
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("目标层深度") + ":"
+                    text: qsTr("目的层深度") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -69,7 +69,7 @@ Item{
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
                     validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
                     }
                     // text: qsTr("192")
                     text: Depth.TargetLayerDepth
@@ -77,7 +77,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textTargetLayerDepth.text =", textTargetLayerDepth.text);
                          console.log("textTargetLayerDepth =", textTargetLayerDepth);
-                        mainWindow.showPrimaryNumpad("请输入目标层深度", "s", 3, 0, 5, textTargetLayerDepth.text,textTargetLayerDepth,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入目标层深度"), " ", 2, 0, 99999, textTargetLayerDepth.text, textTargetLayerDepth, function(val) {
                             Depth.TargetLayerDepth = val;
                             ModbusUtils.writeScaledValue(val,13,100.0)
 
@@ -152,7 +152,7 @@ Item{
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
                     validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
                     }
                     // text: qsTr("192")
                     text:Depth.MeterDepth
@@ -161,7 +161,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textMeterDepth.text =", textMeterDepth.text);
                          console.log("textMeterDepth =", textMeterDepth);
-                        mainWindow.showPrimaryNumpad("请输入表套深度", "s", 3, 0, 5, textMeterDepth.text,textMeterDepth,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入表套深度"), " ", 3, 0, 99999, textMeterDepth.text,textMeterDepth,function(val) {
                             Depth.MeterDepth = val;
                             ModbusUtils.writeScaledValue(val,15,100.0)
                         })
@@ -235,14 +235,17 @@ Item{
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
                     validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
                     }
                     // text: qsTr("8080")
-                    text:HBHome.Speed
+                    text: HBHome.Depth
                     onlyForNumpad: true
-                    // onSignalClickedEvent: {
-                    //     mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, "0.123")
-                    // }
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入瞬时深度"), " ", 3, 0, 99999, textCurrentDepth.text, textCurrentDepth,function(val) {
+                            HBHome.Depth = val;
+                            ModbusUtils.writeScaledValue(val,15,100.0)
+                        })
+                    }
                 }
                 Text {
                     id: unitCurrentDepth
@@ -344,7 +347,7 @@ Item{
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
                     validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                        regularExpression: /^[1-9][0-9]{4}$/
                     }
                     text: HBHome.Pulse
                     onlyForNumpad: true
@@ -352,7 +355,7 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textPulseCount.text =", textPulseCount.text);
                          console.log("textPulseCount =", textPulseCount);
-                        mainWindow.showPrimaryNumpad("请输入脉冲数", "s", 3, 0, 5, textPulseCount.text,textPulseCount,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text,textPulseCount,function(val) {
                             HBHome.Pulse = val;
                             ModbusClient.writeRegister(17,[parseInt(val)])
                         })
@@ -361,6 +364,56 @@ Item{
 
                 }
             }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleUpperVelocityLimit
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("极限速度") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textUpperVelocityLimit
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
+                    }
+                    text: HBHome.MaxSpeed
+                    onlyForNumpad: true
+
+                    onSignalClickedEvent: {
+                        console.log("textPulseCount.text =", textUpperVelocityLimit.text);
+                         console.log("textPulseCount =", textUpperVelocityLimit);
+                        mainWindow.showPrimaryNumpad(qsTr("请输入极限速度"), " ", 2, 0, 20000, textUpperVelocityLimit.text, textUpperVelocityLimit, function(val) {
+                            HBHome.MaxSpeed = val;
+                            ModbusClient.writeRegister(17,[parseInt(val)])
+                        })
+
+                    }
+                }
+                Text {
+                    id: unitUpperVelocityLimit
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: "m/h"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+            }
+
         }
     }
 
