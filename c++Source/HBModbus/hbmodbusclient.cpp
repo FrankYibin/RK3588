@@ -110,7 +110,7 @@ void HBModbusClient::readRegister(int address, int count)
 
 void HBModbusClient::startBatchRead()
 {
-    readRegister(HQmlEnum::DEPTH_H,HQmlEnum::HIGH_ANGLE_WELL);
+    readRegister(HQmlEnum::HOLOD_DEPTH_H,HQmlEnum::HIGH_ANGLE_WELL);
 
     readCoils();
 
@@ -128,10 +128,10 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
         quint16 value = result.value(i);
 
         switch (currentAddress) {
-        case HQmlEnum::DEPTH_H: // DEPTH_H
+        case HQmlEnum::HOLOD_DEPTH_H: // DEPTH_H
             Depth_H = value;
             break;
-        case HQmlEnum::DEPTH_L: // DEPTH_L
+        case HQmlEnum::HOLOD_DEPTH_L: // DEPTH_L
             Depth_L = value;
             depth = (Depth_H << 16) | Depth_L;
             HBHome::getInstance()->setDepth(depth);

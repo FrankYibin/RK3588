@@ -52,7 +52,7 @@
 #include "c++Source/HBScreen/tensiometermanager.h"
 #include "c++Source/HBVoice/hbvoice.h"
 #include "c++Source/HBScreen/historydatatable.h"
-//#include "c++Source/HBScreen/tensionscale.h"
+#include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBScreen/tensionscalemanager.h"
 //#include "c++Source/HBVideoCapture/videocaptureitem.h"
 //#include "opencv2/opencv.hpp"
@@ -113,8 +113,10 @@ int main(int argc, char *argv[])
     //    qmlRegisterSingletonInstance<HBDatabase>("HBDatabase", 1, 0, "HBDatabase", &dbInstance);
     qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::getInstance());
     // qmlRegisterType<TensiometerManager>("HB.TensiometerManager", 1, 0, "TensiometerManager");
-     qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
+    qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
     qmlRegisterType<TensionScaleManager>("HB.TensionScaleManager", 1, 0, "TensionScaleManager");
+     qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
+                                          "HQmlEnum is an enum container and cannot be created in QML");
 
 //    qmlRegisterType<VideoCaptureItem>("HB.VideoCapture", 1, 0, "CV");
 

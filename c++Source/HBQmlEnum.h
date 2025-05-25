@@ -33,6 +33,7 @@ public:
         ALARM_CODE2,                  //编码器2报警
         ALARM_CODE3,                  //编码器3报警
     };
+    Q_ENUM(COILS_REGISTERS)
 
 
     //    enum HOLDING_REGISTERS
@@ -50,74 +51,74 @@ public:
     //        DEPTH_CALCD_TYPE,
 
 
-    //        CODE_OPTION,
-    //        DEPTH_CODE1_H,
-    //        DEPTH_CODE1_L,
-    //        DEPTH_CODE2_H,
-    //        DEPTH_CODE2_L,
-    //        DEPTH_CODE3_H,
-    //        DEPTH_CODE3_L,
+        //        CODE_OPTION,
+        //        DEPTH_CODE1_H,
+        //        DEPTH_CODE1_L,
+        //        DEPTH_CODE2_H,
+        //        DEPTH_CODE2_L,
+        //        DEPTH_CODE3_H,
+        //        DEPTH_CODE3_L,
 
-    //        CODE_COUNT_H,
-    //        CODE_COUNT_L,
-    //        DEPTH_COUNTDOWN,
+        //        CODE_COUNT_H,
+        //        CODE_COUNT_L,
+        //        DEPTH_COUNTDOWN,
 
-    //        TENSION_H = 32,
-    //        TENSION_L,
-    //        TENSION_INCREMENT_H,
-    //        TENSION_INCREMENT_L,
-    //        K_VALUE,
-    //        TENSIOMETER_STATUS,
-    //        TENSIOMETER_BATTERY,
-    //        TESIOMETER_NUM_H,
-    //        TESIOMETER_NUM_L,
-    //        CURRENT_TICK_ENDPOINT_NUM,
-    //        ENDPOINT_VLAUE,
-    //        TENSIOMETER_ENDPOINT_H,
-    //        TENSIOMETER_ENDPOINT_L,
-    //        CALIBRATION_ENDPOINT_NUM,
-    //        CALIBRATION_ENABLE,
-    //        MAX_TENSION_H,
-    //        MAX_TENSION_L,
-    //        MAX_TENSION_INCREMENT_H,
-    //        MAX_TENSION_INCREMENT_L,
-    //        MAX_SPEED_H,
-    //        MAX_SPEED_L,
-    //        MAX_DEPTH_H,
-    //        MAX_DEPTH_L,
-    //        CABLE_TENSION_H,
-    //        CABLE_TENSION_L,
-    //        SPEED_CONTROL_STATE,
-    //        SPEED_ENABLE,
-    //        SPEED_CONTROL_H,
-    //        SPEED_CONTROL_L,
+        //        TENSION_H = 32,
+        //        TENSION_L,
+        //        TENSION_INCREMENT_H,
+        //        TENSION_INCREMENT_L,
+        //        K_VALUE,
+        //        TENSIOMETER_STATUS,
+        //        TENSIOMETER_BATTERY,
+        //        TESIOMETER_NUM_H,
+        //        TESIOMETER_NUM_L,
+        //        CURRENT_TICK_ENDPOINT_NUM,
+        //        ENDPOINT_VLAUE,
+        //        TENSIOMETER_ENDPOINT_H,
+        //        TENSIOMETER_ENDPOINT_L,
+        //        CALIBRATION_ENDPOINT_NUM,
+        //        CALIBRATION_ENABLE,
+        //        MAX_TENSION_H,
+        //        MAX_TENSION_L,
+        //        MAX_TENSION_INCREMENT_H,
+        //        MAX_TENSION_INCREMENT_L,
+        //        MAX_SPEED_H,
+        //        MAX_SPEED_L,
+        //        MAX_DEPTH_H,
+        //        MAX_DEPTH_L,
+        //        CABLE_TENSION_H,
+        //        CABLE_TENSION_L,
+        //        SPEED_CONTROL_STATE,
+        //        SPEED_ENABLE,
+        //        SPEED_CONTROL_H,
+        //        SPEED_CONTROL_L,
 
-    //        TENSION_BAR_TONNAGE = 67,
-    //        CABLE_TYPE,
-    //        DEPTH_OPERATION_H,
-    //        DEPTH_OPERATION_L,
-    //        WELL_TYPE,
-    //        OPERATION_TYPE,
-    //        HARNESS_FORCE,
-    //        WEAK_FORCE,
-    //        CABLE_UINT,
-    //        SENSOR_WEIGHT,
-    //        TENSION_SAFE_FACTOR,
-    //        CURRENT_TENSION_SAFE_H,
-    //        CURRENT_TENSION_SAFE_L,
-    //        CIRRENT_TENSION_MAX_H,
-    //        CIRRENT_TENSION_MAX_L,
-    //        HARNESS_TENSION_TREND,
-    //        PARKING_SAFE_TIME,
-    //        DEPTH_TENSION_STATE,
+        //        TENSION_BAR_TONNAGE = 67,
+        //        CABLE_TYPE,
+        //        DEPTH_OPERATION_H,
+        //        DEPTH_OPERATION_L,
+        //        WELL_TYPE,
+        //        OPERATION_TYPE,
+        //        HARNESS_FORCE,
+        //        WEAK_FORCE,
+        //        CABLE_UINT,
+        //        SENSOR_WEIGHT,
+        //        TENSION_SAFE_FACTOR,
+        //        CURRENT_TENSION_SAFE_H,
+        //        CURRENT_TENSION_SAFE_L,
+        //        CIRRENT_TENSION_MAX_H,
+        //        CIRRENT_TENSION_MAX_L,
+        //        HARNESS_TENSION_TREND,
+        //        PARKING_SAFE_TIME,
+        //        DEPTH_TENSION_STATE,
 
-    //    };
+        //    };
 
-    enum HOLDING_REGISTERS
+        enum HOLDING_REGISTERS
     {
 
-        DEPTH_H = 8,      //深度高十六位
-        DEPTH_L,          //深度低十六位
+        HOLOD_DEPTH_H = 8,      //深度高十六位
+        HOLOD_DEPTH_L,          //深度低十六位
         SPEED_H,          // 速度高十六位
         SPEED_L,          //速度高十六位
         MAX_SPEED_H,      // 极限速度高十六位
@@ -216,6 +217,7 @@ public:
         HIGH_ANGLE_WELL,         // 大斜度井斜度设置
 
     };
+    Q_ENUM(HOLDING_REGISTERS)
 
 public:
     explicit HQmlEnum(QObject *parent = nullptr){}
