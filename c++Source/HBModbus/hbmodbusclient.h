@@ -32,7 +32,7 @@ public:
     int cableWeight;
     int TensionSafeFactor;
     int weakForce;
-//    int currentHarnessTension;
+    //    int currentHarnessTension;
     int currentTensionSafe;
     int maxTensionSafe;
     int cableTensionTrend;
@@ -42,6 +42,13 @@ public:
     int currentDepth2;
     int currentDepth3;
 
+    //
+    int m_targetLayerDepth = 0;
+    int m_depthOrientation = 0;
+    int m_meterDepth = 0;
+    int depthCalculateType = 0;
+    int m_velocityUnit = 0;
+    int m_codeOption = 0;
 
 
 public:
@@ -102,8 +109,8 @@ private:
     quint16 currentDepth2_L;
     quint16 currentDepth3_H;
     quint16 currentDepth3_L;
-//    quint16 currentHarnessTension_H;
-//    quint16 currentHarnessTension_L;
+    //    quint16 currentHarnessTension_H;
+    //    quint16 currentHarnessTension_L;
 
 
 private:

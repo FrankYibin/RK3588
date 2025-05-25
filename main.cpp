@@ -51,6 +51,8 @@
 #include "c++Source/HBGraph/GraphAxisDefineHB.h"
 #include "c++Source/HBScreen/tensiometermanager.h"
 #include "c++Source/HBVoice/hbvoice.h"
+#include "c++Source/HBScreen/historydatatable.h"
+//#include "c++Source/HBScreen/tensionscale.h"
 #include "c++Source/HBScreen/tensionscalemanager.h"
 //#include "c++Source/HBVideoCapture/videocaptureitem.h"
 //#include "opencv2/opencv.hpp"
@@ -110,6 +112,8 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", &modbusClient);
     //    qmlRegisterSingletonInstance<HBDatabase>("HBDatabase", 1, 0, "HBDatabase", &dbInstance);
     qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::getInstance());
+    // qmlRegisterType<TensiometerManager>("HB.TensiometerManager", 1, 0, "TensiometerManager");
+     qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
     qmlRegisterType<TensionScaleManager>("HB.TensionScaleManager", 1, 0, "TensionScaleManager");
 
 //    qmlRegisterType<VideoCaptureItem>("HB.VideoCapture", 1, 0, "CV");
