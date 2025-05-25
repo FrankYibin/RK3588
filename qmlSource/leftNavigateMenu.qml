@@ -103,21 +103,21 @@ Item {
         function resetModel()
         {
             modelMenuData.clear()
-            modelMenuData.append({"MenuName":       "主页",
+            modelMenuData.append({"MenuName":       qsTr("主页"),
                                     "MenuIcon":     "qrc:/images/homePage.png",
                                     "IsSubmenu":    false,
                                     "MenuIndex":    UIScreenEnum.HB_DASHBOARD,
                                     "ImageSize":    Math.round(50 * Style.scaleHint),
                                     "MenuEnabled":  false,
                                       })
-            modelMenuData.append({"MenuName":       "设置",
+            modelMenuData.append({"MenuName":       qsTr("设置"),
                                     "MenuIcon":     "qrc:/images/setting.png",
                                     "IsSubmenu":    true,
                                     "MenuIndex":    UIScreenEnum.HB_SETTING,
                                     "ImageSize":    Math.round(45 * Style.scaleHint),
                                     "MenuEnabled":  false,
                                       })
-            modelMenuData.append({"MenuName":       "测试",
+            modelMenuData.append({"MenuName":       qsTr("控速"),
                                     "MenuIcon":     "qrc:/images/velocity.png",
                                     "IsSubmenu":    false,
                                     "MenuIndex":    UIScreenEnum.HB_VELOCITY,
@@ -277,7 +277,7 @@ Item {
         {
             id: menuOptionLayout
             anchors.fill: parent
-            spacing: Math.round(20 * Style.scaleHint)
+            spacing: Math.round(10 * Style.scaleHint)
             Repeater
             {
                 model: modelMenuData
@@ -285,7 +285,7 @@ Item {
                 {
                     id: menuOptionDelegate
                     width: parent.width
-                    height: Math.round(width * 1.0)
+                    height: Math.round(width * 1.2)
                     Rectangle{
                         id: menuImageTextLayout
                         width: parent.width

@@ -17,7 +17,7 @@ Item{
     readonly property var velocityUnitModel: [qsTr("m/min"), qsTr("m/h"),qsTr("ft/min"),qsTr("ft/h")]
     readonly property var depthOrientationModel: [qsTr("反"), qsTr("正")]
     readonly property var depthCalculateTypeModel: [qsTr("单编码器"), qsTr("双编码器")]
-    readonly property var encorderOptionModel: [qsTr("编码器1"), qsTr("编码器2"),qsTr("编码器3")]
+    readonly property var encorderOptionModel: [qsTr("编码器1"), qsTr("编码器2"),qsTr("编码器3"), qsTr("编码器1-2"), qsTr("编码器1-3"), qsTr("编码器2-3")]
 
     Rectangle
     {
@@ -180,38 +180,38 @@ Item{
                 }
             }
 
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Text {
-                    id: titleDepthCalculateType
-                    width: Math.round(textWidth * Style.scaleHint)
-                    height: parent.height
-                    text: qsTr("深度计算方式") + ":"
-                    font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-                HBComboBox
-                {
-                    id:comboBoxDepthCalculateType
-                    model:depthCalculateTypeModel
-                    currentIndex:Depth.DepthCalculateType
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    // Component.onCompleted: {
-                    //     comboBoxDepthCalculateType.currentIndex = Depth.DepthCalculateType
-                    // }
+//            Row{
+//                height: Math.round(optionHeight * Style.scaleHint)
+//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+//                spacing: rowSpacing
+//                Text {
+//                    id: titleDepthCalculateType
+//                    width: Math.round(textWidth * Style.scaleHint)
+//                    height: parent.height
+//                    text: qsTr("深度计算方式") + ":"
+//                    font.family: "宋体"
+//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+//                    verticalAlignment: Text.AlignVCenter
+//                    color: Style.whiteFontColor
+//                }
+//                HBComboBox
+//                {
+//                    id:comboBoxDepthCalculateType
+//                    model:depthCalculateTypeModel
+//                    currentIndex:Depth.DepthCalculateType
+//                    width: Math.round(componentWidth * Style.scaleHint)
+//                    height: parent.height
+//                    // Component.onCompleted: {
+//                    //     comboBoxDepthCalculateType.currentIndex = Depth.DepthCalculateType
+//                    // }
 
-                    onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(19, [currentIndex+1])
-                        Depth.DepthOrientation = currentIndex
-                        console.log("DepthCalculateType" + currentIndex)
-                    }
-                }
-            }
+//                    onCurrentIndexChanged: {
+//                        ModbusClient.writeRegister(19, [currentIndex+1])
+//                        Depth.DepthOrientation = currentIndex
+//                        console.log("DepthCalculateType" + currentIndex)
+//                    }
+//                }
+//            }
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
@@ -267,7 +267,7 @@ Item{
                     id: titleEncorderOption
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("编码器选择") + ":"
+                    text: qsTr("编码器源选择") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter

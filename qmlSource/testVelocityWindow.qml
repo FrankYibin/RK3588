@@ -122,7 +122,10 @@ Item{
                     onlyForNumpad: true
                     //输入写入
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入控速值："), " ", 3, 0, 99999, "0.123")
+                        mainWindow.showPrimaryNumpad(qsTr("请输入控速值"), " ", 2, 0, 99999, textVelocitySetting.text, textVelocitySetting, function(val) {
+                            AutoTestSpeed.SpeedValue = val;
+                            ModbusUtils.writeScaledValue(val,67,100.0)
+                        })
                     }
 
                     onFocusChanged: {
