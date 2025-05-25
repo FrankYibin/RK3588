@@ -6,6 +6,7 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
+import HB.Enums 1.0
 
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
@@ -68,12 +69,12 @@ Item{
                     regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                 }
                 // text: qsTr("8081")
-                text:DepthMeter.DepthPreset
+                text:AutoTestSpeed.DepthCountDown
                 onlyForNumpad: true
                 onSignalClickedEvent: {
                     mainWindow.showPrimaryNumpad(qsTr("请输入深度倒计值"), " ", 3, 0, 99999, textSDepthPreset.text,textSDepthPreset,function(val) {
-                        DepthMeter.DepthPreset = val;
-                        ModbusClient.writeRegister(29,[parseInt(val)])
+                        AutoTestSpeed.DepthCountDown = val;
+                        ModbusClient.writeRegister(HQmlEnum.DEPTH_COUNTDOWN,[parseInt(val)])
                     })
                 }
             }
@@ -138,7 +139,7 @@ Item{
                     regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                 }
                 // text: "8081"
-                text: DepthMeter.CurrentDepth
+                text: HBHome.Depth
                 onlyForNumpad: true
                 onSignalClickedEvent: {
                     mainWindow.showPrimaryNumpad("请输入深度倒计值", " ", 3, 0, 99999, "0.123")

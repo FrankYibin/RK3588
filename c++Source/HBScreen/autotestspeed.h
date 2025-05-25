@@ -13,6 +13,14 @@ class AutoTestSpeed : public QObject
     //Control speed
     Q_PROPERTY(int SpeedValue READ SpeedValue WRITE setSpeedValue NOTIFY SpeedValueChanged)
 
+
+    //深度倒计
+    //深度倒计设置
+    Q_PROPERTY(int DepthCountDown READ DepthCountDown WRITE setDepthCountDown NOTIFY DepthCountDownChanged)
+
+    //深度倒计当前值
+    Q_PROPERTY(int DepthCurrent READ DepthCurrent WRITE setDepthCurrent NOTIFY DepthCurrentChanged)
+
 public:
 
     static AutoTestSpeed* getInstance();
@@ -25,6 +33,12 @@ public:
     Q_INVOKABLE int SpeedValue();
 
     Q_INVOKABLE void setSpeedValue(int newSpeedValue);
+
+    Q_INVOKABLE int DepthCountDown();
+    Q_INVOKABLE void setDepthCountDown(int newSpeedValue);
+
+    Q_INVOKABLE int DepthCurrent();
+    Q_INVOKABLE void setDepthCurrent(int newSpeedValue);
 
 private:
     explicit AutoTestSpeed(QObject *parent = nullptr);
@@ -39,11 +53,19 @@ signals:
 
     void SpeedValueChanged();
 
+    void DepthCountDownChanged();
+
+    void DepthCurrentChanged();
+
 private:
 
     int m_direction = 0;
 
     int m_speedVlue = 0;
+
+    int m_depthCountDown = 8888;
+
+    int m_depthCount = 0;
 };
 
 #endif // AUTOTESTSPEED_H
