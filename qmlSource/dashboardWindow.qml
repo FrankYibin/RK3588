@@ -77,6 +77,7 @@ Item{
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
                 text:(HBHome.Depth / 100.0).toFixed(2)
+                enabled: false
 
             }
             Text
@@ -121,6 +122,7 @@ Item{
                 // text: "1200.00"
 //                text: HBHome.Speed
                 text:(HBHome.Speed / 100.0).toFixed(2)
+                enabled: false
             }
             Text
             {
@@ -164,6 +166,7 @@ Item{
                 //text: "1200.00"
 //                text: HBHome.Tension
                 text:(HBHome.Tension / 100.0).toFixed(2)
+                enabled: false
 
             }
             Text
@@ -207,6 +210,7 @@ Item{
                 // text: "1200.00"
 //                text: HBHome.TensionIncrement
                  text:(HBHome.TensionIncrement / 100.0).toFixed(2)
+                 enabled: false
 
             }
             Text
@@ -285,6 +289,7 @@ Item{
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                    // text: "100"
                     text: HBHome.Pulse
+                    enabled: false
                 }
             }
 
@@ -312,6 +317,7 @@ Item{
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                     // text: "99.00"
                     text: HBHome.MaxSpeed
+                    enabled: false
                 }
                 Text
                 {
@@ -347,6 +353,7 @@ Item{
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                     // text: "101.00"
                     text: HBHome.HarnessTension
+                    enabled: false
                 }
                 Text
                 {
@@ -390,6 +397,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+                    enabled: false
                 }
                 Text
                 {
@@ -426,6 +434,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+                    enabled: false
                 }
                 Text
                 {
@@ -463,6 +472,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                     font.family: "宋体"
+                    enabled: false
                 }
             }
         }
@@ -499,6 +509,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+                    enabled: false
                 }
                 Text
                 {
@@ -536,6 +547,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+                    enabled: false
                 }
             }
 
@@ -566,6 +578,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                     font.family: "宋体"
+                    enabled: false
                 }
             }
         }

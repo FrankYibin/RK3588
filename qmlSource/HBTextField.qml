@@ -48,7 +48,7 @@ TextField {
         background: Rectangle {
             id:backGroundId
             radius: 2
-            color: (enabled === true) ? backgroundColor : "#ffffff"
+            color: (enabled === true) ? backgroundColor : backgroundColor
             border.color: Style.hbFrameBorderColor
             border.width: 2
         }
