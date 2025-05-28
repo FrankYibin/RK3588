@@ -22,7 +22,7 @@ public:
 
     Q_INVOKABLE void writeScaledValue(const QString &value, int address, float scale = 100.0f);
 
-    Q_INVOKABLE void writeScaledValueByIndex(const QString &value, int index, float scale);
+    // Q_INVOKABLE QString readScaledModbusValue( int address) const;
 
 
     // 设置 ModbusClient（需注入）
