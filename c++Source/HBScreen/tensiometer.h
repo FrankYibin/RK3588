@@ -23,6 +23,15 @@ class Tensiometer : public QObject
     //Tension Units  张力单位
     Q_PROPERTY(int TensionUnits READ TensionUnits WRITE setTensionUnits NOTIFY TensionUnitsChanged)
 
+    //Scale
+    Q_PROPERTY(int Scale1 READ Scale1 WRITE setScale1 NOTIFY Scale1Changed)
+
+    Q_PROPERTY(int Scale2 READ Scale2 WRITE setScale2 NOTIFY Scale2Changed)
+    Q_PROPERTY(int Scale3 READ Scale3 WRITE setScale3 NOTIFY Scale3Changed)
+    Q_PROPERTY(int Scale4 READ Scale4 WRITE setScale4 NOTIFY Scale4Changed)
+    Q_PROPERTY(int Scale5 READ Scale5 WRITE setScale5 NOTIFY Scale5Changed)
+
+
 
 public:
     static Tensiometer* getInstance();
@@ -44,6 +53,23 @@ public:
     Q_INVOKABLE int TensionUnits() const;
     Q_INVOKABLE void setTensionUnits(int newTensionUnits);
 
+    //Scale
+
+    Q_INVOKABLE int Scale1() const;
+    Q_INVOKABLE void setScale1(int newTensiometerType);
+
+    Q_INVOKABLE int Scale2() const;
+    Q_INVOKABLE void setScale2(int newTensiometerType);
+
+    Q_INVOKABLE int Scale3() const;
+    Q_INVOKABLE void setScale3(int newTensiometerType);
+
+    Q_INVOKABLE int Scale4() const;
+    Q_INVOKABLE void setScale4(int newTensiometerType);
+
+    Q_INVOKABLE int Scale5() const;
+    Q_INVOKABLE void setScale5(int newTensiometerType);
+
 
 signals:
 
@@ -52,6 +78,14 @@ signals:
     void TensiometerRangeChanged();
     void TensiometerSignalChanged();
     void TensionUnitsChanged();
+
+
+    void Scale1Changed();
+    void Scale2Changed();
+    void Scale3Changed();
+    void Scale4Changed();
+    void Scale5Changed();
+
 
 private:
     explicit Tensiometer(QObject *parent = nullptr);
@@ -70,6 +104,13 @@ private:
     int m_tensiometerSignal;
 
     int m_tensionUnits = 0;
+
+    int m_scale1;
+    int m_scale2;
+    int m_scale3;
+    int m_scale4;
+    int m_scale5;
+
 };
 
 #endif // TENSIOMETER_H

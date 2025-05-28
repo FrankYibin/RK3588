@@ -1,6 +1,5 @@
-#ifndef TENSIONSCALEMANAGER_H
+﻿#ifndef TENSIONSCALEMANAGER_H
 #define TENSIONSCALEMANAGER_H
-
 #include <QAbstractListModel>
 #include <QList>
 #include <QVariant>
@@ -21,17 +20,17 @@ public:
     };
 public:
 
-    // Reimplement rowCount and data to provide the data to QML
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    // A function to reset the model with default data
+
     Q_INVOKABLE void resetModel();
 
-    // A function to modify a tension value
+
     Q_INVOKABLE void updateTensionValue(int index, double newTensionValue);
 
-    // A function to get the total number of checked scales
+
     Q_INVOKABLE int getCheckedCount() const;
 
 protected:

@@ -172,8 +172,7 @@ Item{
                         onlyForNumpad: true
                         onSignalClickedEvent: {
                             mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, tensionInput.text,tensionInput,function(val){
-//                                tensionScaleTable.model.set(styleData.row, "TensionValue", parseFloat(val))
-//                                ModbusClient
+
                             })
                         }
                     }

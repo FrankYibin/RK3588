@@ -83,3 +83,67 @@ void Tensiometer::setTensionUnits(int newTensionUnits)
         emit TensionUnitsChanged();
     }
 }
+
+int Tensiometer::Scale1() const
+{
+ return m_scale1;
+}
+
+void Tensiometer::setScale1(int newScale1)
+{
+    if (m_scale1 != newScale1) {
+        m_scale1 = newScale1;
+        emit Scale1Changed();
+    }
+}
+
+int Tensiometer::Scale2() const
+{
+ return m_scale2;
+}
+
+void Tensiometer::setScale2(int newScale2)
+{    if (m_scale2 != newScale2) {
+        m_scale2 = newScale2;
+        emit Scale2Changed();
+    }
+
+}
+int Tensiometer::Scale3() const
+{
+ return m_scale3;
+}
+
+void Tensiometer::setScale3(int newScale3)
+{  if (m_scale3 != newScale3) {
+        m_scale3 = newScale3;
+        emit Scale3Changed();
+    }
+
+
+}
+int Tensiometer::Scale4() const
+{
+ return m_scale4;
+}
+
+void Tensiometer::setScale4(int newScale4)
+{  if (m_scale4 != newScale4) {
+        m_scale4 = newScale4;
+        emit Scale4Changed();
+    }
+
+
+}
+int Tensiometer::Scale5() const
+{
+ return m_scale5;
+}
+
+void Tensiometer::setScale5(int newScale5)
+{ if (m_scale5 != newScale5) {
+        m_scale5 = newScale5;
+        emit Scale5Changed();
+    }
+
+}

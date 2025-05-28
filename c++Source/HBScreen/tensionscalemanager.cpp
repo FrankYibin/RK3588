@@ -1,4 +1,5 @@
-#include "tensionscalemanager.h"
+﻿#include "tensionscalemanager.h"
+#include "c++Source/HBScreen/tensiometer.h"
 
 TensionScaleManager::TensionScaleManager(QObject *parent)
     : QAbstractListModel(parent)
@@ -24,8 +25,20 @@ QVariant TensionScaleManager::data(const QModelIndex &index, int role) const
         return scale.checked;
     case IndexRole:
         return scale.index;
-    case ScaleValueRole:
-        return scale.scaleValue;
+    case ScaleValueRole:{
+
+        int row = index.row();
+        Tensiometer* t = Tensiometer::getInstance();
+
+        switch (row) {
+        case 1: return t->Scale1();
+        case 2: return t->Scale2();
+        case 3: return t->Scale3();
+        case 4: return t->Scale4();
+        case 5: return t->Scale5();
+        default: return scale.scaleValue;
+        }
+    }
     case TensionValueRole:
         return scale.tensionValue;
     default:

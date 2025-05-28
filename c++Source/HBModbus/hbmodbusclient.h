@@ -50,6 +50,14 @@ public:
     int m_velocityUnit = 0;
     int m_codeOption = 0;
 
+    //
+
+    int m_scale1;
+    int m_scale2;
+    int m_scale3;
+    int m_scale4;
+    int m_scale5;
+
 
 public:
     explicit HBModbusClient(QObject *parent = nullptr);
@@ -112,6 +120,18 @@ private:
     quint16 currentDepth3_L;
     //    quint16 currentHarnessTension_H;
     //    quint16 currentHarnessTension_L;
+
+    quint16 scale1_H;
+    quint16 scale1_L;
+    quint16 scale2_H;
+    quint16 scale2_L;
+    quint16 scale3_H;
+    quint16 scale3_L;
+    quint16 scale4_H;
+    quint16 scale4_L;
+    quint16 scale5_H;
+    quint16 scale5_L;
+
 
 
 private:

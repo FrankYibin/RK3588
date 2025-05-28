@@ -8,6 +8,8 @@
 #include "c++Source/HBDefine.h"
 #include "c++Source/HBData/hbdatabase.h"
 #include "c++Source/HBScreen/wellparameter.h"
+#include "c++Source/HBScreen/tensiometer.h"
+#include <QtConcurrent>
 
 HBModbusClient::HBModbusClient(QObject *parent)
     : QObject{parent}
@@ -39,9 +41,9 @@ void HBModbusClient::connectToServer()
     if (!modbus)
         return;
 
-//    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM7");
+   // modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM6");
     modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "ttyS3");
-//    modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "usbmon3");
+   // modbus->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "usbmon3")
     modbus->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud115200);
     modbus->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
     modbus->setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
@@ -93,7 +95,7 @@ void HBModbusClient::readRegister(int address, int count)
 
     QModbusDataUnit request(QModbusDataUnit::HoldingRegisters, address, count);
 
-    if (auto *reply = modbus->sendReadRequest(request, 1)) { // Slave ID 1
+    if (auto *reply = modbus->sendReadRequest(request, 1)) {
         connect(reply, &QModbusReply::finished, this, [this, reply]() {
             if (reply->error() == QModbusDevice::NoError) {
                 const QModbusDataUnit result = reply->result();
@@ -110,7 +112,7 @@ void HBModbusClient::readRegister(int address, int count)
 
 void HBModbusClient::startBatchRead()
 {
-    readRegister(HQmlEnum::HOLOD_DEPTH_H,HQmlEnum::HIGH_ANGLE_WELL);
+    readRegister(0,HQmlEnum::HIGH_ANGLE_WELL);
 
     readCoils();
 
@@ -317,11 +319,65 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             qDebug() << "Address" << currentAddress << "- Updated currentDepth3:" << currentDepth3;
             break;
 
+        case HQmlEnum::SCALE_1_H:
+            scale1_H = value;
+            break;
+
+        case HQmlEnum::SCALE_1_L:
+            scale1_L = value;
+            m_scale1 = (scale1_H << 16) | scale1_L;
+            Tensiometer::getInstance()->setScale1(m_scale1);
+            qDebug() << "Address" << currentAddress << "- Updated m_scale1:" << m_scale1;
+            break;
+
+        case HQmlEnum::SCALE_2_H:
+            scale2_H = value;
+            break;
+
+        case HQmlEnum::SCALE_2_L:
+            scale2_L = value;
+            m_scale2 = (scale2_H << 16) | scale2_L;
+            Tensiometer::getInstance()->setScale2(m_scale2);
+            qDebug() << "Address" << currentAddress << "- Updated m_scale2:" << m_scale2;
+            break;
+
+        case HQmlEnum::SCALE_3_H:
+            scale3_H = value;
+            break;
+
+        case HQmlEnum::SCALE_3_L:
+            scale3_L = value;
+            m_scale3 = (scale3_H << 16) | scale3_L;
+            Tensiometer::getInstance()->setScale3(m_scale3);
+            qDebug() << "Address" << currentAddress << "- Updated scale3_L:" << scale3_L;
+            break;
+        case HQmlEnum::SCALE_4_H:
+            scale4_H = value;
+            break;
+
+        case HQmlEnum::SCALE_4_L:
+            scale4_L = value;
+            m_scale4 = (scale4_H << 16) | scale4_L;
+            Tensiometer::getInstance()->setScale1(m_scale4);
+            qDebug() << "Address" << currentAddress << "- Updated m_scale4:" << m_scale4;
+            break;
+        case HQmlEnum::SCALE_5_H:
+            scale5_H = value;
+            break;
+
+        case HQmlEnum::SCALE_5_L:
+            scale5_L = value;
+            m_scale5 = (scale5_H << 16) | scale5_L;
+            Tensiometer::getInstance()->setScale1(m_scale5);
+            qDebug() << "Address" << currentAddress << "- Updated m_scale5:" << m_scale5;
+            break;
+
         default:
             // 其他地址不处理
             break;
         }
     }
+    insertDataToDatabase();
 }
 
 
@@ -547,7 +603,10 @@ void HBModbusClient::insertDataToDatabase()
     modData.safetyTension = currentTensionSafe;
     modData.exception = "无";
 
-    HBDatabase::getInstance().insertHistoryData(modData);
+    // HBDatabase::getInstance().insertHistoryData(modData);
+    QtConcurrent::run([modData]() {
+        HBDatabase::getInstance().insertHistoryData(modData);
+    });
 }
 
 void HBModbusClient::writeCoil(int address, int value)

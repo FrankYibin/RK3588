@@ -953,23 +953,24 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
     }
     QSqlQuery query(m_database);
     QString sql = "INSERT INTO history_table (wellNumber, date, operateType, operater, depth, velocity, "
-                  "velocityUnit, tensions, tensionUnit, maxTension, harnessTension, safetyTension, exception) "
+                  "velocityUnit, tensions,tensionIncrement, tensionUnit, maxTension, harnessTension, safetyTension, exception) "
                   "VALUES (:wellNumber, CURRENT_DATE, :operateType, :operater, :depth, :velocity, "
-                  ":velocityUnit, :tensions, :tensionUnit, :maxTension, :harnessTension, :safetyTension, :exception)";
+                  ":velocityUnit, :tensions,:tensionIncrement,:tensionUnit, :maxTension, :harnessTension, :safetyTension, :exception)";
     query.prepare(sql);
 
 
     query.bindValue(":wellNumber", modbusData.wellNumber);
-    query.bindValue(":operateType", modbusData.operateType);            // 固定数据 - 操作类型
-    query.bindValue(":operater", modbusData.operater);                  // 固定数据 - 操作员
-    query.bindValue(":depth", modbusData.depth);                       // 从 Modbus 获取深度
-    query.bindValue(":velocity", modbusData.velocity);                 // 从 Modbus 获取速度
-    query.bindValue(":velocityUnit", "m/min");                           // 固定单位 - 速度
-    query.bindValue(":tensions", modbusData.tensions);                 // 从 Modbus 获取张力
-    query.bindValue(":tensionUnit", "kg");                              // 固定单位 - 张力
-    query.bindValue(":maxTension", modbusData.maxTension);             // 从 Modbus 获取最大张力
-    query.bindValue(":harnessTension", modbusData.harnessTension);     // 从 Modbus 获取吊索张力
-    query.bindValue(":safetyTension", modbusData.safetyTension);       // 从 Modbus 获取安全张力
+    query.bindValue(":operateType", modbusData.operateType);
+    query.bindValue(":operater", modbusData.operater);
+    query.bindValue(":depth", modbusData.depth);
+    query.bindValue(":velocity", modbusData.velocity);
+    query.bindValue(":velocityUnit", "m/min");
+    query.bindValue(":tensions", modbusData.tensions);
+    query.bindValue(":tensionIncrement", modbusData.tensionIncrement);
+    query.bindValue(":tensionUnit", "kg");
+    query.bindValue(":maxTension", modbusData.maxTension);
+    query.bindValue(":harnessTension", modbusData.harnessTension);
+    query.bindValue(":safetyTension", modbusData.safetyTension);
     query.bindValue(":exception", "无");
 
     // 执行插入

@@ -84,3 +84,4 @@ void ModbusUtils::writeScaledValue(const QString &value, int address, float scal
 //        qWarning() << "Failed to send write request:" << m_client->errorString();
 //    }
 //}
+

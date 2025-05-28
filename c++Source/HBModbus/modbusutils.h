@@ -22,6 +22,9 @@ public:
 
     Q_INVOKABLE void writeScaledValue(const QString &value, int address, float scale = 100.0f);
 
+    // Q_INVOKABLE QString readScaledModbusValue( int address) const;
+
+
     // 设置 ModbusClient（需注入）
     void setModbusClient(HBModbusClient *client);
 signals:
