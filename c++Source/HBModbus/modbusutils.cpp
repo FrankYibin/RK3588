@@ -2,6 +2,7 @@
 #include "hbmodbusclient.h"
 #include <QDebug>
 #include <QtMath>
+#include "c++Source/HBQmlEnum.h"
 
 ModbusUtils::ModbusUtils(QObject *parent)
     : QObject{parent}
@@ -48,40 +49,21 @@ void ModbusUtils::writeScaledValue(const QString &value, int address, float scal
 }
 
 
-//void ModbusUtils::writeScaledValue(const QString &value, int address, float scale, int slaveId)
-//{
-//    if (!m_client) return;
+void ModbusUtils::writeScaledValueByIndex(const QString &value, int index, float scale)
+{
+    int address = -1;
 
-//    bool ok = false;
-//    float floatValue = value.toFloat(&ok);
-//    if (!ok) {
-//        qWarning() << "Invalid float string:" << value;
-//        return;
-//    }
+    switch (index) {
+    case 1: address = HQmlEnum::SCALE_1_TENSION_H; break;
+    case 2: address = HQmlEnum::SCALE_2_TENSION_H; break;
+    case 3: address = HQmlEnum::SCALE_3_TENSION_H; break;
+    case 4: address = HQmlEnum::SCALE_4_TENSION_H; break;
+    case 5: address = HQmlEnum::SCALE_5_TENSION_H; break;
+    default:
+        qWarning() << "Invalid index in writeScaledValueByIndex:" << index;
+        return;
+    }
 
-
-//    int32_t scaledInt = static_cast<int32_t>(std::round(floatValue * scale));
-
-
-//    quint16 high = static_cast<quint16>((scaledInt >> 16) & 0xFFFF);
-//    quint16 low  = static_cast<quint16>(scaledInt & 0xFFFF);
-
-
-//    QModbusDataUnit writeUnit(QModbusDataUnit::HoldingRegisters, address, 2);
-//    writeUnit.setValue(0, high);
-//    writeUnit.setValue(1, low);
-
-//    if (auto *reply = m_client->sendWriteRequest(writeUnit, slaveId)) {
-//        connect(reply, &QModbusReply::finished, this, [reply]() {
-//            if (reply->error() == QModbusDevice::NoError) {
-//                qDebug() << "Write scaled value succeeded";
-//            } else {
-//                qWarning() << "Write failed:" << reply->errorString();
-//            }
-//            reply->deleteLater();
-//        });
-//    } else {
-//        qWarning() << "Failed to send write request:" << m_client->errorString();
-//    }
-//}
+    writeScaledValue(value, address, scale);
+}
 
