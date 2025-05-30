@@ -70,17 +70,22 @@ public:
 
 
     // 加载某台张力计的所有刻度点
-    bool loadScalesForTensiometer(int tensioId,QList<ScaleData> &outRecords);
+    bool loadScalesForTensiometerNumber(const QString &tensioNumber,QList<ScaleData> &outRecords);
+
+    bool deleteScalesByTensiometerId(int tensioId);
+
 
 
     // 插入默认的 5 条刻度点（在 addTensiometer 后调用）
-    bool insertDefaultScales(int tensioId);
+    bool insertDefaultScales(QString &tensiometerNumber);
 
 
     bool updateTensionScale(int scaleId, int rawValue);
 
+    bool updateTensionValue(const QString &tensioNumber, int index, double scaleValue, double tensionValue, bool selected);
 
-    bool deleteScalesByTensiometerId(int tensioId);
+
+    bool deleteScalesByTensiometerId(const QString &tensioNumber);
 
 
 
@@ -93,7 +98,15 @@ public:
 
     void closeTransaction();
 
+    QVector<QPointF> loadGraphPoints(const QString& fieldName);
 
+
+
+    //
+    bool getUnitSettings(UnitSettings &settings);
+    Q_INVOKABLE bool updateTensionUnit(int tensionUnit);
+
+    Q_INVOKABLE bool updateDepthUnit(int depthUnit);
     //test
     bool testUpdate();
 

@@ -227,6 +227,25 @@ public:
     };
     Q_ENUM(HOLDING_REGISTERS)
 
+    enum TENSION_UNIT{
+
+        UnitLb,
+        UnitKg,
+        UnitKn
+
+    };Q_ENUM(TENSION_UNIT)
+
+    enum DEPTH_UNIT{
+
+        UnitMPerMin,
+        UnitMPerHour,
+        UnitFtPerMin,
+        UnitFtPerHour
+
+    };Q_ENUM(DEPTH_UNIT)
+
+
+
 public:
     explicit HQmlEnum(QObject *parent = nullptr){}
 

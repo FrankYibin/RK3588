@@ -1,4 +1,5 @@
 ﻿#include "tensiometer.h"
+#include <QDebug>
 
 Tensiometer* Tensiometer::m_tensiometer = nullptr;
 
@@ -80,7 +81,8 @@ void Tensiometer::setTensionUnits(int newTensionUnits)
 {
     if (m_tensionUnits != newTensionUnits) {
         m_tensionUnits = newTensionUnits;
-        emit TensionUnitsChanged();
+         qDebug() << "C++ emit tensionUnitsChanged, new value:" << m_tensionUnits;
+        emit tensionUnitsChanged();
     }
 }
 

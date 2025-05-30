@@ -68,6 +68,7 @@ Item{
                     mainWindow.showPrimaryNumpad(qsTr("请输入张力计编号"), " ", 3, 0, 99999, txtTensionsNumber.text,txtTensionsNumber,function(val) {
                         Tensiometer.TensiometerNumber = val;
                         ModbusClient.writeRegister(39,[parseInt(val)])
+
                     })
                 }
             }

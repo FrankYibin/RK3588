@@ -1,5 +1,7 @@
 ﻿#include "tensionscalemanager.h"
 #include "c++Source/HBScreen/tensiometer.h"
+#include "c++Source/HBData/hbdatabase.h"
+#include <QDebug>
 
 TensionScaleManager::TensionScaleManager(QObject *parent)
     : QAbstractListModel(parent)
@@ -46,17 +48,29 @@ QVariant TensionScaleManager::data(const QModelIndex &index, int role) const
     }
 }
 
+void TensionScaleManager::setTensiometerNumber(const QString &number)
+{
+    m_tensiometerNumber = number;
+    resetModel();
+}
 void TensionScaleManager::resetModel()
 {
     beginResetModel();
     m_scales.clear();
 
-    m_scales.append({true, 1, 10,10 });
-    m_scales.append({true, 2, 20, 10});
-    m_scales.append({false, 3, 30, 15});
-    m_scales.append({false, 4, 40, 20});
-    m_scales.append({false, 5, 50, 25});
-
+    // m_scales.append({true, 1, 10,10 });
+    // m_scales.append({true, 2, 20, 10});
+    // m_scales.append({false, 3, 30, 15});
+    // m_scales.append({false, 4, 40, 20});
+    // m_scales.append({false, 5, 50, 25});
+    if (!m_tensiometerNumber.isEmpty()) {
+        QList<ScaleData> scaleData;
+        if (HBDatabase::getInstance().loadScalesForTensiometerNumber(m_tensiometerNumber, scaleData)) {
+            for (const ScaleData &sd : scaleData) {
+                m_scales.append({sd.selected != 0, sd.pointIndex, sd.rawScaleValue, sd.rawTensionValue});
+            }
+        }
+    }
     endResetModel();
 }
 
@@ -68,6 +82,23 @@ void TensionScaleManager::updateTensionValue(int index, double newTensionValue)
     }
 }
 
+void TensionScaleManager::saveData()
+{
+    for (const TensionScaleData &scale : m_scales) {
+        qDebug() << "Saving Index:" << scale.index
+                 << "ScaleValue:" << scale.scaleValue
+                 << "TensionValue:" << scale.tensionValue
+                 << "Checked:" << scale.checked;
+
+        HBDatabase::getInstance().updateTensionValue(
+            m_tensiometerNumber,
+            scale.index,
+            scale.scaleValue,
+            scale.tensionValue,
+            scale.checked
+            );
+    }
+}
 int TensionScaleManager::getCheckedCount() const
 {
     int count = 0;

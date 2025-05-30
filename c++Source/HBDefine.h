@@ -153,6 +153,12 @@ struct ModbusData {
     QString exception;
 };
 
+struct UnitSettings {
+
+    int tensionUnit = 0;
+    int depthUnit = 0;
+};
+
 
 struct _Measurements_data{
     int id;                                // id

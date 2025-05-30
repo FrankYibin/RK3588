@@ -1,10 +1,12 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
+import QtCharts 2.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.GraphData 1.0
 Item{
     readonly property int textWidth: 100
     readonly property int comboBoxWidth: 150
@@ -19,8 +21,8 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
     HBGroupBox
@@ -104,6 +106,11 @@ Item{
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
+                        // weldGraphObj.loadHistoryCurve(depthLeftAxisPlot, "depth");
+                        // weldGraphObj.loadHistoryCurve(velocityLeftAxisPlot, "velocity");
+                        // weldGraphObj.loadHistoryCurve(tensionsLeftAxisPlot, "tensions");
+                        // weldGraphObj.loadHistoryCurve(tensionIncrementLeftAxisPlot, "tension_increment");
+                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
                     }
                 }
 
@@ -120,7 +127,6 @@ Item{
                 }
             }
         }
-
 
     }
 

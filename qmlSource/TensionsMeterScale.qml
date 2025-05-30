@@ -12,11 +12,11 @@ Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_VIEW
     property int totalScales: 0
     signal signalSaveTensometerScale()
-//    Component.onCompleted:
-//    {
-//        dataModel.resetModel()
+    Component.onCompleted:
+    {
+        scalemodel.setTensiometerNumber(Tensiometer.TensiometerNumber)
 
-//    }
+    }
     TensionScaleManager{
         id:scalemodel
         Component.onCompleted:scalemodel.resetModel()
@@ -30,32 +30,10 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
-
-//    ListModel
-//    {
-//        id: dataModel
-//        function resetModel()
-//        {
-//            dataModel.clear()
-//            dataModel.append({"Checked": true,  "Index": 1,   "ScaleValue": 10,   "TensionValue": 0.5})
-//            dataModel.append({"Checked": true,  "Index": 2,   "ScaleValue": 20,   "TensionValue": 1.0})
-//            dataModel.append({"Checked": false, "Index": 3,   "ScaleValue": 30,   "TensionValue": 1.5})
-//            dataModel.append({"Checked": false, "Index": 4,   "ScaleValue": 40,   "TensionValue": 2.0})
-//            dataModel.append({"Checked": false, "Index": 5,   "ScaleValue": 50,   "TensionValue": 2.5})
-//            dataModel.append({"Checked": true,  "Index": 6,   "ScaleValue": 60,   "TensionValue": 3.0})
-//            dataModel.append({"Checked": true,  "Index": 7,   "ScaleValue": 70,   "TensionValue": 0.5})
-//            dataModel.append({"Checked": true,  "Index": 8,   "ScaleValue": 80,   "TensionValue": 1.0})
-//            dataModel.append({"Checked": false, "Index": 9,   "ScaleValue": 90,   "TensionValue": 1.5})
-////            dataModel.append({"Checked": false, "Index": 10,   "ScaleValue": 100,   "TensionValue": 2.0})
-////            dataModel.append({"Checked": false, "Index": 11,   "ScaleValue": 110,   "TensionValue": 2.5})
-////            dataModel.append({"Checked": true,  "Index": 12,   "ScaleValue": 120,   "TensionValue": 3.0})
-//        }
-//    }
-
 
     Item {
         id: tensionScaleFrame
@@ -72,7 +50,6 @@ Item{
             rowHeight: Math.round(35 * Style.scaleHint)
             fontSize: Math.round(Style.style2 * Style.scaleHint)
             model: scalemodel
-            // model: tensiometerModel
             isMouseMoving: false
 
             rowDelegate: Rectangle{
@@ -172,6 +149,8 @@ Item{
                         onlyForNumpad: true
                         onSignalClickedEvent: {
                             mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 5, tensionInput.text,tensionInput,function(val){
+                                tensionInput.text = val
+                                scalemodel.updateTensionValue(styleData.row, parseFloat(val))
                                 ModbusUtils.writeScaledValue(val,styleData.row ,100.0)
                             })
                         }
@@ -219,7 +198,8 @@ Item{
             Text
             {
                 id: numberTensiometer
-                text: qsTr("2412001")
+                // text: qsTr("2412001")
+                text:Tensiometer.TensiometerNumber
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 font.family: Style.regular.name
                 color: Style.whiteFontColor
@@ -264,6 +244,7 @@ Item{
         onClicked:
         {
             signalSaveTensometerScale()
+            scalemodel.saveData()
         }
     }
 

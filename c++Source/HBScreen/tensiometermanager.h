@@ -22,6 +22,7 @@ public:
 
     explicit TensiometerManager(QObject *parent = nullptr);
 
+
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
@@ -39,6 +40,8 @@ signals:
 private:
     QList<TensiometerData> m_items;
     HBDatabase *m_db;
+
+
 };
 
 #endif // TENSIOMETERMANAGER_H

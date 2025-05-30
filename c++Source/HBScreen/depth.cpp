@@ -84,7 +84,8 @@ void Depth::setVelocityUnit(int newTVelocityUnit)
     if ( m_velocityUnit == newTVelocityUnit )
         return;
     m_velocityUnit = newTVelocityUnit;
-    emit VelocityUnitChanged();
+      qDebug() << "C++ emit velocityUnitChanged, new value:" << m_velocityUnit;
+    emit velocityUnitChanged();
 }
 
 int Depth::CodeOption() const

@@ -6,6 +6,7 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
+import HB.Database 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidth: 50
@@ -106,12 +107,18 @@ Item{
                 onCurrentIndexChanged: {
                     Tensiometer.TensionUnits = currentIndex
                     console.log("TensionUnit" + currentIndex)
+                    // HBDatabase.updateTensionUnit(Tensiometer.TensionUnits)
                 }
             }
 
         }
     }
-
+    Connections {
+        target: Tensiometer
+        function onTensionUnitsChanged() {
+                HBDatabase.updateTensionUnit(Tensiometer.TensionUnits)
+            }
+    }
 }
 
 

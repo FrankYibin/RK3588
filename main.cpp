@@ -54,6 +54,7 @@
 #include "c++Source/HBScreen/historydatatable.h"
 #include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBScreen/tensionscalemanager.h"
+#include "c++Source/HBGraph/SensorGraphData.h"
 //#include "c++Source/HBVideoCapture/videocaptureitem.h"
 //#include "opencv2/opencv.hpp"
 void messageHandler(QtMsgType type,
@@ -107,16 +108,16 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HBChartViewAxisDefine.qml"), "HBAxisDefine", 1, 0, "HBAxisDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/AlarmMessageDefine.qml"), "AlarmDefine", 1, 0, "AlarmDefine");
 
-
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", &modbusClient);
-    //    qmlRegisterSingletonInstance<HBDatabase>("HBDatabase", 1, 0, "HBDatabase", &dbInstance);
     qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::getInstance());
-    // qmlRegisterType<TensiometerManager>("HB.TensiometerManager", 1, 0, "TensiometerManager");
     qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
     qmlRegisterType<TensionScaleManager>("HB.TensionScaleManager", 1, 0, "TensionScaleManager");
      qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
                                           "HQmlEnum is an enum container and cannot be created in QML");
+
+    qmlRegisterSingletonInstance<SensorGraphData>("HB.GraphData", 1, 0, "SensorGraphData", SensorGraphData::GetInstance());
+
 
 //    qmlRegisterType<VideoCaptureItem>("HB.VideoCapture", 1, 0, "CV");
 

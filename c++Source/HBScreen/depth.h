@@ -20,7 +20,7 @@ class Depth : public QObject
     Q_PROPERTY(int CodeOption READ CodeOption WRITE setCodeOption NOTIFY CodeOptionChanged)
 
     //速度单位
-    Q_PROPERTY(int VelocityUnit READ VelocityUnit WRITE setVelocityUnit NOTIFY VelocityUnitChanged)
+    Q_PROPERTY(int VelocityUnit READ VelocityUnit WRITE setVelocityUnit NOTIFY velocityUnitChanged)
 
 public:
     static Depth* getInstance();
@@ -67,7 +67,7 @@ signals:
 
     void DepthCalculateTypeChanged();
 
-    void VelocityUnitChanged();
+    void velocityUnitChanged();
 
     void CodeOptionChanged();
 

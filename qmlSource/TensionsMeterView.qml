@@ -1,19 +1,25 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import HB.TensionScaleManager 1.0
 Item{
     id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_VIEW
     signal signalReturnTensometer()
-//    Component.onCompleted:
-//    {
-//        dataModel.resetModel()
+    Component.onCompleted:
+    {
+       scalemodel.setTensiometerNumber(Tensiometer.TensiometerNumber)
 
-//    }
+    }
+    TensionScaleManager{
+        id:scalemodel
+        Component.onCompleted:scalemodel.resetModel()
+    }
+
 
     Rectangle
     {
@@ -27,21 +33,6 @@ Item{
         GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
-
-//    ListModel
-//    {
-//        id: dataModel
-//        function resetModel()
-//        {
-//            dataModel.clear()
-//            dataModel.append({"Index": 1,   "ScaleValue": 10,   "TensionValue": 0.5})
-//            dataModel.append({"Index": 2,   "ScaleValue": 20,   "TensionValue": 1.0})
-//            dataModel.append({"Index": 3,   "ScaleValue": 30,   "TensionValue": 1.5})
-//            dataModel.append({"Index": 4,   "ScaleValue": 40,   "TensionValue": 2.0})
-//            dataModel.append({"Index": 5,   "ScaleValue": 50,   "TensionValue": 2.5})
-//            dataModel.append({"Index": 6,   "ScaleValue": 60,   "TensionValue": 3.0})
-//        }
-//    }
 
     Item {
         id: tensionScaleFrame
@@ -57,7 +48,7 @@ Item{
             headerHeight: Math.round(40 * Style.scaleHint)
             rowHeight: Math.round(35 * Style.scaleHint)
             fontSize: Math.round(Style.style2 * Style.scaleHint)
-            model: tensionScale
+            model: scalemodel
             selectionMode: SelectionMode.SingleSelection
 
             itemDelegate: Rectangle {
@@ -121,7 +112,8 @@ Item{
             Text
             {
                 id: numberTensiometer
-                text: qsTr("2412001")
+                // text: qsTr("2412001")
+                text:Tensiometer.TensiometerNumber
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 font.family: Style.regular.name
                 color: Style.whiteFontColor
