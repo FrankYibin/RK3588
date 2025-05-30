@@ -1,4 +1,4 @@
-QT += quick gui charts serialport serialbus sql multimedia concurrent  core
+QT += quick gui charts serialport serialbus sql multimedia concurrent core
 CONFIG += c++11
 #qtquickcompiler
 

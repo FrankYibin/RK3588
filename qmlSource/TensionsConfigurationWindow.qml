@@ -50,12 +50,6 @@ Item{
                 verticalAlignment: Text.AlignVCenter
                 color: Style.whiteFontColor
             }
-            // HBComboBox
-            // {
-            //     id:comboBoxPort
-            //     width: Math.round(comboBoxWidth * Style.scaleHint)
-            //     height: parent.height
-            // }
             HBTextField
             {
                 id: textKvalue
@@ -97,17 +91,12 @@ Item{
             {
                 id: comboBoxTensionUnits
                 model:tensionModel
-                // currentIndex: Tensiometer.TensionUnits
+                currentIndex: Tensiometer.TensionUnits
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
-                Component.onCompleted: {
-                      comboBoxTensionUnits.currentIndex = Tensiometer.TensionUnits
-                  }
-
                 onCurrentIndexChanged: {
                     Tensiometer.TensionUnits = currentIndex
                     console.log("TensionUnit" + currentIndex)
-                    // HBDatabase.updateTensionUnit(Tensiometer.TensionUnits)
                 }
             }
 
