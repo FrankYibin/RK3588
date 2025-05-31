@@ -211,8 +211,9 @@ Window{
             stackMainView.push("qrc:/qmlSource/testVelocityWindow.qml", {}, StackView.Immediate)
             break;
         case UIScreenEnum.HB_HDMI:
+            stackMainView.push("qrc:/qmlSource/hdmiInputWindow.qml", {}, StackView.Immediate)
             break;
-        case UIScreenEnum.HB_VEDIO:
+        case UIScreenEnum.HB_VIDEO:
             stackMainView.push("qrc:/qmlSource/hikvisionCameraWindow.qml", {}, StackView.Immediate)
             break;
         default:

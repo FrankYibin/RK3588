@@ -87,8 +87,8 @@ private:
         RAW_DATA m_AlertDistanceForWellLower;
         RAW_DATA m_InclinationAngle;
     };
-    static MODBUS_REGISTER m_ReceivedReg;
-    static MODBUS_REGISTER m_PrevReg;
+    static MODBUS_REGISTER m_RecvReg;
+    static MODBUS_REGISTER m_PrevRecvReg;
 
     static QModbusClient *_ptrModbus;
     static int m_timerIdentifier;

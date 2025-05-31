@@ -11,7 +11,8 @@ import HB.Enums 1.0
 import DepthGlobalDefine 1.0
 
 Item{
-    readonly property int qmlscreenIndicator:  UIScreenEnum.HB_VEDIO
+    readonly property int qmlscreenIndicator:  UIScreenEnum.HB_VIDEO
+
 
     MediaPlayer {
         id: mediaPlayer
