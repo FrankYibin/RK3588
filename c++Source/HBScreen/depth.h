@@ -68,7 +68,6 @@ signals:
     void DepthOrientationChanged();
     void MeterDepthChanged();
     void DepthCalculateTypeChanged();
-
     void CodeOptionChanged();
 
     void VelocityUnitChanged    ();

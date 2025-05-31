@@ -8,6 +8,7 @@ import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Enums 1.0
 import DepthGlobalDefine 1.0
+import HB.Database 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
     readonly property int textWidth: 100
@@ -369,7 +370,15 @@ Item{
             }
 
         }
+        Connections {
+               target: Depth
+               function onVelocityUnitChanged() {
+                   console.log("velocityUnitChanged 被触发！")
+                       HBDatabase.updateDepthUnit(Depth.VelocityUnit)
+                   }
+           }
     }
+
 
 }
 

@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -6,10 +6,23 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import TensionsGlobalDefine 1.0
+import HB.TensionScaleManager 1.0
+
 Item{
     id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_VIEW
     signal signalReturnTensometer()
+
+    Component.onCompleted:
+    {
+       scalemodel.setTensiometerNumber(Tensiometer.TensiometerNumber)
+
+    }
+	
+    TensionScaleManager{
+        id:scalemodel
+        Component.onCompleted:scalemodel.resetModel()
+    }
 
     Rectangle
     {
@@ -38,7 +51,7 @@ Item{
             headerHeight: Math.round(40 * Style.scaleHint)
             rowHeight: Math.round(35 * Style.scaleHint)
             fontSize: Math.round(Style.style2 * Style.scaleHint)
-            model: tensionScale
+            model: scalemodel
             selectionMode: SelectionMode.SingleSelection
 
             itemDelegate: Rectangle {
@@ -114,7 +127,8 @@ Item{
             Text
             {
                 id: numberTensiometer
-                text: qsTr("2412001")
+                // text: qsTr("2412001")
+                text:Tensiometer.TensiometerNumber
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 font.family: Style.regular.name
                 color: Style.whiteFontColor

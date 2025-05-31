@@ -1,4 +1,4 @@
-#ifndef SENSORGRAPHDATA_H
+﻿#ifndef SENSORGRAPHDATA_H
 #define SENSORGRAPHDATA_H
 
 #include <QObject>
@@ -26,6 +26,8 @@ public:
     Q_INVOKABLE void clearGraph();
 
     Q_INVOKABLE void generateRandomNumber();
+
+    Q_INVOKABLE void loadHistoryCurve(QAbstractSeries* series, const QString& fieldName);
 protected:
     explicit SensorGraphData(QObject *parent = nullptr);
 private:

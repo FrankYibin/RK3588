@@ -21,6 +21,7 @@ public:
 public:
 
 
+    Q_INVOKABLE void setTensiometerNumber(const QString &number);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
@@ -30,6 +31,8 @@ public:
 
     Q_INVOKABLE void updateTensionValue(int index, double newTensionValue);
 
+    Q_INVOKABLE void saveData();
+
 
     Q_INVOKABLE int getCheckedCount() const;
 
@@ -38,6 +41,8 @@ protected:
 
 private:
     QList<TensionScaleData> m_scales;  // 存储刻度点数据
+
+    QString m_tensiometerNumber;
 };
 
 #endif // TENSIONSCALEMANAGER_H

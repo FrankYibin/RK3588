@@ -15,6 +15,7 @@ TensiometerManager::TensiometerManager(QObject *parent)
     }
 }
 
+
 int TensiometerManager::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return m_items.count();
@@ -63,7 +64,7 @@ void TensiometerManager::addTensiometer(const QString &number, int type, int ran
 
     if (m_db->insertTensiometerData(data)) {
         qDebug() << "Insert tensiometer data successful, id:" << data.id;
-                    m_db->insertDefaultScales(data.id);
+                    m_db->insertDefaultScales( data.tensiometerNumber);
         qDebug()<< "number:" << data.tensiometerNumber;
         beginInsertRows(QModelIndex(), m_items.count(), m_items.count());
         m_items.append(data);
@@ -83,7 +84,8 @@ void TensiometerManager::removeTensiometer(int index) {
     beginResetModel();
     int id = m_items[index].id;
     if (m_db->deleteTensiometerData(id)) {
-        m_db->deleteScalesByTensiometerId(id);
+         QString TensionmerterNumber = m_items[index].tensiometerNumber;
+        m_db->deleteScalesByTensiometerId(TensionmerterNumber);
 
         m_items.removeAt(index);
     } else {

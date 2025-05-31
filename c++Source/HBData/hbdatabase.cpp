@@ -171,8 +171,14 @@ void HBDatabase::loadDataFromDatabase()
         qDebug() << "Failed to load DepthSet from DB.";
     }
 
+    UnitSettings setUint;
 
-
+    bool set_Unit = HBDatabase::getInstance().getUnitSettings(setUint);
+    if (set_Unit) {
+        qDebug() << "set_Unit loaded successfully!";
+    } else {
+        qDebug() << "Failed to load set_Unit from DB.";
+    }
 }
 
 bool HBDatabase::updateWellParameter(const _WellParameter &param)
@@ -805,56 +811,73 @@ bool HBDatabase::loadAllTensiometerData(QList<TensiometerData> &list)
 }
 
 
-bool HBDatabase::loadScalesForTensiometer(int tensioId,QList<ScaleData> &outRecords)
+bool HBDatabase::loadScalesForTensiometerNumber(const QString &tensioNumber,QList<ScaleData> &outRecords)
 
 {
     QSqlQuery q(m_database);
     q.prepare(R"SQL(
               SELECT id, point_index, scale_value, tension_value, selected
               FROM tension_scale
-              WHERE tensiometer_id = ?
+              WHERE tensiometer_number = ?
               ORDER BY point_index
               )SQL");
-    q.addBindValue(tensioId);
+    q.addBindValue(tensioNumber);
     if (!q.exec()) {
-        qWarning() << "Failed to load scales for tensioId" << tensioId
+        qWarning() << "Failed to load scales for tensiometer_number" << tensioNumber
                    << ":" << q.lastError().text();
         return false;
     }
     outRecords.clear();
     while (q.next()) {
-        ScaleData r;
-        r.id            = q.value(0).toInt();
-        r.tensiometerId = tensioId;
-        r.pointIndex         = q.value(1).toInt();
-        r.rawScaleValue    = q.value(2).toInt();
-        r.rawTensionValue  = q.value(3).toInt();
-        r.selected      = q.value(4).toInt();
-        outRecords.append(r);
+        ScaleData data;
+        data.id = q.value(0).toInt();
+        data.pointIndex = q.value(1).toInt();
+        data.rawScaleValue = q.value(2).toDouble();
+        data.rawTensionValue = q.value(3).toDouble();
+        data.selected = q.value(4).toInt();
+        outRecords.append(data);
+
+    }
+    return true;
+}
+
+bool HBDatabase::deleteScalesByTensiometerId(int tensioId)
+{
+    QSqlQuery q(m_database);
+    q.prepare(R"SQL(
+              DELETE FROM tension_scale
+              WHERE tensiometer_id = ?
+              )SQL");
+    q.addBindValue(tensioId);
+    if (!q.exec()) {
+        qWarning() << "Failed to delete scales for tensioId" << tensioId
+                   << ":" << q.lastError().text();
+        return false;
     }
     return true;
 }
 
 //// 插入默认的 5 条刻度点
-bool HBDatabase::insertDefaultScales(int tensioId)
+bool HBDatabase::insertDefaultScales(QString &tensiometerNumber)
 {
     QSqlQuery q(m_database);
     q.prepare(R"SQL(
               INSERT INTO tension_scale
-              (tensiometer_id, point_index, scale_value, tension_value)
+              (tensiometer_number, point_index, scale_value, tension_value)
               VALUES (?, ?, ?, ?)
               )SQL");
     for (int i = 1; i <= 5; ++i) {
-        q.bindValue(0, tensioId);
+        q.bindValue(0, tensiometerNumber);
         q.bindValue(1, i);
         q.bindValue(2, i * 100);   // 默认刻度值 ×100 存储
         q.bindValue(3, 0);         // 默认张力值 0
         if (!q.exec()) {
-            qWarning() << "Failed to insert default scale for tensioId" << tensioId
+            qWarning() << "Failed to insert default scale for tensiometer_number" << tensiometerNumber
                        << "point" << i << ":" << q.lastError().text();
             return false;
         }
     }
+
     return true;
 }
 
@@ -877,17 +900,51 @@ bool HBDatabase::updateTensionScale(int scaleId, int rawValue)
     return true;
 }
 
+bool HBDatabase::updateTensionValue(const QString &tensioNumber, int index, double scaleValue, double tensionValue, bool selected)
+{
+
+    QSqlQuery query;
+    query.prepare(R"(
+        UPDATE tension_scale
+        SET scale_value = :scale,
+            tension_value = :tension,
+            selected = :selected
+        WHERE tensiometer_number = :num AND point_index = :idx
+    )");
+
+    query.bindValue(":scale", scaleValue);
+    query.bindValue(":tension", tensionValue);
+    query.bindValue(":selected", selected ? 1 : 0);
+    query.bindValue(":num", tensioNumber);
+    query.bindValue(":idx", index);
+
+    bool success = query.exec();
+    if (!success) {
+        qWarning() << " Failed to update tension value in DB:"
+                   << query.lastError().text()
+                   << "\nQuery:" << query.lastQuery();
+    } else {
+        qDebug() << " Updated tension successfully:"
+                 << "Tensio#" << tensioNumber << "Index:" << index
+                 << "Scale:" << scaleValue << "Tension:" << tensionValue << "Selected:" << selected;
+    }
+
+    return query.exec();
+
+
+}
+
 // 删除某台张力计的所有刻度点
-bool HBDatabase::deleteScalesByTensiometerId(int tensioId)
+bool HBDatabase::deleteScalesByTensiometerId( const QString &tensioNumber)
 {
     QSqlQuery q(m_database);
     q.prepare(R"SQL(
               DELETE FROM tension_scale
-              WHERE tensiometer_id = ?
+              WHERE tensiometer_number  = ?
               )SQL");
-    q.addBindValue(tensioId);
+    q.addBindValue(tensioNumber);
     if (!q.exec()) {
-        qWarning() << "Failed to delete scales for tensioId" << tensioId
+        qWarning() << "Failed to delete scales for tensioNumber" << tensioNumber
                    << ":" << q.lastError().text();
         return false;
     }
@@ -983,4 +1040,71 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
     return true;
 }
 
+QVector<QPointF> HBDatabase::loadGraphPoints(const QString& fieldName)
+{
+    QVector<QPointF> points;
 
+    if (!m_database.isOpen()) {
+        qDebug() << "Database is not open!";
+        return points;
+    }
+
+    QSqlQuery query(m_database);
+    QString sql = QString("SELECT date, %1 FROM history_table ORDER BY date ASC").arg(fieldName);
+
+    if (!query.exec(sql)) {
+        qDebug() << "Failed to load graph data:" << query.lastError();
+        return points;
+    }
+
+    while (query.next()) {
+
+        qreal x = query.value(0).toDouble();
+        QVariant value = query.value(1);
+
+        if (value.isValid() && value.canConvert<double>()) {
+            qreal y = value.toDouble();
+            points.append(QPointF(x, y));
+        } else {
+            qWarning() << "Invalid data at row:" << query.at();
+        }
+    }
+
+    return points;
+}
+
+bool HBDatabase::getUnitSettings(UnitSettings &settings) {
+
+    QSqlQuery query("SELECT tension_unit, depth_unit FROM unit_settings WHERE id = 1");
+    if (query.next()) {
+        settings.tensionUnit = query.value(0).toInt();
+        settings.depthUnit = query.value(1).toInt();
+
+        Tensiometer *ts = Tensiometer::getInstance();
+        Depth *ds = Depth::getInstance();
+
+        if (ts) {
+            ts->setTensionUnits(settings.tensionUnit);
+            ds->setVelocityUnit(settings.depthUnit);
+        }
+
+        return true;
+    }
+    return false;
+}
+
+
+
+bool HBDatabase::updateTensionUnit(int tensionUnit) {
+    QSqlQuery query;
+    query.prepare("UPDATE unit_settings SET tension_unit = :unit WHERE id = 1");
+    query.bindValue(":unit", tensionUnit);
+    return query.exec();
+}
+
+bool HBDatabase::updateDepthUnit(int depthUnit) {
+    QSqlQuery query;
+    query.prepare("UPDATE unit_settings SET depth_unit = :unit WHERE id = 1");
+    query.bindValue(":unit", depthUnit);
+    return query.exec();
+}

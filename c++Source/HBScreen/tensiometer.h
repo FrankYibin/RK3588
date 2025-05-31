@@ -21,7 +21,7 @@ class Tensiometer : public QObject
 
 
     //Tension Units  张力单位
-    Q_PROPERTY(int TensionUnits READ TensionUnits WRITE setTensionUnits NOTIFY TensionUnitsChanged)
+    Q_PROPERTY(int TensionUnits READ TensionUnits WRITE setTensionUnits NOTIFY tensionUnitsChanged)
 
     //Scale
     Q_PROPERTY(int Scale1 READ Scale1 WRITE setScale1 NOTIFY Scale1Changed)
@@ -72,7 +72,7 @@ signals:
     void TensiometerTypeChanged();
     void TensiometerRangeChanged();
     void TensiometerSignalChanged();
-    void TensionUnitsChanged();
+    void tensionUnitsChanged();
 
     void Scale1Changed();
     void Scale2Changed();
