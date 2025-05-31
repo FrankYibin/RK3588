@@ -4,68 +4,104 @@
 #include <QObject>
 #include <QModbusRtuSerialMaster>
 #include <QModbusDataUnit>
-#include <QTimer>
 #include <QVector>
-
-
+#include <QMap>
+#include <QMutex>
 class HBModbusClient : public QObject
 {
     Q_OBJECT
 
-public:
+private:
+    struct RAW_DATA
+    {
+        int Data;
+        int Address;
+    };
+    struct MODBUS_REGISTER
+    {
+        //HOME
+        RAW_DATA m_Depth;
+        RAW_DATA m_Speed;
+        RAW_DATA m_MaxSpeed;
+        RAW_DATA m_TargetLayerDepth;
+        RAW_DATA m_MeterDepth;
+        RAW_DATA m_Pulse;
+        RAW_DATA m_DepthCalculateType;
+        RAW_DATA m_EncoderDepth1;
+        RAW_DATA m_EncoderDepth2;
+        RAW_DATA m_EncoderDepth3;
+        // above total 10 register
+        RAW_DATA m_DeltaEncoderDepth;
+        RAW_DATA m_DepthCountDown;
+        RAW_DATA m_Tension;
+        RAW_DATA m_TensionIncrement;
+        RAW_DATA m_MaxTension;
+        RAW_DATA m_MaxTensionIncrement;
+        RAW_DATA m_CableTension;
+        RAW_DATA m_K_Value;
+        RAW_DATA m_TensionType;
+        RAW_DATA m_AnalogTensionChannel;
+        // above total 10 register
+        RAW_DATA m_TensiometerBattery;
+        RAW_DATA m_TensiometerNumber;
+        RAW_DATA m_Point1Scale;
+        RAW_DATA m_Point1Tension;
+        RAW_DATA m_Point2Scale;
+        RAW_DATA m_Point2Tension;
+        RAW_DATA m_Point3Scale;
+        RAW_DATA m_Point3Tension;
+        RAW_DATA m_Point4Scale;
+        RAW_DATA m_Point4Tension;
+        // above total 10 register
+        RAW_DATA m_Point5Scale;
+        RAW_DATA m_Point5Tension;
+        RAW_DATA m_ScalesQuantity;
+        RAW_DATA m_SpeedControlStatus;
+        RAW_DATA m_ControlledSpeed;
+        RAW_DATA m_4SlowSpeed;
+        RAW_DATA m_PumpDownCurrent;
+        RAW_DATA m_PumpUpCurrent;
+        RAW_DATA m_MotorCurrent;
+        RAW_DATA m_PotentiometerVol;
+        // above total 10 register
+        RAW_DATA m_PumpVol;
+        RAW_DATA m_SpeedVol;
+        RAW_DATA m_TensionBarWithTon;
+        RAW_DATA m_CableSpec;
+        RAW_DATA m_WellDepth;
+        //tensionsafe
+        RAW_DATA m_WellType;
+        RAW_DATA m_OperatingType;
+        RAW_DATA m_CableBrokenForce;
+        RAW_DATA m_WeaknessForce;
+        RAW_DATA m_CalbeWeightPerKiloMeter;
+        // above total 10 register
+        RAW_DATA m_CableWeight;
+        RAW_DATA m_SenorWeight;
+        RAW_DATA m_SafetyTensionFactor;
+        RAW_DATA m_CurrentSafetyTension;
+        RAW_DATA m_CurrentMaxTension;
+        RAW_DATA m_CableTensionTrend;
+        RAW_DATA m_ParkStopTimeStamp;
+        RAW_DATA m_AlertDistanceForWellUpper;
+        RAW_DATA m_AlertDistanceForWellLower;
+        RAW_DATA m_InclinationAngle;
+    };
+    static MODBUS_REGISTER m_ReceivedReg;
+    static MODBUS_REGISTER m_PrevReg;
 
-    //HOME
-    int depth = 0;
-    int speed = 0;
-    int plus = 0;
-    int tension = 0;
-    int tensionIncrement = 0;
-    int K_Value = 0;
-    int maxTension = 0;
-    int maxTensionIncrement = 0;
-    int targetDepth = 0;
-    int maxSpeed = 0;
-    int cableTension = 0;
-
-    //tensionsafe
-    int wellType;
-    int cableWeight;
-    int TensionSafeFactor;
-    int weakForce;
-    //    int currentHarnessTension;
-    int currentTensionSafe;
-    int maxTensionSafe;
-    int cableTensionTrend;
-    int ptime;
-    int depthLoss;
-    int currentDepth1;
-    int currentDepth2;
-    int currentDepth3;
-
-    //
-    int m_targetLayerDepth = 0;
-    int m_depthOrientation = 0;
-    int m_meterDepth = 0;
-    int depthCalculateType = 0;
-    int m_velocityUnit = 0;
-    int m_codeOption = 0;
-
-    //
-
-    int m_scale1;
-    int m_scale2;
-    int m_scale3;
-    int m_scale4;
-    int m_scale5;
-
+    static QModbusClient *_ptrModbus;
+    static int m_timerIdentifier;
+    static QMap<int, int> m_RegisterSendMap;
+    static QMutex m_mutexSending;
 
 public:
     explicit HBModbusClient(QObject *parent = nullptr);
     ~HBModbusClient();
 
     void readRegister(int address, int count = 1);
-    Q_INVOKABLE void writeRegister(int address, const QVector<quint16> &values);
-    Q_INVOKABLE void writeRegister(int address, const QVariantList &values);
+
+    Q_INVOKABLE bool writeRegister(const int address, const int value);
 
     Q_INVOKABLE void readCoils();
     Q_INVOKABLE void writeCoil(int address, int value);
@@ -74,12 +110,16 @@ public:
 
     //historydata
     void insertDataToDatabase();
-
+protected:
+    void timerEvent(QTimerEvent *event) override;
 
 private:
     void connectToServer();
     void startBatchRead();
     void handleReadResult(const QModbusDataUnit &result);
+
+    void writeRegister(int address, const QVector<quint16> &values);
+    void writeRegister(int address, const QVariantList &values);
 
 signals:
 
@@ -131,15 +171,6 @@ private:
     quint16 scale4_L;
     quint16 scale5_H;
     quint16 scale5_L;
-
-
-
-private:
-    QModbusClient *modbus = nullptr;
-    QTimer *refreshTimer = nullptr;
-
-
-    // HBHome *m_home;
 
 };
 

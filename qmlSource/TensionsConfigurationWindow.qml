@@ -6,6 +6,7 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
+import TensionsGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidth: 50
@@ -13,7 +14,6 @@ Item{
     readonly property int rowSpacing: 100
     readonly property int columnSpacing: 30
     readonly property int optionHeight: 30
-    readonly property var tensionModel: [qsTr("LB"),qsTr("KG"),qsTr("KN")]
     Rectangle
     {
         id: background
@@ -49,12 +49,6 @@ Item{
                 verticalAlignment: Text.AlignVCenter
                 color: Style.whiteFontColor
             }
-            // HBComboBox
-            // {
-            //     id:comboBoxPort
-            //     width: Math.round(comboBoxWidth * Style.scaleHint)
-            //     height: parent.height
-            // }
             HBTextField
             {
                 id: textKvalue
@@ -65,11 +59,10 @@ Item{
                 onlyForNumpad: true
 
                 onSignalClickedEvent: {
-                    console.log("textKvalue.text =", textKvalue.text);
-                     console.log("textKvalue =", textKvalue);
                     mainWindow.showPrimaryNumpad(qsTr("请输入K值"), " ", 3, 0, 99999, textKvalue.text,textKvalue,function(val) {
+                        //TODO need to do unit exchange
                         HBHome.KValue = val;
-                        ModbusClient.writeRegister(36,[parseInt(val)])
+                        ModbusClient.writeRegister(HQmlEnum.K_VALUE, [parseInt(val)])
                     })
                 }
             }
@@ -95,17 +88,12 @@ Item{
             HBComboBox
             {
                 id: comboBoxTensionUnits
-                model:tensionModel
-                // currentIndex: Tensiometer.TensionUnits
+                model: TensionsGlobalDefine.tensionUnitModel
+                currentIndex: Tensiometer.TensionUnits
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
-                Component.onCompleted: {
-                      comboBoxTensionUnits.currentIndex = Tensiometer.TensionUnits
-                  }
-
                 onCurrentIndexChanged: {
                     Tensiometer.TensionUnits = currentIndex
-                    console.log("TensionUnit" + currentIndex)
                 }
             }
 

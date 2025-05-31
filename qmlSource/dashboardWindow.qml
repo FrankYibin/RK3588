@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import DepthGlobalDefine 1.0
+import TensionsGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DASHBOARD
     Rectangle{
@@ -83,7 +85,7 @@ Item{
             Text
             {
                 id: unitWellDepth
-                text: qsTr("m")
+                text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]//qsTr("m")
                 anchors.left: txtDepth.right
                 anchors.leftMargin: Math.round(5 * Style.scaleHint)
                 anchors.verticalCenter: txtDepth.verticalCenter
@@ -127,7 +129,7 @@ Item{
             Text
             {
                 id: unitVelocity
-                text: qsTr("m/min")
+                text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]//qsTr("m/min")
                 anchors.left: txtVelocity.right
                 anchors.leftMargin: Math.round(5 * Style.scaleHint)
                 anchors.verticalCenter: txtVelocity.verticalCenter
@@ -172,7 +174,7 @@ Item{
             Text
             {
                 id: unitTension
-                text: qsTr("kg")
+                text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]//qsTr("kg")
                 anchors.left: txtTension.right
                 anchors.leftMargin: Math.round(5 * Style.scaleHint)
                 anchors.verticalCenter: txtTension.verticalCenter
@@ -216,7 +218,7 @@ Item{
             Text
             {
                 id: unittxtTensionIncrement
-                text: qsTr("kg/s")
+                text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + "/s" //qsTr("kg/s")
                 anchors.left: txtTensionIncrement.right
                 anchors.leftMargin: Math.round(5 * Style.scaleHint)
                 anchors.verticalCenter: txtTensionIncrement.verticalCenter
@@ -322,7 +324,7 @@ Item{
                 Text
                 {
                     id: unitMaxVelocity
-                    text: qsTr("m/min")
+                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]//qsTr("m/min")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor
@@ -358,7 +360,7 @@ Item{
                 Text
                 {
                     id: unitHarnessTension
-                    text: qsTr("kg")
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]//qsTr("kg")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor
@@ -402,7 +404,7 @@ Item{
                 Text
                 {
                     id: unitMaxTension
-                    text: qsTr("kg")
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]//qsTr("kg")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor
@@ -439,7 +441,7 @@ Item{
                 Text
                 {
                     id: unitMaxTensionIncrement
-                    text: qsTr("kg/s")
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + "/s" //qsTr("kg/s")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor
@@ -514,7 +516,7 @@ Item{
                 Text
                 {
                     id: unitTargetDepth
-                    text: qsTr("m")
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]//qsTr("m")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor

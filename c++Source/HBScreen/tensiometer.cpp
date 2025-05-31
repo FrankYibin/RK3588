@@ -1,14 +1,17 @@
 ﻿#include "tensiometer.h"
-
+#include <QDebug>
 Tensiometer* Tensiometer::m_tensiometer = nullptr;
 
 Tensiometer::Tensiometer(QObject *parent)
-    : QObject{parent},m_tensiometerNumber("2512001"),
-    m_tensiometerType(0),
-    m_tensiometerRange(0),
-    m_tensiometerSignal(0),
-    m_tensionUnits(0)
-{}
+    : QObject{parent}
+{
+    m_tensiometerNumber = "2512001";
+    m_tensiometerType = 0;
+    m_tensiometerRange = 0;
+    m_tensiometerSignal = 0;
+    m_tensionUnits = -1;
+    setTensionUnits(LB);
+}
 
 Tensiometer *Tensiometer::getInstance()
 {
@@ -78,7 +81,8 @@ int Tensiometer::TensionUnits() const
 
 void Tensiometer::setTensionUnits(int newTensionUnits)
 {
-    if (m_tensionUnits != newTensionUnits) {
+    if (m_tensionUnits != newTensionUnits)
+    {
         m_tensionUnits = newTensionUnits;
         emit TensionUnitsChanged();
     }

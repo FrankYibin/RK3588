@@ -115,7 +115,6 @@ Item {
             strInputText += data
             if(BransonNumpadDefine.isValidData(strInputText, suffix) === true)
             {
-//                text_input.insert(text_input.cursorPosition, data)
                 text_input.text = strInputText
             }
         }
@@ -191,14 +190,17 @@ Item {
         }
         else
         {
-            validator = /^\d{1,7}(\.\d{1,2})?$/
+            validator = /^\d{0,7}(\.\d{0,2})?$/
         }
 
         if (validator.test(strInputText))
+        {
             bResult = true
+        }
         else
+        {
             bResult = false
-
+        }
         return bResult
     }
 

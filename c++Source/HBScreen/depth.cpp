@@ -15,7 +15,19 @@ Depth *Depth::getInstance()
 
 Depth::Depth(QObject *parent)
     : QObject{parent}
-{}
+{
+    m_targetLayerDepth = 0;
+    m_depthOrientation = 0;
+    m_meterDepth = 0;
+    m_depthCalculateType = 0;
+
+    m_codeOption = 0;
+
+    m_velocityUnit = -1;
+    int tmpVelocity = M_PER_HOUR;
+    //get tmpVelocity from database
+    setVelocityUnit(tmpVelocity);
+}
 
 int Depth::TargetLayerDepth() const
 {
@@ -79,12 +91,62 @@ int Depth::VelocityUnit() const
 
 }
 
-void Depth::setVelocityUnit(int newTVelocityUnit)
+int Depth::DistanceUnit() const
 {
-    if ( m_velocityUnit == newTVelocityUnit )
+    return m_distanceUnit;
+}
+
+int Depth::TimeUnit() const
+{
+    return m_timeUnit;
+}
+
+void Depth::setVelocityUnit(const int velocityUnit)
+{
+    if (m_velocityUnit == velocityUnit)
         return;
-    m_velocityUnit = newTVelocityUnit;
+    m_velocityUnit = velocityUnit;
+    switch(m_velocityUnit)
+    {
+    case M_PER_HOUR:
+        setTimeUnit(HOUR);
+        setDistanceUnit(METER);
+        break;
+    case M_PER_MIN:
+        setTimeUnit(MIN);
+        setDistanceUnit(METER);
+        break;
+    case FT_HOUR:
+        setTimeUnit(HOUR);
+        setDistanceUnit(FEET);
+        break;
+    case FT_PER_MIN:
+        setTimeUnit(MIN);
+        setDistanceUnit(FEET);
+        break;
+    default:
+        m_velocityUnit = M_PER_HOUR;
+        setTimeUnit(HOUR);
+        setDistanceUnit(METER);
+        break;
+    }
     emit VelocityUnitChanged();
+}
+
+void Depth::setDistanceUnit(const int distanceUnit)
+{
+    if(m_distanceUnit == distanceUnit)
+        return;
+    m_distanceUnit = distanceUnit;
+    emit DistanceUnitChanged();
+}
+
+void Depth::setTimeUnit(const int timeUnit)
+{
+    if(m_timeUnit == timeUnit)
+        return;
+    m_timeUnit = timeUnit;
+    emit TimeUnitChanged();
 }
 
 int Depth::CodeOption() const

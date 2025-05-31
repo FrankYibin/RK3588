@@ -584,8 +584,8 @@ bool HBDatabase::loadTensionSet(_TensionSet &param)
 
     Tensiometer* ts = Tensiometer::getInstance();
     HBHome* hs = HBHome::getInstance();
-    hs->setKValue(param.kValue);
-    ts->setTensionUnits(param.tensionUnit);
+    // hs->setKValue(param.kValue);
+    // ts->setTensionUnits(param.tensionUnit);
 
     return true;
 }

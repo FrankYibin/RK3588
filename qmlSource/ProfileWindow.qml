@@ -5,6 +5,8 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Database 1.0
+import HB.Enums 1.0
+import ProfileGlobalDefine 1.0
 Item{
     // Component.onCompleted:
     // {
@@ -12,10 +14,9 @@ Item{
     // }
     id: profileLayout
     readonly property int comboBoxWidth: 100
-    readonly property var wellTypeModel: [qsTr("垂直井段"), qsTr("大斜度井段"), qsTr("水平井段")]
+
     readonly property var harnessTypeModel: [5.6, 11.8]
     readonly property var tensionUnitModel: [10 , 20, 30]
-    readonly property var workTypeModel: [qsTr("射孔"), qsTr("测井")]
 
     HBBackground{
         id: background
@@ -61,13 +62,9 @@ Item{
                     id: textWellNumber
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    //                    text: qsTr("陕30H-3")
                     text: WellParameter.WellNumber
-
-                    onFocusChanged: {
-                        if (!focus) {
-                            WellParameter.WellNumber = text;
-                        }
+                    onAccepted: {
+                        WellParameter.WellNumber = text;
                     }
                 }
             }
@@ -93,12 +90,9 @@ Item{
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     //                    text: qsTr("--")
-                    text:WellParameter.AreaBlock
-
-                    onFocusChanged: {
-                        if (!focus) {
-                            WellParameter.AreaBlock = text;
-                        }
+                    text: WellParameter.AreaBlock
+                    onAccepted: {
+                        WellParameter.AreaBlock = text;
                     }
                 }
             }
@@ -122,17 +116,14 @@ Item{
                 HBComboBox
                 {
                     id: comboWellType
-                    model: wellTypeModel
+                    model: ProfileGlobalDefine.wellTypeModel
                     currentIndex: WellParameter.WellType
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        var valueMap = [0x0000, 0x0002, 0x0003]
-                        var val = valueMap[currentIndex];
-                        ModbusClient.writeRegister(71, [val])
                         WellParameter.WellType = currentIndex
-                        console.log("init valu：" + valueMap[currentIndex])
+                        ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, currentIndex)
                     }
                 }
 
@@ -199,7 +190,6 @@ Item{
                 HBTextField
                 {
                     id: textHarnessWeight
-                    //                    text: qsTr("500.00")
                     text: WellParameter.HarnessWeight
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
@@ -209,8 +199,9 @@ Item{
                         console.log("textHarnessWeight.text =", textHarnessWeight.text);
                          console.log("textHarnessWeight =", textHarnessWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆自重值"), " ", 3, 0, 99999, textHarnessWeight.text,textHarnessWeight,function(val) {
+                            //TODO need to unit exchange
                             WellParameter.HarnessWeight = val;
-                            ModbusClient.writeRegister(75,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.CABLE_UINT, [parseInt(val)])
                         })
                     }
                 }
@@ -253,7 +244,7 @@ Item{
                          console.log("textHarnessWeight =", textSensorWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeight.text,textSensorWeight,function(val) {
                             WellParameter.SensorWeight = val;
-                            ModbusClient.writeRegister(76, [parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.SENSOR_WEIGHT, [parseInt(val)])
                         })
                     }
 
@@ -312,9 +303,9 @@ Item{
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(68, [currentIndex])
+                        ModbusClient.writeRegister(HQmlEnum.CABLE_TYPE, [currentIndex])
                         WellParameter.HarnessType = currentIndex
-                        console.log("HarnessType value：" + [currentIndex])
+                        console.log("HarnessType value： ", [currentIndex])
                     }
                 }
             }
@@ -338,7 +329,6 @@ Item{
                 HBTextField
                 {
                     id: textHarnessForce
-                    //                    text: qsTr("4000.00")
                     text: WellParameter.HarnessForce
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
@@ -347,9 +337,10 @@ Item{
                     onSignalClickedEvent: {
                         console.log("textHarnessForce.text =", textHarnessForce.text);
                          console.log("textHarnessForce =", textHarnessForce);
-                        mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textHarnessForce.text,textHarnessForce,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力"), " ", 3, 0, 99999, textHarnessForce.text,textHarnessForce,function(val) {
+                            //TODO Need to unit exchange.
                             WellParameter.HarnessForce = val;
-                            ModbusClient.writeRegister(73,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.HARNESS_FORCE, [parseInt(val)])
                         })
                     }
                 }
@@ -380,33 +371,22 @@ Item{
                     color: Style.whiteFontColor
                 }
 
-                HBComboBox
+                HBTextField
                 {
-                    id: comboTensionUnit
-                    model: tensionUnitModel
-                    currentIndex: WellParameter.TensionUnit
-                    width: Math.round(comboBoxWidth * Style.scaleHint)
-                    height: parent.height
-                    fontFamily: "宋体"
-                    onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(67, [currentIndex])
-                        WellParameter.TensionUnit = currentIndex
-                        console.log("init HarnessType:" + currentIndex)
+                    id: textTensionUnit
+                    text: WellParameter.TensionUnit
+                    width: Math.round(100 * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入拉力磅吨位"), " ", 3, 0, 99999, textTensionUnit.text,textTensionUnit,function(val) {
+                            //TODO Need to unit exchange.
+                            WellParameter.textTensionUnit = val;
+                            ModbusClient.writeRegister(HQmlEnum.TENSION_BAR_TONNAGE, [parseInt(val)])
+                        })
                     }
                 }
-
-                //                HBTextField
-                //                {
-                //                    id: textTensionUnit
-                //                    text: qsTr("10")
-                //                    width: Math.round(100 * Style.scaleHint)
-                //                    height: Math.round(25 * Style.scaleHint)
-                //                    onlyForNumpad: true
-                //                    onSignalClickedEvent: {
-                //                        mainWindow.showPrimaryNumpad("请输入拉力磅吨位", " ", 3, 0, 5, "0.123")
-                //                    }
-                //                }
-
                 Text
                 {
                     id: unitTensionUnit
@@ -436,24 +416,17 @@ Item{
                 HBComboBox
                 {
                     id: comboWorkType
-                    model: workTypeModel
+                    model: ProfileGlobalDefine.workTypeModel
                     currentIndex: WellParameter.WorkType
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(72, [currentIndex])
-                         WellParameter.WorkType = currentIndex
-                        console.log("init WorkType:" + currentIndex)
+                        ModbusClient.writeRegister(HQmlEnum.WOKE_TYPE, [currentIndex])
+                        WellParameter.WorkType = currentIndex
+                        console.log("init WorkType: ", currentIndex)
                     }
                 }
-                //                HBLineEdit {
-                //                    id: textWorkType
-                //                    width: Math.round(100 * Style.scaleHint)
-                //                    height: Math.round(25 * Style.scaleHint)
-                //                    text: qsTr("测井")
-                //                    font.family: "宋体"
-                //                }
             }
 
             Row

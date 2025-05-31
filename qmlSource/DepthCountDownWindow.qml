@@ -7,7 +7,7 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Enums 1.0
-
+import DepthGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
     readonly property int textWidthColumn1: 100
@@ -73,6 +73,7 @@ Item{
                 onlyForNumpad: true
                 onSignalClickedEvent: {
                     mainWindow.showPrimaryNumpad(qsTr("请输入深度倒计值"), " ", 3, 0, 99999, textSDepthPreset.text,textSDepthPreset,function(val) {
+                        //TODO Need to Unit exchange function
                         AutoTestSpeed.DepthCountDown = val;
                         ModbusClient.writeRegister(HQmlEnum.DEPTH_COUNTDOWN,[parseInt(val)])
                     })
@@ -82,7 +83,7 @@ Item{
                 id: unitDepthPreset
                 width: Math.round(textWidthUnit * Style.scaleHint)
                 height: parent.height
-                text: "m"
+                text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                 font.family: Style.regular.name
                 font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                 verticalAlignment: Text.AlignVCenter
@@ -149,7 +150,7 @@ Item{
                 id: unitCurrentDepth
                 width: Math.round(textWidthUnit * Style.scaleHint)
                 height: parent.height
-                text: "m"
+                text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                 font.family: Style.regular.name
                 font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                 verticalAlignment: Text.AlignVCenter

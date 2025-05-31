@@ -118,5 +118,8 @@
         <file>qmlSource/UserSystemIDWindow.qml</file>
         <file>qmlSource/UserNewWindow.qml</file>
         <file>qmlSource/HBFaceDetector.qml</file>
+        <file>qmlSource/DepthGlobalDefine.qml</file>
+        <file>qmlSource/ProfileGlobalDefine.qml</file>
+        <file>qmlSource/TensionsGlobalDefine.qml</file>
     </qresource>
 </RCC>

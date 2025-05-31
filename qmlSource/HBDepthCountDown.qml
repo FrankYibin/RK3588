@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import DepthGlobalDefine 1.0
 Item{
     id: depthCountDownPopUp
     readonly property int textWidthColumn1: 100
@@ -89,7 +90,7 @@ Item{
         id: unitCurrentDepth
         width: Math.round(textWidthUnit * Style.scaleHint)
         height: parent.height
-        text: "m"
+        text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
         font.family: Style.regular.name
         font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
         verticalAlignment: Text.AlignVCenter

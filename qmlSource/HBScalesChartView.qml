@@ -17,14 +17,15 @@ import QtQuick.Controls 2.2
 import Style 1.0
 import HBAxisDefine 1.0
 import Com.Branson.HBGraphAxisEnum 1.0
+import TensionsGlobalDefine 1.0
 Item {
     id: weldGraph
     property bool flagDragDrop: false
     property bool isNormalScreen: true
     property int fontsize: Math.round(Style.style3 * Style.scaleHint)
 
-    readonly property string tensionsLeftPlotName:          "tensionsLeftPlot"
-    readonly property string qmltextSecUnit:                "s"
+    readonly property string tensionsLeftPlotName:  "tensionsLeftPlot"
+    readonly property string qmltextSecUnit:        "s"
 
     /**
     *@breif: Rounding of axis values for proper representation
@@ -147,7 +148,7 @@ Item {
                 labelsColor: Style.whiteFontColor
                 lineVisible: true
                 minorGridVisible: false
-                titleText: qsTr("张力(kg)")
+                titleText: ""
                 titleFont.family: "宋体"
                 titleFont.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                 titleVisible: false
@@ -209,7 +210,7 @@ Item {
                 font.family: "宋体"
                 font.pixelSize: Math.round(Math.round(Style.style3 * Style.scaleHint))
                 color: Style.whiteFontColor
-                text: "张力 (kg)" // 竖排显示
+                text: qsTr("张力") + "(" + TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + ")" // 竖排显示
             }
         }
 

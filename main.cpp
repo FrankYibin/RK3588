@@ -106,7 +106,9 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonChartViewAxisDefine.qml"), "AxisDefine", 1, 0, "AxisDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HBChartViewAxisDefine.qml"), "HBAxisDefine", 1, 0, "HBAxisDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/AlarmMessageDefine.qml"), "AlarmDefine", 1, 0, "AlarmDefine");
-
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/DepthGlobalDefine.qml"), "DepthGlobalDefine", 1, 0, "DepthGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/ProfileGlobalDefine.qml"), "ProfileGlobalDefine", 1, 0, "ProfileGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/TensionsGlobalDefine.qml"), "TensionsGlobalDefine", 1, 0, "TensionsGlobalDefine");
 
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", &modbusClient);
@@ -115,7 +117,7 @@ int main(int argc, char *argv[])
     // qmlRegisterType<TensiometerManager>("HB.TensiometerManager", 1, 0, "TensiometerManager");
     qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
     qmlRegisterType<TensionScaleManager>("HB.TensionScaleManager", 1, 0, "TensionScaleManager");
-     qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
+    qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
                                           "HQmlEnum is an enum container and cannot be created in QML");
 
 //    qmlRegisterType<VideoCaptureItem>("HB.VideoCapture", 1, 0, "CV");

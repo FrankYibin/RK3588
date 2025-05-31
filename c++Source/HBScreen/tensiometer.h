@@ -32,53 +32,47 @@ class Tensiometer : public QObject
     Q_PROPERTY(int Scale5 READ Scale5 WRITE setScale5 NOTIFY Scale5Changed)
 
 
-
+public:
+    enum FORCE_UNIT
+    {
+        LB = 0,
+        KG,
+        KN
+    };
 public:
     static Tensiometer* getInstance();
 
 
     Q_INVOKABLE QString TensiometerNumber() const;
     Q_INVOKABLE void setTensiometerNumber(const QString &number);
-
     Q_INVOKABLE int TensiometerType() const;
     Q_INVOKABLE void setTensiometerType(int newTensiometerType);
-
     Q_INVOKABLE int TensiometerRange() const;
     Q_INVOKABLE void setTensiometerRange(int newTensiometerRange);
-
     Q_INVOKABLE int TensiometerSignal() const;
     Q_INVOKABLE void setTensiometerSignal(int TensiometerSignal);
-
-
     Q_INVOKABLE int TensionUnits() const;
     Q_INVOKABLE void setTensionUnits(int newTensionUnits);
 
     //Scale
-
     Q_INVOKABLE int Scale1() const;
     Q_INVOKABLE void setScale1(int newTensiometerType);
-
     Q_INVOKABLE int Scale2() const;
     Q_INVOKABLE void setScale2(int newTensiometerType);
-
     Q_INVOKABLE int Scale3() const;
     Q_INVOKABLE void setScale3(int newTensiometerType);
-
     Q_INVOKABLE int Scale4() const;
     Q_INVOKABLE void setScale4(int newTensiometerType);
-
     Q_INVOKABLE int Scale5() const;
     Q_INVOKABLE void setScale5(int newTensiometerType);
 
 
 signals:
-
     void TensiometerNumberChanged();
     void TensiometerTypeChanged();
     void TensiometerRangeChanged();
     void TensiometerSignalChanged();
     void TensionUnitsChanged();
-
 
     void Scale1Changed();
     void Scale2Changed();
@@ -89,7 +83,6 @@ signals:
 
 private:
     explicit Tensiometer(QObject *parent = nullptr);
-
     Tensiometer(const Tensiometer&) = delete;              // 禁止拷贝
     Tensiometer& operator=(const Tensiometer&) = delete;   // 禁止赋值
     static Tensiometer* m_tensiometer;
@@ -97,20 +90,16 @@ private:
 
 
 private:
-
     QString m_tensiometerNumber;
     int m_tensiometerType;
     int m_tensiometerRange;
     int m_tensiometerSignal;
-
-    int m_tensionUnits = 0;
-
+    int m_tensionUnits;
     int m_scale1;
     int m_scale2;
     int m_scale3;
     int m_scale4;
     int m_scale5;
-
 };
 
 #endif // TENSIOMETER_H

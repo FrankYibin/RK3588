@@ -122,7 +122,7 @@ public:
 
         //    };
 
-        enum HOLDING_REGISTERS
+    enum HOLDING_REGISTERS
     {
 
         HOLOD_DEPTH_H = 8,      //深度高十六位
@@ -161,7 +161,7 @@ public:
 
         K_VALUE,              //K值
         TENSION_TYPE,         //张力类型
-        TENSIOMETER_STATUS,   //模拟张力通道(张力计在线状态)
+        TENSIOMETER_ANALOG,   //模拟张力通道(张力计在线状态)
         TENSIOMETER_BATTERY,  //张力计电池电量(无线张力计有效)
         TESIOMETER_NUM_H,     //张力计编号高十六位
         TESIOMETER_NUM_L,     //张力计编号低十六位
@@ -223,6 +223,7 @@ public:
         WELL_DOWN_ALARM_H,        // 井底报警距离设置高字节
         WELL_DOWN_ALARM_L,       //   井底报警距离设置低字节
         HIGH_ANGLE_WELL,         // 大斜度井斜度设置
+        MAX_REGISTR
 
     };
     Q_ENUM(HOLDING_REGISTERS)

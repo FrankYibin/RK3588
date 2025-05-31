@@ -45,7 +45,7 @@ void ModbusUtils::writeScaledValue(const QString &value, int address, float scal
     quint16 high = static_cast<quint16>((scaledInt >> 16) & 0xFFFF);
     quint16 low  = static_cast<quint16>(scaledInt & 0xFFFF);
 
-    m_client->writeRegister(address, QVector<quint16>{high, low});
+    // m_client->writeRegister(address, QVector<quint16>{high, low});
 }
 
 

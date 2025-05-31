@@ -51,7 +51,6 @@ Item {
 
         else if(menuIndex === UIScreenEnum.HB_RETURN)
         {
-            console.debug("11111111111111111111111111111111")
             mainWindow.menuOptionLookAt(screenIndex)
             modelMenuData.resetModel()
             modelMenuData.set(1, {"MenuEnabled": true})

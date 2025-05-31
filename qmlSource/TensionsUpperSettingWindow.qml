@@ -7,6 +7,10 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Database 1.0
+import HB.Enums 1.0
+import ProfileGlobalDefine 1.0
+import DepthGlobalDefine 1.0
+import TensionsGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidthColumn1: 100
@@ -14,6 +18,7 @@ Item{
     readonly property int textWidthColumn3: 80
     readonly property int textWidthUnit: 20
     readonly property int componentWidth: 60
+    readonly property int comboxWidth: 60 + 20 + 10 + 20
     readonly property int rowSpacing: 10
     readonly property int columnSpacing: 10
     readonly property int optionHeight: 30
@@ -64,26 +69,19 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBTextField
+                HBComboBox
                 {
-                    id: textWellType
-                    width: Math.round(componentWidth * Style.scaleHint)
+                    id: comboWellType
+                    model: ProfileGlobalDefine.wellTypeModel
+                    currentIndex: WellParameter.WellType
+                    width: Math.round(comboxWidth * Style.scaleHint)
                     height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    // text: qsTr("192")
-                    text:TensionSafe.WellType
-                    onlyForNumpad: true
-
-                    onSignalClickedEvent: {
-                        console.log("textWellType.text =", textWellType.text);
-                        console.log("textWellType =", textWellType);
-                        mainWindow.showPrimaryNumpad(qsTr("请输入油气井类型"), " ", 3, 0, 99999, textWellType.text,textWellType,function(val) {
-                            TensionSafe.WellType = val;
-                        })
+                    fontFamily: "宋体"
+                    fontSize: Math.round(Style.style3 * Style.scaleHint)
+                    onCurrentIndexChanged: {
+                        ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, [currentIndex + 1])
+                        // WellParameter.WellType = currentIndex
+                        console.log("Well Type：", WellParameter.WellType)
                     }
                 }
             }
@@ -112,15 +110,15 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("192")
                     text: WellParameter.HarnessWeight
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         console.log("textCableWeight.text =", textCableWeight.text);
                         console.log("textCableWeight =", textCableWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆每千米重量值"), " ", 3, 0, 99999, textCableWeight.text,textCableWeight,function(val) {
+                            //TODO need to do unit exchange
                             WellParameter.HarnessWeight = val;
-                            ModbusClient.writeRegister(75,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.CABLE_UINT, [parseInt(val)])
                         })
                     }
                 }
@@ -128,7 +126,7 @@ Item{
                     id: unitHarnessWeightPerEachKilometers
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -150,27 +148,20 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBTextField
+                HBComboBox
                 {
-                    id: textWorkType
+                    id: comboWorkType
+                    model: ProfileGlobalDefine.workTypeModel
+                    currentIndex: WellParameter.WorkType
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    fontFamily: "宋体"
+                    fontSize: Math.round(Style.style3 * Style.scaleHint)
+                    onCurrentIndexChanged: {
+                        ModbusClient.writeRegister(HQmlEnum.WOKE_TYPE, [currentIndex])
+                        WellParameter.WorkType = currentIndex
+                        console.log("init WorkType: ", currentIndex)
                     }
-                    // text: qsTr("192")
-                    text: WellParameter.WorkType
-                    onlyForNumpad: true
-                    // onSignalClickedEvent: {
-                    //     console.log("textCableWeight.text =", textCableWeight.text);
-                    //     console.log("textCableWeight =", textCableWeight);
-                    //     mainWindow.showPrimaryNumpad(qsTr("请输入作业类型"), " ", 3, 0, 5, textCableWeight.text,textCableWeight,function(val) {
-                    //         WellParameter.HarnessWeight = val;
-                    //         ModbusClient.writeRegister(75,[parseInt(val)])
-                    //     })
-                    // }
                 }
             }
 
@@ -206,7 +197,7 @@ Item{
                          console.log("textSensorWeightValue =", textSensorWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeightValue.text,textSensorWeightValue,function(val) {
                             WellParameter.SensorWeight = val;
-                            ModbusClient.writeRegister(76, [parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.SENSOR_WEIGHT, [parseInt(val)])
                         })
                     }
                 }
@@ -214,7 +205,7 @@ Item{
                     id: unitSensorWeight
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -246,15 +237,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("8080")
                     text: WellParameter.HarnessForce
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        console.log("textHarnessPullingStrength.text =", textHarnessPullingStrength.text);
-                         console.log("textHarnessPullingStrength =", textHarnessPullingStrength);
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessPullingStrength.text,textHarnessPullingStrength,function(val) {
                             WellParameter.HarnessForce = val;
-                            ModbusClient.writeRegister(73,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.HARNESS_FORCE,[parseInt(val)])
                         })
                     }
                 }
@@ -262,7 +250,7 @@ Item{
                     id: unitHarnessPullingStrength
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -303,7 +291,7 @@ Item{
                          console.log("textWeaknessPullingStrength =", textWeaknessPullingStrength);
                         mainWindow.showPrimaryNumpad(qsTr("请输入弱点拉断力值"), " ", 3, 0, 99999, textWeaknessPullingStrength.text,textWeaknessPullingStrength,function(val) {
                             TensionSafe.WeakForce = val;
-                            ModbusClient.writeRegister(74,[parseInt(val)])
+                            ModbusClient.writeRegister(HQmlEnum.WEAK_FORCE, [parseInt(val)])
                         })
                     }
                 }
@@ -311,7 +299,7 @@ Item{
                     id: unitWeaknessPullingStrength
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -359,7 +347,7 @@ Item{
                     id: unitUltimateTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -468,7 +456,7 @@ Item{
                     id: unitCurrentSafetyTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -544,7 +532,7 @@ Item{
                     id: unitCurrentDepth1
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -587,7 +575,7 @@ Item{
                     id: unitMaxSafetyTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -673,7 +661,7 @@ Item{
                     id: unitCurrentDepth2
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -716,7 +704,7 @@ Item{
                     id: unitCurrentHarnessTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "kg"
+                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -759,7 +747,7 @@ Item{
                     id: unitDepthTolerance
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -802,7 +790,7 @@ Item{
                     id: unitCurrentDepth3
                     width: Math.round(textWidthColumn3 * Style.scaleHint)
                     height: parent.height
-                    text: "m"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter

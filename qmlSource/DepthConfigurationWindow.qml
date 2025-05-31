@@ -7,18 +7,19 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Enums 1.0
+import DepthGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
-    readonly property int textWidth: 80
+    readonly property int textWidth: 100
     readonly property int componentWidth: 140
-    readonly property int rowSpacing: 50
+    readonly property int rowSpacing: 20
     readonly property int columnSpacing: 30
     readonly property int optionHeight: 30
 
-    readonly property var velocityUnitModel: [qsTr("m/min"), qsTr("m/h"),qsTr("ft/min"),qsTr("ft/h")]
+
     readonly property var depthOrientationModel: [qsTr("反"), qsTr("正")]
     readonly property var depthCalculateTypeModel: [qsTr("单编码器"), qsTr("双编码器")]
-    readonly property var encorderOptionModel: [qsTr("编码器1"), qsTr("编码器2"),qsTr("编码器3"), qsTr("编码器1-2"), qsTr("编码器1-3"), qsTr("编码器2-3")]
+    readonly property var encorderOptionModel: [qsTr("编码器1"), qsTr("编码器2"),qsTr("编码器3"), qsTr("编码器1-2"), qsTr("编码器2-3"), qsTr("编码器1-3")]
 
     Rectangle
     {
@@ -90,8 +91,8 @@ Item{
                     id: unitTargetLayerDepth
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
-                    text: "m"
-                    font.family: "宋体"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
+                    font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
@@ -173,47 +174,13 @@ Item{
                     id: unitMeterDepth
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
-                    text: "m"
-                    font.family: "宋体"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
+                    font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
             }
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                Text {
-//                    id: titleDepthCalculateType
-//                    width: Math.round(textWidth * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("深度计算方式") + ":"
-//                    font.family: "宋体"
-//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//                    verticalAlignment: Text.AlignVCenter
-//                    color: Style.whiteFontColor
-//                }
-//                HBComboBox
-//                {
-//                    id:comboBoxDepthCalculateType
-//                    model:depthCalculateTypeModel
-//                    currentIndex:Depth.DepthCalculateType
-//                    width: Math.round(componentWidth * Style.scaleHint)
-//                    height: parent.height
-//                    // Component.onCompleted: {
-//                    //     comboBoxDepthCalculateType.currentIndex = Depth.DepthCalculateType
-//                    // }
-
-//                    onCurrentIndexChanged: {
-//                        ModbusClient.writeRegister(19, [currentIndex+1])
-//                        Depth.DepthOrientation = currentIndex
-//                        console.log("DepthCalculateType" + currentIndex)
-//                    }
-//                }
-//            }
-
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
@@ -236,7 +203,7 @@ Item{
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
                     validator: RegularExpressionValidator{
-                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
+                        regularExpression: /^\d{0,5}(\.\d{0,2})?$/
                     }
                     // text: qsTr("8080")
                     text: HBHome.Depth
@@ -252,8 +219,8 @@ Item{
                     id: unitCurrentDepth
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
-                    text: "m"
-                    font.family: "宋体"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
+                    font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
@@ -276,19 +243,14 @@ Item{
                 }
                 HBComboBox
                 {
-                    id:comboBoxEncorderOption
-                    model:encorderOptionModel
-                    currentIndex:Depth.CodeOption
+                    id: comboBoxEncorderOption
+                    model: encorderOptionModel
+                    currentIndex: Depth.CodeOption
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
-                    // Component.onCompleted: {
-                    //     comboBoxEncorderOption.currentIndex = Depth.CodeOption
-                    // }
-
                     onCurrentIndexChanged: {
                         Depth.CodeOption = currentIndex
-                        ModbusClient.writeRegister(HQmlEnum.DEPTHCALCULATETYPE, [currentIndex+1])
-                        console.log("CodeOption" + currentIndex)
+                        ModbusClient.writeRegister(HQmlEnum.DEPTHCALCULATETYPE, currentIndex)
                     }
                 }
             }
@@ -310,19 +272,13 @@ Item{
                 HBComboBox
                 {
                     id:comboBoxVelocityUnit
-                    model:velocityUnitModel
+                    model: DepthGlobalDefine.velocityUnitModel
                     currentIndex: Depth.VelocityUnit
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
-
-                    // Component.onCompleted: {
-                    //     comboBoxVelocityUnit.currentIndex = Depth.VelocityUnit
-                    // }
                     onCurrentIndexChanged: {
                         Depth.VelocityUnit = currentIndex
-                        console.log("VelocityUnit" + currentIndex)
                     }
-
                 }
             }
 
@@ -353,12 +309,9 @@ Item{
                     text: HBHome.Pulse
                     onlyForNumpad: true
 
-                    onSignalClickedEvent: {
-                        console.log("textPulseCount.text =", textPulseCount.text);
-                         console.log("textPulseCount =", textPulseCount);
-                        mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text,textPulseCount,function(val) {
-                            HBHome.Pulse = val;
-                            ModbusClient.writeRegister(HQmlEnum.PULSE,[parseInt(val)])
+                    onSignalClickedEvent: { 
+                        mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text, textPulseCount, function(val) {
+                            ModbusClient.writeRegister(HQmlEnum.PULSE, parseInt(val))
                         })
 
                     }
@@ -407,8 +360,8 @@ Item{
                     id: unitUpperVelocityLimit
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
-                    text: "m/h"
-                    font.family: "宋体"
+                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
+                    font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor

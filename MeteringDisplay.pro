@@ -1,4 +1,4 @@
-QT += quick gui charts serialport serialbus sql multimedia concurrent  core
+QT += quick gui charts serialport serialbus sql multimedia concurrent core
 CONFIG += c++11
 #qtquickcompiler
 
@@ -54,29 +54,29 @@ SOURCES += main.cpp \
     c++Source/HBScreen/tensionscalemanager.cpp \
     c++Source/HBScreen/wellparameter.cpp \
 #    c++Source/HBVideoCapture/videocaptureitem.cpp \
-        c++Source/alarmnotification.cpp \
-        c++Source/clientsocket.cpp \
-        c++Source/communicationinterface.cpp \
+    c++Source/alarmnotification.cpp \
+    c++Source/clientsocket.cpp \
+    c++Source/communicationinterface.cpp \
     c++Source/HBVoice/hbvoice.cpp \
-        c++Source/heartbeatformat.cpp \
-        c++Source/jsontreeitem.cpp \
-        c++Source/jsontreeitemhash.cpp \
-        c++Source/jsontreemodel.cpp \
-        c++Source/languageconfig.cpp \
-        c++Source/languageitem.cpp \
-        c++Source/languagemodel.cpp \
-        c++Source/login.cpp \
-        c++Source/productionruninterface.cpp \
-        c++Source/protocolformat.cpp \
-        c++Source/quickcrc32algorithm.cpp \
-        c++Source/recipegeneral.cpp \
-        c++Source/recipemodel.cpp \
-        c++Source/serversocket.cpp \
-        c++Source/systemInformationInterface.cpp \
-        c++Source/upgradesoftware.cpp \
-        c++Source/weldgraphdata.cpp \
-        c++Source/weldrecipeparameter.cpp \
-        c++Source/weldresultmodel.cpp \
+    c++Source/heartbeatformat.cpp \
+    c++Source/jsontreeitem.cpp \
+    c++Source/jsontreeitemhash.cpp \
+    c++Source/jsontreemodel.cpp \
+    c++Source/languageconfig.cpp \
+    c++Source/languageitem.cpp \
+    c++Source/languagemodel.cpp \
+    c++Source/login.cpp \
+    c++Source/productionruninterface.cpp \
+    c++Source/protocolformat.cpp \
+    c++Source/quickcrc32algorithm.cpp \
+    c++Source/recipegeneral.cpp \
+    c++Source/recipemodel.cpp \
+    c++Source/serversocket.cpp \
+    c++Source/systemInformationInterface.cpp \
+    c++Source/upgradesoftware.cpp \
+    c++Source/weldgraphdata.cpp \
+    c++Source/weldrecipeparameter.cpp \
+    c++Source/weldresultmodel.cpp \
 
 
 

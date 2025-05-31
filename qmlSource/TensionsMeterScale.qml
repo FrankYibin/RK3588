@@ -6,17 +6,14 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.TensionScaleManager 1.0
+import TensionsGlobalDefine 1.0
 
 Item{
     id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_VIEW
     property int totalScales: 0
     signal signalSaveTensometerScale()
-//    Component.onCompleted:
-//    {
-//        dataModel.resetModel()
 
-//    }
     TensionScaleManager{
         id:scalemodel
         Component.onCompleted:scalemodel.resetModel()
@@ -34,28 +31,6 @@ Item{
         GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
-
-//    ListModel
-//    {
-//        id: dataModel
-//        function resetModel()
-//        {
-//            dataModel.clear()
-//            dataModel.append({"Checked": true,  "Index": 1,   "ScaleValue": 10,   "TensionValue": 0.5})
-//            dataModel.append({"Checked": true,  "Index": 2,   "ScaleValue": 20,   "TensionValue": 1.0})
-//            dataModel.append({"Checked": false, "Index": 3,   "ScaleValue": 30,   "TensionValue": 1.5})
-//            dataModel.append({"Checked": false, "Index": 4,   "ScaleValue": 40,   "TensionValue": 2.0})
-//            dataModel.append({"Checked": false, "Index": 5,   "ScaleValue": 50,   "TensionValue": 2.5})
-//            dataModel.append({"Checked": true,  "Index": 6,   "ScaleValue": 60,   "TensionValue": 3.0})
-//            dataModel.append({"Checked": true,  "Index": 7,   "ScaleValue": 70,   "TensionValue": 0.5})
-//            dataModel.append({"Checked": true,  "Index": 8,   "ScaleValue": 80,   "TensionValue": 1.0})
-//            dataModel.append({"Checked": false, "Index": 9,   "ScaleValue": 90,   "TensionValue": 1.5})
-////            dataModel.append({"Checked": false, "Index": 10,   "ScaleValue": 100,   "TensionValue": 2.0})
-////            dataModel.append({"Checked": false, "Index": 11,   "ScaleValue": 110,   "TensionValue": 2.5})
-////            dataModel.append({"Checked": true,  "Index": 12,   "ScaleValue": 120,   "TensionValue": 3.0})
-//        }
-//    }
-
 
     Item {
         id: tensionScaleFrame
@@ -155,7 +130,9 @@ Item{
                 }
             }
             TableViewColumn {
-                role: "TensionValue";  title: qsTr("张力值(kN)"); width: Math.round(90 * Style.scaleHint)
+                role: "TensionValue";
+                title: qsTr("张力值") + "(" + TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + ")";
+                width: Math.round(90 * Style.scaleHint)
                 delegate: Rectangle {
                     height: tensionScaleTable.rowHeight
                     width: styleData.columnWidth

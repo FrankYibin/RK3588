@@ -8,13 +8,12 @@ import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Database 1.0
 import HB.Enums 1.0
+import ProfileGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_WELL_PARAMETERS
     readonly property int comboBoxWidth: 100
-    readonly property var wellTypeModel: [qsTr("垂直井段"), qsTr("大斜度井段"), qsTr("水平井段")]
     readonly property var harnessTypeModel: [5.6, 11.8]
     readonly property var tensionUnitModel: [10 , 20, 30]
-    readonly property var workTypeModel: [qsTr("射孔"), qsTr("测井")]
 
 
     Rectangle
@@ -129,7 +128,7 @@ Item{
                 HBComboBox
                 {
                     id: comboWellType
-                    model: wellTypeModel
+                    model: ProfileGlobalDefine.wellTypeModel
                     currentIndex: WellParameter.WellType
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
@@ -443,7 +442,7 @@ Item{
                 HBComboBox
                 {
                     id: comboWorkType
-                    model: workTypeModel
+                    model: ProfileGlobalDefine.workTypeModel
                     currentIndex: WellParameter.WorkType
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height

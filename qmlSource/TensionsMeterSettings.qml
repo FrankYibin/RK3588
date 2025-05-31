@@ -6,6 +6,8 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
+import HB.Enums 1.0
+import TensionsGlobalDefine 1.0
 Item{
     id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
@@ -63,11 +65,9 @@ Item{
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 onSignalClickedEvent: {
-                    console.log("txtTensionsNumber.text =", txtTensionsNumber.text);
-                     console.log("txtTensionsNumber =", txtTensionsNumber);
                     mainWindow.showPrimaryNumpad(qsTr("请输入张力计编号"), " ", 3, 0, 99999, txtTensionsNumber.text,txtTensionsNumber,function(val) {
                         Tensiometer.TensiometerNumber = val;
-                        ModbusClient.writeRegister(39,[parseInt(val)])
+                        ModbusClient.writeRegister(HQmlEnum.TESIOMETER_NUM_H, [parseInt(val)])
                     })
                 }
             }
@@ -98,9 +98,9 @@ Item{
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
-                    ModbusClient.writeRegister(37, [currentIndex])
+                    ModbusClient.writeRegister(HQmlEnum.TENSION_TYPE, [currentIndex])
                     Tensiometer.TensiometerType = currentIndex
-                    console.log("init Tensiometer:" + currentIndex)
+                    console.log("init Tensiometer:", currentIndex)
                 }
             }
         }
@@ -132,7 +132,7 @@ Item{
                     // ModbusClient.writeRegister(37, [currentIndex])
                     // ModbusUtils.writeScaledValue()
                     Tensiometer.TensiometerRange = currentIndex
-                    console.log("init TensiometerRange:" + currentIndex)
+                    console.log("init TensiometerRange: ", currentIndex)
                 }
             }
         }
@@ -162,10 +162,10 @@ Item{
                 height:  parent.height
 
                 onCurrentIndexChanged: {
-                    // ModbusClient.writeRegister(37, [currentIndex])
+                    ModbusClient.writeRegister(HQmlEnum.TENSIOMETER_ANALOG, [currentIndex])
                     // ModbusUtils.writeScaledValue()
                     Tensiometer.TensiometerSignal = currentIndex
-                    console.log("init TensiometerSignal:" + currentIndex)
+                    console.log("init TensiometerSignal:", currentIndex)
                 }
             }
         }

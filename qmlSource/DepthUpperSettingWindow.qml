@@ -6,6 +6,8 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Database 1.0
+import DepthGlobalDefine 1.0
+import TensionsGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
     readonly property int textWidthColumn1: 100
@@ -88,7 +90,7 @@ Item{
                     id: unitDepthPreset
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -132,7 +134,7 @@ Item{
                     id: unitVelocityLimit
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m/min"
+                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -193,22 +195,7 @@ Item{
                     maxWidth: Math.round(optionHeight * Style.scaleHint)
                     maxHeight: maxWidth
                 }
-
-
             }
-
-            // HBPrimaryButton
-            // {
-            //     id: buttonConfirm
-            //     width: Math.round(105 * Style.scaleHint)
-            //     height: Math.round(optionHeight * Style.scaleHint)
-            //     text: qsTr("确定")
-            //     onClicked:
-            //     {
-            //         // controlLimitNumpad.visible = false
-            //         HBDatabase.updateDepthSafeFromInstance()
-            //     }
-            // }
         }
 
     }
@@ -256,7 +243,6 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("192")
                     text: DepthSafe.DepthPreset
                     onlyForNumpad: true
                     onSignalClickedEvent: {
@@ -269,7 +255,7 @@ Item{
                     id: unitDepthLowerPreset
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -301,7 +287,6 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("8081")
                     text:DepthSafe.VelocityLimit
                     onlyForNumpad: true
                     onSignalClickedEvent: {
@@ -313,7 +298,7 @@ Item{
                     id: unitVelocityLowerLimit
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m/min"
+                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -375,19 +360,6 @@ Item{
                     maxHeight: maxWidth
                 }
             }
-
-            // HBPrimaryButton
-            // {
-            //     id: buttonConfirm
-            //     width: Math.round(105 * Style.scaleHint)
-            //     height: Math.round(optionHeight * Style.scaleHint)
-            //     text: qsTr("确定")
-            //     onClicked:
-            //     {
-            //         // controlLimitNumpad.visible = false
-            //         HBDatabase.updateDepthSafeFromInstance()
-            //     }
-            // }
         }
 
     }
@@ -435,7 +407,6 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("192")
                     text:DepthSafe.TotalDepth
                     onlyForNumpad: true
                     onSignalClickedEvent: {
@@ -447,7 +418,7 @@ Item{
                     id: unitTotalDepth
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m"
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -491,7 +462,7 @@ Item{
                     id: unitDepthVelocityLimit
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: "m/min"
+                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter

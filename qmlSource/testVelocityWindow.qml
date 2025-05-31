@@ -7,7 +7,7 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Enums 1.0
-
+import DepthGlobalDefine 1.0
 
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_VELOCITY
@@ -128,23 +128,11 @@ Item{
                             ModbusUtils.writeScaledValue(val,HQmlEnum.CONTROL_SPEED_H,100.0)
                         })
                     }
-
-                    // onFocusChanged: {
-                    //     if (!focus) {  // 失去焦点时处理
-                    //         var velocityValue = parseFloat(textVelocitySetting.text);
-                    //         if (!isNaN(velocityValue) && velocityValue > 0) {
-                    //             var modbusRegisters = ModbusUtils.floatToModbusRegisters(velocityValue);
-                    //             // 将转换后的寄存器值写入 Modbus
-                    //             ModbusClient.writeRegister(55, modbusRegisters);
-
-                    //         }
-                    //     }
-                    // }
                 }
                 Text
                 {
                     id: unitVelocity
-                    text: qsTr("m/min")
+                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor
