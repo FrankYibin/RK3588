@@ -103,26 +103,43 @@ Item {
         {
             modelMenuData.clear()
             modelMenuData.append({"MenuName":       qsTr("主页"),
-                                    "MenuIcon":     "qrc:/images/homePage.png",
-                                    "IsSubmenu":    false,
-                                    "MenuIndex":    UIScreenEnum.HB_DASHBOARD,
-                                    "ImageSize":    Math.round(50 * Style.scaleHint),
-                                    "MenuEnabled":  false,
+                                  "MenuIcon":       "qrc:/images/homePage.png",
+                                  "IsSubmenu":      false,
+                                  "MenuIndex":      UIScreenEnum.HB_DASHBOARD,
+                                  "ImageSize":      Math.round(50 * Style.scaleHint),
+                                  "FontSize":       Math.round(Style.style4 * Style.scaleHint),
+                                  "MenuEnabled":    false,
                                       })
             modelMenuData.append({"MenuName":       qsTr("设置"),
-                                    "MenuIcon":     "qrc:/images/setting.png",
-                                    "IsSubmenu":    true,
-                                    "MenuIndex":    UIScreenEnum.HB_SETTING,
-                                    "ImageSize":    Math.round(45 * Style.scaleHint),
-                                    "MenuEnabled":  false,
+                                  "MenuIcon":       "qrc:/images/setting.png",
+                                  "IsSubmenu":      true,
+                                  "MenuIndex":      UIScreenEnum.HB_SETTING,
+                                  "ImageSize":      Math.round(45 * Style.scaleHint),
+                                  "FontSize":       Math.round(Style.style4 * Style.scaleHint),
+                                  "MenuEnabled":    false,
                                       })
             modelMenuData.append({"MenuName":       qsTr("控速"),
                                     "MenuIcon":     "qrc:/images/velocity.png",
                                     "IsSubmenu":    false,
                                     "MenuIndex":    UIScreenEnum.HB_VELOCITY,
                                     "ImageSize":    Math.round(50 * Style.scaleHint),
+                                    "FontSize":       Math.round(Style.style4 * Style.scaleHint),
                                     "MenuEnabled":  false,
                                       })
+            modelMenuData.append({"MenuName":       qsTr("地面仪界面"),
+                                  "MenuIcon":       "qrc:/images/hdmi.jpg",
+                                  "IsSubmenu":      false,
+                                  "MenuIndex":      UIScreenEnum.HB_HDMI,
+                                  "ImageSize":      Math.round(50 * Style.scaleHint),
+                                  "FontSize":       Math.round(Style.style3 * Style.scaleHint),
+                                  "MenuEnabled":    false})
+            modelMenuData.append({"MenuName":       qsTr("井口监控"),
+                                  "MenuIcon":       "qrc:/images/video.jpg",
+                                  "IsSubmenu":      false,
+                                  "MenuIndex":      UIScreenEnum.HB_VIDEO,
+                                  "ImageSize":      Math.round(50 * Style.scaleHint),
+                                  "FontSize":       Math.round(Style.style4 * Style.scaleHint),
+                                  "MenuEnabled":    false})
         }
 
         function historyModel()
@@ -132,14 +149,16 @@ Item {
                                  "MenuIcon":    "qrc:/images/history.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_HISTORY_DATA,
-                                 "ImageSize":    Math.round(45 * Style.scaleHint),
+                                 "ImageSize":   Math.round(45 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": true
                                  })
             modelMenuData.append({"MenuName":   "返回",
                                  "MenuIcon":    "qrc:/images/back.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_RETURN,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": false
                                  })
 
@@ -152,14 +171,16 @@ Item {
                                  "MenuIcon":    "qrc:/images/system.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_SYSTEM_CONFIG,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": true
                                  })
             modelMenuData.append({"MenuName":   "返回",
                                  "MenuIcon":    "qrc:/images/back.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_RETURN,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": false
                                  })
 
@@ -172,14 +193,16 @@ Item {
                                  "MenuIcon":    "qrc:/images/parameter.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_WELL_PARAMETERS,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": true
                                  })
             modelMenuData.append({"MenuName":   "返回",
                                  "MenuIcon":    "qrc:/images/back.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_RETURN,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": false
                                  })
 
@@ -192,14 +215,16 @@ Item {
                                  "MenuIcon":    "qrc:/images/tension.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_TENSIONS_SETTING,
-                                 "ImageSize":    Math.round(55 * Style.scaleHint),
+                                 "ImageSize":   Math.round(55 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": true
                                  })
             modelMenuData.append({"MenuName":   "返回",
                                  "MenuIcon":    "qrc:/images/back.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_RETURN,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": false
                                  })
 
@@ -212,14 +237,16 @@ Item {
                                  "MenuIcon":    "qrc:/images/depth.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_DEPTH_SETTING,
-                                 "ImageSize":    Math.round(50 * Style.scaleHint),
+                                 "ImageSize":   Math.round(50 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": true
                                  })
             modelMenuData.append({"MenuName":   "返回",
                                  "MenuIcon":    "qrc:/images/back.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_RETURN,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": false
                                  })
 
@@ -232,14 +259,16 @@ Item {
                                  "MenuIcon":    "qrc:/images/user.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_USER_MANAGEMENT,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": true
                                  })
             modelMenuData.append({"MenuName":   "返回",
                                  "MenuIcon":    "qrc:/images/back.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_RETURN,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": false
                                  })
         }
@@ -251,14 +280,16 @@ Item {
                                  "MenuIcon":    "qrc:/images/help.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_HELP,
-                                 "ImageSize":    Math.round(45 * Style.scaleHint),
+                                 "ImageSize":   Math.round(45 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": true
                                  })
             modelMenuData.append({"MenuName":   "返回",
                                  "MenuIcon":    "qrc:/images/back.png",
                                  "IsSubmenu":   false,
                                  "MenuIndex":   UIScreenEnum.HB_RETURN,
-                                 "ImageSize":    Math.round(40 * Style.scaleHint),
+                                 "ImageSize":   Math.round(40 * Style.scaleHint),
+                                 "FontSize":    Math.round(Style.style4 * Style.scaleHint),
                                  "MenuEnabled": false
                                  })
         }
@@ -317,7 +348,7 @@ Item {
                                     text: model.MenuName
                                     anchors.horizontalCenter: menuOptionImage.horizontalCenter
                                     horizontalAlignment: Text.AlignHCenter
-                                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                                    font.pixelSize: model.FontSize
                                 }
                             }
                         }

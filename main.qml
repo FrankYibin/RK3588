@@ -210,6 +210,11 @@ Window{
         case UIScreenEnum.HB_VELOCITY:
             stackMainView.push("qrc:/qmlSource/testVelocityWindow.qml", {}, StackView.Immediate)
             break;
+        case UIScreenEnum.HB_HDMI:
+            break;
+        case UIScreenEnum.HB_VEDIO:
+            stackMainView.push("qrc:/qmlSource/hikvisionCameraWindow.qml", {}, StackView.Immediate)
+            break;
         default:
             break;
         }

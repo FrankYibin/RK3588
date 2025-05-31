@@ -121,5 +121,7 @@
         <file>qmlSource/DepthGlobalDefine.qml</file>
         <file>qmlSource/ProfileGlobalDefine.qml</file>
         <file>qmlSource/TensionsGlobalDefine.qml</file>
+        <file>qmlSource/hdmiInputWindow.qml</file>
+        <file>qmlSource/hikvisionCameraWindow.qml</file>
     </qresource>
 </RCC>

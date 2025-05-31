@@ -6,10 +6,6 @@
 class TensionSafe : public QObject
 {
     Q_OBJECT
-    // parameter set
-
-    //WellType                  油井类型?
-    Q_PROPERTY(QString WellType READ WellType WRITE setWellType NOTIFY WellTypeChanged)
 
     // SensorWeight              仪器串重量
     // Q_PROPERTY(QString SensorWeight READ SensorWeight WRITE setSensorWeight NOTIFY SensorWeightChanged);
@@ -46,7 +42,7 @@ class TensionSafe : public QObject
 //    Q_PROPERTY(QString CurrentHarnessTension READ CurrentHarnessTension WRITE setCurrentHarnessTension NOTIFY CurrentHarnessTensionChanged);
 
     //Trend of tension variation of the cable head  揽头张力变化趋势
-    Q_PROPERTY(QString CableTensionTrend READ CableTensionTrend WRITE setCableTensionTrend NOTIFY CableTensionTrendChanged )
+    Q_PROPERTY(int CableTensionTrend READ CableTensionTrend WRITE setCableTensionTrend NOTIFY CableTensionTrendChanged )
 
     //Safe parking time
     Q_PROPERTY(QString Ptime READ Ptime WRITE setPtime NOTIFY PtimeChanged)
@@ -62,12 +58,18 @@ class TensionSafe : public QObject
 
     //Current Depth3
     Q_PROPERTY(QString CurrentDepth3 READ CurrentDepth3 WRITE setCurrentDepth3 NOTIFY CurrentDepth3Changed)
+public:
+    enum CABLE_TENSION_TREND
+    {
+        NORMAL = 0,
+        INCREMENT,
+        DECREMENT
+
+    };
 
 public:
     static TensionSafe* getInstance();
 
-
-    QString WellType() const;
     // QString MaxTension() const;
     QString CableWeight() const;
     QString TensionSafeFactor() const;
@@ -75,14 +77,13 @@ public:
     QString CurrentTensionSafe() const;
 //    QString CurrentHarnessTension() const;
     QString MAXTensionSafe() const;
-    QString CableTensionTrend() const;
+
     QString Ptime() const;
     QString DepthLoss() const;
     QString CurrentDepth1() const;
     QString CurrentDepth2() const;
     QString CurrentDepth3() const;
 
-    void setWellType(const QString &value);
     // void setMaxTension(const QString &value);
     void setCableWeight(const QString &value);
     void setTensionSafeFactor(const QString &value);
@@ -90,31 +91,32 @@ public:
 //    void setCurrentHarnessTension(const QString &value);
     void setCurrentTensionSafe(const QString &value);
     void setMAXTensionSafe(const QString &value);
-    void setCableTensionTrend(const QString &value);
+
     void setPtime(const QString &value);
     void setDepthLoss(const QString &value);
     void setCurrentDepth1(const QString &value);
     void setCurrentDepth2(const QString &value);
     void setCurrentDepth3(const QString &value);
 
-
+    int     CableTensionTrend       () const;
+    void    setCableTensionTrend    (const int trend);
 
 signals:
-
-    void WellTypeChanged();
     // void MaxTensionChanged();
     void CableWeightChanged();
     void TensionSafeFactorChanged();
     void WeakForceChanged();
     void CurrentTensionSafeChanged();
     void MAXTensionSafeChanged();
-    void CableTensionTrendChanged();
+
     void PtimeChanged();
     void DepthLossChanged();
     void CurrentDepth1Changed();
     void CurrentDepth2Changed();
     void CurrentDepth3Changed();
 //    void CurrentHarnessTensionChanged();
+
+    void CableTensionTrendChanged();
 
 private:
 
@@ -126,8 +128,6 @@ private:
 
 
 private:
-
-    QString m_wellType = "0";
     // QString m_maxTension;
     QString m_cableWeight = "0" ;
     QString m_TensionSafeFactor = "0";
@@ -135,12 +135,14 @@ private:
 //    QString m_currentHarnessTension;
     QString m_currentTensionSafe = "0";
     QString m_maxTensionSafe = "0";
-    QString m_cableTensionTrend = "0";
+
     QString m_ptime = "0";
     QString m_depthLoss = "0";
     QString m_currentDepth1 = "0";
     QString m_currentDepth2 = "0";
     QString m_currentDepth3 = "0";
+
+    int m_cableTensionTrend;
 };
 
 #endif // TENSIONSAFE_H

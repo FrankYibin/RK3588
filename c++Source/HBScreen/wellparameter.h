@@ -15,7 +15,7 @@ class WellParameter : public QObject
     //area block         区块
     Q_PROPERTY(QString AreaBlock READ AreaBlock WRITE setAreaBlock NOTIFY AreaBlockChanged)
 
-    //WellType           井斜
+    //WellType           油气井类型
     Q_PROPERTY(int WellType READ WellType WRITE setWellType NOTIFY WellTypeChanged)
 
     //WellDepth          井深（作业井深度）
@@ -44,8 +44,19 @@ class WellParameter : public QObject
 
     //OperatorType       操作员工种
     Q_PROPERTY(QString OperatorType READ OperatorType WRITE setOperatorType NOTIFY OperatorTypeChanged)
+public:
+    enum OIL_WELL_TYPE
+    {
+        VERTICAL = 0,
+        SLOPE,
+        HORIZONTAL
+    };
 
-
+    enum WORK_TYPE
+    {
+        PERFORATION = 0, //qsTr("射孔")
+        LOGGING //qsTr("测井")
+    };
 public:
     static WellParameter* getInstance();
 
@@ -54,9 +65,6 @@ public:
 
     Q_INVOKABLE QString AreaBlock() const;
     Q_INVOKABLE void setAreaBlock(const QString &value);
-
-    Q_INVOKABLE int WellType() const;
-    Q_INVOKABLE void setWellType(const int newWellType);
 
     Q_INVOKABLE QString WellDepth() const;
     Q_INVOKABLE void setWellDepth(const QString &value);
@@ -76,14 +84,16 @@ public:
     Q_INVOKABLE int TensionUnit() const;
     Q_INVOKABLE void setTensionUnit(const int newTensionUnit);
 
-    Q_INVOKABLE int WorkType() const;
-    Q_INVOKABLE void setWorkType(const int newWorkType);
-
     Q_INVOKABLE QString UserName() const;
     Q_INVOKABLE void setUserName(const QString &value);
 
     Q_INVOKABLE QString OperatorType() const;
     Q_INVOKABLE void setOperatorType(const QString &value);
+
+    Q_INVOKABLE int WorkType() const;
+    Q_INVOKABLE int WellType() const;
+    Q_INVOKABLE void setWorkType(const int type);
+    Q_INVOKABLE void setWellType(const int type);
 
     // CSV methods
 //    QString toCSVLine() const;
@@ -98,8 +108,6 @@ signals:
 
     void AreaBlockChanged();
 
-    void WellTypeChanged();
-
     void WellDepthChanged();
 
     void HarnessWeightChanged();
@@ -111,12 +119,12 @@ signals:
     void HarnessForceChanged();
 
     void TensionUnitChanged();
-
-    void WorkTypeChanged();
-
     void UserNameChanged();
 
     void OperatorTypeChanged();
+
+    void WorkTypeChanged();
+    void WellTypeChanged();
 
 private:
     explicit WellParameter(QObject *parent = nullptr);
@@ -129,16 +137,17 @@ private:
 
     QString m_wellNumber;
     QString m_areaBlock;
-    int m_wellType = 0;
+
     QString m_wellDepth = 0;
     QString m_harnessWeight = 0;
     QString m_sensorWeight = 0;
     int m_harnessType = 0;
     QString m_harnessForce;
     int m_tensionUnit = 0;
-    int m_workType = 0;
     QString m_userName = "";
     QString m_operatorType = "";
+    int m_workType;
+    int m_wellType;
 };
 
 #endif // WELLPARAMETER_H

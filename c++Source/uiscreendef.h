@@ -78,6 +78,8 @@ public:
         HB_DASHBOARD,
         HB_SETTING,
         HB_VELOCITY,
+        HB_HDMI,
+        HB_VEDIO,
 
         HB_HISTORY_DATA,
         HB_SYSTEM_CONFIG,

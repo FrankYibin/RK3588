@@ -13,7 +13,7 @@ Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_WELL_PARAMETERS
     readonly property int comboBoxWidth: 100
     readonly property var harnessTypeModel: [5.6, 11.8]
-    readonly property var tensionUnitModel: [10 , 20, 30]
+    readonly property var tensionUnitModel: [10, 20, 30]
 
 
     Rectangle

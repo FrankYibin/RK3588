@@ -41,7 +41,7 @@ Item{
             id: leftInfo
             width: Math.round(350 * Style.scaleHint)
             height: Math.round(430 * Style.scaleHint)
-            spacing: Math.round(35 * Style.scaleHint)
+            spacing: Math.round(20 * Style.scaleHint)
             Row
             {
                 id: infoWellNumber
@@ -107,7 +107,7 @@ Item{
                 {
                     id: titleWellType
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("井斜：")
+                    text: qsTr("油气井类型：")
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -266,7 +266,7 @@ Item{
             id: rightInfo
             width: Math.round(350 * Style.scaleHint)
             height: Math.round(430 * Style.scaleHint)
-            spacing: Math.round(35 * Style.scaleHint)
+            spacing: Math.round(20 * Style.scaleHint)
             Row
             {
                 id: infoHarnessType

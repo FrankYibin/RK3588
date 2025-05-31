@@ -77,5 +77,7 @@
         <file>images/up.png</file>
         <file>images/password.png</file>
         <file>images/userIcon.png</file>
+        <file>images/hdmi.jpg</file>
+        <file>images/video.jpg</file>
     </qresource>
 </RCC>

@@ -6,7 +6,12 @@ WellParameter* WellParameter::m_wellParameter = nullptr;
 
 WellParameter::WellParameter(QObject *parent)
     : QObject{parent}
-{}
+{
+    m_workType = -1;
+    m_wellType = -1;
+    setWellType(VERTICAL);
+    setWorkType(PERFORATION);
+}
 
 WellParameter *WellParameter::getInstance()
 {
@@ -49,10 +54,11 @@ int WellParameter::WellType() const
     return m_wellType;
 }
 
-void WellParameter::setWellType(const int newWellType)
+void WellParameter::setWellType(const int type)
 {
-    if (m_wellType != newWellType) {
-        m_wellType = newWellType;
+    if (m_wellType != type)
+    {
+        m_wellType = type;
         emit WellTypeChanged();
     }
 }
@@ -145,10 +151,11 @@ int WellParameter::WorkType() const
     return m_workType;
 }
 
-void WellParameter::setWorkType(const int newWorkType)
+void WellParameter::setWorkType(const int type)
 {
-    if (m_workType != newWorkType) {
-        m_workType = newWorkType;
+    if (m_workType != type)
+    {
+        m_workType = type;
         emit WorkTypeChanged();
     }
 

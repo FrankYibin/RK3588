@@ -507,7 +507,7 @@ bool HBDatabase::loadTensionSafe(_TensionSafe &param)
 
     TensionSafe* ts = TensionSafe::getInstance();
     HBHome* hs = HBHome::getInstance();
-    ts->setWellType(param.wellType);
+
     hs->setMaxTension(param.maxTension);
     ts->setWeakForce(param.weakForce);
     ts->setTensionSafeFactor(param.tensionSafeFactor);
@@ -561,7 +561,7 @@ bool HBDatabase::updateTensionSafeFromInstance()
 
     _TensionSafe param;
     param.id = 1;
-    param.wellType = ts->WellType();
+    // param.wellType = ts->WellType();
     param.maxTension = hs->MaxTension();
     param.weakForce = ts->WeakForce();
     param.tensionSafeFactor = ts->TensionSafeFactor();

@@ -22,6 +22,7 @@ Item{
     readonly property int rowSpacing: 10
     readonly property int columnSpacing: 10
     readonly property int optionHeight: 30
+    readonly property var tensionTrendModel: [qsTr("正常"), qsTr("增加"), qsTr("减小")]
     Rectangle
     {
         id: background
@@ -469,7 +470,7 @@ Item{
                 width: Math.round((textWidthColumn2 + componentWidth + rowSpacing) * Style.scaleHint)
                 spacing: rowSpacing
                 Text {
-                    id: titleHarnessTensionTrend
+                    id: titleCableTensionTrend
                     width: Math.round(textWidthColumn2 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("缆头张力变化趋势") + ":"
@@ -478,21 +479,19 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBTextField
+                HBComboBox
                 {
-                    id: textHarnessTensionTrend
+                    id: comboCableTensionTrend
+                    model: tensionTrendModel
+                    currentIndex: TensionSafe.CableTensionTrend
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    // text: qsTr("192")
-                    text: TensionSafe.CableTensionTrend
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("Time Scale Setting", " ", 3, 0, 99999, "0.123")
+                    fontFamily: "宋体"
+                    fontSize: Math.round(Style.style3 * Style.scaleHint)
+                    onCurrentIndexChanged: {
+                        // ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, [currentIndex + 1])
+                        TensionSafe.CableTensionTrend = currentIndex
+                        console.log("Cable Tension Trend： ", TensionSafe.CableTensionTrend)
                     }
                 }
             }
