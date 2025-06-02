@@ -10,10 +10,8 @@ import HB.Database 1.0
 import HB.Enums 1.0
 import ProfileGlobalDefine 1.0
 Item{
-    readonly property int qmlscreenIndicator:  UIScreenEnum.HB_WELL_PARAMETERS
+    property int qmlscreenIndicator:  UIScreenEnum.HB_WELL_PARAMETERS
     readonly property int comboBoxWidth: 100
-    readonly property var tensionUnitModel: [10, 20, 30]
-
 
     Rectangle
     {
@@ -363,17 +361,15 @@ Item{
                 HBTextField
                 {
                     id: textHarnessForce
-                    text: WellParameter.HarnessForce
+                    text: WellParameter.BreakingForceCable
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
 
                     onSignalClickedEvent: {
-                        console.log("textHarnessForce.text =", textHarnessForce.text);
-                         console.log("textHarnessForce =", textHarnessForce);
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessForce.text,textHarnessForce,function(val) {
                             //TODO Need to unit exchange.
-                            WellParameter.HarnessForce = val;
+                            WellParameter.BreakingForceCable = val;
                             ModbusClient.writeRegister(HQmlEnum.HARNESS_FORCE, [parseInt(val)])
                         })
                     }
@@ -407,7 +403,7 @@ Item{
                 HBTextField
                 {
                     id: textTensionUnit
-                    text: WellParameter.TensionUnit
+                    text: WellParameter.TonnageTensionStick
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
@@ -415,7 +411,7 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入拉力磅吨位"), " ", 3, 0, 99999, textTensionUnit.text,textTensionUnit,function(val) {
                             //TODO Need to unit exchange.
-                            WellParameter.textTensionUnit = val;
+                            WellParameter.TonnageTensionStick = val;
                             // ModbusClient.writeRegister(HQmlEnum.TENSION_BAR_TONNAGE, [parseInt(val)])
                         })
                     }

@@ -116,6 +116,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthCurrent.Data      = tmpData;
             m_RecvReg.m_DepthCurrent.Address   = currentAddress;
+            HBHome::getInstance()->setDepth(tmpData);
             break;
         case HQmlEnum::VELOCITY_CURRENT_H: // SPEED_H
             m_RegisterData.HIGH_16BITS = value;
@@ -127,7 +128,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_VelocityCurrent.Data      = tmpData;
             m_RecvReg.m_VelocityCurrent.Address   = currentAddress;
-            // HBHome::getInstance()->setSpeed(speed);
+            HBHome::getInstance()->setSpeed(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated speed:" << speed;
             break;
         case HQmlEnum::VELOCITY_LIMITED_H: // MAX_SPEED_H
@@ -140,7 +141,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_VelocityLimited.Data = tmpData;
             m_RecvReg.m_VelocityLimited.Address = currentAddress;
-            // HBHome::getInstance()->setMaxSpeed(maxSpeed);
+            HBHome::getInstance()->setMaxSpeed(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated maxSpeed:" << maxSpeed;
             break;
         case HQmlEnum::DEPTH_TARGET_LAYER_H: // MAX_SPEED_H
@@ -153,7 +154,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthTargetLayer.Data = tmpData;
             m_RecvReg.m_DepthTargetLayer.Address = currentAddress;
-            // HBHome::getInstance()->setTargetDepth(targetDepth);
+            HBHome::getInstance()->setTargetDepth(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
         case HQmlEnum::DEPTH_SURFACE_COVER_H: // 表套深度高
@@ -166,13 +167,13 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthSurfaceCover.Data = tmpData;
             m_RecvReg.m_DepthSurfaceCover.Address = currentAddress;
-            // HBHome::getInstance()->setTargetDepth(targetDepth);
+            HBHome::getInstance()->setTargetDepth(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
         case HQmlEnum::PULSE_COUNT: // PULSE
             m_RecvReg.m_PulseCount.Data = value;
             m_RecvReg.m_PulseCount.Address = currentAddress;
-            // HBHome::getInstance()->setPulse(plus);
+            HBHome::getInstance()->setPulse(value);
             // qDebug() << "Address" << currentAddress << "- Updated plus:" << plus;
             break;
         case HQmlEnum::DEPTH_ENCODER:
@@ -245,7 +246,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCurrent.Data = tmpData;
             m_RecvReg.m_TensionCurrent.Address = currentAddress;
-            // HBHome::getInstance()->setTension(tension);
+            HBHome::getInstance()->setTension(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated tension:" << tension;
             break;
         case HQmlEnum::TENSION_CURRENT_DELTA_H: // TENSION_INCREMENT_H
@@ -258,7 +259,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCurrentDelta.Data = tmpData;
             m_RecvReg.m_TensionCurrentDelta.Address = currentAddress;
-            // HBHome::getInstance()->setTensionIncrement(tensionIncrement);
+            HBHome::getInstance()->setTensionIncrement(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated tensionIncrement:" << tensionIncrement;
             break;
         case HQmlEnum::TENSION_LIMITED_H: // MAX_TENSION_H
@@ -271,7 +272,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionLimited.Data = tmpData;
             m_RecvReg.m_TensionLimited.Address = currentAddress;
-            // HBHome::getInstance()->setMaxTension(maxTension);
+            HBHome::getInstance()->setMaxTension(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated maxTension:" << maxTension;
             break;
         case HQmlEnum::TENSION_LIMITED_DELTA_H: // MAX_TENSION_INCREMENT_L
@@ -284,7 +285,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionLimitedDelta.Data = tmpData;
             m_RecvReg.m_TensionLimitedDelta.Address = currentAddress;
-            // HBHome::getInstance()->setMaxTensionIncrement(maxTensionIncrement);
+            HBHome::getInstance()->setMaxTensionIncrement(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated maxTensionIncrement:" << maxTensionIncrement;
             break;
         case HQmlEnum::TENSION_CABLE_HEAD_H: // CABLE_TENSION_H
@@ -297,13 +298,13 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCableHead.Data = tmpData;
             m_RecvReg.m_TensionCableHead.Address = currentAddress;
-            // HBHome::getInstance()->setHarnessTension(cableTension);
+            HBHome::getInstance()->setHarnessTension(tmpData);
             // qDebug() << "Address" << currentAddress << "- Updated cableTension:" << cableTension;
             break;
         case HQmlEnum::K_VALUE:
             m_RecvReg.m_K_Value.Data = value;
             m_RecvReg.m_K_Value.Address = currentAddress;
-            // HBHome::getInstance()->setKValue(K_Value);
+            HBHome::getInstance()->setKValue(value);
             // qDebug() << "Address" << currentAddress << "- Updated K_Value:" << K_Value;
             break;
         case HQmlEnum::TENSION_ENCODER:
@@ -563,23 +564,23 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             // TensionSafe::getInstance()->setCurrentTensionSafe( QString::number(currentTensionSafe));
             // qDebug() << "Address" << currentAddress << "- Updated currentTensionSafe:" << currentTensionSafe;
             break;
-        case HQmlEnum::TENSION_CIRRENT_LIMITED_H: // CIRRENT_TENSION_MAX_H
+        case HQmlEnum::TENSION_CURRENT_LIMITED_H: // CIRRENT_TENSION_MAX_H
             m_RegisterData.HIGH_16BITS = value;
             break;
-        case HQmlEnum::TENSION_CIRRENT_LIMITED_L: // CIRRENT_TENSION_MAX_L
+        case HQmlEnum::TENSION_CURRENT_LIMITED_L: // CIRRENT_TENSION_MAX_L
             m_RegisterData.LOW_16BITS = value;
             tmpData = m_RegisterData.HIGH_16BITS;
             tmpData <<= 16;
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCurrentLimited.Data = tmpData;
             m_RecvReg.m_TensionCurrentLimited.Address = currentAddress;
-            // TensionSafe::getInstance()->setMAXTensionSafe(QString::number(maxTensionSafe));
+            TensionSafe::getInstance()->setMAXTensionSafe(QString::number(tmpData));
             // qDebug() << "Address" << currentAddress << "- Updated maxTensionSafe:" << maxTensionSafe;
             break;
         case HQmlEnum::TENSION_CABLE_HEAD_TREND: // HARNESS_TENSION_TREND
             m_RecvReg.m_TensionCableHeadTrend.Data = value;
             m_RecvReg.m_TensionCableHeadTrend.Address = currentAddress;
-            // TensionSafe::getInstance()->setCableTensionTrend(QString::number(cableTensionTrend));
+            TensionSafe::getInstance()->setCableTensionTrend(value);
             // qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
             break;
         case HQmlEnum::TIME_SAFETY_STOP: // PARKING_SAFE_TIME

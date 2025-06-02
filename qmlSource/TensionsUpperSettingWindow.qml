@@ -233,11 +233,11 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: WellParameter.HarnessForce
+                    text: WellParameter.BreakingForceCable
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessPullingStrength.text,textHarnessPullingStrength,function(val) {
-                            WellParameter.HarnessForce = val;
+                            WellParameter.BreakingForceCable = val;
                             ModbusClient.writeRegister(HQmlEnum.HARNESS_FORCE,[parseInt(val)])
                         })
                     }

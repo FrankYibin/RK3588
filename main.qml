@@ -51,8 +51,6 @@ Window{
     property var qmlTextArray: [qmltextTimeMode, qmltextEnergyMode, qmltextPeakPowerMode,
                                 qmltextGroundDetectMode, qmltextAbsoluteDistanceMode, qmltextCollapseDistanceMode]
 
-    readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
-
     signal signalCurrentLanguageChanged()
     signal signalCurrentScreenChanged(int index)
 
@@ -291,7 +289,7 @@ Window{
 
     function menuOptionLookAt(index)
     {
-        var objItem = stackMainView.find(function(item) { return (item.qmlscreenIndicator === index)})
+        var objItem = stackMainView.find(function(item) { return (item.qmlscreenIndicator === index)}, true)
         if(objItem !== null)
         {
             var size = stackMainView.depth

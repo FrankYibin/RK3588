@@ -7,13 +7,13 @@ class Depth : public QObject
 {
     Q_OBJECT
     //目的层深度
-    Q_PROPERTY(int TargetLayerDepth READ TargetLayerDepth WRITE setTargetLayerDepth NOTIFY TargetLayerDepthChanged)
+    Q_PROPERTY(QString DepthTargetLayer READ DepthTargetLayer WRITE setDepthTargetLayer NOTIFY DepthTargetLayerChanged)
     //深度方向
     Q_PROPERTY(int DepthOrientation READ DepthOrientation WRITE setDepthOrientation NOTIFY DepthOrientationChanged)
     //表套深度
-    Q_PROPERTY(int MeterDepth READ MeterDepth WRITE setMeterDepth NOTIFY MeterDepthChanged)
-    //深度计算方式
-    Q_PROPERTY(int DepthCalculateType READ DepthCalculateType WRITE setDepthCalculateType NOTIFY DepthCalculateTypeChanged)
+    Q_PROPERTY(QString DepthSurfaceCover READ DepthSurfaceCover WRITE setDepthSurfaceCover NOTIFY DepthSurfaceCoverChanged)
+    //编码器源选择
+    Q_PROPERTY(int DepthEncoder READ DepthEncoder WRITE setDepthEncoder NOTIFY DepthEncoderChanged)
     //编码器编号
     Q_PROPERTY(int CodeOption READ CodeOption WRITE setCodeOption NOTIFY CodeOptionChanged)
     //速度单位
@@ -43,16 +43,27 @@ public:
 
     };
 
+    enum ENCODER_SOURCE
+    {
+        ENCODER_1 = 0,
+        ENCODER_2,
+        ENCODER_3,
+        ENCODER_1_2,
+        ENCODER_2_3,
+        ENCODER_1_3
+    };
+
 public:
     static Depth* getInstance();
-    Q_INVOKABLE int TargetLayerDepth() const;
-    Q_INVOKABLE void setTargetLayerDepth(int newTargetLayerDepth);
+    Q_INVOKABLE QString DepthTargetLayer() const;
+    Q_INVOKABLE void setDepthTargetLayer(const QString value);
+
     Q_INVOKABLE int DepthOrientation() const;
     Q_INVOKABLE void setDepthOrientation(int newTargetLayerDepth);
-    Q_INVOKABLE int MeterDepth() const;
-    Q_INVOKABLE void setMeterDepth(int newMeterDepth);
-    Q_INVOKABLE int DepthCalculateType() const;
-    Q_INVOKABLE void setDepthCalculateType(int newDepthCalculateType);
+    Q_INVOKABLE QString DepthSurfaceCover() const;
+    Q_INVOKABLE void setDepthSurfaceCover(const QString value);
+    Q_INVOKABLE int DepthEncoder() const;
+    Q_INVOKABLE void setDepthEncoder(const int value);
     Q_INVOKABLE int VelocityUnit    () const;
     Q_INVOKABLE int DistanceUnit    () const;
     Q_INVOKABLE int TimeUnit        () const;
@@ -64,10 +75,10 @@ public:
     Q_INVOKABLE int CodeOption() const;
     Q_INVOKABLE void setCodeOption(int newTCodeOption);
 signals:
-    void TargetLayerDepthChanged();
+    void DepthTargetLayerChanged();
     void DepthOrientationChanged();
-    void MeterDepthChanged();
-    void DepthCalculateTypeChanged();
+    void DepthSurfaceCoverChanged();
+    void DepthEncoderChanged();
     void CodeOptionChanged();
 
     void VelocityUnitChanged    ();
@@ -83,10 +94,10 @@ private:
     static Depth* m_depth;
 
 private:
-    int m_targetLayerDepth;
+    QString m_DepthTargetLayer;
     int m_depthOrientation;
-    int m_meterDepth;
-    int m_depthCalculateType;
+    QString m_DepthSurfaceCover;
+    int m_DepthEncoder;
     int m_codeOption;
     int m_velocityUnit;
     int m_timeUnit;

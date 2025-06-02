@@ -16,8 +16,6 @@ Item{
     readonly property int rowSpacing: 100
     readonly property int columnSpacing: 30
     readonly property int optionHeight: 30
-//    readonly property var tensionsTypeModel: [qsTr("数字无线"), qsTr("数字有线"), qsTr("模拟有线")]
-//    readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
     signal signalSaveTensometer()
     Rectangle
     {
@@ -123,7 +121,7 @@ Item{
             HBComboBox
             {
                 id: comboSensorRange
-                model: mainWindow.sensorRangeModel
+                model: TensionsGlobalDefine.tensionRangeModel
                 currentIndex:Tensiometer.TensiometerRange
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height

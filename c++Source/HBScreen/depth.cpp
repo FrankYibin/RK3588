@@ -16,10 +16,10 @@ Depth *Depth::getInstance()
 Depth::Depth(QObject *parent)
     : QObject{parent}
 {
-    m_targetLayerDepth = 0;
+    m_DepthTargetLayer = "";
     m_depthOrientation = 0;
-    m_meterDepth = 0;
-    m_depthCalculateType = 0;
+    m_DepthSurfaceCover = "";
+    m_DepthEncoder = -1;
 
     m_codeOption = 0;
 
@@ -27,19 +27,22 @@ Depth::Depth(QObject *parent)
     int tmpVelocity = M_PER_HOUR;
     //get tmpVelocity from database
     setVelocityUnit(tmpVelocity);
+    setDepthTargetLayer("99999.99");
+    setDepthSurfaceCover("99999.99");
+    setDepthEncoder(ENCODER_1);
 }
 
-int Depth::TargetLayerDepth() const
+QString Depth::DepthTargetLayer() const
 {
-    return m_targetLayerDepth;
+    return m_DepthTargetLayer;
 }
 
-void Depth::setTargetLayerDepth(int newTargetLayerDepth)
+void Depth::setDepthTargetLayer(const QString value)
 {
-    if ( m_targetLayerDepth == newTargetLayerDepth )
+    if ( m_DepthTargetLayer == value)
         return;
-    m_targetLayerDepth = newTargetLayerDepth;
-    emit TargetLayerDepthChanged();
+    m_DepthTargetLayer = value;
+    emit DepthTargetLayerChanged();
 }
 
 int Depth::DepthOrientation() const
@@ -55,33 +58,32 @@ void Depth::setDepthOrientation(int newDepthOrientation)
     emit DepthOrientationChanged();
 }
 
-int Depth::MeterDepth() const
+QString Depth::DepthSurfaceCover() const
 {
-
-    return m_meterDepth;
+    return m_DepthSurfaceCover;
 }
 
 
-void Depth::setMeterDepth(int newMeterDepth)
+void Depth::setDepthSurfaceCover(const QString value)
 {
-    if ( m_meterDepth == newMeterDepth )
+    if (m_DepthSurfaceCover == value)
         return;
-    m_meterDepth = newMeterDepth;
-    emit MeterDepthChanged();
+    m_DepthSurfaceCover = value;
+    emit DepthSurfaceCoverChanged();
 
 }
 
-int Depth::DepthCalculateType() const
+int Depth::DepthEncoder() const
 {
-    return m_depthCalculateType;
+    return m_DepthEncoder;
 }
 
-void Depth::setDepthCalculateType(int newDepthCalculateType)
+void Depth::setDepthEncoder(const int value)
 {
-    if ( m_depthCalculateType == newDepthCalculateType )
+    if ( m_DepthEncoder == value )
         return;
-    m_depthCalculateType = newDepthCalculateType;
-    emit DepthCalculateTypeChanged();
+    m_DepthEncoder = value;
+    emit DepthEncoderChanged();
 
 }
 

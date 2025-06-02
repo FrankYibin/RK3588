@@ -13,12 +13,16 @@ WellParameter::WellParameter(QObject *parent)
     m_SlopeAngleWellSetting = "";
     m_WeightEachKilometerCable = "";
     m_CableSpec = -1;
+    m_BreakingForceCable = "";
+    m_TonnageTensionStick = "";
     setWellType(VERTICAL);
     setWorkType(PERFORATION);
     setSlopeAngleWellSetting("0.00");
     setDepthCurrent("99999.99");
     setWeightEachKilometerCable("20000");
     setCableSpec(MILIMETER_5_6);
+    setBreakingForceCable("40000");
+    setTonnageTensionStick("10.00");
 }
 
 WellParameter *WellParameter::getInstance()
@@ -141,29 +145,29 @@ void WellParameter::setCableSpec(const int spec)
 
 }
 
-QString WellParameter::HarnessForce() const
+QString WellParameter::BreakingForceCable() const
 {
-    return m_harnessForce;
+    return m_BreakingForceCable;
 }
 
-void WellParameter::setHarnessForce(const QString &value)
-{    if (m_harnessForce != value) {
-        m_harnessForce = value;
-        emit HarnessForceChanged();
+void WellParameter::setBreakingForceCable(const QString value)
+{    if (m_BreakingForceCable != value) {
+        m_BreakingForceCable = value;
+        emit BreakingForceCableChanged();
     }
-
 }
 
-int WellParameter::TensionUnit() const
+QString WellParameter::TonnageTensionStick() const
 {
-    return m_tensionUnit;
+    return m_TonnageTensionStick;
 }
 
-void WellParameter::setTensionUnit(const int newTensionUnit)
+void WellParameter::setTonnageTensionStick(const QString value)
 {
-    if (m_tensionUnit != newTensionUnit) {
-        m_tensionUnit = newTensionUnit;
-        emit TensionUnitChanged();
+    if (m_TonnageTensionStick != value)
+    {
+        m_TonnageTensionStick = value;
+        emit TonnageTensionStickChanged();
     }
 
 }

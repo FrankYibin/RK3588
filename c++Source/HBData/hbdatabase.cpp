@@ -115,8 +115,8 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     wp->setWeightEachKilometerCable(param.harnessWeight);
     wp->setWeightInstrumentString(param.sensorWeight);
     wp->setCableSpec(param.harnessType);
-    wp->setHarnessForce(param.harnessForce);
-    wp->setTensionUnit(param.tensionUnit);
+    wp->setBreakingForceCable(param.harnessForce);
+    wp->setTonnageTensionStick(param.tensionUnit);
     wp->setWorkType(param.workType);
     wp->setUserName(param.userName);
     wp->setOperatorType(param.operatorType);
@@ -248,8 +248,8 @@ bool HBDatabase::updateWellParameterFromInstance()
     param.harnessWeight = wp->WeightEachKilometerCable();
     param.sensorWeight = wp->WeightInstrumentString();
     param.harnessType = wp->CableSpec();
-    param.harnessForce = wp->HarnessForce();
-    param.tensionUnit = wp->TensionUnit();
+    param.harnessForce = wp->BreakingForceCable();
+    param.tensionUnit = wp->TonnageTensionStick();
     param.workType = wp->WorkType();
     param.userName = wp->UserName();
     param.operatorType = wp->OperatorType();
@@ -309,10 +309,10 @@ bool HBDatabase::loadDepthSet(_DepthSet &param)
     Depth* ds = Depth::getInstance();
     HBHome* hs = HBHome::getInstance();
 
-    ds->setTargetLayerDepth(param.targetLayerDepth);
+    ds->setDepthTargetLayer(param.targetLayerDepth);
     ds->setDepthOrientation(param.depthOrientation);
-    ds->setMeterDepth(param.meterDepth);
-    ds->setDepthCalculateType(param.depthCalculateType);
+    ds->setDepthSurfaceCover(param.meterDepth);
+    ds->setDepthEncoder(param.depthCalculateType);
     ds->setCodeOption(param.codeOption);
     hs->setPulse(param.pulse);
 
@@ -369,10 +369,10 @@ bool HBDatabase::updateDepthSetFromInstance()
 
     _DepthSet param;
     param.id = 1;
-    param.targetLayerDepth = ds->TargetLayerDepth();
+    param.targetLayerDepth = ds->DepthTargetLayer();
     param.depthOrientation = ds->DepthOrientation();
-    param.meterDepth = ds->MeterDepth();
-    param.depthCalculateType = ds->DepthCalculateType();
+    param.meterDepth = ds->DepthSurfaceCover();
+    param.depthCalculateType = ds->DepthEncoder();
     param.codeOption = ds->CodeOption();
     param.pulse = hs->Pulse();
 

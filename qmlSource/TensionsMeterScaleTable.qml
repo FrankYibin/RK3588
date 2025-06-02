@@ -28,9 +28,6 @@ Item{
 
     HBTableView {
         id: tensionMeterTable
-        property var tensionsTypeModel: []
-        property var sensorRangeModel: []
-        property var analogRangeModel: []
         property int selectedRow: -1
         anchors.left: parent.left
         anchors.leftMargin: Math.round(10 * Style.scaleHint)
@@ -127,10 +124,7 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    //                    text: styleData.value
-                    text: tensionsTypeModel[styleData.value] !== undefined
-                          ? tensionsTypeModel[styleData.value]
-                          : ""
+                    text: TensionsGlobalDefine.tensionEncoderModel[styleData.value]
                     font.family: "宋体"
                     font.pixelSize: tensionMeterTable.fontSize
                 }
@@ -146,10 +140,7 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    //                    text: styleData.value
-                    text: sensorRangeModel[styleData.value] !== undefined
-                          ? sensorRangeModel[styleData.value]
-                          : ""
+                    text: TensionsGlobalDefine.tensionRangeModel[styleData.value]
                     font.family: Style.regular.name
                     font.pixelSize: tensionMeterTable.fontSize
                 }
@@ -165,10 +156,7 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    //                    text: styleData.value
-                    text: analogRangeModel[styleData.value] !== undefined
-                          ? analogRangeModel[styleData.value]
-                          : ""
+                    text: TensionsGlobalDefine.tensionAnalogModel[styleData.value]
                     font.family: "宋体"
                     font.pixelSize: tensionMeterTable.fontSize
                 }

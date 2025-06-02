@@ -69,15 +69,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^\d{1,5}(\.\d{1,2})?$/
                     }
-                    // text: qsTr("192")
-                    text: Depth.TargetLayerDepth
+                    text: Depth.DepthTargetLayer
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        console.log("textTargetLayerDepth.text =", textTargetLayerDepth.text);
-                         console.log("textTargetLayerDepth =", textTargetLayerDepth);
                         mainWindow.showPrimaryNumpad(qsTr("请输入目标层深度"), " ", 2, 0, 99999, textTargetLayerDepth.text, textTargetLayerDepth, function(val) {
-                            Depth.TargetLayerDepth = val;
-                            ModbusUtils.writeScaledValue(val,HQmlEnum.TARGET_DEPTH_H,100.0)
+                            Depth.DepthTargetLayer = val;
+                            // ModbusUtils.writeScaledValue(val,HQmlEnum.TARGET_DEPTH_H,100.0)
 
                         })
 
@@ -111,9 +108,9 @@ Item{
                 }
                 HBComboBox
                 {
-                    id:comboBoxDepthOrientation
+                    id: comboBoxDepthOrientation
                     model: DepthGlobalDefine.depthOrientationModel
-                    currentIndex:  Depth.DepthOrientation
+                    currentIndex: Depth.DepthOrientation
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     onCurrentIndexChanged: {
@@ -149,15 +146,13 @@ Item{
                         regularExpression: /^\d{1,5}(\.\d{1,2})?$/
                     }
                     // text: qsTr("192")
-                    text:Depth.MeterDepth
+                    text: Depth.DepthSurfaceCover
                     onlyForNumpad: true
 
                     onSignalClickedEvent: {
-                        console.log("textMeterDepth.text =", textMeterDepth.text);
-                         console.log("textMeterDepth =", textMeterDepth);
-                        mainWindow.showPrimaryNumpad(qsTr("请输入表套深度"), " ", 3, 0, 99999, textMeterDepth.text,textMeterDepth,function(val) {
-                            Depth.MeterDepth = val;
-                            ModbusUtils.writeScaledValue(val,HQmlEnum.METER_DEPTH_H,100.0)
+                        mainWindow.showPrimaryNumpad(qsTr("请输入表套深度"), " ", 2, 0, 99999, textMeterDepth.text,textMeterDepth,function(val) {
+                            Depth.DepthSurfaceCover = val;
+                            // ModbusUtils.writeScaledValue(val,HQmlEnum.METER_DEPTH_H,100.0)
                         })
 
                     }
@@ -197,7 +192,6 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^\d{0,5}(\.\d{0,2})?$/
                     }
-                    // text: qsTr("8080")
                     text: HBHome.Depth
                     onlyForNumpad: true
                     onSignalClickedEvent: {
@@ -237,12 +231,12 @@ Item{
                 {
                     id: comboBoxEncorderOption
                     model: DepthGlobalDefine.depthEncorderModel
-                    currentIndex: Depth.CodeOption
+                    currentIndex: Depth.DepthEncoder
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     onCurrentIndexChanged: {
-                        Depth.CodeOption = currentIndex
-                        ModbusClient.writeRegister(HQmlEnum.DEPTHCALCULATETYPE, currentIndex)
+                        Depth.DepthEncoder = currentIndex
+                        // ModbusClient.writeRegister(HQmlEnum.DEPTHCALCULATETYPE, currentIndex)
                     }
                 }
             }
@@ -303,7 +297,8 @@ Item{
 
                     onSignalClickedEvent: { 
                         mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text, textPulseCount, function(val) {
-                            ModbusClient.writeRegister(HQmlEnum.PULSE, parseInt(val))
+                            HBHome.Pulse = val
+                            // ModbusClient.writeRegister(HQmlEnum.PULSE, parseInt(val))
                         })
 
                     }

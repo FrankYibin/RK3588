@@ -50,7 +50,7 @@ struct _WellParameter {
     QString sensorWeight;
     int harnessType = 0;
     QString harnessForce;
-    int tensionUnit = 0;
+    QString tensionUnit;
     int workType = 0;
     QString userName;
     QString operatorType;
@@ -58,9 +58,9 @@ struct _WellParameter {
 
 struct _DepthSet {
     int id;
-    int targetLayerDepth;
+    QString targetLayerDepth;
     int depthOrientation;
-    int meterDepth;
+    QString meterDepth;
     int depthCalculateType;
     int codeOption;
     int pulse;

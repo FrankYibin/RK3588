@@ -28,14 +28,15 @@ class WellParameter : public QObject
     Q_PROPERTY(QString WeightInstrumentString READ WeightInstrumentString WRITE setWeightInstrumentString NOTIFY WeightInstrumentStringChanged FINAL)
 
     //HarnessType        电缆规格
-    // Q_PROPERTY(int HarnessType READ HarnessType WRITE setHarnessType NOTIFY HarnessTypeChanged)
     Q_PROPERTY(int CableSpec READ CableSpec WRITE setCableSpec NOTIFY CableSpecChanged)
 
     //HarnessForce       电缆拉断力
-    Q_PROPERTY(QString HarnessForce READ HarnessForce WRITE setHarnessForce NOTIFY HarnessForceChanged)
+    // Q_PROPERTY(QString HarnessForce READ HarnessForce WRITE setHarnessForce NOTIFY HarnessForceChanged)
+    Q_PROPERTY(QString BreakingForceCable READ BreakingForceCable WRITE setBreakingForceCable NOTIFY BreakingForceCableChanged)
 
     //TensionUnit        拉力磅吨位
-    Q_PROPERTY(int TensionUnit READ TensionUnit WRITE setTensionUnit NOTIFY TensionUnitChanged)
+    // Q_PROPERTY(int TensionUnit READ TensionUnit WRITE setTensionUnit NOTIFY TensionUnitChanged)
+    Q_PROPERTY(QString TonnageTensionStick READ TonnageTensionStick WRITE setTonnageTensionStick NOTIFY TonnageTensionStickChanged FINAL)
 
     //WorkType           作业类型
     Q_PROPERTY(int WorkType READ WorkType WRITE setWorkType NOTIFY WorkTypeChanged)
@@ -45,7 +46,7 @@ class WellParameter : public QObject
 
     //OperatorType       操作员工种
     Q_PROPERTY(QString OperatorType READ OperatorType WRITE setOperatorType NOTIFY OperatorTypeChanged)
-
+    //大斜度井斜度设置
     Q_PROPERTY(QString SlopeAngleWellSetting READ SlopeAngleWellSetting WRITE setSlopeAngleWellSetting NOTIFY SlopeAngleWellSettingChanged)
 public:
     enum OIL_WELL_TYPE
@@ -79,11 +80,11 @@ public:
     Q_INVOKABLE int CableSpec() const;
     Q_INVOKABLE void setCableSpec(const int spec);
 
-    Q_INVOKABLE QString HarnessForce() const;
-    Q_INVOKABLE void setHarnessForce(const QString &value);
+    Q_INVOKABLE QString BreakingForceCable() const;
+    Q_INVOKABLE void setBreakingForceCable(const QString value);
 
-    Q_INVOKABLE int TensionUnit() const;
-    Q_INVOKABLE void setTensionUnit(const int newTensionUnit);
+    Q_INVOKABLE QString TonnageTensionStick() const;
+    Q_INVOKABLE void setTonnageTensionStick(const QString value);
 
     Q_INVOKABLE QString UserName() const;
     Q_INVOKABLE void setUserName(const QString &value);
@@ -93,16 +94,24 @@ public:
 
     Q_INVOKABLE QString WellNumber() const;
     Q_INVOKABLE void setWellNumber(const QString &value);
+
     Q_INVOKABLE QString AreaBlock() const;
     Q_INVOKABLE void setAreaBlock(const QString &value);
+
     Q_INVOKABLE QString DepthCurrent() const;
     Q_INVOKABLE void setDepthCurrent(const QString &value);
+
     Q_INVOKABLE int WorkType() const;
-    Q_INVOKABLE int WellType() const;
-    Q_INVOKABLE QString SlopeAngleWellSetting() const;
     Q_INVOKABLE void setWorkType(const int type);
+
+    Q_INVOKABLE int WellType() const;
     Q_INVOKABLE void setWellType(const int type);
+
+    Q_INVOKABLE QString SlopeAngleWellSetting() const;
     Q_INVOKABLE void setSlopeAngleWellSetting(const QString angle);
+
+
+
 
     // CSV methods
 //    QString toCSVLine() const;
@@ -121,9 +130,9 @@ signals:
 
     void CableSpecChanged();
 
-    void HarnessForceChanged();
+    void BreakingForceCableChanged();
 
-    void TensionUnitChanged();
+    void TonnageTensionStickChanged();
     void UserNameChanged();
 
     void OperatorTypeChanged();
@@ -149,8 +158,8 @@ private:
     QString m_WeightEachKilometerCable;
     QString m_WeightInstrumentString;
     int m_CableSpec;
-    QString m_harnessForce;
-    int m_tensionUnit = 0;
+    QString m_BreakingForceCable;
+    QString m_TonnageTensionStick;
     QString m_userName = "";
     QString m_operatorType = "";
     int m_workType;

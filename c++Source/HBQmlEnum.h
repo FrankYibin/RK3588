@@ -130,8 +130,8 @@ public:
         TENSION_SAFETY_COEFFICIENT, //安全张力系数
         TENSION_CURRENT_SAFETY_H,   //当前安全张力
         TENSION_CURRENT_SAFETY_L,
-        TENSION_CIRRENT_LIMITED_H,  //当前极限张力
-        TENSION_CIRRENT_LIMITED_L,
+        TENSION_CURRENT_LIMITED_H,  //当前极限张力
+        TENSION_CURRENT_LIMITED_L,
         TENSION_CABLE_HEAD_TREND,   //揽头张力变化趋势
         TIME_SAFETY_STOP,           //安全停车时间
 
