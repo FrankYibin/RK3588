@@ -10,6 +10,8 @@
 #include "c++Source/HBScreen/wellparameter.h"
 #include "c++Source/HBScreen/tensiometer.h"
 #include <QtConcurrent>
+#include <QHash>
+#include <cstring>
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_RecvReg;
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_PrevRecvReg;
 QModbusClient* HBModbusClient::_ptrModbus = nullptr;
@@ -96,9 +98,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
 {
     int startAddress = result.startAddress();
     int count = result.valueCount();
-
-    qDebug() << "Batch read from address" << startAddress << "count" << count;
-
+    int tmpData;
     for (int i = 0; i < count; ++i)
     {
         int currentAddress = startAddress + i;
@@ -106,82 +106,199 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
         quint16 value = result.value(i);
 
         switch (currentAddress) {
-        case HQmlEnum::HOLOD_DEPTH_H: // DEPTH_H
-            Depth_H = value;
+        case HQmlEnum::DEPTH_CURRENT_H: // DEPTH_H
+            m_RegisterData.HIGH_16BITS = value;
             break;
-        case HQmlEnum::HOLOD_DEPTH_L: // DEPTH_L
-            Depth_L = value;
-            m_RecvReg.m_Depth.Data = (Depth_H << 16) | Depth_L;
-            m_RecvReg.m_Depth.Address = currentAddress;
-            // HBHome::getInstance()->setDepth(m_ReceivedReg.m_Depth.Data);
-            // qDebug() << "Address" << currentAddress << "- Updated depth:" << depth;
+        case HQmlEnum::DEPTH_CURRENT_L: // DEPTH_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthCurrent.Data      = tmpData;
+            m_RecvReg.m_DepthCurrent.Address   = currentAddress;
             break;
-        case HQmlEnum::SPEED_H: // SPEED_H
-            Speed_H = value;
+        case HQmlEnum::VELOCITY_CURRENT_H: // SPEED_H
+            m_RegisterData.HIGH_16BITS = value;
             break;
-        case HQmlEnum::SPEED_L: // SPEED_H
-            Speed_L = value;
-            m_RecvReg.m_Speed.Data = (Speed_H << 16) | Speed_L;
-            m_RecvReg.m_Speed.Address = currentAddress;
+        case HQmlEnum::VELOCITY_CURRENT_L: // SPEED_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_VelocityCurrent.Data      = tmpData;
+            m_RecvReg.m_VelocityCurrent.Address   = currentAddress;
             // HBHome::getInstance()->setSpeed(speed);
             // qDebug() << "Address" << currentAddress << "- Updated speed:" << speed;
             break;
-        case HQmlEnum::MAX_SPEED_H: // MAX_SPEED_H
-            MaxSpeed_H = value;
+        case HQmlEnum::VELOCITY_LIMITED_H: // MAX_SPEED_H
+            m_RegisterData.HIGH_16BITS = value;
             break;
-        case HQmlEnum::MAX_SPEED_L: // MAX_SPEED_L
-            MaxSpeed_L = value;
-            m_RecvReg.m_MaxSpeed.Data = (MaxSpeed_H << 16) | MaxSpeed_L;
-            m_RecvReg.m_MaxSpeed.Address = currentAddress;
+        case HQmlEnum::VELOCITY_LIMITED_L: // MAX_SPEED_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_VelocityLimited.Data = tmpData;
+            m_RecvReg.m_VelocityLimited.Address = currentAddress;
             // HBHome::getInstance()->setMaxSpeed(maxSpeed);
             // qDebug() << "Address" << currentAddress << "- Updated maxSpeed:" << maxSpeed;
             break;
-        case HQmlEnum::TARGET_DEPTH_H: // MAX_SPEED_H
-            TargetDepth_H = value;
+        case HQmlEnum::DEPTH_TARGET_LAYER_H: // MAX_SPEED_H
+            m_RegisterData.HIGH_16BITS = value;
             break;
-        case HQmlEnum::TARGET_DEPTH_L: // MAX_SPEED_L
-            TargetDepth_L = value;
-            m_RecvReg.m_TargetLayerDepth.Data = (TargetDepth_H << 16) | TargetDepth_L;
-            m_RecvReg.m_TargetLayerDepth.Address = currentAddress;
+        case HQmlEnum::DEPTH_TARGET_LAYER_L: // MAX_SPEED_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthTargetLayer.Data = tmpData;
+            m_RecvReg.m_DepthTargetLayer.Address = currentAddress;
             // HBHome::getInstance()->setTargetDepth(targetDepth);
             // qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
-
-        case HQmlEnum::METER_DEPTH_H: // 表套深度高
-            TargetDepth_H = value;
+        case HQmlEnum::DEPTH_SURFACE_COVER_H: // 表套深度高
+            m_RegisterData.HIGH_16BITS = value;
             break;
-        case HQmlEnum::METER_DEPTH_L: //
-            TargetDepth_L = value;
-            m_RecvReg.m_MeterDepth.Data = (TargetDepth_H << 16) | TargetDepth_L;
-            m_RecvReg.m_MeterDepth.Address = currentAddress;
+        case HQmlEnum::DEPTH_SURFACE_COVER_L: //
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthSurfaceCover.Data = tmpData;
+            m_RecvReg.m_DepthSurfaceCover.Address = currentAddress;
             // HBHome::getInstance()->setTargetDepth(targetDepth);
             // qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
-        case HQmlEnum::PULSE: // PULSE
-            m_RecvReg.m_Pulse.Data = value;
-            m_RecvReg.m_Pulse.Address = currentAddress;
+        case HQmlEnum::PULSE_COUNT: // PULSE
+            m_RecvReg.m_PulseCount.Data = value;
+            m_RecvReg.m_PulseCount.Address = currentAddress;
             // HBHome::getInstance()->setPulse(plus);
             // qDebug() << "Address" << currentAddress << "- Updated plus:" << plus;
             break;
-        case HQmlEnum::TENSION_H: // TENSION_H
-            Tension_H = value;
+        case HQmlEnum::DEPTH_ENCODER:
+            m_RecvReg.m_DepthEncoder.Data = value;
+            m_RecvReg.m_DepthEncoder.Address = currentAddress;
             break;
-        case HQmlEnum::TENSION_L: // TENSION_L
-            Tension_L = value;
-            m_RecvReg.m_Tension.Data = (Tension_H << 16) | Tension_L;
-            m_RecvReg.m_Tension.Address = currentAddress;
+        case HQmlEnum::DEPTH_ENCODER_1_H: // DEPTH_CODE1_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DEPTH_ENCODER_1_L: // DEPTH_CODE1_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthEncoder1.Data = tmpData;
+            m_RecvReg.m_DepthEncoder1.Address = currentAddress;
+            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth1));
+            // qDebug() << "Address" << currentAddress << "- Updated currentDepth1:" << currentDepth1;
+            break;
+        case HQmlEnum::DEPTH_ENCODER_2_H: // DEPTH_CODE2_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DEPTH_ENCODER_2_L: // DEPTH_CODE2_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthEncoder2.Data = tmpData;
+            m_RecvReg.m_DepthEncoder2.Address = currentAddress;
+            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth2));
+            // qDebug() << "Address" << currentAddress << "- Updated currentDepth2:" << currentDepth2;
+            break;
+        case HQmlEnum::DEPTH_ENCODER_3_H: // DEPTH_CODE3_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DEPTH_ENCODER_3_L: // DEPTH_CODE3_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthEncoder3.Data = tmpData;
+            m_RecvReg.m_DepthEncoder3.Address =  currentAddress;
+            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth3));
+            // qDebug() << "Address" << currentAddress << "- Updated currentDepth3:" << currentDepth3;
+            break;
+        case HQmlEnum::DEPTH_TOLERANCE_H: // CODE_COUNT_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DEPTH_TOLERANCE_L: // CODE_COUNT_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthTolerance.Data = tmpData;
+            m_RecvReg.m_DepthTolerance.Address = currentAddress;
+            // TensionSafe::getInstance()->setDepthLoss(QString::number(depthLoss));
+            // qDebug() << "Address" << currentAddress << "- Updated depthLoss:" << depthLoss;
+            break;
+        case HQmlEnum::DEPTH_CURRENT_DELTA:
+            m_RecvReg.m_DepthCurrentDelta.Data = value;
+            m_RecvReg.m_DepthCurrentDelta.Address = currentAddress;
+            break;
+        case HQmlEnum::TENSION_CURRENT_H: // TENSION_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::TENSION_CURRENT_L: // TENSION_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionCurrent.Data = tmpData;
+            m_RecvReg.m_TensionCurrent.Address = currentAddress;
             // HBHome::getInstance()->setTension(tension);
             // qDebug() << "Address" << currentAddress << "- Updated tension:" << tension;
             break;
-        case HQmlEnum::TENSION_INCREMENT_H: // TENSION_INCREMENT_H
-            TensionIncrement_H = value;
+        case HQmlEnum::TENSION_CURRENT_DELTA_H: // TENSION_INCREMENT_H
+            m_RegisterData.HIGH_16BITS = value;
             break;
-        case HQmlEnum::TENSION_INCREMENT_L: // TENSION_INCREMENT_L
-            TensionIncrement_L = value;
-            m_RecvReg.m_TensionIncrement.Data = (TensionIncrement_H << 16) | TensionIncrement_L;
-            m_RecvReg.m_TensionIncrement.Address = currentAddress;
+        case HQmlEnum::TENSION_CURRENT_DELTA_L: // TENSION_INCREMENT_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionCurrentDelta.Data = tmpData;
+            m_RecvReg.m_TensionCurrentDelta.Address = currentAddress;
             // HBHome::getInstance()->setTensionIncrement(tensionIncrement);
             // qDebug() << "Address" << currentAddress << "- Updated tensionIncrement:" << tensionIncrement;
+            break;
+        case HQmlEnum::TENSION_LIMITED_H: // MAX_TENSION_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::TENSION_LIMITED_L: // MAX_TENSION_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionLimited.Data = tmpData;
+            m_RecvReg.m_TensionLimited.Address = currentAddress;
+            // HBHome::getInstance()->setMaxTension(maxTension);
+            // qDebug() << "Address" << currentAddress << "- Updated maxTension:" << maxTension;
+            break;
+        case HQmlEnum::TENSION_LIMITED_DELTA_H: // MAX_TENSION_INCREMENT_L
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::TENSION_LIMITED_DELTA_L: // MAX_TENSION_INCREMENT_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionLimitedDelta.Data = tmpData;
+            m_RecvReg.m_TensionLimitedDelta.Address = currentAddress;
+            // HBHome::getInstance()->setMaxTensionIncrement(maxTensionIncrement);
+            // qDebug() << "Address" << currentAddress << "- Updated maxTensionIncrement:" << maxTensionIncrement;
+            break;
+        case HQmlEnum::TENSION_CABLE_HEAD_H: // CABLE_TENSION_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::TENSION_CABLE_HEAD_L: // CABLE_TENSION_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionCableHead.Data = tmpData;
+            m_RecvReg.m_TensionCableHead.Address = currentAddress;
+            // HBHome::getInstance()->setHarnessTension(cableTension);
+            // qDebug() << "Address" << currentAddress << "- Updated cableTension:" << cableTension;
             break;
         case HQmlEnum::K_VALUE:
             m_RecvReg.m_K_Value.Data = value;
@@ -189,185 +306,334 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             // HBHome::getInstance()->setKValue(K_Value);
             // qDebug() << "Address" << currentAddress << "- Updated K_Value:" << K_Value;
             break;
-        case HQmlEnum::MAX_TENSION_H: // MAX_TENSION_H
-            MaxTension_H = value;
+        case HQmlEnum::TENSION_ENCODER:
+            m_RecvReg.m_TensionEncoder.Data = value;
+            m_RecvReg.m_TensionEncoder.Address = currentAddress;
             break;
-        case HQmlEnum::MAX_TENSION_L: // MAX_TENSION_L
-            MaxTension_L = value;
-            m_RecvReg.m_MaxTension.Data = (MaxTension_H << 16) | MaxTension_L;
-            m_RecvReg.m_MaxTension.Address = currentAddress;
-            // HBHome::getInstance()->setMaxTension(maxTension);
-            // qDebug() << "Address" << currentAddress << "- Updated maxTension:" << maxTension;
+        case HQmlEnum::TENSION_ANALOG:
+            m_RecvReg.m_TensionAnalog.Data = value;
+            m_RecvReg.m_TensionAnalog.Address = currentAddress;
             break;
-        case HQmlEnum::MAX_TENSION_INCREMENT_H: // MAX_TENSION_INCREMENT_L
-            MaxTensionIncrement_H = value;
+        case HQmlEnum::TENSION_BATTERY:
+            m_RecvReg.m_TensionBattery.Data = value;
+            m_RecvReg.m_TensionBattery.Address = currentAddress;
             break;
-        case HQmlEnum::MAX_TENSION_INCREMENT_L: // MAX_TENSION_INCREMENT_L
-            MaxTensionIncrement_L = value;
-            m_RecvReg.m_MaxTensionIncrement.Data = (MaxTensionIncrement_H << 16) | MaxTensionIncrement_L;
-            m_RecvReg.m_MaxTensionIncrement.Address = currentAddress;
-            // HBHome::getInstance()->setMaxTensionIncrement(maxTensionIncrement);
-            // qDebug() << "Address" << currentAddress << "- Updated maxTensionIncrement:" << maxTensionIncrement;
+        case HQmlEnum::TENSION_NUM_H:
+            m_RegisterData.HIGH_16BITS = value;
             break;
-
-        case HQmlEnum::CABLE_TENSION_H: // CABLE_TENSION_H
-            CableTension_H = value;
+        case HQmlEnum::TENSION_NUM_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionNum.Data = tmpData;
+            m_RecvReg.m_TensionNum.Address = currentAddress;
             break;
-        case HQmlEnum::CABLE_TENSION_L: // CABLE_TENSION_L
-            CableTension_L = value;
-            m_RecvReg.m_CableTension.Data = (CableTension_H << 16) | CableTension_L;
-            m_RecvReg.m_CableTension.Address = currentAddress;
-            // HBHome::getInstance()->setHarnessTension(cableTension);
-            // qDebug() << "Address" << currentAddress << "- Updated cableTension:" << cableTension;
-            break;
-
-        case HQmlEnum::CURRENT_TENSION_SAFE_H: // CURRENT_TENSION_SAFE_H
-            currentTensionSafe_H = value;
-            break;
-        case HQmlEnum::CURRENT_TENSION_SAFE_L: // CURRENT_TENSION_SAFE_L
-            currentTensionSafe_L = value;
-            m_RecvReg.m_CurrentSafetyTension.Data = (currentTensionSafe_H << 16) | currentTensionSafe_L;
-            m_RecvReg.m_CurrentSafetyTension.Address = currentAddress;
-            // TensionSafe::getInstance()->setCurrentTensionSafe( QString::number(currentTensionSafe));
-            // qDebug() << "Address" << currentAddress << "- Updated currentTensionSafe:" << currentTensionSafe;
-            break;
-
-        case HQmlEnum::CIRRENT_TENSION_MAX_H: // CIRRENT_TENSION_MAX_H
-            maxTensionSafe_H = value;
-            break;
-        case HQmlEnum::CIRRENT_TENSION_MAX_L: // CIRRENT_TENSION_MAX_L
-            maxTensionSafe_L = value;
-            m_RecvReg.m_CurrentMaxTension.Data = (maxTensionSafe_H << 16) | maxTensionSafe_L;
-            m_RecvReg.m_CurrentMaxTension.Address = currentAddress;
-            // TensionSafe::getInstance()->setMAXTensionSafe(QString::number(maxTensionSafe));
-            // qDebug() << "Address" << currentAddress << "- Updated maxTensionSafe:" << maxTensionSafe;
-            break;
-        case HQmlEnum::HARNESS_TENSION_TREND: // HARNESS_TENSION_TREND
-            m_RecvReg.m_CableTensionTrend.Data = value;
-            m_RecvReg.m_CableTensionTrend.Address = currentAddress;
-            // TensionSafe::getInstance()->setCableTensionTrend(QString::number(cableTensionTrend));
-            // qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
-            break;
-
-        case HQmlEnum::PARKING_SAFE_TIME: // PARKING_SAFE_TIME
-            m_RecvReg.m_ParkStopTimeStamp.Data = value;
-            m_RecvReg.m_ParkStopTimeStamp.Address = currentAddress;
-            // TensionSafe::getInstance()->setPtime(QString::number(ptime));
-            // qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
-            break;
-
-        case HQmlEnum::CODE_COUNT_H: // CODE_COUNT_H
-            depthLoss_H = value;
-            break;
-
-        case HQmlEnum::CODE_COUNT_L: // CODE_COUNT_L
-            depthLoss_L = value;
-            m_RecvReg.m_DeltaEncoderDepth.Data = (depthLoss_H << 16) | depthLoss_L;
-            m_RecvReg.m_DeltaEncoderDepth.Address = currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(depthLoss));
-            // qDebug() << "Address" << currentAddress << "- Updated depthLoss:" << depthLoss;
-            break;
-
-        case HQmlEnum::DEPTH_CODE1_H: // DEPTH_CODE1_H
-            currentDepth1_H = value;
-            break;
-
-        case HQmlEnum::DEPTH_CODE1_L: // DEPTH_CODE1_L
-            currentDepth1_L = value;
-            m_RecvReg.m_EncoderDepth1.Data = (currentDepth1_H << 16) | currentDepth1_L;
-            m_RecvReg.m_EncoderDepth1.Address = currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth1));
-            // qDebug() << "Address" << currentAddress << "- Updated currentDepth1:" << currentDepth1;
-            break;
-
-        case HQmlEnum::DEPTH_CODE2_H: // DEPTH_CODE2_H
-            currentDepth2_H = value;
-            break;
-
-        case HQmlEnum::DEPTH_CODE2_L: // DEPTH_CODE2_L
-            currentDepth2_L = value;
-            m_RecvReg.m_EncoderDepth2.Data = (currentDepth2_H << 16) | currentDepth2_L;
-            m_RecvReg.m_EncoderDepth2.Address = currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth2));
-            // qDebug() << "Address" << currentAddress << "- Updated currentDepth2:" << currentDepth2;
-            break;
-
-        case HQmlEnum::DEPTH_CODE3_H: // DEPTH_CODE3_H
-            currentDepth3_H = value;
-            break;
-
-        case HQmlEnum::DEPTH_CODE3_L: // DEPTH_CODE3_L
-            currentDepth3_L = value;
-            m_RecvReg.m_EncoderDepth3.Data = (currentDepth3_H << 16) | currentDepth3_L;
-            m_RecvReg.m_EncoderDepth3.Address =  currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth3));
-            // qDebug() << "Address" << currentAddress << "- Updated currentDepth3:" << currentDepth3;
-            break;
-
         case HQmlEnum::SCALE_1_H:
-            scale1_H = value;
+            m_RegisterData.HIGH_16BITS = value;
             break;
-
         case HQmlEnum::SCALE_1_L:
-            scale1_L = value;
-            m_RecvReg.m_Point1Scale.Data = (scale1_H << 16) | scale1_L;
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point1Scale.Data = tmpData;
             m_RecvReg.m_Point1Scale.Address = currentAddress;
             // Tensiometer::getInstance()->setScale1(m_scale1);
             // qDebug() << "Address" << currentAddress << "- Updated m_scale1:" << m_scale1;
             break;
-
-        case HQmlEnum::SCALE_2_H:
-            scale2_H = value;
+        case HQmlEnum::TENSION_1_H:
+            m_RegisterData.HIGH_16BITS = value;
             break;
-
+        case HQmlEnum::TENSION_1_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point1Tension.Data = tmpData;
+            m_RecvReg.m_Point1Tension.Address = currentAddress;
+            break;
+        case HQmlEnum::SCALE_2_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
         case HQmlEnum::SCALE_2_L:
-            scale2_L = value;
-            m_RecvReg.m_Point2Scale.Data = (scale2_H << 16) | scale2_L;
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point2Scale.Data = tmpData;
             m_RecvReg.m_Point2Scale.Address = currentAddress;
             // Tensiometer::getInstance()->setScale2(m_scale2);
             // qDebug() << "Address" << currentAddress << "- Updated m_scale2:" << m_scale2;
             break;
-
-        case HQmlEnum::SCALE_3_H:
-            scale3_H = value;
+        case HQmlEnum::TENSION_2_H:
+            m_RegisterData.HIGH_16BITS = value;
             break;
-
+        case HQmlEnum::TENSION_2_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point2Tension.Data = tmpData;
+            m_RecvReg.m_Point2Tension.Address = currentAddress;
+            break;
+        case HQmlEnum::SCALE_3_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
         case HQmlEnum::SCALE_3_L:
-            scale3_L = value;
-            m_RecvReg.m_Point3Scale.Data = (scale3_H << 16) | scale3_L;
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point3Scale.Data = tmpData;
             m_RecvReg.m_Point3Scale.Address = currentAddress;
             // Tensiometer::getInstance()->setScale3(m_scale3);
             // qDebug() << "Address" << currentAddress << "- Updated scale3_L:" << scale3_L;
             break;
-        case HQmlEnum::SCALE_4_H:
-            scale4_H = value;
+        case HQmlEnum::TENSION_3_H:
+            m_RegisterData.HIGH_16BITS = value;
             break;
-
+        case HQmlEnum::TENSION_3_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point3Tension.Data = tmpData;
+            m_RecvReg.m_Point3Tension.Address = currentAddress;
+            break;
+        case HQmlEnum::SCALE_4_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
         case HQmlEnum::SCALE_4_L:
-            scale4_L = value;
-            m_RecvReg.m_Point4Scale.Data = (scale4_H << 16) | scale4_L;
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point4Scale.Data = tmpData;
             m_RecvReg.m_Point4Scale.Address = currentAddress;
             // Tensiometer::getInstance()->setScale1(m_scale4);
             // qDebug() << "Address" << currentAddress << "- Updated m_scale4:" << m_scale4;
             break;
-        case HQmlEnum::SCALE_5_H:
-            scale5_H = value;
+        case HQmlEnum::TENSION_4_H:
+            m_RegisterData.HIGH_16BITS = value;
             break;
-
+        case HQmlEnum::TENSION_4_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point4Tension.Data = tmpData;
+            m_RecvReg.m_Point4Tension.Address = currentAddress;
+            break;
+        case HQmlEnum::SCALE_5_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
         case HQmlEnum::SCALE_5_L:
-            scale5_L = value;
-            m_RecvReg.m_Point5Scale.Data = (scale5_H << 16) | scale5_L;
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point5Scale.Data = tmpData;
             m_RecvReg.m_Point5Scale.Address = currentAddress;
             // Tensiometer::getInstance()->setScale1(m_scale5);
             // qDebug() << "Address" << currentAddress << "- Updated m_scale5:" << m_scale5;
             break;
-
+        case HQmlEnum::TENSION_5_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::TENSION_5_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_Point5Tension.Data = tmpData;
+            m_RecvReg.m_Point5Tension.Address = currentAddress;
+            break;
+        case HQmlEnum::QUANTITY_OF_CALIBRATION:
+            m_RecvReg.m_QuantityOfCalibration.Data = value;
+            m_RecvReg.m_QuantityOfCalibration.Address = currentAddress;
+            break;
+        case HQmlEnum::VELOCITY_STATUS:
+            m_RecvReg.m_VelocityStatus.Data = value;
+            m_RecvReg.m_VelocityStatus.Address = currentAddress;
+            break;
+        case HQmlEnum::VELOCITY_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::VELOCITY_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_VelocitySetting.Data = tmpData;
+            m_RecvReg.m_VelocitySetting.Address = currentAddress;
+            break;
+        case HQmlEnum::VELOCITY_SIMAN_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::VELOCITY_SIMAN_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_VelocitySiman.Data = tmpData;
+            m_RecvReg.m_VelocitySiman.Address = currentAddress;
+            break;
+        case HQmlEnum::CURRENT_PUMP_MOVE_DOWN:
+            m_RecvReg.m_CurrentPumpMoveDown.Data = value;
+            m_RecvReg.m_CurrentPumpMoveDown.Address = currentAddress;
+            break;
+        case HQmlEnum::CURRENT_PUMP_MOVE_UP:
+            m_RecvReg.m_CurrentPumpMoveUp.Data = value;
+            m_RecvReg.m_CurrentPumpMoveUp.Address = currentAddress;
+            break;
+        case HQmlEnum::CURRENT_MOTOR:
+            m_RecvReg.m_CurrentMotor.Data = value;
+            m_RecvReg.m_CurrentMotor.Address = currentAddress;
+            break;
+        case HQmlEnum::VOLOTAGE_MOTOR:
+            m_RecvReg.m_VoltageMotor.Data = value;
+            m_RecvReg.m_VoltageMotor.Address = currentAddress;
+            break;
+        case HQmlEnum::PERCENT_PUMP:
+            m_RecvReg.m_PercentPump.Data = value;
+            m_RecvReg.m_PercentPump.Address = currentAddress;
+            break;
+        case HQmlEnum::PERCENT_VELOCITY:
+            m_RecvReg.m_PercentVelocity.Data = value;
+            m_RecvReg.m_PercentVelocity.Address = currentAddress;
+            break;
+        case HQmlEnum::TONNAGE_TENSION_STICK:
+            m_RecvReg.m_TonnageTensionStick.Data = value;
+            m_RecvReg.m_TonnageTensionStick.Address = currentAddress;
+            break;
+        case HQmlEnum::CABLE_SPEC:
+            m_RecvReg.m_CableSpec.Data = value;
+            m_RecvReg.m_CableSpec.Address = currentAddress;
+            break;
+        case HQmlEnum::DEPTH_WELL_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DEPTH_WELL_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthWellSetting.Data = tmpData;
+            m_RecvReg.m_DepthWellSetting.Address = currentAddress;
+            break;
+        case HQmlEnum::WELL_TYPE:
+            m_RecvReg.m_WellType.Data = value;
+            m_RecvReg.m_WellType.Address = currentAddress;
+            break;
+        case HQmlEnum::WOKE_TYPE:
+            m_RecvReg.m_WorkType.Data = value;
+            m_RecvReg.m_WorkType.Address = currentAddress;
+            break;
+        case HQmlEnum::BREAKING_FORCE_CABLE:
+            m_RecvReg.m_BreakingForceCable.Data = value;
+            m_RecvReg.m_BreakingForceCable.Address = currentAddress;
+            break;
+        case HQmlEnum::BREAKING_FORCE_WEAKNESS:
+            m_RecvReg.m_BreakingForceWeakness.Data = value;
+            m_RecvReg.m_BreakingForceWeakness.Address = currentAddress;
+            break;
+        case HQmlEnum::WEIGHT_EACH_KILOMETER_CABLE:
+            m_RecvReg.m_WeightEachKilometerCable.Data = value;
+            m_RecvReg.m_WeightEachKilometerCable.Address = currentAddress;
+            break;
+        case HQmlEnum::WEIGHT_INSTRUMENT_STRING:
+            m_RecvReg.m_WeightInstrumentString.Data = value;
+            m_RecvReg.m_WeightInstrumentString.Address = currentAddress;
+            break;
+        case HQmlEnum::TENSION_SAFETY_COEFFICIENT:
+            m_RecvReg.m_TensionSafetyCoefficient.Data = value;
+            m_RecvReg.m_TensionSafetyCoefficient.Address = currentAddress;
+            break;
+        case HQmlEnum::TENSION_CURRENT_SAFETY_H: // CURRENT_TENSION_SAFE_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::TENSION_CURRENT_SAFETY_L: // CURRENT_TENSION_SAFE_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionCurrentSafety.Data = tmpData;
+            m_RecvReg.m_TensionCurrentSafety.Address = currentAddress;
+            // TensionSafe::getInstance()->setCurrentTensionSafe( QString::number(currentTensionSafe));
+            // qDebug() << "Address" << currentAddress << "- Updated currentTensionSafe:" << currentTensionSafe;
+            break;
+        case HQmlEnum::TENSION_CIRRENT_LIMITED_H: // CIRRENT_TENSION_MAX_H
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::TENSION_CIRRENT_LIMITED_L: // CIRRENT_TENSION_MAX_L
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_TensionCurrentLimited.Data = tmpData;
+            m_RecvReg.m_TensionCurrentLimited.Address = currentAddress;
+            // TensionSafe::getInstance()->setMAXTensionSafe(QString::number(maxTensionSafe));
+            // qDebug() << "Address" << currentAddress << "- Updated maxTensionSafe:" << maxTensionSafe;
+            break;
+        case HQmlEnum::TENSION_CABLE_HEAD_TREND: // HARNESS_TENSION_TREND
+            m_RecvReg.m_TensionCableHeadTrend.Data = value;
+            m_RecvReg.m_TensionCableHeadTrend.Address = currentAddress;
+            // TensionSafe::getInstance()->setCableTensionTrend(QString::number(cableTensionTrend));
+            // qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
+            break;
+        case HQmlEnum::TIME_SAFETY_STOP: // PARKING_SAFE_TIME
+            m_RecvReg.m_TimeSafetyStop.Data = value;
+            m_RecvReg.m_TimeSafetyStop.Address = currentAddress;
+            // TensionSafe::getInstance()->setPtime(QString::number(ptime));
+            // qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
+            break;
+        case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DistanceUpperWellSetting.Data = tmpData;
+            m_RecvReg.m_DistanceUpperWellSetting.Address = currentAddress;
+            break;
+        case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DistanceLowerWellSetting.Data = tmpData;
+            m_RecvReg.m_DistanceLowerWellSetting.Address = currentAddress;
+            break;
+        case HQmlEnum::SLOPE_ANGLE_WELL_SETTING:
+            m_RecvReg.m_SlopeAngleWellSetting.Data = value;
+            m_RecvReg.m_SlopeAngleWellSetting.Address = currentAddress;
+            break;
         default:
             // 其他地址不处理
             break;
         }
     }
-    insertDataToDatabase();
+    // insertDataToDatabase();
+}
+
+void HBModbusClient::compareRawData()
+{
+    int hashCode = qHashBits(&m_RecvReg, sizeof(MODBUS_REGISTER));
+    qDebug() << "current Register Hash Code: " << hashCode;
+    int prevHashCode = qHashBits(&m_PrevRecvReg, sizeof(MODBUS_REGISTER));
+    qDebug() << "previous Register Hash Code: " << prevHashCode;
+    if(hashCode != prevHashCode)
+    {
+        HBHome::getInstance()->setDepth(m_RecvReg.m_DepthCurrent.Data);
+        qDebug() << "Address: " << m_RecvReg.m_DepthCurrent.Address << "----- Updated depth:" << m_RecvReg.m_DepthCurrent.Data;
+        memcpy(&m_PrevRecvReg, &m_RecvReg, sizeof(MODBUS_REGISTER));
+    }
 }
 
 void HBModbusClient::writeRegister(int address, const QVector<quint16> &values)
@@ -587,9 +853,9 @@ void HBModbusClient::insertDataToDatabase()
     modData.velocity = _dashboard->Speed();
     modData.tensions = _dashboard->Tension();
     modData.tensionIncrement = _dashboard->TensionIncrement();
-    modData.harnessTension = m_RecvReg.m_CableTension.Data;
+    modData.harnessTension = m_RecvReg.m_TensionCableHead.Data;
     modData.maxTension = _dashboard->MaxTension();
-    modData.safetyTension = m_RecvReg.m_CurrentSafetyTension.Data;
+    modData.safetyTension = m_RecvReg.m_TensionCurrentSafety.Data;
     modData.exception = "none";
 
     // HBDatabase::getInstance().insertHistoryData(modData);

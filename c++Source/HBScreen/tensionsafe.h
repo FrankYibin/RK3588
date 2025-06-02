@@ -7,15 +7,12 @@ class TensionSafe : public QObject
 {
     Q_OBJECT
 
-    // SensorWeight              仪器串重量
-    // Q_PROPERTY(QString SensorWeight READ SensorWeight WRITE setSensorWeight NOTIFY SensorWeightChanged);
 
     //MaxTension                极限张力
     // Q_PROPERTY(QString  MaxTension READ MaxTension WRITE setMaxTension NOTIFY MaxTensionChanged );
 
 
-    //Weight per kilometer of cable     电缆每千米重量
-    Q_PROPERTY(QString CableWeight READ CableWeight WRITE setCableWeight NOTIFY CableWeightChanged )
+
 
     // HarnessForce              电缆拉断力
     // Q_PROPERTY(QString HarnessForce READ HarnessForce WRITE setHarnessForce NOTIFY HarnessForceChanged );

@@ -456,7 +456,7 @@ Item{
                 spacing: Math.round(sensorInfo.rowSpacing * Style.scaleHint)
                 Text
                 {
-                    id: titleSensorWeight
+                    id: titleMaxParameterStatus
                     width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
                     height: parent.height
                     text: qsTr("极限参数状态：")
@@ -467,7 +467,7 @@ Item{
                 }
                 HBTextField
                 {
-                    id: textSensorWeight
+                    id: textMaxParameterStatus
                     text: qsTr("自动")
                     // text: HBHome.MaxParameterStatus
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)

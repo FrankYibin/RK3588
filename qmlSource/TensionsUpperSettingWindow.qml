@@ -22,7 +22,6 @@ Item{
     readonly property int rowSpacing: 10
     readonly property int columnSpacing: 10
     readonly property int optionHeight: 30
-    readonly property var tensionTrendModel: [qsTr("正常"), qsTr("增加"), qsTr("减小")]
     Rectangle
     {
         id: background
@@ -111,14 +110,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: WellParameter.HarnessWeight
+                    text: WellParameter.WeightEachKilometerCable
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        console.log("textCableWeight.text =", textCableWeight.text);
-                        console.log("textCableWeight =", textCableWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆每千米重量值"), " ", 3, 0, 99999, textCableWeight.text,textCableWeight,function(val) {
                             //TODO need to do unit exchange
-                            WellParameter.HarnessWeight = val;
+                            WellParameter.WeightEachKilometerCable = val;
                             ModbusClient.writeRegister(HQmlEnum.CABLE_UINT, [parseInt(val)])
                         })
                     }
@@ -191,14 +188,12 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     // text: qsTr("8081")
-                    text: WellParameter.SensorWeight
+                    text: WellParameter.WeightInstrumentString
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        console.log("textSensorWeightValue.text =", textSensorWeightValue.text);
-                         console.log("textSensorWeightValue =", textSensorWeight);
                         mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeightValue.text,textSensorWeightValue,function(val) {
-                            WellParameter.SensorWeight = val;
-                            ModbusClient.writeRegister(HQmlEnum.SENSOR_WEIGHT, [parseInt(val)])
+                            WellParameter.WeightInstrumentString = val;
+                            // ModbusClient.writeRegister(HQmlEnum.SENSOR_WEIGHT, [parseInt(val)])
                         })
                     }
                 }
@@ -482,7 +477,7 @@ Item{
                 HBComboBox
                 {
                     id: comboCableTensionTrend
-                    model: tensionTrendModel
+                    model: TensionsGlobalDefine.tensionCableHeadTrendModel
                     currentIndex: TensionSafe.CableTensionTrend
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height

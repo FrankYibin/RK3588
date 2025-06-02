@@ -18,7 +18,6 @@ Item{
     readonly property int optionHeight: 30
 //    readonly property var tensionsTypeModel: [qsTr("数字无线"), qsTr("数字有线"), qsTr("模拟有线")]
 //    readonly property var sensorRangeModel: ["10T", "15T", "20T", "30T"]
-//    readonly property var analogRangeModel: [qsTr("无"), "0-30mV", "0-1.5V", "0-5V"]
     signal signalSaveTensometer()
     Rectangle
     {
@@ -92,7 +91,7 @@ Item{
             HBComboBox
             {
                 id: comboTensionsType
-                model: mainWindow.tensionsTypeModel
+                model: TensionsGlobalDefine.tensionEncoderModel
                 currentIndex: Tensiometer.TensiometerType
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
@@ -156,7 +155,7 @@ Item{
             HBComboBox
             {
                 id: comboAnalogRange
-                model: mainWindow.analogRangeModel
+                model: TensionsGlobalDefine.tensionAnalogModel
                 currentIndex: Tensiometer.TensiometerSignal
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height:  parent.height

@@ -17,33 +17,40 @@ private:
         int Data;
         int Address;
     };
+    struct REGISTER_DATA
+    {
+        quint16 HIGH_16BITS;
+        quint16 LOW_16BITS;
+    };
+
     struct MODBUS_REGISTER
     {
         //HOME
-        RAW_DATA m_Depth;
-        RAW_DATA m_Speed;
-        RAW_DATA m_MaxSpeed;
-        RAW_DATA m_TargetLayerDepth;
-        RAW_DATA m_MeterDepth;
-        RAW_DATA m_Pulse;
-        RAW_DATA m_DepthCalculateType;
-        RAW_DATA m_EncoderDepth1;
-        RAW_DATA m_EncoderDepth2;
-        RAW_DATA m_EncoderDepth3;
+        RAW_DATA m_DepthCurrent;
+        RAW_DATA m_VelocityCurrent;
+        RAW_DATA m_VelocityLimited;
+        RAW_DATA m_DepthTargetLayer;
+        RAW_DATA m_DepthSurfaceCover;
+        RAW_DATA m_PulseCount;
+        RAW_DATA m_DepthEncoder;
+        RAW_DATA m_DepthEncoder1;
+        RAW_DATA m_DepthEncoder2;
+        RAW_DATA m_DepthEncoder3;
         // above total 10 register
-        RAW_DATA m_DeltaEncoderDepth;
-        RAW_DATA m_DepthCountDown;
-        RAW_DATA m_Tension;
-        RAW_DATA m_TensionIncrement;
-        RAW_DATA m_MaxTension;
-        RAW_DATA m_MaxTensionIncrement;
-        RAW_DATA m_CableTension;
+        RAW_DATA m_DepthTolerance;  //两个编码器深度实时误差
+        RAW_DATA m_DepthCurrentDelta;   //深度倒计功能深度
+        RAW_DATA m_TensionCurrent;
+        RAW_DATA m_TensionCurrentDelta;
+        RAW_DATA m_TensionLimited;
+        RAW_DATA m_TensionLimitedDelta;
+        RAW_DATA m_TensionCableHead;
         RAW_DATA m_K_Value;
-        RAW_DATA m_TensionType;
-        RAW_DATA m_AnalogTensionChannel;
+        RAW_DATA m_TensionEncoder;
+        RAW_DATA m_TensionAnalog;
         // above total 10 register
-        RAW_DATA m_TensiometerBattery;
-        RAW_DATA m_TensiometerNumber;
+        RAW_DATA m_TensionBattery;
+        RAW_DATA m_TensionNum;
+
         RAW_DATA m_Point1Scale;
         RAW_DATA m_Point1Tension;
         RAW_DATA m_Point2Scale;
@@ -55,40 +62,41 @@ private:
         // above total 10 register
         RAW_DATA m_Point5Scale;
         RAW_DATA m_Point5Tension;
-        RAW_DATA m_ScalesQuantity;
-        RAW_DATA m_SpeedControlStatus;
-        RAW_DATA m_ControlledSpeed;
-        RAW_DATA m_4SlowSpeed;
-        RAW_DATA m_PumpDownCurrent;
-        RAW_DATA m_PumpUpCurrent;
-        RAW_DATA m_MotorCurrent;
-        RAW_DATA m_PotentiometerVol;
+
+        RAW_DATA m_QuantityOfCalibration;
+        RAW_DATA m_VelocityStatus;
+        RAW_DATA m_VelocitySetting;
+        RAW_DATA m_VelocitySiman;
+        RAW_DATA m_CurrentPumpMoveDown;
+        RAW_DATA m_CurrentPumpMoveUp;
+        RAW_DATA m_CurrentMotor;
+        RAW_DATA m_VoltageMotor;
         // above total 10 register
-        RAW_DATA m_PumpVol;
-        RAW_DATA m_SpeedVol;
-        RAW_DATA m_TensionBarWithTon;
+        RAW_DATA m_PercentPump;
+        RAW_DATA m_PercentVelocity;
+        RAW_DATA m_TonnageTensionStick;
         RAW_DATA m_CableSpec;
-        RAW_DATA m_WellDepth;
+        RAW_DATA m_DepthWellSetting;
         //tensionsafe
         RAW_DATA m_WellType;
-        RAW_DATA m_OperatingType;
-        RAW_DATA m_CableBrokenForce;
-        RAW_DATA m_WeaknessForce;
-        RAW_DATA m_CalbeWeightPerKiloMeter;
+        RAW_DATA m_WorkType;
+        RAW_DATA m_BreakingForceCable;
+        RAW_DATA m_BreakingForceWeakness;
+        RAW_DATA m_WeightEachKilometerCable;
         // above total 10 register
-        RAW_DATA m_CableWeight;
-        RAW_DATA m_SenorWeight;
-        RAW_DATA m_SafetyTensionFactor;
-        RAW_DATA m_CurrentSafetyTension;
-        RAW_DATA m_CurrentMaxTension;
-        RAW_DATA m_CableTensionTrend;
-        RAW_DATA m_ParkStopTimeStamp;
-        RAW_DATA m_AlertDistanceForWellUpper;
-        RAW_DATA m_AlertDistanceForWellLower;
-        RAW_DATA m_InclinationAngle;
+        RAW_DATA m_WeightInstrumentString;
+        RAW_DATA m_TensionSafetyCoefficient;
+        RAW_DATA m_TensionCurrentSafety;
+        RAW_DATA m_TensionCurrentLimited;
+        RAW_DATA m_TensionCableHeadTrend;
+        RAW_DATA m_TimeSafetyStop;
+        RAW_DATA m_DistanceUpperWellSetting;
+        RAW_DATA m_DistanceLowerWellSetting;
+        RAW_DATA m_SlopeAngleWellSetting;
     };
     static MODBUS_REGISTER m_RecvReg;
     static MODBUS_REGISTER m_PrevRecvReg;
+    REGISTER_DATA m_RegisterData;
 
     static QModbusClient *_ptrModbus;
     static int m_timerIdentifier;
@@ -117,6 +125,7 @@ private:
     void connectToServer();
     void startBatchRead();
     void handleReadResult(const QModbusDataUnit &result);
+    void compareRawData();
 
     void writeRegister(int address, const QVector<quint16> &values);
     void writeRegister(int address, const QVariantList &values);
@@ -143,6 +152,9 @@ private:
     quint16 CableTension_H = 0;
     quint16 CableTension_L = 0;
 
+    quint16 TensionNum_H;
+    quint16 TensionNum_L;
+
     //tensionsafe
 
 
@@ -163,8 +175,11 @@ private:
 
     quint16 scale1_H;
     quint16 scale1_L;
+
     quint16 scale2_H;
     quint16 scale2_L;
+
+
     quint16 scale3_H;
     quint16 scale3_L;
     quint16 scale4_H;

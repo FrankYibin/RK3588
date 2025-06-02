@@ -54,11 +54,11 @@ void ModbusUtils::writeScaledValueByIndex(const QString &value, int index, float
     int address = -1;
 
     switch (index) {
-    case 1: address = HQmlEnum::SCALE_1_TENSION_H; break;
-    case 2: address = HQmlEnum::SCALE_2_TENSION_H; break;
-    case 3: address = HQmlEnum::SCALE_3_TENSION_H; break;
-    case 4: address = HQmlEnum::SCALE_4_TENSION_H; break;
-    case 5: address = HQmlEnum::SCALE_5_TENSION_H; break;
+    // case 1: address = HQmlEnum::SCALE_1_TENSION_H; break;
+    // case 2: address = HQmlEnum::SCALE_2_TENSION_H; break;
+    // case 3: address = HQmlEnum::SCALE_3_TENSION_H; break;
+    // case 4: address = HQmlEnum::SCALE_4_TENSION_H; break;
+    // case 5: address = HQmlEnum::SCALE_5_TENSION_H; break;
     default:
         qWarning() << "Invalid index in writeScaledValueByIndex:" << index;
         return;

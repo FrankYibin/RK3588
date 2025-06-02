@@ -17,11 +17,6 @@ Item{
     readonly property int columnSpacing: 30
     readonly property int optionHeight: 30
 
-
-    readonly property var depthOrientationModel: [qsTr("反"), qsTr("正")]
-    readonly property var depthCalculateTypeModel: [qsTr("单编码器"), qsTr("双编码器")]
-    readonly property var encorderOptionModel: [qsTr("编码器1"), qsTr("编码器2"),qsTr("编码器3"), qsTr("编码器1-2"), qsTr("编码器2-3"), qsTr("编码器1-3")]
-
     Rectangle
     {
         id: background
@@ -117,14 +112,10 @@ Item{
                 HBComboBox
                 {
                     id:comboBoxDepthOrientation
-                    model: depthOrientationModel
+                    model: DepthGlobalDefine.depthOrientationModel
                     currentIndex:  Depth.DepthOrientation
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
-                    // Component.onCompleted: {
-                    //     comboBoxDepthOrientation.currentIndex = Depth.DepthOrientation
-                    // }
-
                     onCurrentIndexChanged: {
                         ModbusClient.writeCoil(HQmlEnum.DEPTHORIENTATION,currentIndex)
                         Depth.DepthOrientation = currentIndex
@@ -212,7 +203,7 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入瞬时深度"), " ", 3, 0, 99999, textCurrentDepth.text, textCurrentDepth,function(val) {
                             HBHome.Depth = val;
-                            ModbusUtils.writeScaledValue(val,HQmlEnum.HOLOD_DEPTH_H,100.0)
+                            // ModbusUtils.writeScaledValue(val,HQmlEnum.HOLOD_DEPTH_H,100.0)
                         })
                     }
                 }
@@ -245,7 +236,7 @@ Item{
                 HBComboBox
                 {
                     id: comboBoxEncorderOption
-                    model: encorderOptionModel
+                    model: DepthGlobalDefine.depthEncorderModel
                     currentIndex: Depth.CodeOption
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
@@ -370,13 +361,6 @@ Item{
             }
 
         }
-        Connections {
-               target: Depth
-               function onVelocityUnitChanged() {
-                   console.log("velocityUnitChanged 被触发！")
-                       HBDatabase.updateDepthUnit(Depth.VelocityUnit)
-                   }
-           }
     }
 
 

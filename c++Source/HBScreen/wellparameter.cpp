@@ -9,8 +9,16 @@ WellParameter::WellParameter(QObject *parent)
 {
     m_workType = -1;
     m_wellType = -1;
+    m_DepthCurrent = "";
+    m_SlopeAngleWellSetting = "";
+    m_WeightEachKilometerCable = "";
+    m_CableSpec = -1;
     setWellType(VERTICAL);
     setWorkType(PERFORATION);
+    setSlopeAngleWellSetting("0.00");
+    setDepthCurrent("99999.99");
+    setWeightEachKilometerCable("20000");
+    setCableSpec(MILIMETER_5_6);
 }
 
 WellParameter *WellParameter::getInstance()
@@ -54,6 +62,11 @@ int WellParameter::WellType() const
     return m_wellType;
 }
 
+QString WellParameter::SlopeAngleWellSetting() const
+{
+    return m_SlopeAngleWellSetting;
+}
+
 void WellParameter::setWellType(const int type)
 {
     if (m_wellType != type)
@@ -63,58 +76,67 @@ void WellParameter::setWellType(const int type)
     }
 }
 
-QString WellParameter::WellDepth() const
+void WellParameter::setSlopeAngleWellSetting(const QString angle)
 {
-    return m_wellDepth;
+    if(m_SlopeAngleWellSetting != angle)
+    {
+        m_SlopeAngleWellSetting = angle;
+        emit SlopeAngleWellSettingChanged();
+    }
 }
 
-void WellParameter::setWellDepth(const QString &value)
+QString WellParameter::DepthCurrent() const
 {
-    if (m_wellDepth != value) {
-        m_wellDepth = value;
-        emit WellDepthChanged();
+    return m_DepthCurrent;
+}
+
+void WellParameter::setDepthCurrent(const QString &value)
+{
+    if (m_DepthCurrent != value) {
+        m_DepthCurrent = value;
+        emit DepthCurrentChanged();
     }
 
 }
 
-QString WellParameter::HarnessWeight() const
+QString WellParameter::WeightEachKilometerCable() const
 {
-    return m_harnessWeight;
+    return m_WeightEachKilometerCable;
 }
 
-void WellParameter::setHarnessWeight(const QString &value)
+void WellParameter::setWeightEachKilometerCable(const QString weight)
 {
-    if (m_harnessWeight != value) {
-        m_harnessWeight = value;
-        emit HarnessWeightChanged();
+    if (m_WeightEachKilometerCable != weight) {
+        m_WeightEachKilometerCable = weight;
+        emit WeightEachKilometerCableChanged();
     }
 
 }
 
-QString WellParameter::SensorWeight() const
+QString WellParameter::WeightInstrumentString() const
 {
-    return m_sensorWeight;
+    return m_WeightInstrumentString;
 }
 
-void WellParameter::setSensorWeight(const QString &value)
+void WellParameter::setWeightInstrumentString(const QString weight)
 {
-    if (m_sensorWeight != value) {
-        m_sensorWeight = value;
-        emit SensorWeightChanged();
+    if (m_WeightInstrumentString != weight) {
+        m_WeightInstrumentString = weight;
+        emit WeightInstrumentStringChanged();
     }
 
 }
 
-int WellParameter::HarnessType() const
+int WellParameter::CableSpec() const
 {
-    return m_harnessType;
+    return m_CableSpec;
 }
 
-void WellParameter::setHarnessType(const int newHarnessType)
+void WellParameter::setCableSpec(const int spec)
 {
-    if (m_harnessType != newHarnessType) {
-        m_harnessType = newHarnessType;
-        emit HarnessTypeChanged();
+    if (m_CableSpec != spec) {
+        m_CableSpec = spec;
+        emit CableSpecChanged();
     }
 
 }

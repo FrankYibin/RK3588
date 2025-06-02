@@ -10,25 +10,26 @@ class WellParameter : public QObject
 {
     Q_OBJECT
     //well number        井号
-    Q_PROPERTY(QString WellNumber READ WellNumber WRITE setWellNumber NOTIFY WellNumberChanged)
+    Q_PROPERTY(QString WellNumber READ WellNumber WRITE setWellNumber NOTIFY WellNumberChanged) //database modbus
 
     //area block         区块
-    Q_PROPERTY(QString AreaBlock READ AreaBlock WRITE setAreaBlock NOTIFY AreaBlockChanged)
+    Q_PROPERTY(QString AreaBlock READ AreaBlock WRITE setAreaBlock NOTIFY AreaBlockChanged) //database
 
     //WellType           油气井类型
-    Q_PROPERTY(int WellType READ WellType WRITE setWellType NOTIFY WellTypeChanged)
+    Q_PROPERTY(int WellType READ WellType WRITE setWellType NOTIFY WellTypeChanged) //database modbus
 
     //WellDepth          井深（作业井深度）
-    Q_PROPERTY(QString WellDepth READ WellDepth WRITE setWellDepth NOTIFY WellDepthChanged)
+    Q_PROPERTY(QString DepthCurrent READ DepthCurrent WRITE setDepthCurrent NOTIFY DepthCurrentChanged)
 
-    //HarnessWeight      电缆自重
-    Q_PROPERTY(QString HarnessWeight READ HarnessWeight WRITE setHarnessWeight NOTIFY HarnessWeightChanged)
+    //HarnessWeight      电缆每千米重量
+    Q_PROPERTY(QString WeightEachKilometerCable READ WeightEachKilometerCable WRITE setWeightEachKilometerCable NOTIFY WeightEachKilometerCableChanged)
 
     //SensorWeight       仪器串重量
-    Q_PROPERTY(QString SensorWeight READ SensorWeight WRITE setSensorWeight NOTIFY SensorWeightChanged)
+    Q_PROPERTY(QString WeightInstrumentString READ WeightInstrumentString WRITE setWeightInstrumentString NOTIFY WeightInstrumentStringChanged FINAL)
 
     //HarnessType        电缆规格
-    Q_PROPERTY(int HarnessType READ HarnessType WRITE setHarnessType NOTIFY HarnessTypeChanged)
+    // Q_PROPERTY(int HarnessType READ HarnessType WRITE setHarnessType NOTIFY HarnessTypeChanged)
+    Q_PROPERTY(int CableSpec READ CableSpec WRITE setCableSpec NOTIFY CableSpecChanged)
 
     //HarnessForce       电缆拉断力
     Q_PROPERTY(QString HarnessForce READ HarnessForce WRITE setHarnessForce NOTIFY HarnessForceChanged)
@@ -44,6 +45,8 @@ class WellParameter : public QObject
 
     //OperatorType       操作员工种
     Q_PROPERTY(QString OperatorType READ OperatorType WRITE setOperatorType NOTIFY OperatorTypeChanged)
+
+    Q_PROPERTY(QString SlopeAngleWellSetting READ SlopeAngleWellSetting WRITE setSlopeAngleWellSetting NOTIFY SlopeAngleWellSettingChanged)
 public:
     enum OIL_WELL_TYPE
     {
@@ -57,26 +60,24 @@ public:
         PERFORATION = 0, //qsTr("射孔")
         LOGGING //qsTr("测井")
     };
+
+    enum CABLE_SPEC
+    {
+        MILIMETER_5_6 = 0,  //5.6mm
+        MILIMETER_11_8      //11.8mm
+    };
+
 public:
     static WellParameter* getInstance();
 
-    Q_INVOKABLE QString WellNumber() const;
-    Q_INVOKABLE void setWellNumber(const QString &value);
+    Q_INVOKABLE QString WeightEachKilometerCable() const;
+    Q_INVOKABLE void setWeightEachKilometerCable(const QString weight);
 
-    Q_INVOKABLE QString AreaBlock() const;
-    Q_INVOKABLE void setAreaBlock(const QString &value);
+    Q_INVOKABLE QString WeightInstrumentString() const;
+    Q_INVOKABLE void setWeightInstrumentString(const QString weight);
 
-    Q_INVOKABLE QString WellDepth() const;
-    Q_INVOKABLE void setWellDepth(const QString &value);
-
-    Q_INVOKABLE QString HarnessWeight() const;
-    Q_INVOKABLE void setHarnessWeight(const QString &value);
-
-    Q_INVOKABLE QString SensorWeight() const;
-    Q_INVOKABLE void setSensorWeight(const QString &value);
-
-    Q_INVOKABLE int HarnessType() const;
-    Q_INVOKABLE void setHarnessType(const int newHarnessTYpe);
+    Q_INVOKABLE int CableSpec() const;
+    Q_INVOKABLE void setCableSpec(const int spec);
 
     Q_INVOKABLE QString HarnessForce() const;
     Q_INVOKABLE void setHarnessForce(const QString &value);
@@ -90,10 +91,18 @@ public:
     Q_INVOKABLE QString OperatorType() const;
     Q_INVOKABLE void setOperatorType(const QString &value);
 
+    Q_INVOKABLE QString WellNumber() const;
+    Q_INVOKABLE void setWellNumber(const QString &value);
+    Q_INVOKABLE QString AreaBlock() const;
+    Q_INVOKABLE void setAreaBlock(const QString &value);
+    Q_INVOKABLE QString DepthCurrent() const;
+    Q_INVOKABLE void setDepthCurrent(const QString &value);
     Q_INVOKABLE int WorkType() const;
     Q_INVOKABLE int WellType() const;
+    Q_INVOKABLE QString SlopeAngleWellSetting() const;
     Q_INVOKABLE void setWorkType(const int type);
     Q_INVOKABLE void setWellType(const int type);
+    Q_INVOKABLE void setSlopeAngleWellSetting(const QString angle);
 
     // CSV methods
 //    QString toCSVLine() const;
@@ -108,13 +117,9 @@ signals:
 
     void AreaBlockChanged();
 
-    void WellDepthChanged();
+    void WeightInstrumentStringChanged();
 
-    void HarnessWeightChanged();
-
-    void SensorWeightChanged();
-
-    void HarnessTypeChanged();
+    void CableSpecChanged();
 
     void HarnessForceChanged();
 
@@ -125,6 +130,9 @@ signals:
 
     void WorkTypeChanged();
     void WellTypeChanged();
+    void DepthCurrentChanged();
+    void SlopeAngleWellSettingChanged();
+    void WeightEachKilometerCableChanged();
 
 private:
     explicit WellParameter(QObject *parent = nullptr);
@@ -138,16 +146,17 @@ private:
     QString m_wellNumber;
     QString m_areaBlock;
 
-    QString m_wellDepth = 0;
-    QString m_harnessWeight = 0;
-    QString m_sensorWeight = 0;
-    int m_harnessType = 0;
+    QString m_WeightEachKilometerCable;
+    QString m_WeightInstrumentString;
+    int m_CableSpec;
     QString m_harnessForce;
     int m_tensionUnit = 0;
     QString m_userName = "";
     QString m_operatorType = "";
     int m_workType;
     int m_wellType;
+    QString m_DepthCurrent;
+    QString m_SlopeAngleWellSetting;
 };
 
 #endif // WELLPARAMETER_H

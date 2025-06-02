@@ -17,8 +17,10 @@ import QtQuick 2.12
 QtObject
 {
     id: depthGlobalDefine
-    readonly property var velocityUnitModel:    ["m/h", "m/min", "ft/h", "ft/min"]
-    readonly property var timeUnitModel:        ["h", "min"]
-    readonly property var distanceUnitModel:    ["m", "ft"]
+    readonly property var velocityUnitModel:        ["m/h", "m/min", "ft/h", "ft/min"]
+    readonly property var timeUnitModel:            ["h", "min"]
+    readonly property var distanceUnitModel:        ["m", "ft"]
+    readonly property var depthEncorderModel:       [qsTr("编码器1"), qsTr("编码器2"),qsTr("编码器3"), qsTr("编码器1-2"), qsTr("编码器2-3"), qsTr("编码器1-3")]
+    readonly property var depthOrientationModel:    [qsTr("反"), qsTr("正")]
 }
 

@@ -17,7 +17,9 @@ import QtQuick 2.12
 Item
 {
     id: profileGlobalDefine
-    readonly property var wellTypeModel: [qsTr("垂直井段"), qsTr("大斜度井段"), qsTr("水平井段")]
-    readonly property var workTypeModel: [qsTr("射孔"), qsTr("测井")]
+    readonly property var wellTypeModel:    [qsTr("垂直井段"), qsTr("大斜度井段"), qsTr("水平井段")]
+    readonly property var workTypeModel:    [qsTr("射孔"), qsTr("测井")]
+    readonly property var cableSpecModel:   [5.6, 11.8]
+        // readonly property var tensionUnitModel: [10 , 20, 30]
 }
 
