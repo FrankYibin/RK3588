@@ -20,7 +20,7 @@ Item{
         VideoOutput {
             id: videoOutput
             anchors.fill: parent
-            source: "v4l2src device=/dev/video0 ! video/x-raw,format=BGR,framerate=60/1 ! videoconvert ! video/x-raw,format=RGBA ! qtvideo"
+            source: "gst-pipeline: v4l2src device=/dev/video0 ! video/x-raw,format=BGR,framerate=60/1 ! videoconvert ! video/x-raw ! qtvideosink"
         }
     }
 }
