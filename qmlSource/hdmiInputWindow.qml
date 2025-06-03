@@ -17,10 +17,27 @@ Item{
         width: parent.width
         height: parent.height
         anchors.centerIn: parent
-        VideoOutput {
-            id: videoOutput
-            anchors.fill: parent
+
+        MediaPlayer {
+            id: mediaPlayer
+            autoPlay: true
             source: "gst-pipeline: v4l2src device=/dev/video0 ! video/x-raw,format=BGR,framerate=60/1 ! videoconvert ! video/x-raw ! qtvideosink"
+            onError: {
+                console.error("MediaPlayer error:", errorString)
+            }
+        }
+
+        Item {
+            id: video
+            width: parent.width
+            height: parent.height
+            anchors.centerIn: parent
+            VideoOutput {
+                id: videoOutput
+                anchors.fill: parent
+                source: mediaPlayer
+                fillMode: VideoOutput.Stretch
+            }
         }
     }
 }
