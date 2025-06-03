@@ -57,6 +57,7 @@
 #include "c++Source/HBGraph/SensorGraphData.h"
 //#include "c++Source/HBVideoCapture/videocaptureitem.h"
 //#include "opencv2/opencv.hpp"
+#include "c++Source/HBUtility/hbutilityclass.h"
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
                     const QString &message)
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
     modbusUtils.setModbusClient(&modbusClient);
     TensiometerManager *manager = new TensiometerManager();
     HBVoice VoicePlayer;
+    HBUtilityClass::GetInstance();
 
     QString strOSIndicator = "None";
 #ifdef WIN32
@@ -142,12 +144,12 @@ int main(int argc, char *argv[])
     qputenv("QT_VIRTUALKEYBOARD_STYLE", "styleVirtualKeyboard");
     QQmlContext *pQmlContext = engine.rootContext();
     pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
-    pQmlContext->setContextProperty("HBHome", HBHome::getInstance());
+    pQmlContext->setContextProperty("HBHome", HBHome::GetInstance());
     pQmlContext->setContextProperty("AutoTestSpeed", AutoTestSpeed::getInstance());
-    pQmlContext->setContextProperty("Depth", Depth::getInstance());
+    pQmlContext->setContextProperty("Depth", Depth::GetInstance());
     pQmlContext->setContextProperty("DepthMeter", DepthMeter::getInstance());
     pQmlContext->setContextProperty("DepthSafe", DepthSafe::getInstance());
-    pQmlContext->setContextProperty("Tensiometer", Tensiometer::getInstance());
+    pQmlContext->setContextProperty("Tensiometer", Tensiometer::GetInstance());
     pQmlContext->setContextProperty("TensionSafe", TensionSafe::getInstance());
     pQmlContext->setContextProperty("WellParameter", WellParameter::getInstance());
     pQmlContext->setContextProperty("tensiometerManager", manager);

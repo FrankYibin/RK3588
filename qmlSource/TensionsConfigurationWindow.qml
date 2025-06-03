@@ -63,7 +63,7 @@ Item{
                     mainWindow.showPrimaryNumpad(qsTr("请输入K值"), " ", 3, 0, 99999, textKvalue.text,textKvalue,function(val) {
                         //TODO need to do unit exchange
                         HBHome.KValue = val;
-                        ModbusClient.writeRegister(HQmlEnum.K_VALUE, [parseInt(val)])
+                        // ModbusClient.writeRegister(HQmlEnum.K_VALUE, [parseInt(val)])
                     })
                 }
             }

@@ -30,7 +30,7 @@ QVariant TensionScaleManager::data(const QModelIndex &index, int role) const
     case ScaleValueRole:{
 
         int row = index.row();
-        Tensiometer* t = Tensiometer::getInstance();
+        Tensiometer* t = Tensiometer::GetInstance();
 
         switch (row) {
         case 1: return t->Scale1();

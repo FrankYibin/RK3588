@@ -26,7 +26,7 @@ public:
     {
         M_PER_HOUR = 0,   //Used by Modbus
         M_PER_MIN,
-        FT_HOUR,
+        FT_PER_HOUR,
         FT_PER_MIN,
     };
 
@@ -54,7 +54,7 @@ public:
     };
 
 public:
-    static Depth* getInstance();
+    static Depth* GetInstance();
     Q_INVOKABLE QString DepthTargetLayer() const;
     Q_INVOKABLE void setDepthTargetLayer(const QString value);
 
@@ -91,7 +91,7 @@ private:
     explicit Depth(QObject *parent = nullptr);
     Depth(const Depth&) = delete;
     Depth& operator=(const Depth&) = delete;
-    static Depth* m_depth;
+    static Depth* _ptrDepth;
 
 private:
     QString m_DepthTargetLayer;

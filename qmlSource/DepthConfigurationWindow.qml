@@ -192,11 +192,11 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^\d{0,5}(\.\d{0,2})?$/
                     }
-                    text: HBHome.Depth
+                    text: HBHome.DepthCurrent
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入瞬时深度"), " ", 3, 0, 99999, textCurrentDepth.text, textCurrentDepth,function(val) {
-                            HBHome.Depth = val;
+                            HBHome.DepthCurrent = val;
                             // ModbusUtils.writeScaledValue(val,HQmlEnum.HOLOD_DEPTH_H,100.0)
                         })
                     }
@@ -292,12 +292,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^[1-9][0-9]{4}$/
                     }
-                    text: HBHome.Pulse
+                    text: HBHome.PulseCount
                     onlyForNumpad: true
 
                     onSignalClickedEvent: { 
                         mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text, textPulseCount, function(val) {
-                            HBHome.Pulse = val
+                            HBHome.PulseCount = val
                             // ModbusClient.writeRegister(HQmlEnum.PULSE, parseInt(val))
                         })
 
@@ -330,15 +330,15 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^\d{1,5}(\.\d{1,2})?$/
                     }
-                    text: HBHome.MaxSpeed
+                    text: HBHome.VelocityLimited
                     onlyForNumpad: true
 
                     onSignalClickedEvent: {
                         console.log("textPulseCount.text =", textUpperVelocityLimit.text);
                          console.log("textPulseCount =", textUpperVelocityLimit);
                         mainWindow.showPrimaryNumpad(qsTr("请输入极限速度"), " ", 2, 0, 20000, textUpperVelocityLimit.text, textUpperVelocityLimit, function(val) {
-                            HBHome.MaxSpeed = val;
-                            ModbusUtils.writeScaledValue(val,HQmlEnum.MAX_SPEED_H,100.0)
+                            HBHome.VelocityLimited = val;
+                            // ModbusUtils.writeScaledValue(val,HQmlEnum.MAX_SPEED_H,100.0)
                         })
 
                     }

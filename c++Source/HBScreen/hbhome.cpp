@@ -1,192 +1,193 @@
 ﻿#include "hbhome.h"
 
-HBHome* HBHome::m_home = nullptr;
+HBHome* HBHome::_ptrHome = nullptr;
 
 HBHome::HBHome(QObject *parent)
     : QObject{parent}
 {}
 
-HBHome *HBHome::getInstance()
+HBHome *HBHome::GetInstance()
 {
-    if (!m_home) {
-        m_home = new HBHome();
+    if (!_ptrHome)
+    {
+        _ptrHome = new HBHome();
     }
-    return m_home;
+    return _ptrHome;
 
 }
 
-int HBHome::Depth() const
+QString HBHome::DepthCurrent() const
 {
-    return m_depth;
+    return m_DepthCurrent;
 }
 
-void HBHome::setDepth(int newDepth)
+void HBHome::setDepthCurrent(const QString value)
 {
-    if ( m_depth == newDepth )
+    if(m_DepthCurrent == value)
         return;
-    m_depth = newDepth;
-    emit DepthChanged();
+    m_DepthCurrent = value;
+    emit DepthCurrentChanged();
 
 }
 
-int HBHome::Speed() const
+QString HBHome::VelocityCurrent() const
 {
-    return m_speed;
+    return m_VelocityCurrent;
 }
 
-void HBHome::setSpeed(int newSpeed)
+void HBHome::setVelocityCurrent(const QString value)
 {
-    if ( m_speed == newSpeed )
+    if(m_VelocityCurrent == value)
         return;
-    m_speed = newSpeed;
-    emit SpeedChanged();
+    m_VelocityCurrent = value;
+    emit VelocityCurrentChanged();
 
 }
 
-int HBHome::Tension() const
+QString HBHome::TensionCurrent() const
 {
-    return m_tension;
+    return m_TensionCurrent;
 }
 
-void HBHome::setTension(int newTension)
+void HBHome::setTensionCurrent(const QString value)
 {
-    if ( m_tension == newTension )
+    if(m_TensionCurrent == value)
         return;
-    m_tension = newTension;
-    emit TensionChanged();
+    m_TensionCurrent = value;
+    emit TensionCurrentChanged();
 
 }
 
-int HBHome::TensionIncrement() const
+QString HBHome::TensionCurrentDelta() const
 {
-    return m_tensionIncrement;
+    return m_TensionCurrentDelta;
 }
 
-void HBHome::setTensionIncrement(int newTensionIncrement)
+void HBHome::setTensionCurrentDelta(const QString value)
 {
-    if ( m_tensionIncrement == newTensionIncrement )
+    if(m_TensionCurrentDelta == value)
         return;
-    m_tensionIncrement = newTensionIncrement;
-    emit TensionIncrementChanged();
+    m_TensionCurrentDelta = value;
+    emit TensionCurrentDeltaChanged();
 }
 
-int HBHome::Pulse() const
+QString HBHome::PulseCount() const
 {
-    return m_pulse;
+    return m_PulseCount;
 }
 
-void HBHome::setPulse(int newPulse)
+void HBHome::setPulseCount(const QString value)
 {
-    if ( m_pulse == newPulse )
+    if(m_PulseCount == value)
         return;
-    m_pulse = newPulse;
-    emit PulseChanged();
+    m_PulseCount = value;
+    emit PulseCountChanged();
 
 }
 
-int HBHome::MaxTension() const
+QString HBHome::TensionLimited() const
 {
-    return m_maxTension;
+    return m_TensionLimited;
 }
 
-void HBHome::setMaxTension(int newMaxTension)
+void HBHome::setTensionLimited(const QString value)
 {
-    if ( m_maxTension == newMaxTension )
+    if(m_TensionLimited == value)
         return;
-    m_maxTension = newMaxTension;
-    emit MaxTensionChanged();
+    m_TensionLimited = value;
+    emit TensionLimitedChanged();
 }
 
-int HBHome::TargetDepth() const
+QString HBHome::DepthTargetLayer() const
 {
-    return m_targetDepth;
+    return m_DepthTargetLayer;
 }
 
-void HBHome::setTargetDepth(int newTargetDepth)
+void HBHome::setDepthTargetLayer(const QString value)
 {
-    if ( m_targetDepth == newTargetDepth )
+    if(m_DepthTargetLayer == value)
         return;
-    m_targetDepth = newTargetDepth;
-    emit   TargetDepthChanged();
+    m_DepthTargetLayer = value;
+    emit DepthTargetLayerChanged();
 }
 
-int HBHome::MaxSpeed() const
+QString HBHome::VelocityLimited() const
 {
-    return m_maxSpeed;
+    return m_VelocityLimited;
 }
 
-void HBHome::setMaxSpeed(int newMaxSpeed)
+void HBHome::setVelocityLimited(const QString value)
 {
-    if ( m_maxSpeed == newMaxSpeed )
+    if(m_VelocityLimited == value)
         return;
-    m_maxSpeed = newMaxSpeed;
-    emit MaxSpeedChanged();
+    m_VelocityLimited = value;
+    emit VelocityLimitedChanged();
 }
 
-int HBHome::MaxTensionIncrement() const
+QString HBHome::TensionLimitedDelta() const
 {
-    return m_maxTensionIncrement;
+    return m_TensionLimitedDelta;
 }
 
-void HBHome::setMaxTensionIncrement(int newMaxTensionIncrement)
+void HBHome::setTensionLimitedDelta(const QString value)
 {
-    if ( m_maxTensionIncrement == newMaxTensionIncrement )
+    if(m_TensionLimitedDelta == value)
         return;
-    m_maxTensionIncrement = newMaxTensionIncrement;
-    emit MaxTensionIncrementChanged();
+    m_TensionLimitedDelta = value;
+    emit TensionLimitedDeltaChanged();
 }
 
-int HBHome::KValue() const
+QString HBHome::KValue() const
 {
-    return m_kValue;
+    return m_KValue;
 }
 
-void HBHome::setKValue(int newKValue)
+void HBHome::setKValue(const QString value)
 {
-    if ( m_kValue == newKValue )
+    if(m_KValue == value)
         return;
-    m_kValue = newKValue;
+    m_KValue = value;
     emit KValueChanged();
 }
 
-int HBHome::HarnessTension() const
+QString HBHome::TensionCableHead() const
 {
-    return m_harnessTension;
+    return m_TensionCableHead;
 }
 
-void HBHome::setHarnessTension(int newHarnessTension)
+void HBHome::setTensionCableHead(const QString value)
 {
-    if ( m_harnessTension == newHarnessTension )
+    if(m_TensionCableHead == value)
         return;
-    m_harnessTension = newHarnessTension;
-    emit HarnessTensionChanged();
+    m_TensionCableHead = value;
+    emit TensionCableHeadChanged();
 }
 
-int HBHome::MaxParameterStatus() const
+int HBHome::StatusLimitedPara() const
 {
-    return m_maxParameterStatus;
+    return m_StatusLimitedPara;
 }
 
-void HBHome::setMaxParameterStatus(int newMaxParameterStatus)
+void HBHome::setStatusLimitedPara(const int status)
 {
-    if ( m_maxParameterStatus == newMaxParameterStatus )
+    if(m_StatusLimitedPara == status)
         return;
-    m_maxParameterStatus = newMaxParameterStatus;
-    emit MaxParameterStatusChanged();
+    m_StatusLimitedPara = status;
+    emit StatusLimitedParaChanged();
 
 }
 
-int HBHome::NetworkStatus() const
+int HBHome::StatusNetwork() const
 {
-    return m_networkStatus;
+    return m_StatusNetwork;
 }
 
-void HBHome::setNetworkStatus(int newNetworkStatus)
+void HBHome::setStatusNetwork(const int status)
 {
-    if ( m_networkStatus == newNetworkStatus )
+    if(m_StatusNetwork == status)
         return;
-    m_networkStatus = newNetworkStatus;
-    emit NetworkStatusChanged();
+    m_StatusNetwork = status;
+    emit StatusNetworkChanged();
 
 }
 

@@ -306,15 +306,15 @@ bool HBDatabase::loadDepthSet(_DepthSet &param)
     param.codeOption = query.value("codeOption").toInt();
     param.pulse = query.value("pulse").toInt();
 
-    Depth* ds = Depth::getInstance();
-    HBHome* hs = HBHome::getInstance();
+    Depth* ds = Depth::GetInstance();
+    HBHome* hs = HBHome::GetInstance();
 
     ds->setDepthTargetLayer(param.targetLayerDepth);
     ds->setDepthOrientation(param.depthOrientation);
     ds->setDepthSurfaceCover(param.meterDepth);
     ds->setDepthEncoder(param.depthCalculateType);
     ds->setCodeOption(param.codeOption);
-    hs->setPulse(param.pulse);
+    hs->setPulseCount(param.pulse);
 
     return true;
 }
@@ -364,8 +364,8 @@ bool HBDatabase::updateDepthSet(const _DepthSet &param)
 
 bool HBDatabase::updateDepthSetFromInstance()
 {
-    Depth* ds = Depth::getInstance();
-    HBHome* hs = HBHome::getInstance();
+    Depth* ds = Depth::GetInstance();
+    HBHome* hs = HBHome::GetInstance();
 
     _DepthSet param;
     param.id = 1;
@@ -374,7 +374,7 @@ bool HBDatabase::updateDepthSetFromInstance()
     param.meterDepth = ds->DepthSurfaceCover();
     param.depthCalculateType = ds->DepthEncoder();
     param.codeOption = ds->CodeOption();
-    param.pulse = hs->Pulse();
+    param.pulse = hs->PulseCount();
 
     return updateDepthSet(param);
 }
@@ -506,9 +506,9 @@ bool HBDatabase::loadTensionSafe(_TensionSafe &param)
     param.tensionSafeFactor = query.value("tensionSafeFactor").toString();
 
     TensionSafe* ts = TensionSafe::getInstance();
-    HBHome* hs = HBHome::getInstance();
+    HBHome* hs = HBHome::GetInstance();
 
-    hs->setMaxTension(param.maxTension);
+    hs->setTensionLimited(param.maxTension);
     ts->setWeakForce(param.weakForce);
     ts->setTensionSafeFactor(param.tensionSafeFactor);
 
@@ -557,12 +557,12 @@ bool HBDatabase::updateTensionSafe(const _TensionSafe &param)
 bool HBDatabase::updateTensionSafeFromInstance()
 {
     TensionSafe* ts = TensionSafe::getInstance();
-    HBHome* hs = HBHome::getInstance();
+    HBHome* hs = HBHome::GetInstance();
 
     _TensionSafe param;
     param.id = 1;
     // param.wellType = ts->WellType();
-    param.maxTension = hs->MaxTension();
+    param.maxTension = hs->TensionLimited();
     param.weakForce = ts->WeakForce();
     param.tensionSafeFactor = ts->TensionSafeFactor();
 
@@ -588,8 +588,8 @@ bool HBDatabase::loadTensionSet(_TensionSet &param)
     param.kValue = query.value("kValue").toInt();
     param.tensionUnit = query.value("tensionUnit").toInt();
 
-    Tensiometer* ts = Tensiometer::getInstance();
-    HBHome* hs = HBHome::getInstance();
+    Tensiometer* ts = Tensiometer::GetInstance();
+    HBHome* hs = HBHome::GetInstance();
     // hs->setKValue(param.kValue);
     // ts->setTensionUnits(param.tensionUnit);
 
@@ -633,8 +633,8 @@ bool HBDatabase::updateTensionSet(const _TensionSet &param)
 
 bool HBDatabase::updateTensionSetFromInstance()
 {
-    Tensiometer* ts = Tensiometer::getInstance();
-    HBHome* hs = HBHome::getInstance();
+    Tensiometer* ts = Tensiometer::GetInstance();
+    HBHome* hs = HBHome::GetInstance();
 
     _TensionSet param;
     param.id = 1;
@@ -1080,8 +1080,8 @@ bool HBDatabase::getUnitSettings(UnitSettings &settings) {
         settings.tensionUnit = query.value(0).toInt();
         settings.depthUnit = query.value(1).toInt();
 
-        Tensiometer *ts = Tensiometer::getInstance();
-        Depth *ds = Depth::getInstance();
+        Tensiometer *ts = Tensiometer::GetInstance();
+        Depth *ds = Depth::GetInstance();
 
         if (ts) {
             ts->setTensionUnits(settings.tensionUnit);

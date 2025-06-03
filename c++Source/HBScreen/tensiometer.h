@@ -40,9 +40,7 @@ public:
         KN
     };
 public:
-    static Tensiometer* getInstance();
-
-
+    static Tensiometer* GetInstance();
     Q_INVOKABLE QString TensiometerNumber() const;
     Q_INVOKABLE void setTensiometerNumber(const QString &number);
     Q_INVOKABLE int TensiometerType() const;
@@ -85,7 +83,7 @@ private:
     explicit Tensiometer(QObject *parent = nullptr);
     Tensiometer(const Tensiometer&) = delete;              // 禁止拷贝
     Tensiometer& operator=(const Tensiometer&) = delete;   // 禁止赋值
-    static Tensiometer* m_tensiometer;
+    static Tensiometer* _ptrTensiometer;
 
 
 

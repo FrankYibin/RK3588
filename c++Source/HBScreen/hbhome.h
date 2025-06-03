@@ -8,139 +8,139 @@ class HBHome : public QObject
     Q_OBJECT
 
     //depth        深度
-    Q_PROPERTY(int Depth READ Depth WRITE setDepth NOTIFY DepthChanged)
+    Q_PROPERTY(QString DepthCurrent READ DepthCurrent WRITE setDepthCurrent NOTIFY DepthCurrentChanged)
 
     //speed        速度
-    Q_PROPERTY(int Speed READ Speed WRITE setSpeed NOTIFY SpeedChanged)
+    Q_PROPERTY(QString VelocityCurrent READ VelocityCurrent WRITE setVelocityCurrent NOTIFY VelocityCurrentChanged)
 
     //tension      张力
-    Q_PROPERTY(int Tension READ Tension WRITE setTension NOTIFY TensionChanged)
+    Q_PROPERTY(QString TensionCurrent READ TensionCurrent WRITE setTensionCurrent NOTIFY TensionCurrentChanged)
 
     //tensionIncrement  张力增量
-    Q_PROPERTY(int TensionIncrement READ TensionIncrement WRITE setTensionIncrement NOTIFY TensionIncrementChanged)
+    Q_PROPERTY(QString TensionCurrentDelta READ TensionCurrentDelta WRITE setTensionCurrentDelta NOTIFY TensionCurrentDeltaChanged)
 
     //pulse count  脉冲数
-    Q_PROPERTY(int Pulse READ Pulse WRITE setPulse NOTIFY PulseChanged)
+    Q_PROPERTY(QString PulseCount READ PulseCount WRITE setPulseCount NOTIFY PulseCountChanged)
 
     //MaxTension 极限张力
-    Q_PROPERTY(int MaxTension READ MaxTension WRITE setMaxTension NOTIFY MaxTensionChanged)
+    Q_PROPERTY(QString TensionLimited READ TensionLimited WRITE setTensionLimited NOTIFY TensionLimitedChanged)
 
     //TargetDepth   目的深度
-    Q_PROPERTY(int TargetDepth READ TargetDepth WRITE setTargetDepth NOTIFY TargetDepthChanged)
+    Q_PROPERTY(QString DepthTargetLayer READ DepthTargetLayer WRITE setDepthTargetLayer NOTIFY DepthTargetLayerChanged)
 
     //MaxSpeed    极限速度
-    Q_PROPERTY(int MaxSpeed READ MaxSpeed WRITE setMaxSpeed NOTIFY MaxSpeedChanged)
+    Q_PROPERTY(QString VelocityLimited READ VelocityLimited WRITE setVelocityLimited NOTIFY VelocityLimitedChanged)
 
     //MaxTensionIncrement  极限张力增量
-    Q_PROPERTY(int MaxTensionIncrement READ MaxTensionIncrement WRITE setMaxTensionIncrement NOTIFY MaxTensionIncrementChanged )
+    Q_PROPERTY(QString TensionLimitedDelta READ TensionLimitedDelta WRITE setTensionLimitedDelta NOTIFY TensionLimitedDeltaChanged )
 
     //K_Value           k值
-    Q_PROPERTY(int KValue READ KValue WRITE setKValue NOTIFY KValueChanged )
+    Q_PROPERTY(QString KValue READ KValue WRITE setKValue NOTIFY KValueChanged )
 
     //HarnessTension  缆头张力
-    Q_PROPERTY(int HarnessTension READ HarnessTension WRITE setHarnessTension NOTIFY HarnessTensionChanged )
+    Q_PROPERTY(QString TensionCableHead READ TensionCableHead WRITE setTensionCableHead NOTIFY TensionCableHeadChanged )
 
     //MaxParameterStatus  极限参数状态
-    Q_PROPERTY(int MaxParameterStatus READ MaxParameterStatus WRITE setMaxParameterStatus NOTIFY MaxParameterStatusChanged)
+    Q_PROPERTY(int StatusLimitedPara READ StatusLimitedPara WRITE setStatusLimitedPara NOTIFY StatusLimitedParaChanged)
 
     //NetworkStatus   网络状态
-    Q_PROPERTY(int NetworkStatus READ NetworkStatus WRITE setNetworkStatus NOTIFY NetworkStatusChanged)
+    Q_PROPERTY(int StatusNetwork READ StatusNetwork WRITE setStatusNetwork NOTIFY StatusNetworkChanged)
 
 public:
 
-    static HBHome* getInstance();
+    static HBHome* GetInstance();
 
-    Q_INVOKABLE int Depth() const;
-    Q_INVOKABLE void setDepth(int newDepth);
+    Q_INVOKABLE QString DepthCurrent() const;
+    Q_INVOKABLE void setDepthCurrent(const QString value);
 
-    Q_INVOKABLE int Speed() const;
-    Q_INVOKABLE void setSpeed(int newSpeed);
+    Q_INVOKABLE QString VelocityCurrent() const;
+    Q_INVOKABLE void setVelocityCurrent(const QString value);
 
-    Q_INVOKABLE int Tension() const;
-    Q_INVOKABLE void setTension(int newTension);
+    Q_INVOKABLE QString TensionCurrent() const;
+    Q_INVOKABLE void setTensionCurrent(const QString value);
 
-    Q_INVOKABLE int TensionIncrement() const;
-    Q_INVOKABLE void setTensionIncrement(int newTensionIncrement);
+    Q_INVOKABLE QString TensionCurrentDelta() const;
+    Q_INVOKABLE void setTensionCurrentDelta(const QString value);
 
-    Q_INVOKABLE int Pulse() const;
-    Q_INVOKABLE void setPulse(int newPulse);
+    Q_INVOKABLE QString PulseCount() const;
+    Q_INVOKABLE void setPulseCount(const QString value);
 
-    Q_INVOKABLE int MaxTension() const;
-    Q_INVOKABLE void setMaxTension(int newMaxTension);
+    Q_INVOKABLE QString TensionLimited() const;
+    Q_INVOKABLE void setTensionLimited(const QString value);
 
-    Q_INVOKABLE int TargetDepth() const;
-    Q_INVOKABLE void setTargetDepth(int newTargetDepth);
+    Q_INVOKABLE QString DepthTargetLayer() const;
+    Q_INVOKABLE void setDepthTargetLayer(const QString value);
 
-    Q_INVOKABLE int MaxSpeed() const;
-    Q_INVOKABLE void setMaxSpeed(int newMaxSpeed);
+    Q_INVOKABLE QString VelocityLimited() const;
+    Q_INVOKABLE void setVelocityLimited(const QString value);
 
-    Q_INVOKABLE int MaxTensionIncrement() const;
-    Q_INVOKABLE void setMaxTensionIncrement(int newMaxTensionIncrement);
+    Q_INVOKABLE QString TensionLimitedDelta() const;
+    Q_INVOKABLE void setTensionLimitedDelta(const QString value);
 
-    Q_INVOKABLE int KValue() const;
-    Q_INVOKABLE void setKValue(int newKValue);
+    Q_INVOKABLE QString KValue() const;
+    Q_INVOKABLE void setKValue(const QString value);
 
-    Q_INVOKABLE int HarnessTension() const;
-    Q_INVOKABLE void setHarnessTension(int newHarnessTension);
+    Q_INVOKABLE QString TensionCableHead() const;
+    Q_INVOKABLE void setTensionCableHead(const QString value);
 
-    Q_INVOKABLE int MaxParameterStatus() const;
-    Q_INVOKABLE void setMaxParameterStatus(int newMaxParameterStatus);
+    Q_INVOKABLE int StatusLimitedPara() const;
+    Q_INVOKABLE void setStatusLimitedPara(const int status);
 
-    Q_INVOKABLE int NetworkStatus() const;
-    Q_INVOKABLE void setNetworkStatus(int newNetworkStatus);
+    Q_INVOKABLE int StatusNetwork() const;
+    Q_INVOKABLE void setStatusNetwork(const int status);
 
 
 
 signals:
 
-    void DepthChanged();
+    void DepthCurrentChanged();
 
-    void SpeedChanged();
+    void VelocityCurrentChanged();
 
-    void TensionChanged();
+    void TensionCurrentChanged();
 
-    void TensionIncrementChanged();
+    void TensionCurrentDeltaChanged();
 
-    void PulseChanged();
+    void PulseCountChanged();
 
-    void MaxTensionChanged();
+    void TensionLimitedChanged();
 
-    void TargetDepthChanged();
+    void DepthTargetLayerChanged();
 
-    void MaxSpeedChanged();
+    void VelocityLimitedChanged();
 
-    void MaxTensionIncrementChanged();
+    void TensionLimitedDeltaChanged();
 
     void KValueChanged();
 
-    void HarnessTensionChanged();
+    void TensionCableHeadChanged();
 
-    void MaxParameterStatusChanged();
+    void StatusLimitedParaChanged();
 
-    void NetworkStatusChanged();
+    void StatusNetworkChanged();
 
 private:
     explicit HBHome(QObject *parent = nullptr);
 
     HBHome(const HBHome&) = delete;
     HBHome& operator=(const HBHome&) = delete;
-    static HBHome* m_home;
+    static HBHome* _ptrHome;
 
 private:
 
-    int m_depth = 0;
-    int m_speed = 0;
-    int m_tension = 0;
-    int m_tensionIncrement = 0;
-    int m_pulse = 1280;
-    int m_maxTension = 0;
-    int m_targetDepth = 0;
-    int m_maxSpeed = 0;
-    int m_maxTensionIncrement = 0;
-    int m_kValue = 0;
-    int m_harnessTension = 0;
-    int m_maxParameterStatus = 0;
-    int m_networkStatus = 0;
+    QString m_DepthCurrent;
+    QString m_VelocityCurrent;
+    QString m_TensionCurrent;
+    QString m_TensionCurrentDelta;
+    QString m_PulseCount;
+    QString m_TensionLimited;
+    QString m_DepthTargetLayer;
+    QString m_VelocityLimited;
+    QString m_TensionLimitedDelta;
+    QString m_KValue;
+    QString m_TensionCableHead;
+    int m_StatusLimitedPara;
+    int m_StatusNetwork;
 
 };
 

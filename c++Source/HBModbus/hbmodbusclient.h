@@ -7,6 +7,8 @@
 #include <QVector>
 #include <QMap>
 #include <QMutex>
+#include "c++Source/HBScreen/depth.h"
+#include "c++Source/HBScreen/tensiometer.h"
 class HBModbusClient : public QObject
 {
     Q_OBJECT
@@ -130,6 +132,21 @@ private:
     void writeRegister(int address, const QVector<quint16> &values);
     void writeRegister(int address, const QVariantList &values);
 
+    void updateDepthCurrent(const int hexData, const int hexAddress);
+    void updateVelocityCurrent(const int hexData, const int hexAddress);
+    void updateTensionCurrent(const int hexData, const int hexAddress);
+    void updateTensionCurrentDelta(const int hexData, const int hexAddress);
+    void updatePulseCount(const int hexData, const int hexAddress);
+    void updateTensionLimited(const int hexData, const int hexAddress);
+    void updateDepthTargetLayer(const int hexData, const int hexAddress);
+    void updateVelocityLimited(const int hexData, const int hexAddress);
+    void updateTensionLimitedDelta(const int hexData, const int hexAddress);
+    void updateKValue(const int hexData, const int hexAddress);
+    void updateTensionCableHead(const int hexData, const int hexAddress);
+    // void update(const int hexData, const int hexAddress);
+    // void updateTensionCurrentDelta(const int hexData, const int hexAddress);
+
+
 signals:
 
 private:
@@ -186,6 +203,11 @@ private:
     quint16 scale4_L;
     quint16 scale5_H;
     quint16 scale5_L;
+
+    Depth::VELOCITY_UNIT    m_VelocityUnit;
+    Depth::DISTANCE_UNIT    m_DistanceUnit;
+    Depth::TIME_UNIT        m_TimeUnit;
+    Tensiometer::FORCE_UNIT m_ForceUnit;
 
 };
 

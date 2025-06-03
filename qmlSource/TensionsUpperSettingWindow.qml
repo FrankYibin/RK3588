@@ -328,14 +328,14 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     // text: qsTr("8080")
-                    text: HBHome.MaxTension
+                    text: HBHome.TensionLimited
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         console.log("textUltimateTension.text =", textUltimateTension.text);
                          console.log("textUltimateTension =", textUltimateTension);
                         mainWindow.showPrimaryNumpad(qsTr("请输入极限张力值"), " ", 3, 0, 99999, textUltimateTension.text,textUltimateTension,function(val) {
-                            HBHome.MaxTension = val;
-                            ModbusUtils.writeScaledValue(val,47,100.0);
+                            HBHome.TensionLimited = val;
+                            // ModbusUtils.writeScaledValue(val,47,100.0);
                         })
                     }
                 }
@@ -687,8 +687,7 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("8080")
-                    text: HBHome.HarnessTension
+                    text: HBHome.TensionCableHead
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad("Time Scale Setting", "s", 3, 0, 99999, "0.123")

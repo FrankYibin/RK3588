@@ -9,6 +9,7 @@
 #include "c++Source/HBData/hbdatabase.h"
 #include "c++Source/HBScreen/wellparameter.h"
 #include "c++Source/HBScreen/tensiometer.h"
+#include "c++Source/HBUtility/hbutilityclass.h"
 #include <QtConcurrent>
 #include <QHash>
 #include <cstring>
@@ -25,6 +26,11 @@ HBModbusClient::HBModbusClient(QObject *parent)
     connectToServer();
     m_timerIdentifier = startTimer(500);
     m_RegisterSendMap.clear();
+
+    m_VelocityUnit = Depth::M_PER_HOUR;
+    m_DistanceUnit = Depth::METER;
+    m_TimeUnit = Depth::HOUR;
+    m_ForceUnit = Tensiometer::LB;
 }
 
 HBModbusClient::~HBModbusClient()
@@ -89,7 +95,7 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
     if(event->timerId() == m_timerIdentifier)
     {
         readRegister(0, HQmlEnum::MAX_REGISTR);
-
+        compareRawData();
         readCoils();
     }
 }
@@ -116,7 +122,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthCurrent.Data      = tmpData;
             m_RecvReg.m_DepthCurrent.Address   = currentAddress;
-            HBHome::getInstance()->setDepth(tmpData);
             break;
         case HQmlEnum::VELOCITY_CURRENT_H: // SPEED_H
             m_RegisterData.HIGH_16BITS = value;
@@ -128,8 +133,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_VelocityCurrent.Data      = tmpData;
             m_RecvReg.m_VelocityCurrent.Address   = currentAddress;
-            HBHome::getInstance()->setSpeed(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated speed:" << speed;
             break;
         case HQmlEnum::VELOCITY_LIMITED_H: // MAX_SPEED_H
             m_RegisterData.HIGH_16BITS = value;
@@ -141,8 +144,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_VelocityLimited.Data = tmpData;
             m_RecvReg.m_VelocityLimited.Address = currentAddress;
-            HBHome::getInstance()->setMaxSpeed(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated maxSpeed:" << maxSpeed;
             break;
         case HQmlEnum::DEPTH_TARGET_LAYER_H: // MAX_SPEED_H
             m_RegisterData.HIGH_16BITS = value;
@@ -154,8 +155,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthTargetLayer.Data = tmpData;
             m_RecvReg.m_DepthTargetLayer.Address = currentAddress;
-            HBHome::getInstance()->setTargetDepth(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
         case HQmlEnum::DEPTH_SURFACE_COVER_H: // 表套深度高
             m_RegisterData.HIGH_16BITS = value;
@@ -167,14 +166,10 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthSurfaceCover.Data = tmpData;
             m_RecvReg.m_DepthSurfaceCover.Address = currentAddress;
-            HBHome::getInstance()->setTargetDepth(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated targetDepth:" << targetDepth;
             break;
         case HQmlEnum::PULSE_COUNT: // PULSE
             m_RecvReg.m_PulseCount.Data = value;
             m_RecvReg.m_PulseCount.Address = currentAddress;
-            HBHome::getInstance()->setPulse(value);
-            // qDebug() << "Address" << currentAddress << "- Updated plus:" << plus;
             break;
         case HQmlEnum::DEPTH_ENCODER:
             m_RecvReg.m_DepthEncoder.Data = value;
@@ -190,8 +185,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthEncoder1.Data = tmpData;
             m_RecvReg.m_DepthEncoder1.Address = currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth1));
-            // qDebug() << "Address" << currentAddress << "- Updated currentDepth1:" << currentDepth1;
             break;
         case HQmlEnum::DEPTH_ENCODER_2_H: // DEPTH_CODE2_H
             m_RegisterData.HIGH_16BITS = value;
@@ -203,8 +196,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthEncoder2.Data = tmpData;
             m_RecvReg.m_DepthEncoder2.Address = currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth2));
-            // qDebug() << "Address" << currentAddress << "- Updated currentDepth2:" << currentDepth2;
             break;
         case HQmlEnum::DEPTH_ENCODER_3_H: // DEPTH_CODE3_H
             m_RegisterData.HIGH_16BITS = value;
@@ -216,8 +207,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthEncoder3.Data = tmpData;
             m_RecvReg.m_DepthEncoder3.Address =  currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(currentDepth3));
-            // qDebug() << "Address" << currentAddress << "- Updated currentDepth3:" << currentDepth3;
             break;
         case HQmlEnum::DEPTH_TOLERANCE_H: // CODE_COUNT_H
             m_RegisterData.HIGH_16BITS = value;
@@ -229,8 +218,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_DepthTolerance.Data = tmpData;
             m_RecvReg.m_DepthTolerance.Address = currentAddress;
-            // TensionSafe::getInstance()->setDepthLoss(QString::number(depthLoss));
-            // qDebug() << "Address" << currentAddress << "- Updated depthLoss:" << depthLoss;
             break;
         case HQmlEnum::DEPTH_CURRENT_DELTA:
             m_RecvReg.m_DepthCurrentDelta.Data = value;
@@ -246,8 +233,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCurrent.Data = tmpData;
             m_RecvReg.m_TensionCurrent.Address = currentAddress;
-            HBHome::getInstance()->setTension(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated tension:" << tension;
             break;
         case HQmlEnum::TENSION_CURRENT_DELTA_H: // TENSION_INCREMENT_H
             m_RegisterData.HIGH_16BITS = value;
@@ -259,8 +244,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCurrentDelta.Data = tmpData;
             m_RecvReg.m_TensionCurrentDelta.Address = currentAddress;
-            HBHome::getInstance()->setTensionIncrement(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated tensionIncrement:" << tensionIncrement;
             break;
         case HQmlEnum::TENSION_LIMITED_H: // MAX_TENSION_H
             m_RegisterData.HIGH_16BITS = value;
@@ -272,8 +255,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionLimited.Data = tmpData;
             m_RecvReg.m_TensionLimited.Address = currentAddress;
-            HBHome::getInstance()->setMaxTension(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated maxTension:" << maxTension;
             break;
         case HQmlEnum::TENSION_LIMITED_DELTA_H: // MAX_TENSION_INCREMENT_L
             m_RegisterData.HIGH_16BITS = value;
@@ -285,8 +266,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionLimitedDelta.Data = tmpData;
             m_RecvReg.m_TensionLimitedDelta.Address = currentAddress;
-            HBHome::getInstance()->setMaxTensionIncrement(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated maxTensionIncrement:" << maxTensionIncrement;
             break;
         case HQmlEnum::TENSION_CABLE_HEAD_H: // CABLE_TENSION_H
             m_RegisterData.HIGH_16BITS = value;
@@ -298,14 +277,10 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCableHead.Data = tmpData;
             m_RecvReg.m_TensionCableHead.Address = currentAddress;
-            HBHome::getInstance()->setHarnessTension(tmpData);
-            // qDebug() << "Address" << currentAddress << "- Updated cableTension:" << cableTension;
             break;
         case HQmlEnum::K_VALUE:
             m_RecvReg.m_K_Value.Data = value;
             m_RecvReg.m_K_Value.Address = currentAddress;
-            HBHome::getInstance()->setKValue(value);
-            // qDebug() << "Address" << currentAddress << "- Updated K_Value:" << K_Value;
             break;
         case HQmlEnum::TENSION_ENCODER:
             m_RecvReg.m_TensionEncoder.Data = value;
@@ -364,8 +339,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_Point2Scale.Data = tmpData;
             m_RecvReg.m_Point2Scale.Address = currentAddress;
-            // Tensiometer::getInstance()->setScale2(m_scale2);
-            // qDebug() << "Address" << currentAddress << "- Updated m_scale2:" << m_scale2;
             break;
         case HQmlEnum::TENSION_2_H:
             m_RegisterData.HIGH_16BITS = value;
@@ -388,8 +361,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_Point3Scale.Data = tmpData;
             m_RecvReg.m_Point3Scale.Address = currentAddress;
-            // Tensiometer::getInstance()->setScale3(m_scale3);
-            // qDebug() << "Address" << currentAddress << "- Updated scale3_L:" << scale3_L;
             break;
         case HQmlEnum::TENSION_3_H:
             m_RegisterData.HIGH_16BITS = value;
@@ -412,8 +383,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_Point4Scale.Data = tmpData;
             m_RecvReg.m_Point4Scale.Address = currentAddress;
-            // Tensiometer::getInstance()->setScale1(m_scale4);
-            // qDebug() << "Address" << currentAddress << "- Updated m_scale4:" << m_scale4;
             break;
         case HQmlEnum::TENSION_4_H:
             m_RegisterData.HIGH_16BITS = value;
@@ -436,8 +405,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_Point5Scale.Data = tmpData;
             m_RecvReg.m_Point5Scale.Address = currentAddress;
-            // Tensiometer::getInstance()->setScale1(m_scale5);
-            // qDebug() << "Address" << currentAddress << "- Updated m_scale5:" << m_scale5;
             break;
         case HQmlEnum::TENSION_5_H:
             m_RegisterData.HIGH_16BITS = value;
@@ -561,8 +528,6 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCurrentSafety.Data = tmpData;
             m_RecvReg.m_TensionCurrentSafety.Address = currentAddress;
-            // TensionSafe::getInstance()->setCurrentTensionSafe( QString::number(currentTensionSafe));
-            // qDebug() << "Address" << currentAddress << "- Updated currentTensionSafe:" << currentTensionSafe;
             break;
         case HQmlEnum::TENSION_CURRENT_LIMITED_H: // CIRRENT_TENSION_MAX_H
             m_RegisterData.HIGH_16BITS = value;
@@ -574,20 +539,14 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCurrentLimited.Data = tmpData;
             m_RecvReg.m_TensionCurrentLimited.Address = currentAddress;
-            TensionSafe::getInstance()->setMAXTensionSafe(QString::number(tmpData));
-            // qDebug() << "Address" << currentAddress << "- Updated maxTensionSafe:" << maxTensionSafe;
             break;
         case HQmlEnum::TENSION_CABLE_HEAD_TREND: // HARNESS_TENSION_TREND
             m_RecvReg.m_TensionCableHeadTrend.Data = value;
             m_RecvReg.m_TensionCableHeadTrend.Address = currentAddress;
-            TensionSafe::getInstance()->setCableTensionTrend(value);
-            // qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
             break;
         case HQmlEnum::TIME_SAFETY_STOP: // PARKING_SAFE_TIME
             m_RecvReg.m_TimeSafetyStop.Data = value;
             m_RecvReg.m_TimeSafetyStop.Address = currentAddress;
-            // TensionSafe::getInstance()->setPtime(QString::number(ptime));
-            // qDebug() << "Address" << currentAddress << "- Updated cableTensionTrend:" << cableTensionTrend;
             break;
         case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_H:
             m_RegisterData.HIGH_16BITS = value;
@@ -629,10 +588,45 @@ void HBModbusClient::compareRawData()
     qDebug() << "current Register Hash Code: " << hashCode;
     int prevHashCode = qHashBits(&m_PrevRecvReg, sizeof(MODBUS_REGISTER));
     qDebug() << "previous Register Hash Code: " << prevHashCode;
+    m_VelocityUnit  = static_cast<Depth::VELOCITY_UNIT>(Depth::GetInstance()->VelocityUnit());
+    m_DistanceUnit  = static_cast<Depth::DISTANCE_UNIT>(Depth::GetInstance()->DistanceUnit());
+    m_TimeUnit      = static_cast<Depth::TIME_UNIT>(Depth::GetInstance()->TimeUnit());
+    m_ForceUnit     = static_cast<Tensiometer::FORCE_UNIT>(Tensiometer::GetInstance()->TensionUnits());
+
     if(hashCode != prevHashCode)
     {
-        HBHome::getInstance()->setDepth(m_RecvReg.m_DepthCurrent.Data);
-        qDebug() << "Address: " << m_RecvReg.m_DepthCurrent.Address << "----- Updated depth:" << m_RecvReg.m_DepthCurrent.Data;
+        if(m_PrevRecvReg.m_DepthCurrent.Data != m_RecvReg.m_DepthCurrent.Data)
+            updateDepthCurrent(m_RecvReg.m_DepthCurrent.Data, m_RecvReg.m_DepthCurrent.Address);
+
+        if(m_PrevRecvReg.m_VelocityCurrent.Data != m_RecvReg.m_VelocityCurrent.Data)
+            updateVelocityCurrent(m_RecvReg.m_VelocityCurrent.Data, m_RecvReg.m_VelocityCurrent.Address);
+
+        if(m_PrevRecvReg.m_TensionCurrent.Data != m_RecvReg.m_TensionCurrent.Data)
+            updateTensionCurrent(m_RecvReg.m_TensionCurrent.Data, m_RecvReg.m_TensionCurrent.Address);
+
+        if(m_PrevRecvReg.m_TensionCurrentDelta.Data != m_RecvReg.m_TensionCurrentDelta.Data)
+            updateTensionCurrentDelta(m_RecvReg.m_TensionCurrentDelta.Data, m_RecvReg.m_TensionCurrentDelta.Address);
+
+        if(m_PrevRecvReg.m_PulseCount.Data != m_RecvReg.m_PulseCount.Data)
+            updatePulseCount(m_RecvReg.m_PulseCount.Data, m_RecvReg.m_PulseCount.Address);
+
+        if(m_PrevRecvReg.m_TensionLimited.Data != m_RecvReg.m_TensionLimited.Data)
+            updateTensionLimited(m_RecvReg.m_TensionLimited.Data, m_RecvReg.m_TensionLimited.Address);
+
+        if(m_PrevRecvReg.m_DepthTargetLayer.Data != m_RecvReg.m_DepthTargetLayer.Data)
+            updateDepthTargetLayer(m_RecvReg.m_DepthTargetLayer.Data, m_RecvReg.m_DepthTargetLayer.Address);
+
+        if(m_PrevRecvReg.m_VelocityLimited.Data != m_RecvReg.m_VelocityLimited.Data)
+            updateVelocityLimited(m_RecvReg.m_VelocityLimited.Data, m_RecvReg.m_VelocityLimited.Address);
+
+        if(m_PrevRecvReg.m_TensionLimitedDelta.Data != m_RecvReg.m_TensionLimitedDelta.Data)
+            updateTensionLimitedDelta(m_RecvReg.m_TensionLimitedDelta.Data, m_RecvReg.m_TensionLimitedDelta.Address);
+
+        if(m_PrevRecvReg.m_K_Value.Data != m_RecvReg.m_K_Value.Data)
+            updateKValue(m_RecvReg.m_K_Value.Data, m_RecvReg.m_K_Value.Address);
+
+        if(m_PrevRecvReg.m_TensionCableHead.Data != m_RecvReg.m_TensionCableHead.Data)
+            updateTensionCableHead(m_RecvReg.m_TensionCableHead.Data, m_RecvReg.m_TensionCableHead.Address);
         memcpy(&m_PrevRecvReg, &m_RecvReg, sizeof(MODBUS_REGISTER));
     }
 }
@@ -667,6 +661,220 @@ void HBModbusClient::writeRegister(int address, const QVariantList &values)
         data.append(static_cast<quint16>(v.toUInt()));
     }
     writeRegister(address, data);
+}
+
+void HBModbusClient::updateDepthCurrent(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Depth Current Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_DistanceUnit)
+    {
+    case Depth::METER:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER, hexData);
+        break;
+    case Depth::FEET:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setDepthCurrent(strData);
+}
+
+void HBModbusClient::updateVelocityCurrent(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Velocity Current Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_VelocityUnit)
+    {
+    case Depth::M_PER_HOUR:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER_PER_HOUR, hexData);
+        break;
+    case Depth::M_PER_MIN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER_PER_MIN, hexData);
+        break;
+    case Depth::FT_PER_HOUR:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET_PER_HOUR, hexData);
+        break;
+    case Depth::FT_PER_MIN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET_PER_MIN, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER_PER_HOUR, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setVelocityCurrent(strData);
+}
+
+void HBModbusClient::updateTensionCurrent(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Tension Current Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_ForceUnit)
+    {
+    case Tensiometer::LB:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2POUND, hexData);
+        break;
+    case Tensiometer::KG:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILOGRAM, hexData);
+        break;
+    case Tensiometer::KN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setTensionCurrent(strData);
+}
+
+void HBModbusClient::updateTensionCurrentDelta(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Tension Current Delta Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_ForceUnit)
+    {
+    case Tensiometer::LB:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2POUND, hexData);
+        break;
+    case Tensiometer::KG:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILOGRAM, hexData);
+        break;
+    case Tensiometer::KN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setTensionCurrentDelta(strData);
+}
+
+void HBModbusClient::updatePulseCount(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Tension Current Delta Address: " << hexAddress << "----- Updated depth:" << hexData;
+    strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2PULSE, hexData);
+    HBHome::GetInstance()->setPulseCount(strData);
+}
+
+void HBModbusClient::updateTensionLimited(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Tension Limited Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_ForceUnit)
+    {
+    case Tensiometer::LB:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2POUND, hexData);
+        break;
+    case Tensiometer::KG:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILOGRAM, hexData);
+        break;
+    case Tensiometer::KN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setTensionLimited(strData);
+}
+
+void HBModbusClient::updateDepthTargetLayer(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Depth Target Layer Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_DistanceUnit)
+    {
+    case Depth::METER:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER, hexData);
+        break;
+    case Depth::FEET:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setDepthTargetLayer(strData);
+}
+
+void HBModbusClient::updateVelocityLimited(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Velocity Current Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_VelocityUnit)
+    {
+    case Depth::M_PER_HOUR:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER_PER_HOUR, hexData);
+        break;
+    case Depth::M_PER_MIN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER_PER_MIN, hexData);
+        break;
+    case Depth::FT_PER_HOUR:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET_PER_HOUR, hexData);
+        break;
+    case Depth::FT_PER_MIN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET_PER_MIN, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER_PER_HOUR, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setVelocityLimited(strData);
+}
+
+void HBModbusClient::updateTensionLimitedDelta(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Tension Limited Delta Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_ForceUnit)
+    {
+    case Tensiometer::LB:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2POUND, hexData);
+        break;
+    case Tensiometer::KG:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILOGRAM, hexData);
+        break;
+    case Tensiometer::KN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setTensionLimitedDelta(strData);
+}
+
+void HBModbusClient::updateKValue(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "K Value Address: " << hexAddress << "----- Updated depth:" << hexData;
+    strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2K_VALUE, hexData);
+    HBHome::GetInstance()->setKValue(strData);
+}
+
+void HBModbusClient::updateTensionCableHead(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Tension Cable Head Address: " << hexAddress << "----- Updated depth:" << hexData;
+    switch(m_ForceUnit)
+    {
+    case Tensiometer::LB:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2POUND, hexData);
+        break;
+    case Tensiometer::KG:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILOGRAM, hexData);
+        break;
+    case Tensiometer::KN:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    default:
+        strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2KILONEWTON, hexData);
+        break;
+    }
+    HBHome::GetInstance()->setTensionCableHead(strData);
 }
 
 bool HBModbusClient::writeRegister(int address, const int value)
@@ -845,24 +1053,24 @@ void HBModbusClient::handleAlarm(int address, bool value)
 
 void HBModbusClient::insertDataToDatabase()
 {
-    HBHome* _dashboard = HBHome::getInstance();
-    ModbusData modData;
-    modData.wellNumber = WellParameter::getInstance()->WellNumber();
-    modData.operateType = WellParameter::getInstance()->OperatorType();
-    modData.operater = WellParameter::getInstance()->UserName();
-    modData.depth = _dashboard->Depth();
-    modData.velocity = _dashboard->Speed();
-    modData.tensions = _dashboard->Tension();
-    modData.tensionIncrement = _dashboard->TensionIncrement();
-    modData.harnessTension = m_RecvReg.m_TensionCableHead.Data;
-    modData.maxTension = _dashboard->MaxTension();
-    modData.safetyTension = m_RecvReg.m_TensionCurrentSafety.Data;
-    modData.exception = "none";
+    // HBHome* _dashboard = HBHome::getInstance();
+    // ModbusData modData;
+    // modData.wellNumber = WellParameter::getInstance()->WellNumber();
+    // modData.operateType = WellParameter::getInstance()->OperatorType();
+    // modData.operater = WellParameter::getInstance()->UserName();
+    // modData.depth = _dashboard->DepthCurrent();
+    // modData.velocity = _dashboard->Speed();
+    // modData.tensions = _dashboard->Tension();
+    // modData.tensionIncrement = _dashboard->TensionIncrement();
+    // modData.harnessTension = m_RecvReg.m_TensionCableHead.Data;
+    // modData.maxTension = _dashboard->MaxTension();
+    // modData.safetyTension = m_RecvReg.m_TensionCurrentSafety.Data;
+    // modData.exception = "none";
 
     // HBDatabase::getInstance().insertHistoryData(modData);
-    QtConcurrent::run([modData]() {
-        HBDatabase::getInstance().insertHistoryData(modData);
-    });
+    // QtConcurrent::run([modData]() {
+    //     HBDatabase::getInstance().insertHistoryData(modData);
+    // });
 }
 
 void HBModbusClient::writeCoil(int address, int value)

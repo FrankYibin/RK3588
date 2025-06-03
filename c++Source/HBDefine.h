@@ -63,7 +63,7 @@ struct _DepthSet {
     QString meterDepth;
     int depthCalculateType;
     int codeOption;
-    int pulse;
+    QString pulse;
 };
 
 struct _DepthSafe {
@@ -81,14 +81,14 @@ struct _DepthSafe {
 struct _TensionSafe {
     int id;
     QString wellType;
-    int maxTension;
+    QString maxTension;
     QString weakForce;
     QString tensionSafeFactor;
 };
 
 struct _TensionSet {
     int id;
-    int kValue;
+    QString kValue;
     int tensionUnit;
 };
 

@@ -1,6 +1,6 @@
 ﻿#include "tensiometer.h"
 #include <QDebug>
-Tensiometer* Tensiometer::m_tensiometer = nullptr;
+Tensiometer* Tensiometer::_ptrTensiometer = nullptr;
 
 Tensiometer::Tensiometer(QObject *parent)
     : QObject{parent}
@@ -13,12 +13,13 @@ Tensiometer::Tensiometer(QObject *parent)
     setTensionUnits(LB);
 }
 
-Tensiometer *Tensiometer::getInstance()
+Tensiometer *Tensiometer::GetInstance()
 {
-    if (!m_tensiometer) {
-        m_tensiometer = new Tensiometer();
+    if (!_ptrTensiometer)
+    {
+        _ptrTensiometer = new Tensiometer();
     }
-    return m_tensiometer;
+    return _ptrTensiometer;
 
 }
 

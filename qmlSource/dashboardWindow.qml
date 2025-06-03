@@ -78,7 +78,7 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text:(HBHome.Depth / 100.0).toFixed(2)
+                text: HBHome.DepthCurrent
                 enabled: false
 
             }
@@ -121,9 +121,7 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,5}(\.\d{1,2})?$/ }
-                // text: "1200.00"
-//                text: HBHome.Speed
-                text:(HBHome.Speed / 100.0).toFixed(2)
+                text: HBHome.VelocityCurrent
                 enabled: false
             }
             Text
@@ -165,9 +163,7 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                //text: "1200.00"
-//                text: HBHome.Tension
-                text:(HBHome.Tension / 100.0).toFixed(2)
+                text: HBHome.TensionCurrent
                 enabled: false
 
             }
@@ -209,10 +205,8 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                // text: "1200.00"
-//                text: HBHome.TensionIncrement
-                 text:(HBHome.TensionIncrement / 100.0).toFixed(2)
-                 enabled: false
+                text: HBHome.TensionCurrentDelta
+                enabled: false
 
             }
             Text
@@ -290,7 +284,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                    // text: "100"
-                    text: HBHome.Pulse
+                    text: HBHome.PulseCount
                     enabled: false
                 }
             }
@@ -318,7 +312,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                     // text: "99.00"
-                    text: HBHome.MaxSpeed
+                    text: HBHome.VelocityLimited
                     enabled: false
                 }
                 Text
@@ -354,7 +348,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                     // text: "101.00"
-                    text: HBHome.HarnessTension
+                    text: HBHome.TensionCableHead
                     enabled: false
                 }
                 Text
@@ -395,7 +389,7 @@ Item{
                 {
                     id: textMaxTension
                     // text: "255.00"
-                    text: HBHome.MaxTension
+                    text: HBHome.TensionLimited
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -431,8 +425,7 @@ Item{
                 HBTextField
                 {
                     id: textMaxTensionIncrement
-                    // text: qsTr("10.00")
-                    text: HBHome.MaxTensionIncrement
+                    text: HBHome.TensionLimitedDelta
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -468,8 +461,7 @@ Item{
                 HBTextField
                 {
                     id: textMaxParameterStatus
-                    text: qsTr("自动")
-                    // text: HBHome.MaxParameterStatus
+                    text: (HBHome.StatusLimitedPara === 0) ? qsTr("手动") : qsTr("自动")
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -507,7 +499,7 @@ Item{
                 {
                     id: textTargetDepth
                     // text: "1000.00"
-                    text: HBHome.TargetDepth
+                    text: HBHome.DepthTargetLayer
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
@@ -573,9 +565,8 @@ Item{
 
                 HBTextField
                 {
-                    id: textTensionUnit
-                    text: qsTr("未连接")
-                    // text: HBHome.NetworkStatus
+                    id: textNetworkStatus
+                    text: (HBHome.StatusNetwork === 0) ? qsTr("未连接") : qsTr("已连接")
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)

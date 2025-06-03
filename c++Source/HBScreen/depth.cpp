@@ -2,14 +2,14 @@
 #include <QtDebug>
 
 
-Depth* Depth::m_depth = nullptr;
+Depth* Depth::_ptrDepth = nullptr;
 
-Depth *Depth::getInstance()
+Depth *Depth::GetInstance()
 {
-    if (!m_depth) {
-        m_depth = new Depth();
+    if (!_ptrDepth) {
+        _ptrDepth = new Depth();
     }
-    return m_depth;
+    return _ptrDepth;
 
 }
 
@@ -118,7 +118,7 @@ void Depth::setVelocityUnit(const int velocityUnit)
         setTimeUnit(MIN);
         setDistanceUnit(METER);
         break;
-    case FT_HOUR:
+    case FT_PER_HOUR:
         setTimeUnit(HOUR);
         setDistanceUnit(FEET);
         break;
