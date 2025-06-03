@@ -108,7 +108,7 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
     for (int i = 0; i < count; ++i)
     {
         int currentAddress = startAddress + i;
-        qDebug() << "Start Address: " << currentAddress;
+        // qDebug() << "Start Address: " << currentAddress;
         quint16 value = result.value(i);
 
         switch (currentAddress) {
@@ -585,9 +585,8 @@ void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
 void HBModbusClient::compareRawData()
 {
     int hashCode = qHashBits(&m_RecvReg, sizeof(MODBUS_REGISTER));
-    qDebug() << "current Register Hash Code: " << hashCode;
     int prevHashCode = qHashBits(&m_PrevRecvReg, sizeof(MODBUS_REGISTER));
-    qDebug() << "previous Register Hash Code: " << prevHashCode;
+
     m_VelocityUnit  = static_cast<Depth::VELOCITY_UNIT>(Depth::GetInstance()->VelocityUnit());
     m_DistanceUnit  = static_cast<Depth::DISTANCE_UNIT>(Depth::GetInstance()->DistanceUnit());
     m_TimeUnit      = static_cast<Depth::TIME_UNIT>(Depth::GetInstance()->TimeUnit());
@@ -595,6 +594,8 @@ void HBModbusClient::compareRawData()
 
     if(hashCode != prevHashCode)
     {
+        qDebug() << "previous Register Hash Code: " << prevHashCode;
+        qDebug() << "current Register Hash Code: " << hashCode;
         if(m_PrevRecvReg.m_DepthCurrent.Data != m_RecvReg.m_DepthCurrent.Data)
             updateDepthCurrent(m_RecvReg.m_DepthCurrent.Data, m_RecvReg.m_DepthCurrent.Address);
 
@@ -916,7 +917,7 @@ void HBModbusClient::handleCoilResult(const QModbusDataUnit &result)
     for (int i = 0; i < count; ++i) {
         int address = startAddress + i;
         bool val = result.value(i);
-        handleAlarm(address, val);
+        // handleAlarm(address, val);
     }
 }
 
