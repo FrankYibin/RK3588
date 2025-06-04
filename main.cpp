@@ -39,7 +39,7 @@
 #include "c++Source/systemInformationInterface.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/autotestspeed.h"
-#include "c++Source/HBScreen/depth.h"
+#include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/depthmeter.h"
 #include "c++Source/HBScreen/depthsafe.h"
 #include "c++Source/HBScreen/tensiometer.h"
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
     pQmlContext->setContextProperty("HBHome", HBHome::GetInstance());
     pQmlContext->setContextProperty("AutoTestSpeed", AutoTestSpeed::getInstance());
-    pQmlContext->setContextProperty("Depth", Depth::GetInstance());
+    pQmlContext->setContextProperty("Depth", DepthSetting::GetInstance());
     pQmlContext->setContextProperty("DepthMeter", DepthMeter::getInstance());
     pQmlContext->setContextProperty("DepthSafe", DepthSafe::getInstance());
     pQmlContext->setContextProperty("Tensiometer", Tensiometer::GetInstance());

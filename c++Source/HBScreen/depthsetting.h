@@ -1,9 +1,9 @@
-﻿#ifndef DEPTH_H
-#define DEPTH_H
+﻿#ifndef DEPTH_SETTING_H
+#define DEPTH_SETTING_H
 
 #include <QObject>
 
-class Depth : public QObject
+class DepthSetting : public QObject
 {
     Q_OBJECT
     //目的层深度
@@ -12,12 +12,17 @@ class Depth : public QObject
     Q_PROPERTY(int DepthOrientation READ DepthOrientation WRITE setDepthOrientation NOTIFY DepthOrientationChanged)
     //表套深度
     Q_PROPERTY(QString DepthSurfaceCover READ DepthSurfaceCover WRITE setDepthSurfaceCover NOTIFY DepthSurfaceCoverChanged)
+    //瞬时深度
+    Q_PROPERTY(QString DepthCurrent READ DepthCurrent WRITE setDepthCurrent NOTIFY DepthCurrentChanged)
     //编码器源选择
     Q_PROPERTY(int DepthEncoder READ DepthEncoder WRITE setDepthEncoder NOTIFY DepthEncoderChanged)
-    //编码器编号
-    Q_PROPERTY(int CodeOption READ CodeOption WRITE setCodeOption NOTIFY CodeOptionChanged)
     //速度单位
     Q_PROPERTY(int VelocityUnit READ VelocityUnit   WRITE setVelocityUnit   NOTIFY VelocityUnitChanged)
+    //脉冲数
+    Q_PROPERTY(QString PulseCount READ PulseCount WRITE setPulseCount NOTIFY PulseCountChanged)
+    //极限速度
+    Q_PROPERTY(QString VelocityLimited READ VelocityLimited WRITE setVelocityLimited NOTIFY VelocityLimitedChanged)
+
     Q_PROPERTY(int DistanceUnit READ DistanceUnit   WRITE setDistanceUnit   NOTIFY DistanceUnitChanged)
     Q_PROPERTY(int TimeUnit     READ TimeUnit       WRITE setTimeUnit       NOTIFY TimeUnitChanged)
 
@@ -54,55 +59,64 @@ public:
     };
 
 public:
-    static Depth* GetInstance();
+    static DepthSetting* GetInstance();
     Q_INVOKABLE QString DepthTargetLayer() const;
     Q_INVOKABLE void setDepthTargetLayer(const QString value);
 
     Q_INVOKABLE int DepthOrientation() const;
     Q_INVOKABLE void setDepthOrientation(int newTargetLayerDepth);
+
+    Q_INVOKABLE QString DepthCurrent() const;
+    Q_INVOKABLE void setDepthCurrent(const QString value);
+
+    Q_INVOKABLE QString PulseCount() const;
+    Q_INVOKABLE void setPulseCount(const QString value);
+    
+    Q_INVOKABLE QString VelocityLimited() const;
+    Q_INVOKABLE void setVelocityLimited(const QString value);
+
     Q_INVOKABLE QString DepthSurfaceCover() const;
     Q_INVOKABLE void setDepthSurfaceCover(const QString value);
+
     Q_INVOKABLE int DepthEncoder() const;
     Q_INVOKABLE void setDepthEncoder(const int value);
+
     Q_INVOKABLE int VelocityUnit    () const;
-    Q_INVOKABLE int DistanceUnit    () const;
-    Q_INVOKABLE int TimeUnit        () const;
     Q_INVOKABLE void setVelocityUnit(const int velocityUnit);
+
+    Q_INVOKABLE int DistanceUnit    () const;
     Q_INVOKABLE void setDistanceUnit(const int distanceUnit);
+
+    Q_INVOKABLE int TimeUnit        () const;
     Q_INVOKABLE void setTimeUnit    (const int timeUnit);
-
-
-    Q_INVOKABLE int CodeOption() const;
-    Q_INVOKABLE void setCodeOption(int newTCodeOption);
 signals:
     void DepthTargetLayerChanged();
     void DepthOrientationChanged();
     void DepthSurfaceCoverChanged();
     void DepthEncoderChanged();
-    void CodeOptionChanged();
-
-    void VelocityUnitChanged    ();
-    void DistanceUnitChanged    ();
-    void TimeUnitChanged        ();
-
-
-
+    void DepthCurrentChanged();
+    void PulseCountChanged();
+    void VelocityLimitedChanged();
+    void VelocityUnitChanged();
+    void DistanceUnitChanged();
+    void TimeUnitChanged();
 private:
-    explicit Depth(QObject *parent = nullptr);
-    Depth(const Depth&) = delete;
-    Depth& operator=(const Depth&) = delete;
-    static Depth* _ptrDepth;
+    explicit DepthSetting(QObject *parent = nullptr);
+    DepthSetting(const DepthSetting&) = delete;
+    DepthSetting& operator=(const DepthSetting&) = delete;
+    static DepthSetting* _ptrDepth;
 
 private:
     QString m_DepthTargetLayer;
     int m_depthOrientation;
     QString m_DepthSurfaceCover;
     int m_DepthEncoder;
-    int m_codeOption;
+    QString m_DepthCurrent;
+    QString m_PulseCount;
+    QString m_VelocityLimited;
     int m_velocityUnit;
     int m_timeUnit;
     int m_distanceUnit;
-
 };
 
-#endif // DEPTH_H
+#endif // DEPTH_SETTING_H

@@ -7,7 +7,7 @@
 #include <QSqlDriver>
 #include "c++Source/HBDefine.h"
 #include "c++Source/HBScreen/wellparameter.h"
-#include "c++Source/HBScreen/depth.h"
+#include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/depthsafe.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include  "c++Source/HBScreen/tensionsafe.h"
@@ -306,14 +306,13 @@ bool HBDatabase::loadDepthSet(_DepthSet &param)
     param.codeOption = query.value("codeOption").toInt();
     param.pulse = query.value("pulse").toInt();
 
-    Depth* ds = Depth::GetInstance();
+    DepthSetting* ds = DepthSetting::GetInstance();
     HBHome* hs = HBHome::GetInstance();
 
     ds->setDepthTargetLayer(param.targetLayerDepth);
     ds->setDepthOrientation(param.depthOrientation);
     ds->setDepthSurfaceCover(param.meterDepth);
     ds->setDepthEncoder(param.depthCalculateType);
-    ds->setCodeOption(param.codeOption);
     hs->setPulseCount(param.pulse);
 
     return true;
@@ -364,7 +363,7 @@ bool HBDatabase::updateDepthSet(const _DepthSet &param)
 
 bool HBDatabase::updateDepthSetFromInstance()
 {
-    Depth* ds = Depth::GetInstance();
+    DepthSetting* ds = DepthSetting::GetInstance();
     HBHome* hs = HBHome::GetInstance();
 
     _DepthSet param;
@@ -373,7 +372,7 @@ bool HBDatabase::updateDepthSetFromInstance()
     param.depthOrientation = ds->DepthOrientation();
     param.meterDepth = ds->DepthSurfaceCover();
     param.depthCalculateType = ds->DepthEncoder();
-    param.codeOption = ds->CodeOption();
+    // param.codeOption = ds->CodeOption();
     param.pulse = hs->PulseCount();
 
     return updateDepthSet(param);
@@ -1081,7 +1080,7 @@ bool HBDatabase::getUnitSettings(UnitSettings &settings) {
         settings.depthUnit = query.value(1).toInt();
 
         Tensiometer *ts = Tensiometer::GetInstance();
-        Depth *ds = Depth::GetInstance();
+        DepthSetting *ds = DepthSetting::GetInstance();
 
         if (ts) {
             ts->setTensionUnits(settings.tensionUnit);

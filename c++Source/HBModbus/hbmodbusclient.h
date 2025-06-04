@@ -7,7 +7,8 @@
 #include <QVector>
 #include <QMap>
 #include <QMutex>
-#include "c++Source/HBScreen/depth.h"
+#include <QVariant>
+#include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/tensiometer.h"
 class HBModbusClient : public QObject
 {
@@ -96,13 +97,20 @@ private:
         RAW_DATA m_DistanceLowerWellSetting;
         RAW_DATA m_SlopeAngleWellSetting;
     };
+    struct SEND_DATA
+    {
+        int Data;
+        int Size;
+    };
+
     static MODBUS_REGISTER m_RecvReg;
     static MODBUS_REGISTER m_PrevRecvReg;
     REGISTER_DATA m_RegisterData;
 
+
     static QModbusClient *_ptrModbus;
     static int m_timerIdentifier;
-    static QMap<int, int> m_RegisterSendMap;
+    static QMap<int, SEND_DATA> m_RegisterSendMap;
     static QMutex m_mutexSending;
 
 public:
@@ -111,7 +119,7 @@ public:
 
     void readRegister(int address, int count = 1);
 
-    Q_INVOKABLE bool writeRegister(const int address, const int value);
+    Q_INVOKABLE void writeRegister(const int address, const QVariant value);
 
     Q_INVOKABLE void readCoils();
     Q_INVOKABLE void writeCoil(int address, int value);
@@ -125,13 +133,14 @@ protected:
 
 private:
     void connectToServer();
-    void startBatchRead();
     void handleReadResult(const QModbusDataUnit &result);
+    void handleWriteRequest();
     void compareRawData();
 
     void writeRegister(int address, const QVector<quint16> &values);
-    void writeRegister(int address, const QVariantList &values);
+    // void writeRegister(int address, const QVariantList &values);
 
+    //Dashboard
     void updateDepthCurrent(const int hexData, const int hexAddress);
     void updateVelocityCurrent(const int hexData, const int hexAddress);
     void updateTensionCurrent(const int hexData, const int hexAddress);
@@ -143,10 +152,17 @@ private:
     void updateTensionLimitedDelta(const int hexData, const int hexAddress);
     void updateKValue(const int hexData, const int hexAddress);
     void updateTensionCableHead(const int hexData, const int hexAddress);
-    // void update(const int hexData, const int hexAddress);
-    // void updateTensionCurrentDelta(const int hexData, const int hexAddress);
+    //Depth Setting
+    void updateDepthOrientation(const int hexData, const int hexAddress);
+    void updateDepthSurfaceCover(const int hexData, const int hexAddress);
+    void updateDepthEncoder(const int hexData, const int hexAddress);
+    // void updateVelocityLimited(const int hexData, const int hexAddress);
+    // void updateDepthEncoder(const int hexData, const int hexAddress);
+    // void updateDepthEncoder(const int hexData, const int hexAddress);
 
-
+    int getDepthInterface(const QString strData, const int hexAddress);
+    int getPulseCount(const QString strData, const int hexAddress);
+    int getVelocityInterface(const QString strData, const int hexAddress);
 signals:
 
 private:
@@ -204,11 +220,10 @@ private:
     quint16 scale5_H;
     quint16 scale5_L;
 
-    Depth::VELOCITY_UNIT    m_VelocityUnit;
-    Depth::DISTANCE_UNIT    m_DistanceUnit;
-    Depth::TIME_UNIT        m_TimeUnit;
-    Tensiometer::FORCE_UNIT m_ForceUnit;
-
+    DepthSetting::VELOCITY_UNIT m_VelocityUnit;
+    DepthSetting::DISTANCE_UNIT m_DistanceUnit;
+    DepthSetting::TIME_UNIT     m_TimeUnit;
+    Tensiometer::FORCE_UNIT     m_ForceUnit;
 };
 
 #endif // HBMODBUSCLIENT_H

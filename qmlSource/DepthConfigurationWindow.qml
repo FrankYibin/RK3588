@@ -74,8 +74,7 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入目标层深度"), " ", 2, 0, 99999, textTargetLayerDepth.text, textTargetLayerDepth, function(val) {
                             Depth.DepthTargetLayer = val;
-                            // ModbusUtils.writeScaledValue(val,HQmlEnum.TARGET_DEPTH_H,100.0)
-
+                            ModbusClient.writeRegister(HQmlEnum.DEPTH_TARGET_LAYER_H, val)
                         })
 
                     }
@@ -116,6 +115,7 @@ Item{
                     onCurrentIndexChanged: {
                         ModbusClient.writeCoil(HQmlEnum.DEPTHORIENTATION,currentIndex)
                         Depth.DepthOrientation = currentIndex
+                        //TODO need to add coil code
                         console.log("DepthOrientation：" + currentIndex)
                     }
                 }
@@ -152,7 +152,7 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入表套深度"), " ", 2, 0, 99999, textMeterDepth.text,textMeterDepth,function(val) {
                             Depth.DepthSurfaceCover = val;
-                            // ModbusUtils.writeScaledValue(val,HQmlEnum.METER_DEPTH_H,100.0)
+                            ModbusClient.writeRegister(HQmlEnum.DEPTH_SURFACE_COVER_H, val)
                         })
 
                     }
@@ -192,12 +192,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^\d{0,5}(\.\d{0,2})?$/
                     }
-                    text: HBHome.DepthCurrent
+                    text: Depth.DepthCurrent
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入瞬时深度"), " ", 3, 0, 99999, textCurrentDepth.text, textCurrentDepth,function(val) {
-                            HBHome.DepthCurrent = val;
-                            // ModbusUtils.writeScaledValue(val,HQmlEnum.HOLOD_DEPTH_H,100.0)
+                            Depth.DepthCurrent = val;
+                            ModbusClient.writeRegister(HQmlEnum.DEPTH_CURRENT_H, val);
                         })
                     }
                 }
@@ -236,7 +236,7 @@ Item{
                     height: parent.height
                     onCurrentIndexChanged: {
                         Depth.DepthEncoder = currentIndex
-                        // ModbusClient.writeRegister(HQmlEnum.DEPTHCALCULATETYPE, currentIndex)
+                        ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER, currentIndex)
                     }
                 }
             }
@@ -292,17 +292,15 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^[1-9][0-9]{4}$/
                     }
-                    text: HBHome.PulseCount
+                    text: Depth.PulseCount
                     onlyForNumpad: true
 
                     onSignalClickedEvent: { 
                         mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text, textPulseCount, function(val) {
-                            HBHome.PulseCount = val
-                            // ModbusClient.writeRegister(HQmlEnum.PULSE, parseInt(val))
+                            Depth.PulseCount = val
+                            ModbusClient.writeRegister(HQmlEnum.PULSE_COUNT, val)
                         })
-
                     }
-
                 }
             }
 
@@ -330,17 +328,14 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^\d{1,5}(\.\d{1,2})?$/
                     }
-                    text: HBHome.VelocityLimited
+                    text: Depth.VelocityLimited
                     onlyForNumpad: true
 
                     onSignalClickedEvent: {
-                        console.log("textPulseCount.text =", textUpperVelocityLimit.text);
-                         console.log("textPulseCount =", textUpperVelocityLimit);
                         mainWindow.showPrimaryNumpad(qsTr("请输入极限速度"), " ", 2, 0, 20000, textUpperVelocityLimit.text, textUpperVelocityLimit, function(val) {
-                            HBHome.VelocityLimited = val;
-                            // ModbusUtils.writeScaledValue(val,HQmlEnum.MAX_SPEED_H,100.0)
+                            Depth.VelocityLimited = val;
+                            ModbusClient.writeRegister(HQmlEnum.VELOCITY_LIMITED_H, val)
                         })
-
                     }
                 }
                 Text {
@@ -354,11 +349,8 @@ Item{
                     color: Style.whiteFontColor
                 }
             }
-
         }
     }
-
-
 }
 
 

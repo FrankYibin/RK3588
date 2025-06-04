@@ -1,28 +1,25 @@
-﻿#include "depth.h"
+﻿#include "depthsetting.h"
 #include <QtDebug>
 
 
-Depth* Depth::_ptrDepth = nullptr;
+DepthSetting* DepthSetting::_ptrDepth = nullptr;
 
-Depth *Depth::GetInstance()
+DepthSetting *DepthSetting::GetInstance()
 {
     if (!_ptrDepth) {
-        _ptrDepth = new Depth();
+        _ptrDepth = new DepthSetting();
     }
     return _ptrDepth;
 
 }
 
-Depth::Depth(QObject *parent)
+DepthSetting::DepthSetting(QObject *parent)
     : QObject{parent}
 {
     m_DepthTargetLayer = "";
     m_depthOrientation = 0;
     m_DepthSurfaceCover = "";
     m_DepthEncoder = -1;
-
-    m_codeOption = 0;
-
     m_velocityUnit = -1;
     int tmpVelocity = M_PER_HOUR;
     //get tmpVelocity from database
@@ -32,12 +29,12 @@ Depth::Depth(QObject *parent)
     setDepthEncoder(ENCODER_1);
 }
 
-QString Depth::DepthTargetLayer() const
+QString DepthSetting::DepthTargetLayer() const
 {
     return m_DepthTargetLayer;
 }
 
-void Depth::setDepthTargetLayer(const QString value)
+void DepthSetting::setDepthTargetLayer(const QString value)
 {
     if ( m_DepthTargetLayer == value)
         return;
@@ -45,12 +42,12 @@ void Depth::setDepthTargetLayer(const QString value)
     emit DepthTargetLayerChanged();
 }
 
-int Depth::DepthOrientation() const
+int DepthSetting::DepthOrientation() const
 {
     return m_depthOrientation;
 }
 
-void Depth::setDepthOrientation(int newDepthOrientation)
+void DepthSetting::setDepthOrientation(int newDepthOrientation)
 {
     if ( m_depthOrientation == newDepthOrientation )
         return;
@@ -58,13 +55,13 @@ void Depth::setDepthOrientation(int newDepthOrientation)
     emit DepthOrientationChanged();
 }
 
-QString Depth::DepthSurfaceCover() const
+QString DepthSetting::DepthSurfaceCover() const
 {
     return m_DepthSurfaceCover;
 }
 
 
-void Depth::setDepthSurfaceCover(const QString value)
+void DepthSetting::setDepthSurfaceCover(const QString value)
 {
     if (m_DepthSurfaceCover == value)
         return;
@@ -73,12 +70,12 @@ void Depth::setDepthSurfaceCover(const QString value)
 
 }
 
-int Depth::DepthEncoder() const
+int DepthSetting::DepthEncoder() const
 {
     return m_DepthEncoder;
 }
 
-void Depth::setDepthEncoder(const int value)
+void DepthSetting::setDepthEncoder(const int value)
 {
     if ( m_DepthEncoder == value )
         return;
@@ -87,23 +84,23 @@ void Depth::setDepthEncoder(const int value)
 
 }
 
-int Depth::VelocityUnit() const
+int DepthSetting::VelocityUnit() const
 {
     return m_velocityUnit;
 
 }
 
-int Depth::DistanceUnit() const
+int DepthSetting::DistanceUnit() const
 {
     return m_distanceUnit;
 }
 
-int Depth::TimeUnit() const
+int DepthSetting::TimeUnit() const
 {
     return m_timeUnit;
 }
 
-void Depth::setVelocityUnit(const int velocityUnit)
+void DepthSetting::setVelocityUnit(const int velocityUnit)
 {
     if (m_velocityUnit == velocityUnit)
         return;
@@ -135,7 +132,7 @@ void Depth::setVelocityUnit(const int velocityUnit)
     emit VelocityUnitChanged();
 }
 
-void Depth::setDistanceUnit(const int distanceUnit)
+void DepthSetting::setDistanceUnit(const int distanceUnit)
 {
     if(m_distanceUnit == distanceUnit)
         return;
@@ -143,29 +140,49 @@ void Depth::setDistanceUnit(const int distanceUnit)
     emit DistanceUnitChanged();
 }
 
-void Depth::setTimeUnit(const int timeUnit)
+void DepthSetting::setTimeUnit(const int timeUnit)
 {
     if(m_timeUnit == timeUnit)
         return;
     m_timeUnit = timeUnit;
     emit TimeUnitChanged();
 }
-
-int Depth::CodeOption() const
+QString DepthSetting::DepthCurrent() const
 {
-
-    return m_codeOption;
+    return m_DepthCurrent;
 }
-
-void Depth::setCodeOption(int newTCodeOption)
+void DepthSetting::setDepthCurrent(const QString value)
 {
-    qDebug() << "Set CodeOption called. New value:" << newTCodeOption;
-
-    if ( m_codeOption == newTCodeOption )
+    if (m_DepthCurrent == value)
         return;
-    m_codeOption = newTCodeOption;
-    emit CodeOptionChanged();
+    m_DepthCurrent = value;
+    emit DepthCurrentChanged();
 }
+
+QString DepthSetting::PulseCount() const
+{
+    return m_PulseCount;
+}
+void DepthSetting::setPulseCount(const QString value)
+{
+    if (m_PulseCount == value)
+        return;
+    m_PulseCount = value;
+    emit PulseCountChanged();
+}
+
+QString DepthSetting::VelocityLimited() const
+{
+    return m_VelocityLimited;
+}
+void DepthSetting::setVelocityLimited(const QString value)
+{
+    if (m_VelocityLimited == value)
+        return;
+    m_VelocityLimited = value;
+    emit VelocityLimitedChanged();
+}
+
 
 
 
