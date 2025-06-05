@@ -19,7 +19,7 @@ class WellParameter : public QObject
     Q_PROPERTY(int WellType READ WellType WRITE setWellType NOTIFY WellTypeChanged) //database modbus
 
     //WellDepth          井深（作业井深度）
-    Q_PROPERTY(QString DepthCurrent READ DepthCurrent WRITE setDepthCurrent NOTIFY DepthCurrentChanged)
+    Q_PROPERTY(QString DepthWell READ DepthWell WRITE setDepthWell NOTIFY DepthWellChanged)
 
     //HarnessWeight      电缆每千米重量
     Q_PROPERTY(QString WeightEachKilometerCable READ WeightEachKilometerCable WRITE setWeightEachKilometerCable NOTIFY WeightEachKilometerCableChanged)
@@ -98,8 +98,8 @@ public:
     Q_INVOKABLE QString AreaBlock() const;
     Q_INVOKABLE void setAreaBlock(const QString &value);
 
-    Q_INVOKABLE QString DepthCurrent() const;
-    Q_INVOKABLE void setDepthCurrent(const QString &value);
+    Q_INVOKABLE QString DepthWell() const;
+    Q_INVOKABLE void setDepthWell(const QString &value);
 
     Q_INVOKABLE int WorkType() const;
     Q_INVOKABLE void setWorkType(const int type);
@@ -121,28 +121,19 @@ public:
 //    Q_INVOKABLE static bool saveToCSV(const QString &filePath, const QList<WellParameter*> &list);
 
 signals:
-
     void WellNumberChanged();
-
     void AreaBlockChanged();
-
     void WeightInstrumentStringChanged();
-
     void CableSpecChanged();
-
     void BreakingForceCableChanged();
-
     void TonnageTensionStickChanged();
     void UserNameChanged();
-
     void OperatorTypeChanged();
-
     void WorkTypeChanged();
     void WellTypeChanged();
-    void DepthCurrentChanged();
+    void DepthWellChanged();
     void SlopeAngleWellSettingChanged();
     void WeightEachKilometerCableChanged();
-
 private:
     explicit WellParameter(QObject *parent = nullptr);
 
@@ -151,10 +142,8 @@ private:
     static WellParameter* m_wellParameter;
 
 private:
-
     QString m_wellNumber;
     QString m_areaBlock;
-
     QString m_WeightEachKilometerCable;
     QString m_WeightInstrumentString;
     int m_CableSpec;
@@ -164,7 +153,7 @@ private:
     QString m_operatorType = "";
     int m_workType;
     int m_wellType;
-    QString m_DepthCurrent;
+    QString m_DepthWell;
     QString m_SlopeAngleWellSetting;
 };
 

@@ -91,7 +91,6 @@ Item{
                     id: textAreaBlock
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    //                    text: qsTr("--")
                     text: WellParameter.AreaBlock
                     onAccepted: {
                         WellParameter.AreaBlock = text;
@@ -477,14 +476,10 @@ Item{
                     id: textUserName
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    //                    text: qsTr("王强")
                     text:WellParameter.UserName
                     font.family: "宋体"
-
-                    onFocusChanged: {
-                        if (!focus) {
-                            WellParameter.UserName = text;
-                        }
+                    onAccepted: {
+                        WellParameter.UserName = text;
                     }
                 }
             }
@@ -508,14 +503,10 @@ Item{
                     id: textUserLevel
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    //                    text: qsTr("操作员")
                     text: WellParameter.OperatorType
                     font.family: "宋体"
-
-                    onFocusChanged: {
-                        if (!focus) {
-                            WellParameter.OperatorType = text;
-                        }
+                    onAccepted: {
+                        WellParameter.OperatorType = text;
                     }
                 }
             }

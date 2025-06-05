@@ -8,6 +8,7 @@
 #include <QMap>
 #include <QMutex>
 #include <QVariant>
+#include <QString>
 #include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/tensiometer.h"
 class HBModbusClient : public QObject
@@ -15,10 +16,15 @@ class HBModbusClient : public QObject
     Q_OBJECT
 
 private:
-    struct RAW_DATA
+    struct RECV_DATA
     {
         int Data;
         int Address;
+    };
+    struct SEND_DATA
+    {
+        int Data;
+        int Size;
     };
     struct REGISTER_DATA
     {
@@ -29,90 +35,87 @@ private:
     struct MODBUS_REGISTER
     {
         //HOME
-        RAW_DATA m_DepthCurrent;
-        RAW_DATA m_VelocityCurrent;
-        RAW_DATA m_VelocityLimited;
-        RAW_DATA m_DepthTargetLayer;
-        RAW_DATA m_DepthSurfaceCover;
-        RAW_DATA m_PulseCount;
-        RAW_DATA m_DepthEncoder;
-        RAW_DATA m_DepthEncoder1;
-        RAW_DATA m_DepthEncoder2;
-        RAW_DATA m_DepthEncoder3;
+        RECV_DATA m_DepthCurrent;
+        RECV_DATA m_VelocityCurrent;
+        RECV_DATA m_VelocityLimited;
+        RECV_DATA m_DepthTargetLayer;
+        RECV_DATA m_DepthSurfaceCover;
+        RECV_DATA m_PulseCount;
+        RECV_DATA m_DepthEncoder;
+        RECV_DATA m_DepthEncoder1;
+        RECV_DATA m_DepthEncoder2;
+        RECV_DATA m_DepthEncoder3;
         // above total 10 register
-        RAW_DATA m_DepthTolerance;  //两个编码器深度实时误差
-        RAW_DATA m_DepthCurrentDelta;   //深度倒计功能深度
-        RAW_DATA m_TensionCurrent;
-        RAW_DATA m_TensionCurrentDelta;
-        RAW_DATA m_TensionLimited;
-        RAW_DATA m_TensionLimitedDelta;
-        RAW_DATA m_TensionCableHead;
-        RAW_DATA m_K_Value;
-        RAW_DATA m_TensionEncoder;
-        RAW_DATA m_TensionAnalog;
+        RECV_DATA m_DepthTolerance;  //两个编码器深度实时误差
+        RECV_DATA m_DepthCurrentDelta;   //深度倒计功能深度
+        RECV_DATA m_TensionCurrent;
+        RECV_DATA m_TensionCurrentDelta;
+        RECV_DATA m_TensionLimited;
+        RECV_DATA m_TensionLimitedDelta;
+        RECV_DATA m_TensionCableHead;
+        RECV_DATA m_K_Value;
+        RECV_DATA m_TensionEncoder;
+        RECV_DATA m_TensionAnalog;
         // above total 10 register
-        RAW_DATA m_TensionBattery;
-        RAW_DATA m_TensionNum;
+        RECV_DATA m_TensionBattery;
+        RECV_DATA m_TensionNum;
 
-        RAW_DATA m_Point1Scale;
-        RAW_DATA m_Point1Tension;
-        RAW_DATA m_Point2Scale;
-        RAW_DATA m_Point2Tension;
-        RAW_DATA m_Point3Scale;
-        RAW_DATA m_Point3Tension;
-        RAW_DATA m_Point4Scale;
-        RAW_DATA m_Point4Tension;
+        RECV_DATA m_Point1Scale;
+        RECV_DATA m_Point1Tension;
+        RECV_DATA m_Point2Scale;
+        RECV_DATA m_Point2Tension;
+        RECV_DATA m_Point3Scale;
+        RECV_DATA m_Point3Tension;
+        RECV_DATA m_Point4Scale;
+        RECV_DATA m_Point4Tension;
         // above total 10 register
-        RAW_DATA m_Point5Scale;
-        RAW_DATA m_Point5Tension;
+        RECV_DATA m_Point5Scale;
+        RECV_DATA m_Point5Tension;
 
-        RAW_DATA m_QuantityOfCalibration;
-        RAW_DATA m_VelocityStatus;
-        RAW_DATA m_VelocitySetting;
-        RAW_DATA m_VelocitySiman;
-        RAW_DATA m_CurrentPumpMoveDown;
-        RAW_DATA m_CurrentPumpMoveUp;
-        RAW_DATA m_CurrentMotor;
-        RAW_DATA m_VoltageMotor;
+        RECV_DATA m_QuantityOfCalibration;
+        RECV_DATA m_VelocityStatus;
+        RECV_DATA m_VelocitySetting;
+        RECV_DATA m_VelocitySiman;
+        RECV_DATA m_CurrentPumpMoveDown;
+        RECV_DATA m_CurrentPumpMoveUp;
+        RECV_DATA m_CurrentMotor;
+        RECV_DATA m_VoltageMotor;
         // above total 10 register
-        RAW_DATA m_PercentPump;
-        RAW_DATA m_PercentVelocity;
-        RAW_DATA m_TonnageTensionStick;
-        RAW_DATA m_CableSpec;
-        RAW_DATA m_DepthWellSetting;
+        RECV_DATA m_PercentPump;
+        RECV_DATA m_PercentVelocity;
+        RECV_DATA m_TonnageTensionStick;
+        RECV_DATA m_CableSpec;
+        RECV_DATA m_DepthWellSetting;
         //tensionsafe
-        RAW_DATA m_WellType;
-        RAW_DATA m_WorkType;
-        RAW_DATA m_BreakingForceCable;
-        RAW_DATA m_BreakingForceWeakness;
-        RAW_DATA m_WeightEachKilometerCable;
+        RECV_DATA m_WellType;
+        RECV_DATA m_WorkType;
+        RECV_DATA m_BreakingForceCable;
+        RECV_DATA m_BreakingForceWeakness;
+        RECV_DATA m_WeightEachKilometerCable;
         // above total 10 register
-        RAW_DATA m_WeightInstrumentString;
-        RAW_DATA m_TensionSafetyCoefficient;
-        RAW_DATA m_TensionCurrentSafety;
-        RAW_DATA m_TensionCurrentLimited;
-        RAW_DATA m_TensionCableHeadTrend;
-        RAW_DATA m_TimeSafetyStop;
-        RAW_DATA m_DistanceUpperWellSetting;
-        RAW_DATA m_DistanceLowerWellSetting;
-        RAW_DATA m_SlopeAngleWellSetting;
+        RECV_DATA m_WeightInstrumentString;
+        RECV_DATA m_TensionSafetyCoefficient;
+        RECV_DATA m_TensionCurrentSafety;
+        RECV_DATA m_TensionCurrentLimited;
+        RECV_DATA m_TensionCableHeadTrend;
+        RECV_DATA m_TimeSafetyStop;
+        RECV_DATA m_DistanceUpperWellSetting;
+        RECV_DATA m_DistanceLowerWellSetting;
+        RECV_DATA m_SlopeAngleWellSetting;
     };
-    struct SEND_DATA
-    {
-        int Data;
-        int Size;
-    };
+
+    REGISTER_DATA m_RegisterData;
 
     static MODBUS_REGISTER m_RecvReg;
     static MODBUS_REGISTER m_PrevRecvReg;
-    REGISTER_DATA m_RegisterData;
-
 
     static QModbusClient *_ptrModbus;
     static int m_timerIdentifier;
     static QMap<int, SEND_DATA> m_RegisterSendMap;
     static QMutex m_mutexSending;
 
+    static constexpr int ONE_SECOND         = 100;
+    static constexpr int MAX_TRIED_COUNT    = 5;
 public:
     explicit HBModbusClient(QObject *parent = nullptr);
     ~HBModbusClient();
@@ -138,31 +141,24 @@ private:
     void compareRawData();
 
     void writeRegister(int address, const QVector<quint16> &values);
-    // void writeRegister(int address, const QVariantList &values);
+
 
     //Dashboard
-    void updateDepthCurrent(const int hexData, const int hexAddress);
-    void updateVelocityCurrent(const int hexData, const int hexAddress);
-    void updateTensionCurrent(const int hexData, const int hexAddress);
-    void updateTensionCurrentDelta(const int hexData, const int hexAddress);
-    void updatePulseCount(const int hexData, const int hexAddress);
-    void updateTensionLimited(const int hexData, const int hexAddress);
-    void updateDepthTargetLayer(const int hexData, const int hexAddress);
-    void updateVelocityLimited(const int hexData, const int hexAddress);
-    void updateTensionLimitedDelta(const int hexData, const int hexAddress);
-    void updateKValue(const int hexData, const int hexAddress);
-    void updateTensionCableHead(const int hexData, const int hexAddress);
+    QString updateDepthInterface    (const int hexData, const int hexAddress);
+    QString updateVelocityInterface (const int hexData, const int hexAddress);
+    QString updateTensionInterface  (const int hexData, const int hexAddress);
+    QString updatePulseCount        (const int hexData, const int hexAddress);
+    QString updateKValue            (const int hexData, const int hexAddress);
     //Depth Setting
-    void updateDepthOrientation(const int hexData, const int hexAddress);
-    void updateDepthSurfaceCover(const int hexData, const int hexAddress);
-    void updateDepthEncoder(const int hexData, const int hexAddress);
+    void    updateDepthOrientation  (const int hexData, const int hexAddress);
+    int     updateDepthEncoder      (const int hexData, const int hexAddress);
     // void updateVelocityLimited(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
 
-    int getDepthInterface(const QString strData, const int hexAddress);
-    int getPulseCount(const QString strData, const int hexAddress);
-    int getVelocityInterface(const QString strData, const int hexAddress);
+    int     getDepthInterface       (const QString strData, const int hexAddress);
+    int     getPulseCount           (const QString strData, const int hexAddress);
+    int     getVelocityInterface    (const QString strData, const int hexAddress);
 signals:
 
 private:

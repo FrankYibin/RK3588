@@ -50,7 +50,6 @@ Item{
                     font.family: "宋体"
                     color: Style.whiteFontColor
                 }
-
                 HBLineEdit {
                     id: textWellNumber
                     width: Math.round(100 * Style.scaleHint)
@@ -58,6 +57,7 @@ Item{
                     text: WellParameter.WellNumber
                     onAccepted: {
                         WellParameter.WellNumber = text;
+                        //TODO need to send number using modbus
                     }
                 }
             }
@@ -82,7 +82,6 @@ Item{
                     id: textAreaBlock
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    //                    text: qsTr("--")
                     text: WellParameter.AreaBlock
                     onAccepted: {
                         WellParameter.AreaBlock = text;
@@ -140,20 +139,15 @@ Item{
                 HBTextField
                 {
                     id: textWellDepth
-                    text: WellParameter.DepthCurrent
+                    text: WellParameter.DepthWell
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
-
                     onSignalClickedEvent: {
-                        console.log("textWellDepth.text =", textWellDepth.text);
-                         console.log("textWellDepth =", textWellDepth);
                         mainWindow.showPrimaryNumpad(qsTr("请输入井深值"), " ", 3, 0, 999999, textWellDepth.text,textWellDepth,function(val) {
-                            WellParameter.DepthCurrent = val;
-                            //ModbusUtils.writeScaledValue(val,HQmlEnum.WORK_WELL_H ,100.0)
+                            WellParameter.DepthWell = val;
                         })
                     }
-
                 }
                 Text
                 {
@@ -187,7 +181,6 @@ Item{
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
-
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆自重值"), " ", 3, 0, 99999, textHarnessWeight.text,textHarnessWeight,function(val) {
                             //TODO need to unit exchange
@@ -228,7 +221,6 @@ Item{
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
-
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeight.text,textSensorWeight,function(val) {
                             WellParameter.WeightInstrumentString = val;
@@ -271,17 +263,14 @@ Item{
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
-
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入斜度值"), " ", 2, 0, 90, textSlopeAngle.text, textSlopeAngle, function(val) {
                             WellParameter.SlopeAngleWellSetting = val;
                             // ModbusClient.writeRegister(HQmlEnum.SENSOR_WEIGHT, [parseInt(val)])
                         })
                     }
-
                 }
             }
-
         }
 
         Column
@@ -314,9 +303,9 @@ Item{
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        ModbusClient.writeRegister(HQmlEnum.CABLE_TYPE, [currentIndex])
+                        // ModbusClient.writeRegister(HQmlEnum.CABLE_TYPE, [currentIndex])
                         WellParameter.CableSpec = currentIndex
-                        console.log("HarnessType value：", [currentIndex])
+                        // console.log("HarnessType value：", [currentIndex])
                     }
                 }
             }
@@ -348,7 +337,7 @@ Item{
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessForce.text,textHarnessForce,function(val) {
                             //TODO Need to unit exchange.
                             WellParameter.BreakingForceCable = val;
-                            ModbusClient.writeRegister(HQmlEnum.HARNESS_FORCE, [parseInt(val)])
+                            // ModbusClient.writeRegister(HQmlEnum.HARNESS_FORCE, [parseInt(val)])
                         })
                     }
                 }
@@ -388,7 +377,6 @@ Item{
 
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入拉力磅吨位"), " ", 3, 0, 99999, textTensionUnit.text,textTensionUnit,function(val) {
-                            //TODO Need to unit exchange.
                             WellParameter.TonnageTensionStick = val;
                             // ModbusClient.writeRegister(HQmlEnum.TENSION_BAR_TONNAGE, [parseInt(val)])
                         })
@@ -419,7 +407,6 @@ Item{
                     font.family: "宋体"
                     color: Style.whiteFontColor
                 }
-
                 HBComboBox
                 {
                     id: comboWorkType
@@ -455,14 +442,10 @@ Item{
                     id: textUserName
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    //                    text: qsTr("王强")
                     text:WellParameter.UserName
                     font.family: "宋体"
-
-                    onFocusChanged: {
-                        if (!focus) {
-                            WellParameter.UserName = text;
-                        }
+                    onAccepted: {
+                        WellParameter.UserName = text;
                     }
                 }
             }
@@ -486,22 +469,15 @@ Item{
                     id: textUserLevel
                     width: Math.round(100 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    //                    text: qsTr("操作员")
                     text: WellParameter.OperatorType
                     font.family: "宋体"
-
-                    onFocusChanged: {
-                        if (!focus) {
-                            WellParameter.OperatorType = text;
-                        }
+                    onAccepted: {
+                        WellParameter.OperatorType = text;
                     }
                 }
             }
-
         }
-
     }
-
 
     Row
     {

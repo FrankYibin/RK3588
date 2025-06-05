@@ -9,7 +9,7 @@ WellParameter::WellParameter(QObject *parent)
 {
     m_workType = -1;
     m_wellType = -1;
-    m_DepthCurrent = "";
+    m_DepthWell = "";
     m_SlopeAngleWellSetting = "";
     m_WeightEachKilometerCable = "";
     m_CableSpec = -1;
@@ -18,7 +18,7 @@ WellParameter::WellParameter(QObject *parent)
     setWellType(VERTICAL);
     setWorkType(PERFORATION);
     setSlopeAngleWellSetting("0.00");
-    setDepthCurrent("99999.99");
+    setDepthWell("99999.99");
     setWeightEachKilometerCable("20000");
     setCableSpec(MILIMETER_5_6);
     setBreakingForceCable("40000");
@@ -89,16 +89,16 @@ void WellParameter::setSlopeAngleWellSetting(const QString angle)
     }
 }
 
-QString WellParameter::DepthCurrent() const
+QString WellParameter::DepthWell() const
 {
-    return m_DepthCurrent;
+    return m_DepthWell;
 }
 
-void WellParameter::setDepthCurrent(const QString &value)
+void WellParameter::setDepthWell(const QString &value)
 {
-    if (m_DepthCurrent != value) {
-        m_DepthCurrent = value;
-        emit DepthCurrentChanged();
+    if (m_DepthWell != value) {
+        m_DepthWell = value;
+        emit DepthWellChanged();
     }
 
 }

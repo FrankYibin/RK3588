@@ -111,7 +111,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     wp->setWellNumber(param.wellNumber);
     wp->setAreaBlock(param.areaBlock);
     wp->setWellType(param.wellType);
-    wp->setDepthCurrent(param.wellDepth);
+    wp->setDepthWell(param.wellDepth);
     wp->setWeightEachKilometerCable(param.harnessWeight);
     wp->setWeightInstrumentString(param.sensorWeight);
     wp->setCableSpec(param.harnessType);
@@ -244,7 +244,7 @@ bool HBDatabase::updateWellParameterFromInstance()
     param.wellNumber = wp->WellNumber();
     param.areaBlock = wp->AreaBlock();
     param.wellType = wp->WellType();
-    param.wellDepth = wp->DepthCurrent();
+    param.wellDepth = wp->DepthWell();
     param.harnessWeight = wp->WeightEachKilometerCable();
     param.sensorWeight = wp->WeightInstrumentString();
     param.harnessType = wp->CableSpec();
