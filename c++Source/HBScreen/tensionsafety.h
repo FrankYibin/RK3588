@@ -1,9 +1,9 @@
-﻿#ifndef TENSIONSAFE_H
-#define TENSIONSAFE_H
+#ifndef TENSIONSAFETY_H
+#define TENSIONSAFETY_H
 
 #include <QObject>
 
-class TensionSafe : public QObject
+class TensionSafety : public QObject
 {
     Q_OBJECT
 
@@ -65,7 +65,7 @@ public:
     };
 
 public:
-    static TensionSafe* getInstance();
+    static TensionSafety* GetInstance();
 
     // QString MaxTension() const;
     QString CableWeight() const;
@@ -117,11 +117,11 @@ signals:
 
 private:
 
-    explicit TensionSafe(QObject *parent = nullptr);
+    explicit TensionSafety(QObject *parent = nullptr);
 
-    TensionSafe(const TensionSafe&) = delete;              // 禁止拷贝
-    TensionSafe& operator=(const TensionSafe&) = delete;   // 禁止赋值
-    static TensionSafe* m_tensionSafe;
+    TensionSafety(const TensionSafety&) = delete;              // 禁止拷贝
+    TensionSafety& operator=(const TensionSafety&) = delete;   // 禁止赋值
+    static TensionSafety* _ptrTensionSafety;
 
 
 private:
@@ -142,4 +142,4 @@ private:
     int m_cableTensionTrend;
 };
 
-#endif // TENSIONSAFE_H
+#endif // TENSIONSAFETY_H

@@ -5,7 +5,7 @@
 #include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/depthsetting.h"
-#include "c++Source/HBScreen/tensionsafe.h"
+#include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBDefine.h"
 #include "c++Source/HBData/hbdatabase.h"
 #include "c++Source/HBScreen/wellparameter.h"
@@ -27,7 +27,7 @@ HBModbusClient::HBModbusClient(QObject *parent)
 {
     _ptrModbus = new QModbusRtuSerialMaster(this);
     connectToServer();
-    m_timerIdentifier = startTimer(500);
+    m_timerIdentifier = startTimer(100);
     m_RegisterSendMap.clear();
 
     m_VelocityUnit = DepthSetting::M_PER_HOUR;
@@ -48,7 +48,7 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
     if(event->timerId() == m_timerIdentifier)
     {
         compareRawData();
-        if(iTick10MS % 100 == 0)
+        if(iTick10MS % 10 == 0)
         {
             readRegister(0, HQmlEnum::MAX_REGISTR);
             // readCoils();
@@ -81,7 +81,7 @@ void HBModbusClient::connectToServer()
     _ptrModbus->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
     _ptrModbus->setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
     _ptrModbus->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
-    _ptrModbus->setTimeout(10);
+    _ptrModbus->setTimeout(200);
     _ptrModbus->setNumberOfRetries(5);
     if (!_ptrModbus->connectDevice())
     {
@@ -614,6 +614,8 @@ void HBModbusClient::handleWriteRequest()
             {
                 valueArray.push_back(static_cast<quint16>(value));
             }
+            qDebug()<< "11111111111111111111: " << value;
+            qDebug()<< "22222222222222222222: " << iter.key();
             writeRegister(iter.key(), valueArray);
 
             if(prevKey == iter.key())

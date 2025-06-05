@@ -49,8 +49,8 @@ SOURCES += main.cpp \
     c++Source/HBScreen/rs232.cpp \
     c++Source/HBScreen/tensiometer.cpp \
     c++Source/HBScreen/tensiometermanager.cpp \
-    c++Source/HBScreen/tensionsafe.cpp \
 #    c++Source/HBScreen/tensionscale.cpp \
+    c++Source/HBScreen/tensionsafety.cpp \
     c++Source/HBScreen/tensionscalemanager.cpp \
     c++Source/HBScreen/wellparameter.cpp \
 #    c++Source/HBVideoCapture/videocaptureitem.cpp \
@@ -100,8 +100,8 @@ HEADERS += \
     c++Source/HBScreen/rs232.h \
     c++Source/HBScreen/tensiometer.h \
     c++Source/HBScreen/tensiometermanager.h \
-    c++Source/HBScreen/tensionsafe.h \
 #    c++Source/HBScreen/tensionscale.h \
+    c++Source/HBScreen/tensionsafety.h \
     c++Source/HBScreen/tensionscalemanager.h \
     c++Source/HBScreen/wellparameter.h \
 #    c++Source/HBVideoCapture/videocaptureitem.h \

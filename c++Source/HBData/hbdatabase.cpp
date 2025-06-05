@@ -10,7 +10,7 @@
 #include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/depthsafe.h"
 #include "c++Source/HBScreen/hbhome.h"
-#include  "c++Source/HBScreen/tensionsafe.h"
+#include  "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/tensiometer.h"
 #include <QVariant>
 

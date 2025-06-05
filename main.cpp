@@ -43,7 +43,7 @@
 #include "c++Source/HBScreen/depthmeter.h"
 #include "c++Source/HBScreen/depthsafe.h"
 #include "c++Source/HBScreen/tensiometer.h"
-#include "c++Source/HBScreen/tensionsafe.h"
+#include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/wellparameter.h"
 #include "c++Source/HBModbus/hbmodbusclient.h"
 #include "c++Source/HBData/hbdatabase.h"

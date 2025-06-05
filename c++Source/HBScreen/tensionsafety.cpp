@@ -1,20 +1,20 @@
-﻿#include "tensionsafe.h"
+﻿#include "tensionsafety.h"
 
-TensionSafe* TensionSafe::m_tensionSafe = nullptr;
+TensionSafety* TensionSafety::_ptrTensionSafety = nullptr;
 
-TensionSafe::TensionSafe(QObject *parent)
+TensionSafety::TensionSafety(QObject *parent)
     : QObject{parent}
 {
     m_cableTensionTrend = -1;
     setCableTensionTrend(NORMAL);
 }
 
-TensionSafe *TensionSafe::getInstance()
+TensionSafety *TensionSafety::GetInstance()
 {
-    if (!m_tensionSafe) {
-        m_tensionSafe = new TensionSafe();
+    if (!_ptrTensionSafety) {
+        _ptrTensionSafety = new TensionSafety();
     }
-    return m_tensionSafe;
+    return _ptrTensionSafety;
 }
 
 // QString TensionSafe::MaxTension() const { return m_maxTension; }
@@ -25,11 +25,11 @@ TensionSafe *TensionSafe::getInstance()
 //     }
 // }
 
-QString TensionSafe::CableWeight() const
+QString TensionSafety::CableWeight() const
 {
     return m_cableWeight;
 }
-void TensionSafe::setCableWeight(const QString &value)
+void TensionSafety::setCableWeight(const QString &value)
 {
     if (m_cableWeight != value) {
         m_cableWeight = value;
@@ -37,11 +37,11 @@ void TensionSafe::setCableWeight(const QString &value)
     }
 }
 
-QString TensionSafe::TensionSafeFactor() const
+QString TensionSafety::TensionSafeFactor() const
 {
     return m_TensionSafeFactor;
 }
-void TensionSafe::setTensionSafeFactor(const QString &value)
+void TensionSafety::setTensionSafeFactor(const QString &value)
 {
     if (m_TensionSafeFactor != value) {
         m_TensionSafeFactor = value;
@@ -49,11 +49,11 @@ void TensionSafe::setTensionSafeFactor(const QString &value)
     }
 }
 
-QString TensionSafe::WeakForce() const
+QString TensionSafety::WeakForce() const
 {
     return m_weakForce;
 }
-void TensionSafe::setWeakForce(const QString &value)
+void TensionSafety::setWeakForce(const QString &value)
 {
     if (m_weakForce != value) {
         m_weakForce = value;
@@ -73,11 +73,11 @@ void TensionSafe::setWeakForce(const QString &value)
 //    return m_currentHarnessTension;
 //}
 
-QString TensionSafe::CurrentTensionSafe() const
+QString TensionSafety::CurrentTensionSafe() const
 {
     return m_currentTensionSafe;
 }
-void TensionSafe::setCurrentTensionSafe(const QString &value)
+void TensionSafety::setCurrentTensionSafe(const QString &value)
 {
     if (m_currentTensionSafe != value)
     {
@@ -86,11 +86,11 @@ void TensionSafe::setCurrentTensionSafe(const QString &value)
     }
 }
 
-QString TensionSafe::MAXTensionSafe() const
+QString TensionSafety::MAXTensionSafe() const
 {
     return m_maxTensionSafe;
 }
-void TensionSafe::setMAXTensionSafe(const QString &value)
+void TensionSafety::setMAXTensionSafe(const QString &value)
 {
     if (m_maxTensionSafe != value)
     {
@@ -99,11 +99,11 @@ void TensionSafe::setMAXTensionSafe(const QString &value)
     }
 }
 
-int TensionSafe::CableTensionTrend() const
+int TensionSafety::CableTensionTrend() const
 {
     return m_cableTensionTrend;
 }
-void TensionSafe::setCableTensionTrend(const int trend)
+void TensionSafety::setCableTensionTrend(const int trend)
 {
     if (m_cableTensionTrend != trend)
     {
@@ -112,11 +112,11 @@ void TensionSafe::setCableTensionTrend(const int trend)
     }
 }
 
-QString TensionSafe::Ptime() const
+QString TensionSafety::Ptime() const
 {
     return m_ptime;
 }
-void TensionSafe::setPtime(const QString &value)
+void TensionSafety::setPtime(const QString &value)
 {
     if (m_ptime != value)
     {
@@ -125,11 +125,11 @@ void TensionSafe::setPtime(const QString &value)
     }
 }
 
-QString TensionSafe::DepthLoss() const
+QString TensionSafety::DepthLoss() const
 {
     return m_depthLoss;
 }
-void TensionSafe::setDepthLoss(const QString &value)
+void TensionSafety::setDepthLoss(const QString &value)
 {
     if (m_depthLoss != value)
     {
@@ -138,11 +138,11 @@ void TensionSafe::setDepthLoss(const QString &value)
     }
 }
 
-QString TensionSafe::CurrentDepth1() const
+QString TensionSafety::CurrentDepth1() const
 {
     return m_currentDepth1;
 }
-void TensionSafe::setCurrentDepth1(const QString &value)
+void TensionSafety::setCurrentDepth1(const QString &value)
 {
     if (m_currentDepth1 != value)
     {
@@ -151,11 +151,11 @@ void TensionSafe::setCurrentDepth1(const QString &value)
     }
 }
 
-QString TensionSafe::CurrentDepth2() const
+QString TensionSafety::CurrentDepth2() const
 {
     return m_currentDepth2;
 }
-void TensionSafe::setCurrentDepth2(const QString &value)
+void TensionSafety::setCurrentDepth2(const QString &value)
 {
     if (m_currentDepth2 != value)
     {
@@ -164,11 +164,11 @@ void TensionSafe::setCurrentDepth2(const QString &value)
     }
 }
 
-QString TensionSafe::CurrentDepth3() const
+QString TensionSafety::CurrentDepth3() const
 {
     return m_currentDepth3;
 }
-void TensionSafe::setCurrentDepth3(const QString &value)
+void TensionSafety::setCurrentDepth3(const QString &value)
 {
     if (m_currentDepth3 != value)
     {
