@@ -115,7 +115,7 @@ Item{
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
                         WellParameter.WellType = currentIndex
-                        //ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, currentIndex)
+                        ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, currentIndex)
                     }
                 }
 

@@ -152,13 +152,23 @@ private:
     //Depth Setting
     void    updateDepthOrientation  (const int hexData, const int hexAddress);
     int     updateDepthEncoder      (const int hexData, const int hexAddress);
+    int     updateWellType          (const int hexData, const int hexAddress);
+    int     updateWorkType          (const int hexData, const int hexAddress);
+    int     updateCalbeHeadTrend    (const int hexData, const int hexAddress);
+    QString updateIntegerInterface  (const int hexData, const int hexAddress);
+    QString updateSafetyCoefficient (const int hexData, const int hexAddress);
+    QString updateTimeSafetyStop    (const int hexData, const int hexAddress);
     // void updateVelocityLimited(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
 
     int     getDepthInterface       (const QString strData, const int hexAddress);
+    int     getTensionInterface     (const QString strData, const int hexAddress);
     int     getPulseCount           (const QString strData, const int hexAddress);
     int     getVelocityInterface    (const QString strData, const int hexAddress);
+    int     getIntegerInterface     (const QString strData, const int hexAddress);
+    int     getSafetyCoefficient    (const QString strData, const int hexAddress);
+    int     getTimeSafetyStop       (const QString strData, const int hexAddress);
 signals:
 
 private:

@@ -69,7 +69,7 @@ public:
     };
 
 public:
-    static WellParameter* getInstance();
+    static WellParameter* GetInstance();
 
     Q_INVOKABLE QString WeightEachKilometerCable() const;
     Q_INVOKABLE void setWeightEachKilometerCable(const QString weight);
@@ -139,7 +139,7 @@ private:
 
     WellParameter(const WellParameter&) = delete;              // 禁止拷贝
     WellParameter& operator=(const WellParameter&) = delete;   // 禁止赋值
-    static WellParameter* m_wellParameter;
+    static WellParameter* _ptrWellParameter;
 
 private:
     QString m_wellNumber;

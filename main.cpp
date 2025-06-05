@@ -150,8 +150,8 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("DepthMeter", DepthMeter::getInstance());
     pQmlContext->setContextProperty("DepthSafe", DepthSafe::getInstance());
     pQmlContext->setContextProperty("Tensiometer", Tensiometer::GetInstance());
-    pQmlContext->setContextProperty("TensionSafe", TensionSafe::getInstance());
-    pQmlContext->setContextProperty("WellParameter", WellParameter::getInstance());
+    pQmlContext->setContextProperty("TensionSafety", TensionSafety::GetInstance());
+    pQmlContext->setContextProperty("WellParameter", WellParameter::GetInstance());
     pQmlContext->setContextProperty("tensiometerManager", manager);
 
 #ifdef QT_DEBUG

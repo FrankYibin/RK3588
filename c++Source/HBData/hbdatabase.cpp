@@ -107,7 +107,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     param.userName = query.value("userName").toString();
     param.operatorType = query.value("operatorType").toString();
 
-    WellParameter* wp = WellParameter::getInstance();
+    WellParameter* wp = WellParameter::GetInstance();
     wp->setWellNumber(param.wellNumber);
     wp->setAreaBlock(param.areaBlock);
     wp->setWellType(param.wellType);
@@ -238,7 +238,7 @@ bool HBDatabase::updateWellParameter(const _WellParameter &param)
 
 bool HBDatabase::updateWellParameterFromInstance()
 {
-    WellParameter* wp = WellParameter::getInstance();
+    WellParameter* wp = WellParameter::GetInstance();
     _WellParameter param;
     param.id = 1;
     param.wellNumber = wp->WellNumber();
@@ -504,12 +504,12 @@ bool HBDatabase::loadTensionSafe(_TensionSafe &param)
     param.weakForce = query.value("weakForce").toString();
     param.tensionSafeFactor = query.value("tensionSafeFactor").toString();
 
-    TensionSafe* ts = TensionSafe::getInstance();
+    TensionSafety* ts = TensionSafety::GetInstance();
     HBHome* hs = HBHome::GetInstance();
 
     hs->setTensionLimited(param.maxTension);
-    ts->setWeakForce(param.weakForce);
-    ts->setTensionSafeFactor(param.tensionSafeFactor);
+    ts->setBreakingForceWeakness(param.weakForce);
+    ts->setTensionSafetyCoefficient(param.tensionSafeFactor);
 
     return true;
 }
@@ -555,15 +555,15 @@ bool HBDatabase::updateTensionSafe(const _TensionSafe &param)
 
 bool HBDatabase::updateTensionSafeFromInstance()
 {
-    TensionSafe* ts = TensionSafe::getInstance();
+    TensionSafety* ts = TensionSafety::GetInstance();
     HBHome* hs = HBHome::GetInstance();
 
     _TensionSafe param;
     param.id = 1;
     // param.wellType = ts->WellType();
     param.maxTension = hs->TensionLimited();
-    param.weakForce = ts->WeakForce();
-    param.tensionSafeFactor = ts->TensionSafeFactor();
+    param.weakForce = ts->BreakingForceWeakness();
+    param.tensionSafeFactor = ts->TensionSafetyCoefficient();
 
     return updateTensionSafe(param);
 }

@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 
-WellParameter* WellParameter::m_wellParameter = nullptr;
+WellParameter* WellParameter::_ptrWellParameter = nullptr;
 
 WellParameter::WellParameter(QObject *parent)
     : QObject{parent}
@@ -25,12 +25,12 @@ WellParameter::WellParameter(QObject *parent)
     setTonnageTensionStick("10.00");
 }
 
-WellParameter *WellParameter::getInstance()
+WellParameter *WellParameter::GetInstance()
 {
-    if (!m_wellParameter) {
-        m_wellParameter = new WellParameter();
+    if (!_ptrWellParameter) {
+        _ptrWellParameter = new WellParameter();
     }
-    return m_wellParameter;
+    return _ptrWellParameter;
 
 }
 

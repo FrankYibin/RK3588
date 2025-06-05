@@ -27,6 +27,7 @@ void HBUtilityClass::InitTextData()
     SetTextData(HEX2FACTOR,         0, static_cast<float>(0.01),                    QString("%.2f"));
     SetTextData(HEX2SECOND,         0, static_cast<float>(0.01),                    QString("%.2f"));
     SetTextData(HEX2DEGREE,         0, static_cast<float>(0.01),                    QString("%.2f"));
+    SetTextData(HEX2INTEGER,        0, static_cast<float>(1.0),                     QString("%d"));
 }
 
 QString HBUtilityClass::FormatedDataToString(const DATA_FORMAT index, const int data)

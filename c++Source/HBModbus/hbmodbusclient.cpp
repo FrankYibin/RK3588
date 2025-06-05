@@ -688,6 +688,7 @@ void HBModbusClient::compareRawData()
         {
             strData = updateTensionInterface(m_RecvReg.m_TensionLimited.Data, m_RecvReg.m_TensionLimited.Address);
             HBHome::GetInstance()->setTensionLimited(strData);
+            TensionSafety::GetInstance()->setTensionLimited(strData);
         }
 
         if(m_PrevRecvReg.m_DepthTargetLayer.Data != m_RecvReg.m_DepthTargetLayer.Data)
@@ -720,6 +721,7 @@ void HBModbusClient::compareRawData()
         {
             strData = updateTensionInterface(m_RecvReg.m_TensionCableHead.Data, m_RecvReg.m_TensionCableHead.Address);
             HBHome::GetInstance()->setTensionCableHead(strData);
+            TensionSafety::GetInstance()->setTensionCableHead(strData);
         }
 
         if(m_PrevRecvReg.m_DepthSurfaceCover.Data != m_RecvReg.m_DepthSurfaceCover.Data)
@@ -734,10 +736,92 @@ void HBModbusClient::compareRawData()
             DepthSetting::GetInstance()->setDepthEncoder(iData);
         }
 
+        if(m_PrevRecvReg.m_WellType.Data != m_RecvReg.m_WellType.Data)
+        {
+            iData = updateWellType(m_RecvReg.m_WellType.Data, m_RecvReg.m_WellType.Address);
+            TensionSafety::GetInstance()->setWellType(iData);
+            WellParameter::GetInstance()->setWellType(iData);
+        }
+
+        if(m_PrevRecvReg.m_WorkType.Data != m_RecvReg.m_WorkType.Data)
+        {
+            iData = updateWorkType(m_RecvReg.m_WorkType.Data, m_RecvReg.m_WorkType.Address);
+            TensionSafety::GetInstance()->setWorkType(iData);
+            WellParameter::GetInstance()->setWorkType(iData);
+        }
+
         if(m_PrevRecvReg.m_WeightEachKilometerCable.Data != m_RecvReg.m_WeightEachKilometerCable.Data)
         {
-
+            strData = updateIntegerInterface(m_RecvReg.m_WeightEachKilometerCable.Data, m_RecvReg.m_WeightEachKilometerCable.Address);
+            TensionSafety::GetInstance()->setWeightEachKilometerCable(strData);
         }
+
+        if(m_PrevRecvReg.m_WeightInstrumentString.Data != m_RecvReg.m_WeightInstrumentString.Data)
+        {
+            strData = updateIntegerInterface(m_RecvReg.m_WeightInstrumentString.Data, m_RecvReg.m_WeightInstrumentString.Address);
+            TensionSafety::GetInstance()->setWeightInstrumentString(strData);
+        }
+
+        if(m_PrevRecvReg.m_BreakingForceCable.Data != m_RecvReg.m_BreakingForceCable.Data)
+        {
+            strData = updateTensionInterface(m_RecvReg.m_BreakingForceCable.Data, m_RecvReg.m_BreakingForceCable.Address);
+            TensionSafety::GetInstance()->setBreakingForceCable(strData);
+        }
+
+        if(m_PrevRecvReg.m_BreakingForceWeakness.Data != m_RecvReg.m_BreakingForceWeakness.Data)
+        {
+            strData = updateTensionInterface(m_RecvReg.m_BreakingForceWeakness.Data, m_RecvReg.m_BreakingForceWeakness.Address);
+            TensionSafety::GetInstance()->setBreakingForceWeakness(strData);
+        }
+
+        if(m_PrevRecvReg.m_TensionCableHeadTrend.Data != m_RecvReg.m_TensionCableHeadTrend.Data)
+        {
+            iData = updateCalbeHeadTrend(m_RecvReg.m_TensionCableHeadTrend.Data, m_RecvReg.m_TensionCableHeadTrend.Address);
+            TensionSafety::GetInstance()->setTensionCableHeadTrend(iData);
+        }
+
+        if(m_PrevRecvReg.m_TensionSafetyCoefficient.Data != m_RecvReg.m_TensionSafetyCoefficient.Data)
+        {
+            strData = updateSafetyCoefficient(m_RecvReg.m_TensionSafetyCoefficient.Data, m_RecvReg.m_TensionSafetyCoefficient.Address);
+            TensionSafety::GetInstance()->setTensionSafetyCoefficient(strData);
+        }
+
+        if(m_PrevRecvReg.m_TensionCurrentSafety.Data != m_RecvReg.m_TensionCurrentSafety.Data)
+        {
+            strData = updateTensionInterface(m_RecvReg.m_TensionCurrentSafety.Data, m_RecvReg.m_TensionCurrentSafety.Address);
+            TensionSafety::GetInstance()->setTensionCurrentSafety(strData);
+        }
+
+        if(m_PrevRecvReg.m_TimeSafetyStop.Data != m_RecvReg.m_TimeSafetyStop.Data)
+        {
+            strData = updateTimeSafetyStop(m_RecvReg.m_TimeSafetyStop.Data, m_RecvReg.m_TimeSafetyStop.Address);
+            TensionSafety::GetInstance()->setTimeSafetyStop(strData);
+        }
+
+        if(m_PrevRecvReg.m_DepthTolerance.Data != m_RecvReg.m_DepthTolerance.Data)
+        {
+            strData = updateDepthInterface(m_RecvReg.m_DepthTolerance.Data, m_RecvReg.m_DepthTolerance.Address);
+            TensionSafety::GetInstance()->setDepthTolerance(strData);
+        }
+
+        if(m_PrevRecvReg.m_DepthEncoder1.Data != m_RecvReg.m_DepthEncoder1.Data)
+        {
+            strData = updateDepthInterface(m_RecvReg.m_DepthEncoder1.Data, m_RecvReg.m_DepthEncoder1.Address);
+            TensionSafety::GetInstance()->setDepthEncoder1(strData);
+        }
+
+        if(m_PrevRecvReg.m_DepthEncoder2.Data != m_RecvReg.m_DepthEncoder2.Data)
+        {
+            strData = updateDepthInterface(m_RecvReg.m_DepthEncoder2.Data, m_RecvReg.m_DepthEncoder2.Address);
+            TensionSafety::GetInstance()->setDepthEncoder2(strData);
+        }
+
+        if(m_PrevRecvReg.m_DepthEncoder3.Data != m_RecvReg.m_DepthEncoder3.Data)
+        {
+            strData = updateDepthInterface(m_RecvReg.m_DepthEncoder3.Data, m_RecvReg.m_DepthEncoder3.Address);
+            TensionSafety::GetInstance()->setDepthEncoder3(strData);
+        }
+
         memcpy(&m_PrevRecvReg, &m_RecvReg, sizeof(MODBUS_REGISTER));
     }
 }
@@ -867,6 +951,48 @@ int HBModbusClient::updateDepthEncoder(const int hexData, const int hexAddress)
     return hexData;
 }
 
+int HBModbusClient::updateWellType(const int hexData, const int hexAddress)
+{
+    qDebug() << "Well Type Address: " << hexAddress << "----- Updated Well Type:" << hexData;
+    return hexData;
+}
+
+int HBModbusClient::updateWorkType(const int hexData, const int hexAddress)
+{
+    qDebug() << "Work Type Address: " << hexAddress << "----- Updated Work Type:" << hexData;
+    return hexData;
+}
+
+int HBModbusClient::updateCalbeHeadTrend(const int hexData, const int hexAddress)
+{
+    qDebug() << "Cable Head Trend Address: " << hexAddress << "----- Updated Head Trend :" << hexData;
+    return hexData;
+}
+
+QString HBModbusClient::updateIntegerInterface(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Integer Address: " << hexAddress << "----- Updated integer:" << hexData;
+    strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2INTEGER, hexData);
+    return strData;
+}
+
+QString HBModbusClient::updateSafetyCoefficient(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Tension Safety Coefficient Address: " << hexAddress << "----- Updated Coefficient:" << hexData;
+    strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FACTOR, hexData);
+    return strData;
+}
+
+QString HBModbusClient::updateTimeSafetyStop(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+    qDebug() << "Time Safety Stop Address: " << hexAddress << "----- Updated Time Safety Stop:" << hexData;
+    strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2SECOND, hexData);
+    return strData;
+}
+
 int HBModbusClient::getDepthInterface(const QString strData, const int hexAddress)
 {
     int iData = -1;
@@ -880,6 +1006,28 @@ int HBModbusClient::getDepthInterface(const QString strData, const int hexAddres
         break;
     default:
         iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER, strData);
+        break;
+    }
+    qDebug() << "Depth: " << hexAddress << "----- Updated depth:" << iData;
+    return iData;
+}
+
+int HBModbusClient::getTensionInterface(const QString strData, const int hexAddress)
+{
+    int iData = -1;
+    switch(m_ForceUnit)
+    {
+    case Tensiometer::LB:
+        iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2POUND, strData);
+        break;
+    case Tensiometer::KG:
+        iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, strData);
+        break;
+    case Tensiometer::KN:
+        iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILONEWTON, strData);
+        break;
+    default:
+        iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2POUND, strData);
         break;
     }
     qDebug() << "Depth: " << hexAddress << "----- Updated depth:" << iData;
@@ -918,6 +1066,27 @@ int HBModbusClient::getVelocityInterface(const QString strData, const int hexAdd
     return iData;
 }
 
+int HBModbusClient::getIntegerInterface(const QString strData, const int hexAddress)
+{
+    int iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2INTEGER, strData);
+    qDebug() << "Integer: " << hexAddress << "----- Updated Integer:" << iData;
+    return iData;
+}
+
+int HBModbusClient::getSafetyCoefficient(const QString strData, const int hexAddress)
+{
+    int iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2FACTOR, strData);
+    qDebug() << "Safety Coefficient: " << hexAddress << "----- Updated Safety Coefficient:" << iData;
+    return iData;
+}
+
+int HBModbusClient::getTimeSafetyStop(const QString strData, const int hexAddress)
+{
+    int iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2SECOND, strData);
+    qDebug() << "Time Safety Stop: " << hexAddress << "----- Updated Time Safety Stop:" << iData;
+    return iData;
+}
+
 
 void HBModbusClient::writeRegister(const int address, const QVariant value)
 {
@@ -930,6 +1099,10 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
     case HQmlEnum::DEPTH_TARGET_LAYER_H:
     case HQmlEnum::DEPTH_SURFACE_COVER_H:
     case HQmlEnum::DEPTH_CURRENT_H:
+    case HQmlEnum::DEPTH_TOLERANCE_H:
+    case HQmlEnum::DEPTH_ENCODER_1_H:
+    case HQmlEnum::DEPTH_ENCODER_2_H:
+    case HQmlEnum::DEPTH_ENCODER_3_H:
         strValue = value.toString();
         tmpValue = getDepthInterface(strValue, address);
         stData.Data = tmpValue;
@@ -937,6 +1110,9 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::DEPTH_ENCODER:
+    case HQmlEnum::WELL_TYPE:
+    case HQmlEnum::WOKE_TYPE:
+    case HQmlEnum::TENSION_CABLE_HEAD_TREND:
         tmpValue = value.toInt();
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
@@ -954,6 +1130,39 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getVelocityInterface(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned int);
+        m_RegisterSendMap.insert(address, stData);
+        break;
+    case HQmlEnum::WEIGHT_EACH_KILOMETER_CABLE:
+    case HQmlEnum::WEIGHT_INSTRUMENT_STRING:
+    case HQmlEnum::BREAKING_FORCE_CABLE:
+    case HQmlEnum::BREAKING_FORCE_WEAKNESS:
+        strValue = value.toString();
+        tmpValue = getIntegerInterface(strValue, address);
+        stData.Data = tmpValue;
+        stData.Size = sizeof(unsigned short);
+        m_RegisterSendMap.insert(address, stData);
+        break;
+    case HQmlEnum::TENSION_LIMITED_H:
+    case HQmlEnum::TENSION_CURRENT_SAFETY_H:
+    case HQmlEnum::TENSION_CABLE_HEAD_H:
+        strValue = value.toString();
+        tmpValue = getTensionInterface(strValue, address);
+        stData.Data = tmpValue;
+        stData.Size = sizeof(unsigned int);
+        m_RegisterSendMap.insert(address, stData);
+        break;
+    case HQmlEnum::TENSION_SAFETY_COEFFICIENT:
+        strValue = value.toString();
+        tmpValue = getSafetyCoefficient(strValue, address);
+        stData.Data = tmpValue;
+        stData.Size = sizeof(unsigned short);
+        m_RegisterSendMap.insert(address, stData);
+        break;
+    case HQmlEnum::TIME_SAFETY_STOP:
+        strValue = value.toString();
+        tmpValue = getTimeSafetyStop(strValue, address);
+        stData.Data = tmpValue;
+        stData.Size = sizeof(unsigned short);
         m_RegisterSendMap.insert(address, stData);
         break;
     default:
