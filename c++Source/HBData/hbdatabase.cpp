@@ -10,8 +10,9 @@
 #include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/depthsafe.h"
 #include "c++Source/HBScreen/hbhome.h"
-#include  "c++Source/HBScreen/tensionsafety.h"
+#include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/tensiometer.h"
+#include "c++Source/HBScreen/tensionsetting.h"
 #include <QVariant>
 
 
@@ -632,13 +633,13 @@ bool HBDatabase::updateTensionSet(const _TensionSet &param)
 
 bool HBDatabase::updateTensionSetFromInstance()
 {
-    Tensiometer* ts = Tensiometer::GetInstance();
+    TensionSetting* ts = TensionSetting::GetInstance();
     HBHome* hs = HBHome::GetInstance();
 
     _TensionSet param;
     param.id = 1;
     param.kValue = hs->KValue();
-    param.tensionUnit = ts->TensionUnits();
+    param.tensionUnit = ts->TensionUnit();
 
     return updateTensionSet(param);
 }
@@ -1079,11 +1080,11 @@ bool HBDatabase::getUnitSettings(UnitSettings &settings) {
         settings.tensionUnit = query.value(0).toInt();
         settings.depthUnit = query.value(1).toInt();
 
-        Tensiometer *ts = Tensiometer::GetInstance();
+        TensionSetting *ts = TensionSetting::GetInstance();
         DepthSetting *ds = DepthSetting::GetInstance();
 
         if (ts) {
-            ts->setTensionUnits(settings.tensionUnit);
+            ts->setTensionUnit(settings.tensionUnit);
             ds->setVelocityUnit(settings.depthUnit);
         }
 

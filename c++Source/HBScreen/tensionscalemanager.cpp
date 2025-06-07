@@ -33,11 +33,11 @@ QVariant TensionScaleManager::data(const QModelIndex &index, int role) const
         Tensiometer* t = Tensiometer::GetInstance();
 
         switch (row) {
-        case 1: return t->Scale1();
-        case 2: return t->Scale2();
-        case 3: return t->Scale3();
-        case 4: return t->Scale4();
-        case 5: return t->Scale5();
+        case 1: return t->Point1Scale();
+        case 2: return t->Point2Scale();
+        case 3: return t->Point3Scale();
+        case 4: return t->Point4Scale();
+        case 5: return t->Point5Scale();
         default: return scale.scaleValue;
         }
     }

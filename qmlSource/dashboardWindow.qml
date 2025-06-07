@@ -170,7 +170,7 @@ Item{
             Text
             {
                 id: unitTension
-                text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]//qsTr("kg")
+                text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]//qsTr("kg")
                 anchors.left: txtTension.right
                 anchors.leftMargin: Math.round(5 * Style.scaleHint)
                 anchors.verticalCenter: txtTension.verticalCenter
@@ -212,7 +212,7 @@ Item{
             Text
             {
                 id: unittxtTensionIncrement
-                text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + "/s" //qsTr("kg/s")
+                text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + "/s" //qsTr("kg/s")
                 anchors.left: txtTensionIncrement.right
                 anchors.leftMargin: Math.round(5 * Style.scaleHint)
                 anchors.verticalCenter: txtTensionIncrement.verticalCenter
@@ -354,7 +354,7 @@ Item{
                 Text
                 {
                     id: unitHarnessTension
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]//qsTr("kg")
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]//qsTr("kg")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor
@@ -398,7 +398,7 @@ Item{
                 Text
                 {
                     id: unitMaxTension
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]//qsTr("kg")
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]//qsTr("kg")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor
@@ -434,7 +434,8 @@ Item{
                 Text
                 {
                     id: unitMaxTensionIncrement
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + "/s" //qsTr("kg/s")
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + "/s" //qsTr("kg/s")
+
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
                     font.family: Style.regular.name
                     color: Style.whiteFontColor

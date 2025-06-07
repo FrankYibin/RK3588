@@ -79,11 +79,11 @@ public:
         TENSION_CABLE_HEAD_L,       //缆头张力低十六位
 
         K_VALUE,                    //K值
-        TENSION_ENCODER,            //张力类型
-        TENSION_ANALOG,             //模拟张力通道(张力计在线状态)
-        TENSION_BATTERY,            //张力计电池电量(无线张力计有效)
-        TENSION_NUM_H,              //张力计编号高十六位
-        TENSION_NUM_L,              //张力计编号低十六位
+        TENSIOMETER_ENCODER,            //张力类型
+        TENSIOMETER_ANALOG,             //模拟张力通道(张力计在线状态)
+        TENSIOMETER_BATTERY,            //张力计电池电量(无线张力计有效)
+        TENSIOMETER_NUM_H,              //张力计编号高十六位
+        TENSIOMETER_NUM_L,              //张力计编号低十六位
         SCALE_1_H,
         SCALE_1_L,
         TENSION_1_H,

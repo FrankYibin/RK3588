@@ -92,6 +92,7 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: qsTr("192.168.111.101")
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("远程IP"), "IPV4", 3, 0, 255, "0.123")

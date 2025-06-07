@@ -10,7 +10,7 @@
 #include <QVariant>
 #include <QString>
 #include "c++Source/HBScreen/depthsetting.h"
-#include "c++Source/HBScreen/tensiometer.h"
+#include "c++Source/HBScreen/tensionsetting.h"
 class HBModbusClient : public QObject
 {
     Q_OBJECT
@@ -54,11 +54,11 @@ private:
         RECV_DATA m_TensionLimitedDelta;
         RECV_DATA m_TensionCableHead;
         RECV_DATA m_K_Value;
-        RECV_DATA m_TensionEncoder;
-        RECV_DATA m_TensionAnalog;
+        RECV_DATA m_TensiometerEncoder;
+        RECV_DATA m_TensiometerAnalog;
         // above total 10 register
-        RECV_DATA m_TensionBattery;
-        RECV_DATA m_TensionNum;
+        RECV_DATA m_TensiometerBattery;
+        RECV_DATA m_TensiometerNum;
 
         RECV_DATA m_Point1Scale;
         RECV_DATA m_Point1Tension;
@@ -155,9 +155,14 @@ private:
     int     updateWellType          (const int hexData, const int hexAddress);
     int     updateWorkType          (const int hexData, const int hexAddress);
     int     updateCalbeHeadTrend    (const int hexData, const int hexAddress);
+    int     updateCableSpec         (const int hexData, const int hexAddress);
+    int     updateTensiometerEncoder(const int hexData, const int hexAddress);
+    int     updateTensiometerAnalog (const int hexData, const int hexAddress);
     QString updateIntegerInterface  (const int hexData, const int hexAddress);
     QString updateSafetyCoefficient (const int hexData, const int hexAddress);
     QString updateTimeSafetyStop    (const int hexData, const int hexAddress);
+    QString updateSlopeAngleWell    (const int hexData, const int hexAddress);
+    QString updateTonnageStick      (const int hexData, const int hexAddress);
     // void updateVelocityLimited(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
@@ -169,67 +174,69 @@ private:
     int     getIntegerInterface     (const QString strData, const int hexAddress);
     int     getSafetyCoefficient    (const QString strData, const int hexAddress);
     int     getTimeSafetyStop       (const QString strData, const int hexAddress);
+    int     getSlopeAngleWell       (const QString strData, const int hexAddress);
+    int     getTonnageStick         (const QString strData, const int hexAddress);
 signals:
 
 private:
-    quint16 Depth_H = 0;
-    quint16 Depth_L = 0;
-    quint16 Speed_H = 0;
-    quint16 Speed_L = 0;
-    quint16 Tension_H = 0;
-    quint16 Tension_L = 0;
-    quint16 TensionIncrement_H = 0;
-    quint16 TensionIncrement_L = 0;
-    quint16 MaxTension_H = 0;
-    quint16 MaxTension_L = 0;
-    quint16 MaxTensionIncrement_H = 0;
-    quint16 MaxTensionIncrement_L = 0;
-    quint16 MaxSpeed_H = 0;
-    quint16 MaxSpeed_L = 0;
-    quint16 TargetDepth_H = 0;
-    quint16 TargetDepth_L = 0;
-    quint16 CableTension_H = 0;
-    quint16 CableTension_L = 0;
+    // quint16 Depth_H = 0;
+    // quint16 Depth_L = 0;
+    // quint16 Speed_H = 0;
+    // quint16 Speed_L = 0;
+    // quint16 Tension_H = 0;
+    // quint16 Tension_L = 0;
+    // quint16 TensionIncrement_H = 0;
+    // quint16 TensionIncrement_L = 0;
+    // quint16 MaxTension_H = 0;
+    // quint16 MaxTension_L = 0;
+    // quint16 MaxTensionIncrement_H = 0;
+    // quint16 MaxTensionIncrement_L = 0;
+    // quint16 MaxSpeed_H = 0;
+    // quint16 MaxSpeed_L = 0;
+    // quint16 TargetDepth_H = 0;
+    // quint16 TargetDepth_L = 0;
+    // quint16 CableTension_H = 0;
+    // quint16 CableTension_L = 0;
 
-    quint16 TensionNum_H;
-    quint16 TensionNum_L;
+    // quint16 TensionNum_H;
+    // quint16 TensionNum_L;
 
-    //tensionsafe
-
-
-    quint16 currentTensionSafe_H;
-    quint16 currentTensionSafe_L;
-    quint16 maxTensionSafe_H;
-    quint16 maxTensionSafe_L;
-    quint16 depthLoss_H;
-    quint16 depthLoss_L;
-    quint16 currentDepth1_H;
-    quint16 currentDepth1_L;
-    quint16 currentDepth2_H;
-    quint16 currentDepth2_L;
-    quint16 currentDepth3_H;
-    quint16 currentDepth3_L;
-    //    quint16 currentHarnessTension_H;
-    //    quint16 currentHarnessTension_L;
-
-    quint16 scale1_H;
-    quint16 scale1_L;
-
-    quint16 scale2_H;
-    quint16 scale2_L;
+    // //tensionsafe
 
 
-    quint16 scale3_H;
-    quint16 scale3_L;
-    quint16 scale4_H;
-    quint16 scale4_L;
-    quint16 scale5_H;
-    quint16 scale5_L;
+    // quint16 currentTensionSafe_H;
+    // quint16 currentTensionSafe_L;
+    // quint16 maxTensionSafe_H;
+    // quint16 maxTensionSafe_L;
+    // quint16 depthLoss_H;
+    // quint16 depthLoss_L;
+    // quint16 currentDepth1_H;
+    // quint16 currentDepth1_L;
+    // quint16 currentDepth2_H;
+    // quint16 currentDepth2_L;
+    // quint16 currentDepth3_H;
+    // quint16 currentDepth3_L;
+    // //    quint16 currentHarnessTension_H;
+    // //    quint16 currentHarnessTension_L;
+
+    // quint16 scale1_H;
+    // quint16 scale1_L;
+
+    // quint16 scale2_H;
+    // quint16 scale2_L;
+
+
+    // quint16 scale3_H;
+    // quint16 scale3_L;
+    // quint16 scale4_H;
+    // quint16 scale4_L;
+    // quint16 scale5_H;
+    // quint16 scale5_L;
 
     DepthSetting::VELOCITY_UNIT m_VelocityUnit;
     DepthSetting::DISTANCE_UNIT m_DistanceUnit;
     DepthSetting::TIME_UNIT     m_TimeUnit;
-    Tensiometer::FORCE_UNIT     m_ForceUnit;
+    TensionSetting::FORCE_UNIT  m_ForceUnit;
 };
 
 #endif // HBMODBUSCLIENT_H

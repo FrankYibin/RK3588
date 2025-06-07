@@ -52,6 +52,7 @@ SOURCES += main.cpp \
 #    c++Source/HBScreen/tensionscale.cpp \
     c++Source/HBScreen/tensionsafety.cpp \
     c++Source/HBScreen/tensionscalemanager.cpp \
+    c++Source/HBScreen/tensionsetting.cpp \
     c++Source/HBScreen/wellparameter.cpp \
 #    c++Source/HBVideoCapture/videocaptureitem.cpp \
     c++Source/HBUtility/hbutilityclass.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
 #    c++Source/HBScreen/tensionscale.h \
     c++Source/HBScreen/tensionsafety.h \
     c++Source/HBScreen/tensionscalemanager.h \
+    c++Source/HBScreen/tensionsetting.h \
     c++Source/HBScreen/wellparameter.h \
 #    c++Source/HBVideoCapture/videocaptureitem.h \
     c++Source/HBUtility/hbutilityclass.h \

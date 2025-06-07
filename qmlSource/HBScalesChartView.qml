@@ -210,7 +210,7 @@ Item {
                 font.family: "宋体"
                 font.pixelSize: Math.round(Math.round(Style.style3 * Style.scaleHint))
                 color: Style.whiteFontColor
-                text: qsTr("张力") + "(" + TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + ")" // 竖排显示
+                text: qsTr("张力") + "(" + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + ")" // 竖排显示
             }
         }
 

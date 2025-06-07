@@ -123,7 +123,7 @@ Item{
                     id: unitHarnessWeightPerEachKilometers
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -198,7 +198,7 @@ Item{
                     id: unitSensorWeight
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -243,7 +243,7 @@ Item{
                     id: unitHarnessPullingStrength
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -289,7 +289,7 @@ Item{
                     id: unitWeaknessPullingStrength
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -335,7 +335,7 @@ Item{
                     id: unitUltimateTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -437,7 +437,7 @@ Item{
                     id: unitCurrentSafetyTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -557,7 +557,7 @@ Item{
                     id: unitMaxSafetyTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -693,7 +693,7 @@ Item{
                     id: unitCurrentHarnessTension
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits]
+                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter

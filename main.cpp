@@ -37,6 +37,7 @@
 #include "c++Source/alarmnotification.h"
 #include "c++Source/login.h"
 #include "c++Source/systemInformationInterface.h"
+
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/autotestspeed.h"
 #include "c++Source/HBScreen/depthsetting.h"
@@ -45,19 +46,26 @@
 #include "c++Source/HBScreen/tensiometer.h"
 #include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/wellparameter.h"
-#include "c++Source/HBModbus/hbmodbusclient.h"
-#include "c++Source/HBData/hbdatabase.h"
-#include "c++Source/HBModbus/modbusutils.h"
-#include "c++Source/HBGraph/GraphAxisDefineHB.h"
-#include "c++Source/HBScreen/tensiometermanager.h"
-#include "c++Source/HBVoice/hbvoice.h"
 #include "c++Source/HBScreen/historydatatable.h"
-#include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBScreen/tensionscalemanager.h"
+#include "c++Source/HBScreen/tensionsetting.h"
+#include "c++Source/HBScreen/tensiometermanager.h"
+
+#include "c++Source/HBModbus/hbmodbusclient.h"
+#include "c++Source/HBModbus/modbusutils.h"
+#include "c++Source/HBData/hbdatabase.h"
+
+#include "c++Source/HBGraph/GraphAxisDefineHB.h"
 #include "c++Source/HBGraph/SensorGraphData.h"
+
+#include "c++Source/HBVoice/hbvoice.h"
+#include "c++Source/HBQmlEnum.h"
+#include "c++Source/HBUtility/hbutilityclass.h"
+
 //#include "c++Source/HBVideoCapture/videocaptureitem.h"
 //#include "opencv2/opencv.hpp"
-#include "c++Source/HBUtility/hbutilityclass.h"
+
+
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
                     const QString &message)
@@ -153,6 +161,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("TensionSafety", TensionSafety::GetInstance());
     pQmlContext->setContextProperty("WellParameter", WellParameter::GetInstance());
     pQmlContext->setContextProperty("tensiometerManager", manager);
+    pQmlContext->setContextProperty("TensionSetting", TensionSetting::GetInstance());
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

@@ -44,6 +44,7 @@ TextField {
     style: TextFieldStyle {
         id: textStyleId
         font.pixelSize: fontSize
+        font.family: Style.regular.name
         textColor: Style.whiteFontColor
         background: Rectangle {
             id:backGroundId

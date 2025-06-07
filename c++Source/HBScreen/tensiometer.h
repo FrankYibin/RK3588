@@ -11,73 +11,78 @@ class Tensiometer : public QObject
     Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY TensiometerNumberChanged)
 
     //Tensiometer Type
-    Q_PROPERTY(int TensiometerType READ TensiometerType WRITE setTensiometerType NOTIFY TensiometerTypeChanged)
+    Q_PROPERTY(int TensiometerEncoder READ TensiometerEncoder WRITE setTensiometerEncoder NOTIFY TensiometerEncoderChanged)
 
     //Tesiometer range
     Q_PROPERTY(int TensiometerRange READ TensiometerRange WRITE setTensiometerRange NOTIFY TensiometerRangeChanged)
 
     //Tension output signal
-    Q_PROPERTY(int TensiometerSignal READ TensiometerSignal WRITE setTensiometerSignal NOTIFY TensiometerSignalChanged)
-
-
-    //Tension Units  张力单位
-    Q_PROPERTY(int TensionUnits READ TensionUnits WRITE setTensionUnits NOTIFY tensionUnitsChanged)
+    Q_PROPERTY(int TensiometerAnalog READ TensiometerAnalog WRITE setTensiometerAnalog NOTIFY TensiometerAnalogChanged)
 
     //Scale
-    Q_PROPERTY(int Scale1 READ Scale1 WRITE setScale1 NOTIFY Scale1Changed)
+    Q_PROPERTY(QString Point1Scale READ Point1Scale WRITE setPoint1Scale NOTIFY Point1ScaleChanged)
+    Q_PROPERTY(QString Point2Scale READ Point2Scale WRITE setPoint2Scale NOTIFY Point2ScaleChanged)
+    Q_PROPERTY(QString Point3Scale READ Point3Scale WRITE setPoint3Scale NOTIFY Point3ScaleChanged)
+    Q_PROPERTY(QString Point4Scale READ Point4Scale WRITE setPoint4Scale NOTIFY Point4ScaleChanged)
+    Q_PROPERTY(QString Point5Scale READ Point5Scale WRITE setPoint5Scale NOTIFY Point5ScaleChanged)
+    //Tension
+    Q_PROPERTY(QString Point1Tension READ Point1Tension WRITE setPoint1Tension NOTIFY Point1TensionChanged)
+    Q_PROPERTY(QString Point2Tension READ Point2Tension WRITE setPoint2Tension NOTIFY Point2TensionChanged)
+    Q_PROPERTY(QString Point3Tension READ Point3Tension WRITE setPoint3Tension NOTIFY Point3TensionChanged)
+    Q_PROPERTY(QString Point4Tension READ Point4Tension WRITE setPoint4Tension NOTIFY Point4TensionChanged)
+    Q_PROPERTY(QString Point5Tension READ Point5Tension WRITE setPoint5Tension NOTIFY Point5TensionChanged)
 
-    Q_PROPERTY(int Scale2 READ Scale2 WRITE setScale2 NOTIFY Scale2Changed)
-    Q_PROPERTY(int Scale3 READ Scale3 WRITE setScale3 NOTIFY Scale3Changed)
-    Q_PROPERTY(int Scale4 READ Scale4 WRITE setScale4 NOTIFY Scale4Changed)
-    Q_PROPERTY(int Scale5 READ Scale5 WRITE setScale5 NOTIFY Scale5Changed)
-
-
-public:
-    enum FORCE_UNIT
-    {
-        LB = 0,
-        KG,
-        KN
-    };
 public:
     static Tensiometer* GetInstance();
     Q_INVOKABLE QString TensiometerNumber() const;
-    Q_INVOKABLE void setTensiometerNumber(const QString &number);
-    Q_INVOKABLE int TensiometerType() const;
-    Q_INVOKABLE void setTensiometerType(int newTensiometerType);
+    Q_INVOKABLE void setTensiometerNumber(const QString number);
+    Q_INVOKABLE int TensiometerEncoder() const;
+    Q_INVOKABLE void setTensiometerEncoder(const int encoder);
     Q_INVOKABLE int TensiometerRange() const;
-    Q_INVOKABLE void setTensiometerRange(int newTensiometerRange);
-    Q_INVOKABLE int TensiometerSignal() const;
-    Q_INVOKABLE void setTensiometerSignal(int TensiometerSignal);
-    Q_INVOKABLE int TensionUnits() const;
-    Q_INVOKABLE void setTensionUnits(int newTensionUnits);
+    Q_INVOKABLE void setTensiometerRange(const int range);
+    Q_INVOKABLE int TensiometerAnalog() const;
+    Q_INVOKABLE void setTensiometerAnalog(const int analog);
 
     //Scale
-    Q_INVOKABLE int Scale1() const;
-    Q_INVOKABLE void setScale1(int newTensiometerType);
-    Q_INVOKABLE int Scale2() const;
-    Q_INVOKABLE void setScale2(int newTensiometerType);
-    Q_INVOKABLE int Scale3() const;
-    Q_INVOKABLE void setScale3(int newTensiometerType);
-    Q_INVOKABLE int Scale4() const;
-    Q_INVOKABLE void setScale4(int newTensiometerType);
-    Q_INVOKABLE int Scale5() const;
-    Q_INVOKABLE void setScale5(int newTensiometerType);
+    Q_INVOKABLE QString Point1Scale() const;
+    Q_INVOKABLE void setPoint1Scale(const QString scale);
+    Q_INVOKABLE QString Point2Scale() const;
+    Q_INVOKABLE void setPoint2Scale(const QString scale);
+    Q_INVOKABLE QString Point3Scale() const;
+    Q_INVOKABLE void setPoint3Scale(const QString scale);
+    Q_INVOKABLE QString Point4Scale() const;
+    Q_INVOKABLE void setPoint4Scale(const QString scale);
+    Q_INVOKABLE QString Point5Scale() const;
+    Q_INVOKABLE void setPoint5Scale(const QString scale);
+    Q_INVOKABLE QString Point1Tension() const;
+    Q_INVOKABLE void setPoint1Tension(const QString tension);
+    Q_INVOKABLE QString Point2Tension() const;
+    Q_INVOKABLE void setPoint2Tension(const QString tension);
+    Q_INVOKABLE QString Point3Tension() const;
+    Q_INVOKABLE void setPoint3Tension(const QString tension);
+    Q_INVOKABLE QString Point4Tension() const;
+    Q_INVOKABLE void setPoint4Tension(const QString tension);
+    Q_INVOKABLE QString Point5Tension() const;
+    Q_INVOKABLE void setPoint5Tension(const QString tension);
 
 
 signals:
     void TensiometerNumberChanged();
-    void TensiometerTypeChanged();
+    void TensiometerEncoderChanged();
     void TensiometerRangeChanged();
-    void TensiometerSignalChanged();
-    void tensionUnitsChanged();
+    void TensiometerAnalogChanged();
 
-    void Scale1Changed();
-    void Scale2Changed();
-    void Scale3Changed();
-    void Scale4Changed();
-    void Scale5Changed();
+    void Point1ScaleChanged();
+    void Point2ScaleChanged();
+    void Point3ScaleChanged();
+    void Point4ScaleChanged();
+    void Point5ScaleChanged();
 
+    void Point1TensionChanged();
+    void Point2TensionChanged();
+    void Point3TensionChanged();
+    void Point4TensionChanged();
+    void Point5TensionChanged();
 
 private:
     explicit Tensiometer(QObject *parent = nullptr);
@@ -85,19 +90,22 @@ private:
     Tensiometer& operator=(const Tensiometer&) = delete;   // 禁止赋值
     static Tensiometer* _ptrTensiometer;
 
-
-
 private:
-    QString m_tensiometerNumber;
-    int m_tensiometerType;
-    int m_tensiometerRange;
-    int m_tensiometerSignal;
-    int m_tensionUnits;
-    int m_scale1;
-    int m_scale2;
-    int m_scale3;
-    int m_scale4;
-    int m_scale5;
+    QString m_TensiometerNumber;
+    int m_TensiometerEncoder;
+    int m_TensiometerRange;
+    int m_TensiometerAnalog;
+
+    QString m_Point1Tension;
+    QString m_Point2Tension;
+    QString m_Point3Tension;
+    QString m_Point4Tension;
+    QString m_Point5Tension;
+    QString m_Point1Scale;
+    QString m_Point2Scale;
+    QString m_Point3Scale;
+    QString m_Point4Scale;
+    QString m_Point5Scale;
 };
 
 #endif // TENSIOMETER_H

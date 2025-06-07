@@ -35,7 +35,6 @@ class WellParameter : public QObject
     Q_PROPERTY(QString BreakingForceCable READ BreakingForceCable WRITE setBreakingForceCable NOTIFY BreakingForceCableChanged)
 
     //TensionUnit        拉力磅吨位
-    // Q_PROPERTY(int TensionUnit READ TensionUnit WRITE setTensionUnit NOTIFY TensionUnitChanged)
     Q_PROPERTY(QString TonnageTensionStick READ TonnageTensionStick WRITE setTonnageTensionStick NOTIFY TonnageTensionStickChanged FINAL)
 
     //WorkType           作业类型
@@ -142,17 +141,17 @@ private:
     static WellParameter* _ptrWellParameter;
 
 private:
-    QString m_wellNumber;
-    QString m_areaBlock;
+    QString m_WellNumber;
+    QString m_AreaBlock;
     QString m_WeightEachKilometerCable;
     QString m_WeightInstrumentString;
-    int m_CableSpec;
+    int     m_CableSpec;
     QString m_BreakingForceCable;
     QString m_TonnageTensionStick;
-    QString m_userName = "";
-    QString m_operatorType = "";
-    int m_workType;
-    int m_wellType;
+    QString m_UserName;
+    QString m_OperatorType;
+    int     m_WorkType;
+    int     m_WellType;
     QString m_DepthWell;
     QString m_SlopeAngleWellSetting;
 };

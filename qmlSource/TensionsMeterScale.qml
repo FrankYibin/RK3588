@@ -136,7 +136,7 @@ Item{
             }
             TableViewColumn {
                 role: "TensionValue";
-                title: qsTr("张力值") + "(" + TensionsGlobalDefine.tensionUnitModel[Tensiometer.TensionUnits] + ")";
+                title: qsTr("张力值") + "(" + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + ")";
                 width: Math.round(90 * Style.scaleHint)
                 delegate: Rectangle {
                     height: tensionScaleTable.rowHeight

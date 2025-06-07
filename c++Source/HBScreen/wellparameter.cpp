@@ -7,22 +7,33 @@ WellParameter* WellParameter::_ptrWellParameter = nullptr;
 WellParameter::WellParameter(QObject *parent)
     : QObject{parent}
 {
-    m_workType = -1;
-    m_wellType = -1;
-    m_DepthWell = "";
-    m_SlopeAngleWellSetting = "";
+    m_WellNumber = "";
+    m_AreaBlock = "";
     m_WeightEachKilometerCable = "";
+    m_WeightInstrumentString = "";
     m_CableSpec = -1;
     m_BreakingForceCable = "";
     m_TonnageTensionStick = "";
-    setWellType(VERTICAL);
-    setWorkType(PERFORATION);
-    setSlopeAngleWellSetting("0.00");
-    setDepthWell("99999.99");
+    m_UserName = "";
+    m_OperatorType = "";
+    m_WorkType = -1;
+    m_WellType = -1;
+    m_DepthWell = "";
+    m_SlopeAngleWellSetting = "";
+
+    setWellNumber("陕50H-30");
+    setAreaBlock("---");
     setWeightEachKilometerCable("20000");
+    setWeightInstrumentString("300");
     setCableSpec(MILIMETER_5_6);
     setBreakingForceCable("40000");
     setTonnageTensionStick("10.00");
+    setUserName("张强");
+    setOperatorType("11111111");
+    setWellType(VERTICAL);
+    setWorkType(PERFORATION);
+    setDepthWell("99999.99");
+    setSlopeAngleWellSetting("0.00");
 }
 
 WellParameter *WellParameter::GetInstance()
@@ -36,26 +47,26 @@ WellParameter *WellParameter::GetInstance()
 
 QString WellParameter::WellNumber() const
 {
-    return m_wellNumber;
+    return m_WellNumber;
 }
 
 void WellParameter::setWellNumber(const QString &value)
 {
-    if (m_wellNumber != value) {
-        m_wellNumber = value;
+    if (m_WellNumber != value) {
+        m_WellNumber = value;
         emit WellNumberChanged();
     }
 }
 
 QString WellParameter::AreaBlock() const
 {
-    return m_areaBlock;
+    return m_AreaBlock;
 }
 
 void WellParameter::setAreaBlock(const QString &value)
 {
-    if (m_areaBlock != value) {
-        m_areaBlock = value;
+    if (m_AreaBlock != value) {
+        m_AreaBlock = value;
         emit AreaBlockChanged();
     }
 
@@ -63,7 +74,7 @@ void WellParameter::setAreaBlock(const QString &value)
 
 int WellParameter::WellType() const
 {
-    return m_wellType;
+    return m_WellType;
 }
 
 QString WellParameter::SlopeAngleWellSetting() const
@@ -73,9 +84,9 @@ QString WellParameter::SlopeAngleWellSetting() const
 
 void WellParameter::setWellType(const int type)
 {
-    if (m_wellType != type)
+    if (m_WellType != type)
     {
-        m_wellType = type;
+        m_WellType = type;
         emit WellTypeChanged();
     }
 }
@@ -174,14 +185,14 @@ void WellParameter::setTonnageTensionStick(const QString value)
 
 int WellParameter::WorkType() const
 {
-    return m_workType;
+    return m_WorkType;
 }
 
 void WellParameter::setWorkType(const int type)
 {
-    if (m_workType != type)
+    if (m_WorkType != type)
     {
-        m_workType = type;
+        m_WorkType = type;
         emit WorkTypeChanged();
     }
 
@@ -189,13 +200,13 @@ void WellParameter::setWorkType(const int type)
 
 QString WellParameter::UserName() const
 {
-    return m_userName;
+    return m_UserName;
 }
 
 void WellParameter::setUserName(const QString &value)
 {
-    if (m_userName != value) {
-        m_userName = value;
+    if (m_UserName != value) {
+        m_UserName = value;
         emit UserNameChanged();
     }
 
@@ -203,16 +214,15 @@ void WellParameter::setUserName(const QString &value)
 
 QString WellParameter::OperatorType() const
 {
-    return m_operatorType;
+    return m_OperatorType;
 }
 
 void WellParameter::setOperatorType(const QString &value)
 {
-    if (m_operatorType != value) {
-        m_operatorType = value;
+    if (m_OperatorType != value) {
+        m_OperatorType = value;
         emit OperatorTypeChanged();
     }
-
 }
 
 //QString WellParameter::csvHeader()
