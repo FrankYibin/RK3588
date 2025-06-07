@@ -25,7 +25,7 @@ class WellParameter : public QObject
     Q_PROPERTY(QString WeightEachKilometerCable READ WeightEachKilometerCable WRITE setWeightEachKilometerCable NOTIFY WeightEachKilometerCableChanged)
 
     //SensorWeight       仪器串重量
-    Q_PROPERTY(QString WeightInstrumentString READ WeightInstrumentString WRITE setWeightInstrumentString NOTIFY WeightInstrumentStringChanged FINAL)
+    Q_PROPERTY(QString WeightInstrumentString READ WeightInstrumentString WRITE setWeightInstrumentString NOTIFY WeightInstrumentStringChanged)
 
     //HarnessType        电缆规格
     Q_PROPERTY(int CableSpec READ CableSpec WRITE setCableSpec NOTIFY CableSpecChanged)
@@ -35,7 +35,7 @@ class WellParameter : public QObject
     Q_PROPERTY(QString BreakingForceCable READ BreakingForceCable WRITE setBreakingForceCable NOTIFY BreakingForceCableChanged)
 
     //TensionUnit        拉力磅吨位
-    Q_PROPERTY(QString TonnageTensionStick READ TonnageTensionStick WRITE setTonnageTensionStick NOTIFY TonnageTensionStickChanged FINAL)
+    Q_PROPERTY(QString TonnageTensionStick READ TonnageTensionStick WRITE setTonnageTensionStick NOTIFY TonnageTensionStickChanged)
 
     //WorkType           作业类型
     Q_PROPERTY(int WorkType READ WorkType WRITE setWorkType NOTIFY WorkTypeChanged)

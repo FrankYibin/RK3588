@@ -117,7 +117,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     wp->setWeightInstrumentString(param.sensorWeight);
     wp->setCableSpec(param.harnessType);
     wp->setBreakingForceCable(param.harnessForce);
-    wp->setTonnageTensionStick(param.tensionUnit);
+    // wp->setTonnageTensionStick(param.tensionUnit);
     wp->setWorkType(param.workType);
     wp->setUserName(param.userName);
     wp->setOperatorType(param.operatorType);

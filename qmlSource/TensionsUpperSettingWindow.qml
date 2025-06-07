@@ -80,7 +80,7 @@ Item{
                     fontSize: Math.round(Style.style3 * Style.scaleHint)
                     onCurrentIndexChanged: {
                         TensionSafety.WellType = currentIndex
-                        ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, currentIndex)
+                        ModbusClient.writeRegister(HQmlEnum.WELL_TYPE, currentIndex)
                     }
                 }
             }
