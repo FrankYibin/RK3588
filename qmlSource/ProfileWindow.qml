@@ -117,7 +117,7 @@ Item{
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
                         WellParameter.WellType = currentIndex
-                        ModbusClient.writeRegister(HQmlEnum.OIL_WELL_TYPE, currentIndex)
+                        ModbusClient.writeRegister(HQmlEnum.WELL_TYPE, currentIndex)
                     }
                 }
 
@@ -373,7 +373,7 @@ Item{
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入拉力磅吨位"), " ", 3, 0, 99999, textTensionUnit.text,textTensionUnit,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入拉力磅吨位"), " ", 2, 0, 99999, textTensionUnit.text, textTensionUnit, function(val) {
                             WellParameter.TonnageTensionStick = val;
                             ModbusClient.writeRegister(HQmlEnum.TONNAGE_TENSION_STICK, val)
                         })

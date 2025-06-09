@@ -1,6 +1,7 @@
 ﻿#include "wellparameter.h"
 #include <QFile>
 #include <QTextStream>
+#include <QDebug>
 
 WellParameter* WellParameter::_ptrWellParameter = nullptr;
 
