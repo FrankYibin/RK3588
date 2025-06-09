@@ -115,8 +115,7 @@ Item{
                     onCurrentIndexChanged: {
                         ModbusClient.writeCoil(HQmlEnum.DEPTHORIENTATION,currentIndex)
                         Depth.DepthOrientation = currentIndex
-                        //TODO need to add coil code
-                        console.log("DepthOrientation：" + currentIndex)
+                        ModbusClient.writeCoil(HQmlEnum.ORIENTATION_DEPTH, currentIndex)
                     }
                 }
             }

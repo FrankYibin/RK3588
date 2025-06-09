@@ -47,11 +47,11 @@ int DepthSetting::DepthOrientation() const
     return m_depthOrientation;
 }
 
-void DepthSetting::setDepthOrientation(int newDepthOrientation)
+void DepthSetting::setDepthOrientation(const int orientation)
 {
-    if ( m_depthOrientation == newDepthOrientation )
+    if ( m_depthOrientation == orientation )
         return;
-    m_depthOrientation = newDepthOrientation;
+    m_depthOrientation = orientation;
     emit DepthOrientationChanged();
 }
 

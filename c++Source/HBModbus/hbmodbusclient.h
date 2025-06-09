@@ -25,6 +25,7 @@ private:
     {
         int Data;
         int Size;
+        int Type;
     };
     struct REGISTER_DATA
     {
@@ -104,10 +105,104 @@ private:
         RECV_DATA m_SlopeAngleWellSetting;
     };
 
+    union MODBUS_IO_VALUE0
+    {
+        unsigned char byte_Value0;
+        struct BITS_VALUE0
+        {
+            unsigned char m_IsMute : 1;
+            unsigned char m_OrientationDepth : 1;
+            unsigned char m_EnableVelocityControl : 1;
+            unsigned char m_EnableTensiometerCalibration : 1;
+            unsigned char m_StatusTensionProtected : 1;
+            unsigned char m_IndicateTensionReset : 1;
+            unsigned char m_StatusTensiometerOnline : 1;
+            unsigned char m_IndicateMoveUpMoveDown : 1;
+        }bits_Value0;
+    };
+
+    union MODBUS_IO_VALUE1
+    {
+        unsigned char byte_Value1;
+        struct BITS_VALUE1
+        {
+            unsigned char m_IndicateSafetyStop : 1;
+            unsigned char m_IndicateSimanAlert : 1;
+            unsigned char m_IndicateSimanStop : 1;
+            unsigned char m_ReservedValue1: 5;
+        }bits_Value1;
+    };
+
+    union MODBUS_IO_VALUE2
+    {
+        unsigned char byte_Value2;
+        struct BITS_VALUE2
+        {
+            unsigned char m_AlarmVelocity: 1;
+            unsigned char m_AlarmWellSurface : 1;
+            unsigned char m_AlarmTargetLayer : 1;
+            unsigned char m_AlarmSurfaceCover : 1;
+            unsigned char m_AlarmTension : 1;
+            unsigned char m_AlarmTensionDeltaSlow : 1;
+            unsigned char m_AlarmTensionDeltaStop : 1;
+            unsigned char m_AlarmTensionCableHeadSlow : 1;
+        }bits_Value2;
+    };
+
+    union MODBUS_IO_VALUE3
+    {
+        unsigned char byte_Value3;
+        struct BITS_VALUE3
+        {
+            unsigned char m_AlarmTensionCableHeadStop : 1;
+            unsigned char m_AlarmEncoder1 : 1;
+            unsigned char m_AlarmEncoder2 : 1;
+            unsigned char m_AlarmEncoder3 : 1;
+            unsigned char m_ReservedValue3 : 4;
+        }bits_Value3;
+    };
+
+    union MODBUS_IO_VALUE4
+    {
+        unsigned char byte_Value4;
+        struct BITS_VALUE4
+        {
+            unsigned char m_EnableSimanControl : 1;
+            unsigned char m_EnableSimanFunction : 1;
+            unsigned char m_EnableMoveForward : 1;
+            unsigned char m_EnableMoveBackward : 1;
+            unsigned char m_StatusBrakeValve1 : 1;
+            unsigned char m_StatusBrakeValve2 : 1;
+            unsigned char m_EnableManualControl : 1;
+            unsigned char m_ModeVelocityControl : 1;
+        }bits_Value4;
+    };
+
+    union MODBUS_IO_VALUE5
+    {
+        unsigned char byte_Value5;
+        struct BITS_VALUE5
+        {
+            unsigned char m_StatusHandle : 1;
+            unsigned char m_FailureHandle : 1;
+            unsigned char m_FailureMoveDownValve : 1;
+            unsigned char m_FailureMoveUpValve : 1;
+            unsigned char m_FailureMotor : 1;
+            unsigned char m_FailureInitialization : 1;
+            unsigned char m_ReservedValue5 : 2;
+        }bits_Value5;
+    };
+
     REGISTER_DATA m_RegisterData;
 
     static MODBUS_REGISTER m_RecvReg;
     static MODBUS_REGISTER m_PrevRecvReg;
+    static MODBUS_IO_VALUE0 m_IO_Value0;
+    static MODBUS_IO_VALUE1 m_IO_Value1;
+    static MODBUS_IO_VALUE2 m_IO_Value2;
+    static MODBUS_IO_VALUE3 m_IO_Value3;
+    static MODBUS_IO_VALUE4 m_IO_Value4;
+    static MODBUS_IO_VALUE5 m_IO_Value5;
 
     static QModbusClient *_ptrModbus;
     static int m_timerIdentifier;
@@ -120,14 +215,8 @@ public:
     explicit HBModbusClient(QObject *parent = nullptr);
     ~HBModbusClient();
 
-    void readRegister(int address, int count = 1);
-
-    Q_INVOKABLE void writeRegister(const int address, const QVariant value);
-
-    Q_INVOKABLE void readCoils();
-    Q_INVOKABLE void writeCoil(int address, int value);
-    void handleCoilResult(const QModbusDataUnit &result);
-    void handleAlarm(int address, bool value);
+    Q_INVOKABLE void writeRegister  (const int address, const QVariant  value);
+    Q_INVOKABLE void writeCoil      (const int address, const int       value);
 
     //historydata
     void insertDataToDatabase();
@@ -135,12 +224,24 @@ protected:
     void timerEvent(QTimerEvent *event) override;
 
 private:
-    void connectToServer();
-    void handleReadResult(const QModbusDataUnit &result);
-    void handleWriteRequest();
-    void compareRawData();
+    void connectToServer    ();
+    void readRegisters      (const int address, const int count = 1);
+    void readCoils          (const int address, const int count = 1);
 
-    void writeRegister(int address, const QVector<quint16> &values);
+    void handleParseRegisters(const QModbusDataUnit &result);
+    void handleParseCoils(const QModbusDataUnit &result);
+
+
+    void handleWriteRequest();
+    void handleWriteRegister(const int address, const QVector<quint16> &values);
+    void handleWriteCoil(const int address, const int value);
+    void handleRawData();
+
+    void handleDevice();
+    void handleAlarm();
+    void handleCANbus();
+
+
 
 
     //Dashboard
@@ -179,60 +280,6 @@ private:
 signals:
 
 private:
-    // quint16 Depth_H = 0;
-    // quint16 Depth_L = 0;
-    // quint16 Speed_H = 0;
-    // quint16 Speed_L = 0;
-    // quint16 Tension_H = 0;
-    // quint16 Tension_L = 0;
-    // quint16 TensionIncrement_H = 0;
-    // quint16 TensionIncrement_L = 0;
-    // quint16 MaxTension_H = 0;
-    // quint16 MaxTension_L = 0;
-    // quint16 MaxTensionIncrement_H = 0;
-    // quint16 MaxTensionIncrement_L = 0;
-    // quint16 MaxSpeed_H = 0;
-    // quint16 MaxSpeed_L = 0;
-    // quint16 TargetDepth_H = 0;
-    // quint16 TargetDepth_L = 0;
-    // quint16 CableTension_H = 0;
-    // quint16 CableTension_L = 0;
-
-    // quint16 TensionNum_H;
-    // quint16 TensionNum_L;
-
-    // //tensionsafe
-
-
-    // quint16 currentTensionSafe_H;
-    // quint16 currentTensionSafe_L;
-    // quint16 maxTensionSafe_H;
-    // quint16 maxTensionSafe_L;
-    // quint16 depthLoss_H;
-    // quint16 depthLoss_L;
-    // quint16 currentDepth1_H;
-    // quint16 currentDepth1_L;
-    // quint16 currentDepth2_H;
-    // quint16 currentDepth2_L;
-    // quint16 currentDepth3_H;
-    // quint16 currentDepth3_L;
-    // //    quint16 currentHarnessTension_H;
-    // //    quint16 currentHarnessTension_L;
-
-    // quint16 scale1_H;
-    // quint16 scale1_L;
-
-    // quint16 scale2_H;
-    // quint16 scale2_L;
-
-
-    // quint16 scale3_H;
-    // quint16 scale3_L;
-    // quint16 scale4_H;
-    // quint16 scale4_L;
-    // quint16 scale5_H;
-    // quint16 scale5_L;
-
     DepthSetting::VELOCITY_UNIT m_VelocityUnit;
     DepthSetting::DISTANCE_UNIT m_DistanceUnit;
     DepthSetting::TIME_UNIT     m_TimeUnit;

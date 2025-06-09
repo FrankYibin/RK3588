@@ -18,10 +18,20 @@
 
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_RecvReg;
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_PrevRecvReg;
+
+HBModbusClient::MODBUS_IO_VALUE0 HBModbusClient::m_IO_Value0;
+HBModbusClient::MODBUS_IO_VALUE1 HBModbusClient::m_IO_Value1;
+HBModbusClient::MODBUS_IO_VALUE2 HBModbusClient::m_IO_Value2;
+HBModbusClient::MODBUS_IO_VALUE3 HBModbusClient::m_IO_Value3;
+HBModbusClient::MODBUS_IO_VALUE4 HBModbusClient::m_IO_Value4;
+HBModbusClient::MODBUS_IO_VALUE5 HBModbusClient::m_IO_Value5;
+
 QModbusClient* HBModbusClient::_ptrModbus = nullptr;
 int HBModbusClient::m_timerIdentifier = -1;
 QMap<int, HBModbusClient::SEND_DATA> HBModbusClient::m_RegisterSendMap;
 QMutex HBModbusClient::m_mutexSending;
+
+
 HBModbusClient::HBModbusClient(QObject *parent)
     : QObject{parent}
 {
@@ -47,11 +57,14 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
 
     if(event->timerId() == m_timerIdentifier)
     {
-        compareRawData();
+        handleRawData();
+        handleAlarm();
+        handleDevice();
+        handleCANbus();
         if(iTick10MS % 10 == 0)
         {
-            readRegister(0, HQmlEnum::MAX_REGISTR);
-            // readCoils();
+            readRegisters   (0, HQmlEnum::MAX_REGISTR);
+            readCoils       (0, HQmlEnum::MAX_COIL);
         }
         else
         {
@@ -93,26 +106,29 @@ void HBModbusClient::connectToServer()
     }
 }
 
-void HBModbusClient::readRegister(int address, int count)
+void HBModbusClient::readRegisters(const int address, const int count)
 {
     QModbusDataUnit request(QModbusDataUnit::HoldingRegisters, address, count);
 
-    if (auto *reply = _ptrModbus->sendReadRequest(request, 1)) {
+    if (auto *reply = _ptrModbus->sendReadRequest(request, 1))
+    {
         connect(reply, &QModbusReply::finished, this, [this, reply]() {
             if (reply->error() == QModbusDevice::NoError) {
                 const QModbusDataUnit result = reply->result();
-                handleReadResult(result);
+                handleParseRegisters(result);
             } else {
                 qWarning() << "Read failed:" << reply->errorString();
             }
             reply->deleteLater();
         });
-    } else {
+    }
+    else
+    {
         qWarning() << "Failed to send read request:" << _ptrModbus->errorString();
     }
 }
 
-void HBModbusClient::handleReadResult(const QModbusDataUnit &result)
+void HBModbusClient::handleParseRegisters(const QModbusDataUnit &result)
 {
     int startAddress = result.startAddress();
     int count = result.valueCount();
@@ -597,6 +613,7 @@ void HBModbusClient::handleWriteRequest()
     m_mutexSending.lock();
     QVector<quint16> valueArray;
     quint32 value;
+    int type = -1;
     static int prevKey = -1;
     static int triedCount = 0;
     if(m_RegisterSendMap.size() > 0)
@@ -604,19 +621,28 @@ void HBModbusClient::handleWriteRequest()
         QMap<int, HBModbusClient::SEND_DATA>::const_iterator iter = m_RegisterSendMap.constBegin();
         if(prevKey != iter.key() || (triedCount < MAX_TRIED_COUNT))
         {
-            value = iter.value().Data;
-            if(iter.value().Size == sizeof(unsigned int))
+            type = iter.value().Type;
+            if(type == QModbusDataUnit::HoldingRegisters)
             {
-                valueArray.push_back(static_cast<quint16>(value >> 16));
-                valueArray.push_back(static_cast<quint16>(value & 0x0000ffff));
+                value = iter.value().Data;
+                if(iter.value().Size == sizeof(unsigned int))
+                {
+                    valueArray.push_back(static_cast<quint16>(value >> 16));
+                    valueArray.push_back(static_cast<quint16>(value & 0x0000ffff));
+                }
+                else
+                {
+                    valueArray.push_back(static_cast<quint16>(value));
+                }
+                qDebug()<< "Register Value: " << value;
+                qDebug()<< "Register Address: " << iter.key();
+                handleWriteRegister(iter.key(), valueArray);
             }
             else
             {
-                valueArray.push_back(static_cast<quint16>(value));
+                value = iter.value().Data;
+                handleWriteCoil(iter.key(), value);
             }
-            qDebug()<< "11111111111111111111: " << value;
-            qDebug()<< "22222222222222222222: " << iter.key();
-            writeRegister(iter.key(), valueArray);
 
             if(prevKey == iter.key())
                 triedCount++;
@@ -636,7 +662,7 @@ void HBModbusClient::handleWriteRequest()
     m_mutexSending.unlock();
 }
 
-void HBModbusClient::compareRawData()
+void HBModbusClient::handleRawData()
 {
     int hashCode = qHashBits(&m_RecvReg, sizeof(MODBUS_REGISTER));
     int prevHashCode = qHashBits(&m_PrevRecvReg, sizeof(MODBUS_REGISTER));
@@ -916,7 +942,7 @@ void HBModbusClient::compareRawData()
     }
 }
 
-void HBModbusClient::writeRegister(int address, const QVector<quint16> &values)
+void HBModbusClient::handleWriteRegister(const int address, const QVector<quint16> &values)
 {
     QModbusDataUnit writeUnit(QModbusDataUnit::HoldingRegisters, address, values.size());
     for (int i = 0; i < values.size(); ++i)
@@ -944,6 +970,31 @@ void HBModbusClient::writeRegister(int address, const QVector<quint16> &values)
     else
     {
         qWarning() << "Failed to send write request:" << _ptrModbus->errorString();
+    }
+}
+
+void HBModbusClient::handleWriteCoil(const int address, const int value)
+{
+    QModbusDataUnit writeUnit(QModbusDataUnit::Coils, address, 1);
+    writeUnit.setValue(0, value ? 1 : 0); // 确保是 0 或 1
+
+    if (auto *reply = _ptrModbus->sendWriteRequest(writeUnit, 1))
+    {
+        connect(reply, &QModbusReply::finished, this, [reply]() {
+            if (reply->error() == QModbusDevice::NoError)
+            {
+                qDebug() << "Coil write successful";
+            }
+            else
+            {
+                qWarning() << "Failed to write coil:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+    }
+    else
+    {
+        qWarning() << "Failed to send coil write request:" << _ptrModbus->errorString();
     }
 }
 
@@ -1245,6 +1296,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getDepthInterface(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned int);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::DEPTH_ENCODER:
@@ -1257,6 +1309,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = value.toInt();
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::PULSE_COUNT:
@@ -1264,6 +1317,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getPulseCount(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::VELOCITY_LIMITED_H:
@@ -1271,6 +1325,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getVelocityInterface(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned int);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::WEIGHT_EACH_KILOMETER_CABLE:
@@ -1281,6 +1336,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getIntegerInterface(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::TENSION_LIMITED_H:
@@ -1290,6 +1346,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getTensionInterface(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned int);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::TENSION_SAFETY_COEFFICIENT:
@@ -1297,6 +1354,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getSafetyCoefficient(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::TIME_SAFETY_STOP:
@@ -1304,6 +1362,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getTimeSafetyStop(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::SLOPE_ANGLE_WELL_SETTING:
@@ -1311,12 +1370,14 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getSlopeAngleWell(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
     case HQmlEnum::TONNAGE_TENSION_STICK:
         strValue = value.toString();
         tmpValue = getTonnageStick(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     case HQmlEnum::TENSIOMETER_NUM_H:
@@ -1324,6 +1385,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getIntegerInterface(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned int);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;
     default:
@@ -1332,171 +1394,191 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
     m_mutexSending.unlock();
 }
 
-
-void HBModbusClient::readCoils()
+void HBModbusClient::writeCoil(const int address, const int value)
 {
-    if (!_ptrModbus || _ptrModbus->state() != QModbusDevice::ConnectedState) {
+    SEND_DATA stData;
+    m_mutexSending.lock();
+    stData.Data = value;
+    stData.Size = 1;
+    stData.Type = QModbusDataUnit::Coils;
+    m_RegisterSendMap.insert(address, stData);
+    m_mutexSending.unlock();
+}
+
+
+void HBModbusClient::readCoils(const int address, const int count)
+{
+    if (!_ptrModbus || _ptrModbus->state() != QModbusDevice::ConnectedState)
+    {
         qWarning() << "Modbus not connected";
         return;
     }
-
-    QModbusDataUnit request(QModbusDataUnit::Coils, HQmlEnum::ALARM_SPEED, 12);
-
-    if (auto *reply = _ptrModbus->sendReadRequest(request, 1)) {
+    if(count == 0)
+    {
+        qWarning() << "the count of Read Coils is ZERO";
+        return;
+    }
+    QModbusDataUnit request(QModbusDataUnit::Coils, address, count);
+    if (auto *reply = _ptrModbus->sendReadRequest(request, 1))
+    {
         connect(reply, &QModbusReply::finished, this, [this, reply]() {
-            if (reply->error() == QModbusDevice::NoError) {
-                handleCoilResult(reply->result());
-            } else {
+            if(reply->error() == QModbusDevice::NoError)
+            {
+                handleParseCoils(reply->result());
+            }
+            else
+            {
                 qWarning() << "Coil read failed:" << reply->errorString();
             }
             reply->deleteLater();
         });
-    } else {
+    }
+    else
+    {
         qWarning() << "Failed to send coil read request:" << _ptrModbus->errorString();
     }
 }
 
-void HBModbusClient::handleCoilResult(const QModbusDataUnit &result)
+void HBModbusClient::handleParseCoils(const QModbusDataUnit &result)
 {
     int startAddress = result.startAddress();
     int count = result.valueCount();
-
-    for (int i = 0; i < count; ++i) {
+    for (int i = 0; i < count; ++i)
+    {
         int address = startAddress + i;
         bool val = result.value(i);
-        // handleAlarm(address, val);
+        switch(address)
+        {
+        case HQmlEnum::IS_MUTE:
+            m_IO_Value0.bits_Value0.m_IsMute = val ? 1 : 0;
+            break;
+        case HQmlEnum::ORIENTATION_DEPTH:
+            m_IO_Value0.bits_Value0.m_OrientationDepth = val ? 1 : 0;
+            break;
+        case HQmlEnum::ENABLE_VELOCITY_CONTROL:
+            m_IO_Value0.bits_Value0.m_EnableVelocityControl = val ? 1 : 0;
+            break;
+        case HQmlEnum::ENABLE_TENSIOMETER_CALIBRATION:
+            m_IO_Value0.bits_Value0.m_EnableTensiometerCalibration = val ? 1 : 0;
+            break;
+        case HQmlEnum::STATUS_TENSION_PROTECTED:
+            m_IO_Value0.bits_Value0.m_StatusTensionProtected = val ? 1 : 0;
+            break;
+        case HQmlEnum::INDICATE_TENSION_RESET:
+            m_IO_Value0.bits_Value0.m_IndicateTensionReset = val ? 1 : 0;
+            break;
+        case HQmlEnum::STATUS_TENSIOMETER_ONLINE:
+            m_IO_Value0.bits_Value0.m_StatusTensiometerOnline = val ? 1 : 0;
+            break;
+        case HQmlEnum::INDICATE_MOVEUP_MOVEDOWN:
+            m_IO_Value0.bits_Value0.m_IndicateMoveUpMoveDown = val ? 1 : 0;
+            break;
+        case HQmlEnum::INDICATE_SAFETY_STOP:
+            m_IO_Value1.bits_Value1.m_IndicateSafetyStop = val ? 1 : 0;
+            break;
+        case HQmlEnum::INDICATE_SIMAN_ALERT:
+            m_IO_Value1.bits_Value1.m_IndicateSimanAlert = val ? 1 : 0;
+            break;
+        case HQmlEnum::INDICATE_SIMAN_STOP:
+            m_IO_Value1.bits_Value1.m_IndicateSimanStop = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_VELOCITY:
+            m_IO_Value2.bits_Value2.m_AlarmVelocity = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_WELL_SURFACE:
+            m_IO_Value2.bits_Value2.m_AlarmWellSurface = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_TARGET_LAYER:
+            m_IO_Value2.bits_Value2.m_AlarmTargetLayer = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_SURFACE_COVER:
+            m_IO_Value2.bits_Value2.m_AlarmSurfaceCover = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_TENSION:
+            m_IO_Value2.bits_Value2.m_AlarmTension = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_TENSION_DELTA_SLOW:
+            m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_TENSION_DELTA_STOP:
+            m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_TENSION_CABLE_HEAD_SLOW:
+            m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_TENSION_CABLE_HEAD_STOP:
+            m_IO_Value3.bits_Value3.m_AlarmTensionCableHeadStop = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_ENCODER1:
+            m_IO_Value3.bits_Value3.m_AlarmEncoder1 = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_ENCODER2:
+            m_IO_Value3.bits_Value3.m_AlarmEncoder2 = val ? 1 : 0;
+            break;
+        case HQmlEnum::ALARM_ENCODER3:
+            m_IO_Value3.bits_Value3.m_AlarmEncoder3 = val ? 1 : 0;
+            break;
+        case HQmlEnum::ENABLE_SIMAN_CONTROL:
+            m_IO_Value4.bits_Value4.m_EnableSimanControl = val ? 1 : 0;
+            break;
+        case HQmlEnum::ENABLE_SIMAN_FUNCTION:
+            m_IO_Value4.bits_Value4.m_EnableSimanFunction = val ? 1 : 0;
+            break;
+        case HQmlEnum::ENABLE_MOVE_FORWARD:
+            m_IO_Value4.bits_Value4.m_EnableMoveForward = val ? 1 : 0;
+            break;
+        case HQmlEnum::ENABLE_MOVE_BACKWARD:
+            m_IO_Value4.bits_Value4.m_EnableMoveBackward = val ? 1 : 0;
+            break;
+        case HQmlEnum::STATUS_BRAKE_VALVE1:
+            m_IO_Value4.bits_Value4.m_StatusBrakeValve1 = val ? 1 : 0;
+            break;
+        case HQmlEnum::STATUS_BRAKE_VALVE2:
+            m_IO_Value4.bits_Value4.m_StatusBrakeValve2 = val ? 1 : 0;
+            break;
+        case HQmlEnum::ENABLE_MANUAL_CONTROL:
+            m_IO_Value4.bits_Value4.m_EnableManualControl = val ? 1 : 0;
+            break;
+        case HQmlEnum::MODE_VELOCITY_CONTROL:
+            m_IO_Value4.bits_Value4.m_ModeVelocityControl = val ? 1 : 0;
+            break;
+        case HQmlEnum::STATUS_HANDLE:
+            m_IO_Value5.bits_Value5.m_StatusHandle = val ? 1 : 0;
+            break;
+        case HQmlEnum::FAILURE_HANDLE:
+            m_IO_Value5.bits_Value5.m_FailureHandle = val ? 1 : 0;
+            break;
+        case HQmlEnum::FAILURE_MOVE_DOWN_VALVE:
+            m_IO_Value5.bits_Value5.m_FailureMoveDownValve = val ? 1 : 0;
+            break;
+        case HQmlEnum::FAILURE_MOVE_UP_VALVE:
+            m_IO_Value5.bits_Value5.m_FailureMoveUpValve = val ? 1 : 0;
+            break;
+        case HQmlEnum::FAILURE_MOTOR:
+            m_IO_Value5.bits_Value5.m_FailureMotor = val ? 1 : 0;
+            break;
+        case HQmlEnum::FAILURE_INITIALIZATION:
+            m_IO_Value5.bits_Value5.m_FailureInitialization = val ? 1 : 0;
+            break;
+        default:
+            break;
+        }
     }
 }
 
-void HBModbusClient::handleAlarm(int address, bool value)
+void HBModbusClient::handleAlarm()
 {
-    QString alarmName;
-    bool alarmActive = value;
 
-    switch (address) {
-    case HQmlEnum::ALARM_SPEED:
-        alarmName = "速度报警";
-        if (alarmActive) {
+}
 
-            qDebug() << alarmName << "触发 - 限速或者停止设备";
+void HBModbusClient::handleCANbus()
+{
 
-        } else {
-            qDebug() << alarmName << "解除 - 恢复正常运行";
+}
 
-        }
-        break;
-
-    case HQmlEnum::ALARM_WELL:
-        alarmName = "井口报警";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 井口异常，执行安全停机";
-
-        } else {
-            qDebug() << alarmName << "解除 - 井口正常";
-        }
-        break;
-
-    case HQmlEnum::ALARM_TARGETLAYERDEPTH:
-        alarmName = "目的层报警";
-
-        qDebug() << alarmName << (alarmActive ? "触发" : "解除");
-        break;
-
-    case HQmlEnum::ALARM_METERDEPTH:
-        alarmName = "表套深度报警";
-        if (alarmActive) {
-
-
-        } else {
-            qDebug() << alarmName << "解除";
-
-        }
-        break;
-
-    case HQmlEnum::ALARM_TENSION:
-        alarmName = "张力报警";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 检查张力状态";
-
-        } else {
-            qDebug() << alarmName << "解除";
-        }
-        break;
-
-
-    case HQmlEnum::ALARM_TENSIONINC_1:
-        alarmName = "张力增量报警（遇阻）";
-        qDebug() << alarmName << (alarmActive ? "触发" : "解除");
-        break;
-
-    case HQmlEnum::ALARM_TENSIONINC_2:
-        alarmName = "张力增量报警（遇卡）";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 检查张力状态";
-
-        } else {
-            qDebug() << alarmName << "解除";
-        }
-        break;
-
-    case HQmlEnum::ALARM_CABLETENSION_1:
-        alarmName = "揽头张力遇阻报警";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 检查张力状态";
-
-        } else {
-            qDebug() << alarmName << "解除";
-        }
-
-        break;
-
-    case HQmlEnum::ALARM_CABLETENSION_2:
-        alarmName = "揽头张力遇卡报警";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 检查张力状态";
-
-        } else {
-            qDebug() << alarmName << "解除";
-        }
-
-        break;
-
-    case HQmlEnum::ALARM_CODE1:
-        alarmName = "编码器1报警";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 检查张力状态";
-
-        } else {
-            qDebug() << alarmName << "解除";
-        }
-
-        break;
-
-    case HQmlEnum::ALARM_CODE2:
-        alarmName = "编码器2报警";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 检查张力状态";
-
-        } else {
-            qDebug() << alarmName << "解除";
-        }
-
-        break;
-
-    case HQmlEnum::ALARM_CODE3:
-        alarmName = "编码器3报警";
-        if (alarmActive) {
-            qDebug() << alarmName << "触发 - 检查张力状态";
-
-        } else {
-            qDebug() << alarmName << "解除";
-        }
-
-        break;
-
-    default:
-        break;
-    }
+void HBModbusClient::handleDevice()
+{
+    DepthSetting::GetInstance()->setDepthOrientation(m_IO_Value0.bits_Value0.m_OrientationDepth);
 }
 
 void HBModbusClient::insertDataToDatabase()
@@ -1521,32 +1603,3 @@ void HBModbusClient::insertDataToDatabase()
     // });
 }
 
-void HBModbusClient::writeCoil(int address, int value)
-{
-    if (!_ptrModbus || _ptrModbus->state() != QModbusDevice::ConnectedState)
-    {
-        qWarning();
-    }
-
-    QModbusDataUnit writeUnit(QModbusDataUnit::Coils, address, 1);
-    writeUnit.setValue(0, value ? 1 : 0); // 确保是 0 或 1
-
-    int serverAddress = 1;
-
-    if (auto *reply = _ptrModbus->sendWriteRequest(writeUnit, serverAddress))
-    {
-        connect(reply, &QModbusReply::finished, this, [reply]()
-                {
-            if (reply->error() == QModbusDevice::NoError) {
-                qDebug() << "Coil write successful";
-            } else {
-                qWarning() << "Failed to write coil:" << reply->errorString();
-            }
-            reply->deleteLater();
-        });
-    }
-    else
-    {
-        qWarning() << "Failed to send coil write request:" << _ptrModbus->errorString();
-    }
-}

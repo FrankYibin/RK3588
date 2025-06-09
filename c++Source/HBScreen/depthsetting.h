@@ -64,7 +64,7 @@ public:
     Q_INVOKABLE void setDepthTargetLayer(const QString value);
 
     Q_INVOKABLE int DepthOrientation() const;
-    Q_INVOKABLE void setDepthOrientation(int newTargetLayerDepth);
+    Q_INVOKABLE void setDepthOrientation(const int orientation);
 
     Q_INVOKABLE QString DepthCurrent() const;
     Q_INVOKABLE void setDepthCurrent(const QString value);

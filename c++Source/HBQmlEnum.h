@@ -20,26 +20,49 @@ public:
 
     enum COILS_REGISTERS
     {
-        // 静音
-        DEPTHORIENTATION = 2, //     深度方向
-        //         自动控速使能
-        //             张力计校准使能
-        //                 保护
-        //                     张力清零标识位
-        //                         张力计在线状态
+        IS_MUTE = 0,                    //静音
+        ORIENTATION_DEPTH = 1,          //深度方向
+        ENABLE_VELOCITY_CONTROL,        //自动控速使能
+        ENABLE_TENSIOMETER_CALIBRATION, //张力计校准使能
+        STATUS_TENSION_PROTECTED,       //张力保护状态
+        INDICATE_TENSION_RESET,         //张力清零标识位
+        STATUS_TENSIOMETER_ONLINE,      //张力计在线状态
+        INDICATE_MOVEUP_MOVEDOWN,       //绞车上提下放
+        INDICATE_SAFETY_STOP,           //安全停车标识位
+        INDICATE_SIMAN_ALERT,           //四慢报警标识位
+        INDICATE_SIMAN_STOP,            //四慢停止标识位
+        DEVICE_COILS_END,
 
-        ALARM_SPEED = 16,                //速度报警
-        ALARM_WELL,                      //井口报警
-        ALARM_TARGETLAYERDEPTH,          //目的层报警
-        ALARM_METERDEPTH,                //表套深度报警
-        ALARM_TENSION,                      //张力报警
-        ALARM_TENSIONINC_1,                      //张力增量报警（遇阻）
-        ALARM_TENSIONINC_2,                      //张力增量报警（遇卡）
-        ALARM_CABLETENSION_1,                      //揽头张力遇阻报警
-        ALARM_CABLETENSION_2,           //揽头张力遇卡报警
-        ALARM_CODE1,                  //编码器1报警
-        ALARM_CODE2,                  //编码器2报警
-        ALARM_CODE3,                  //编码器3报警
+        ALARM_VELOCITY = 16,            //速度报警
+        ALARM_WELL_SURFACE,             //井口报警
+        ALARM_TARGET_LAYER,             //目的层报警
+        ALARM_SURFACE_COVER,            //表套深度报警
+        ALARM_TENSION,                  //张力报警
+        ALARM_TENSION_DELTA_SLOW,       //张力增量报警（遇阻）
+        ALARM_TENSION_DELTA_STOP,       //张力增量报警（遇卡）
+        ALARM_TENSION_CABLE_HEAD_SLOW,  //揽头张力遇阻报警
+        ALARM_TENSION_CABLE_HEAD_STOP,  //揽头张力遇卡报警
+        ALARM_ENCODER1,                 //编码器1报警
+        ALARM_ENCODER2,                 //编码器2报警
+        ALARM_ENCODER3,                 //编码器3报警
+        ALARM_COILS_END,                 //Alarm 预留
+
+        ENABLE_SIMAN_CONTROL = 32,      //四慢控制使能
+        ENABLE_SIMAN_FUNCTION,          //控制器四慢功能开关
+        ENABLE_MOVE_FORWARD,            //前进开关
+        ENABLE_MOVE_BACKWARD,           //后退开关
+        STATUS_BRAKE_VALVE1,            //刹车阀输出1状态
+        STATUS_BRAKE_VALVE2,            //刹车阀输出2状态
+        ENABLE_MANUAL_CONTROL,          //手动控制模式
+        MODE_VELOCITY_CONTROL,          //控速工作状态
+        STATUS_HANDLE,                  //1: 手柄未归位； 0：手柄归位
+        FAILURE_HANDLE,                 //手柄故障
+        FAILURE_MOVE_DOWN_VALVE,        //液压马达下放电磁阀故障
+        FAILURE_MOVE_UP_VALVE,          //液压马达上提电磁阀故障
+        FAILURE_MOTOR,                  //液压马达电磁故障
+        FAILURE_INITIALIZATION,         //起始条件
+        CANBUS_COILS_END,
+        MAX_COIL = 48
     };
     Q_ENUM(COILS_REGISTERS)
 
