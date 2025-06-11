@@ -100,6 +100,13 @@ void SensorGraphData::clearGraph()
 
 void SensorGraphData::generateRandomNumber()
 {
+    // QRandomGenerator* rand = new QRandomGenerator(QTime(0,0,0).secsTo(QTime::currentTime()));
+    // for(int i = 0; i < 9000; i++)
+    // {
+    //     m_RoughData[i] = rand->generate() % 10;
+    // }
+    // delete rand;
+    // receiveWeldGraphData(m_RoughData, 9000);
 
 }
 
