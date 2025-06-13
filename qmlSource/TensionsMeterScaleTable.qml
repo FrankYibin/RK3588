@@ -90,7 +90,7 @@ Item{
                     property int previousY: 0
                     onClicked: {
                         tensionMeterTable.currentRow = styleData.row // Update the current row
-                        // TensiometerManager.syncTensiometer(styleData.row)
+                        TensiometerManager.syncTensiometer(styleData.row)
                         console.debug("Selected Row: ", tensionMeterTable.currentRow)
                     }
 
@@ -183,10 +183,10 @@ Item{
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: tensionMeterTable.fontSize
                         onClicked: {
+                            signalViewTensometer()
                             tensionMeterTable.currentRow = styleData.row
                             TensiometerManager.setTensionmeterNumber(styleData.row)
                             TensiometerScale.loadModel()
-                            signalViewTensometer()
                         }
                     }
 

@@ -24,7 +24,7 @@ Item {
     property bool isNormalScreen: true
     property int fontsize: Math.round(Style.style3 * Style.scaleHint)
 
-    readonly property string tensionsLeftPlotName:  "tensionsLeftPlot"
+    readonly property string tensionsLeftPlotName:  qsTr("张力 Vs 距离")
     readonly property string qmltextSecUnit:        "s"
 
     /**
@@ -57,10 +57,7 @@ Item {
     function plotGraph()
     {
         clearGraph()
-
         TensiometerScale.appendSamples(graphChartView.series(tensionsLeftPlotName), 0);
-
-
         /* Update the Min and Max values */
         var axisMinValues = TensiometerScale.getAxisMinParameters();
         var axisMaxValues = TensiometerScale.getAxisMaxParameters();
@@ -69,7 +66,6 @@ Item {
 
         scaleAxis.max                    = axisMaxValues[0];
         tensionLeftAxis.max               = axisMaxValues[1];
-
 
         /* Rounding of axis values for proper representation */
         scaleAxis.max               = roundAxisValues(scaleAxis.max,            scaleAxis.min);
@@ -153,7 +149,7 @@ Item {
             LineSeries{
                 id: tensionLeftAxisPlot
                 width: graphChartView.myWidth
-                name: qsTr("张力 Vs 距离")
+                name: tensionsLeftPlotName
                 axisX: scaleAxis
                 axisY: tensionLeftAxis
                 color: Style.hbFrameBorderColor

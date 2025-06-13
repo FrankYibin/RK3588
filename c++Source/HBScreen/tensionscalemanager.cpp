@@ -54,7 +54,7 @@ void TensionScaleManager::LoadGraphPoint()
         setAxisMaxParameters(axisMaxValues);
         setAxisMinParameters(axisMinValues);
     }
-
+    emit signalGraphDataReady();
 }
 
 TensionScaleManager *TensionScaleManager::GetInstance()
@@ -150,7 +150,7 @@ void TensionScaleManager::loadModel()
                 }
                 m_ScaleList.append(scale);
             }
-            // LoadGraphPoint();
+            LoadGraphPoint();
         }
         endResetModel();
     }

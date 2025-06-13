@@ -85,6 +85,7 @@ signals:
     void TensiometerNumberChanged();
     void QuantityOfCalibrationChanged();
     void TensiometerChanged(const int index, const QString scale);
+    void signalGraphDataReady();
 };
 
 #endif // TENSIONSCALEMANAGER_H

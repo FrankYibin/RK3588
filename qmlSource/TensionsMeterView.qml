@@ -12,6 +12,14 @@ Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_VIEW
     signal signalReturnTensometer()
 
+    Connections{
+        target: TensiometerScale
+        function onSignalGraphDataReady()
+        {
+            tensionScaleChart.plotGraph()
+        }
+    }
+
     Rectangle
     {
         id: background

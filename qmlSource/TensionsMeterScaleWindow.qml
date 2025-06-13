@@ -8,6 +8,7 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
+
     TabView {
         id: tensionMeterFeatures
         anchors.fill: parent
