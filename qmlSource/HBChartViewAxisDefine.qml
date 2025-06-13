@@ -29,11 +29,11 @@ Item {
     property var qmlTextComboxModel: [qmltextDepthAxis, qmltextVelocityAxis, qmltextTensionsAxis,
         qmltextTensionIncrementAxis, qmltextTimeAxis]
 
-    readonly property color depthAxisColor:                 "#f79428"
-    readonly property color velocityAxisColor:              "#99ccff"
+    readonly property color depthAxisColor:                 "#ef7c7d"
+    readonly property color velocityAxisColor:              "#00afe9"
     readonly property color tensionsAxisColor:              "#00aa7e"
-    readonly property color tensionIncrementAxisColor:      "#a0cf67"
-    readonly property color timeAxisColor:                  "#868e96"
+    readonly property color tensionIncrementAxisColor:      "#d31245"
+    readonly property color timeAxisColor:                  "#ffffff"
     readonly property var colorArray: [depthAxisColor, velocityAxisColor, tensionsAxisColor,
         tensionIncrementAxisColor, timeAxisColor]
 

@@ -7,6 +7,7 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.GraphData 1.0
+import HBAxisDefine 1.0
 Item{
     readonly property int textWidth: 100
     readonly property int comboBoxWidth: 150
@@ -124,6 +125,235 @@ Item{
                     {
                         // controlLimitNumpad.visible = false
                     }
+                }
+            }
+        }
+
+
+
+        Rectangle{
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.rightMargin: Math.round(10 * Style.scaleHint)
+            anchors.topMargin:  Math.round(160 * Style.scaleHint)
+            Item {
+                id: depthChartVeiw
+                width: parent.width/2
+                HBChartView {
+                    id: depthChart
+                    width: Math.round(300 * Style.scaleHint)
+                    height: Math.round(140 * Style.scaleHint)
+                    anchors.centerIn: parent
+                    isDepthLeftAxisVisible: true
+                }
+            }
+            Item{
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.rightMargin: Math.round(300 * Style.scaleHint)
+                anchors.topMargin:  Math.round(170 * Style.scaleHint)
+                anchors.left: parent.left
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 * Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("时间")
+
+                }
+            }
+
+            Item{
+                width: Math.round(30 * Style.scaleHint)
+                height: parent.height
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.leftMargin: -Math.round(5 * Style.scaleHint)
+                anchors.topMargin: Math.round(30*Style.scaleHint)
+                rotation: -90
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 *Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("深度(m)")
+
+                }
+            }
+        }
+
+        Rectangle{
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.leftMargin: Math.round(430 * Style.scaleHint)
+            anchors.topMargin:  Math.round(160 * Style.scaleHint)
+            Item {
+                id: velocityVeiw
+                width: parent.width/2
+                HBChartView {
+                    id: velocityChart
+                    width: Math.round(300 * Style.scaleHint)
+                    height: Math.round(140 * Style.scaleHint)
+                    anchors.centerIn: parent
+                    isVelocityLeftAxisVisible: true
+
+                }
+            }
+            Item{
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.rightMargin: Math.round(130 * Style.scaleHint)
+                anchors.topMargin:  Math.round(170 * Style.scaleHint)
+                anchors.left: parent.left
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 * Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("时间")
+
+                }
+            }
+
+            Item{
+                width: Math.round(30 * Style.scaleHint)
+                height: parent.height
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.leftMargin: -Math.round(110 * Style.scaleHint)
+                anchors.topMargin: Math.round(30*Style.scaleHint)
+                rotation: -90
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 *Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("速度(m/s)")
+
+                }
+            }
+        }
+
+        Rectangle{
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.leftMargin: Math.round(10 * Style.scaleHint)
+            anchors.topMargin:  Math.round(305 * Style.scaleHint)
+            Item {
+                id: tensionVeiw
+                width: parent.width/2
+                HBChartView {
+                    id: tensionChart
+                    width: Math.round(300 * Style.scaleHint)
+                    height: Math.round(140 * Style.scaleHint)
+                    anchors.centerIn: parent
+                    isTensionsLeftAxisVisible: true
+
+                }
+            }
+            Item{
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.rightMargin: Math.round(310 * Style.scaleHint)
+                anchors.topMargin:  Math.round(320 * Style.scaleHint)
+                anchors.left: parent.left
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 * Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("时间")
+
+                }
+            }
+
+            Item{
+                width: Math.round(30 * Style.scaleHint)
+                height: parent.height
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.leftMargin: -Math.round(10 * Style.scaleHint)
+                anchors.topMargin: Math.round(110*Style.scaleHint)
+                rotation: -90
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 *Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("张力(N)")
+
+                }
+            }
+        }
+
+        Rectangle{
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.leftMargin: Math.round(430 * Style.scaleHint)
+            anchors.topMargin:  Math.round(305 * Style.scaleHint)
+            Item {
+                id: tensionIncrementVeiw
+                width: parent.width/2
+                HBChartView {
+                    id: tensionIncrementChart
+                    width: Math.round(300 * Style.scaleHint)
+                    height: Math.round(140 * Style.scaleHint)
+                    anchors.centerIn: parent
+                    isTensionIncrementLeftAxisVisible: true
+
+                }
+            }
+            Item{
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.rightMargin: Math.round(130 * Style.scaleHint)
+                anchors.topMargin:  Math.round(320 * Style.scaleHint)
+                anchors.left: parent.left
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 * Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("时间")
+
+                }
+            }
+
+            Item{
+                width: Math.round(30 * Style.scaleHint)
+                height: parent.height
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.leftMargin: -Math.round(110 * Style.scaleHint)
+                anchors.topMargin: Math.round(110*Style.scaleHint)
+                rotation: -90
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Math.round(Style.style0 *Style.scaleHint))
+                    color: Style.whiteFontColor
+                    text: qsTr("张力增量(m/s)")
+
                 }
             }
         }
