@@ -19,6 +19,7 @@ import Style 1.0
 
 TextField {
     id: hbTextField
+    property alias text: hbTextField.text
     property bool onlyForNumpad: false
     property bool isSelectedAll: false
     property int fontSize: Math.round(Style.style6 * Style.scaleHint)
@@ -66,7 +67,7 @@ TextField {
                 isSelectedAll = true
             }
             signalClickedEvent()
-            parent.focus = true
+            parent.focus = false
             Qt.inputMethod.hide()
         }
         onDoubleClicked:

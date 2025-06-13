@@ -3,8 +3,8 @@
 
 #include <QAbstractListModel>
 #include <QList>
-#include "c++Source/HBDefine.h"
 #include "c++Source/HBData/hbdatabase.h"
+#include "tensiometer.h"
 
 
 class TensiometerManager : public QAbstractListModel {
@@ -17,29 +17,32 @@ public:
         TypeRole,
         RangeRole,
         SignalRole,
-        IndexRole = Qt::UserRole + 100
+        IndexRole,
+        ScaledRole,
     };
-
-    explicit TensiometerManager(QObject *parent = nullptr);
-
+    static TensiometerManager* GetInstance();
 
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void addTensiometer(const QString &number, int type, int range, int signal);
-    Q_INVOKABLE void removeTensiometer(int index);
-    Q_INVOKABLE void clear();
-    Q_INVOKABLE void updateTensiometer(int index, const QString &number, int type, int range, int signal);
+    Q_INVOKABLE void addTensiometer();
+    Q_INVOKABLE void removeTensiometer(const int index);
+    Q_INVOKABLE void syncTensiometer(const int index);
 
-    const QList<TensiometerData>& items() const;
+    Q_INVOKABLE void setTensionmeterNumber(int index);
 
+
+protected:
+    explicit TensiometerManager(QObject *parent = nullptr);
 signals:
-    void countChanged();
 
+public slots:
+    void UpdateTensiometer(const int index, const QString scale);
 private:
-    QList<TensiometerData> m_items;
-    HBDatabase *m_db;
+    static TensiometerManager* _ptrTensiometerManager;
+    static QList<Tensiometer::TENSIONMETER> m_TensiometerList;
+    HBDatabase* m_db;
 
 
 };

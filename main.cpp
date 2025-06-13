@@ -52,7 +52,7 @@
 #include "c++Source/HBScreen/tensiometermanager.h"
 
 #include "c++Source/HBModbus/hbmodbusclient.h"
-#include "c++Source/HBModbus/modbusutils.h"
+// #include "c++Source/HBModbus/modbusutils.h"
 #include "c++Source/HBData/hbdatabase.h"
 
 #include "c++Source/HBGraph/GraphAxisDefineHB.h"
@@ -90,13 +90,11 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     //HB
-    HBDatabase& db = HBDatabase::getInstance();
+    HBDatabase& db = HBDatabase::GetInstance();
     db.loadDataFromDatabase();
     //       db.testUpdate();
-    HBModbusClient modbusClient;
-    ModbusUtils modbusUtils;
-    modbusUtils.setModbusClient(&modbusClient);
-    TensiometerManager *manager = new TensiometerManager();
+    // ModbusUtils modbusUtils;
+    // modbusUtils.setModbusClient(&modbusClient);
     HBVoice VoicePlayer;
     HBUtilityClass::GetInstance();
 
@@ -122,10 +120,9 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/TensionsGlobalDefine.qml"), "TensionsGlobalDefine", 1, 0, "TensionsGlobalDefine");
 
     //HB
-    qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", &modbusClient);
-    qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::getInstance());
+    qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", HBModbusClient::GetInstance());
+    qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::GetInstance());
     qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
-    qmlRegisterType<TensionScaleManager>("HB.TensionScaleManager", 1, 0, "TensionScaleManager");
     qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
                                           "HQmlEnum is an enum container and cannot be created in QML");
 
@@ -151,7 +148,7 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/VirtualKeyboardStyles");
     qputenv("QT_VIRTUALKEYBOARD_STYLE", "styleVirtualKeyboard");
     QQmlContext *pQmlContext = engine.rootContext();
-    pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
+    // pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
     pQmlContext->setContextProperty("HBHome", HBHome::GetInstance());
     pQmlContext->setContextProperty("AutoTestSpeed", AutoTestSpeed::getInstance());
     pQmlContext->setContextProperty("Depth", DepthSetting::GetInstance());
@@ -160,8 +157,9 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("Tensiometer", Tensiometer::GetInstance());
     pQmlContext->setContextProperty("TensionSafety", TensionSafety::GetInstance());
     pQmlContext->setContextProperty("WellParameter", WellParameter::GetInstance());
-    pQmlContext->setContextProperty("tensiometerManager", manager);
+    pQmlContext->setContextProperty("TensiometerManager", TensiometerManager::GetInstance());
     pQmlContext->setContextProperty("TensionSetting", TensionSetting::GetInstance());
+    pQmlContext->setContextProperty("TensiometerScale", TensionScaleManager::GetInstance());
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

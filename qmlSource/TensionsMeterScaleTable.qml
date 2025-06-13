@@ -40,7 +40,7 @@ Item{
         headerHeight: Math.round(40 * Style.scaleHint)
         rowHeight: Math.round(35 * Style.scaleHint)
         fontSize: Math.round(Style.style2 * Style.scaleHint)
-        model: tensiometerManager
+        model: TensiometerManager
         // selectionMode: SelectionMode.SingleSelection
         isMouseMoving: false
         rowDelegate: Rectangle{
@@ -90,7 +90,7 @@ Item{
                     property int previousY: 0
                     onClicked: {
                         tensionMeterTable.currentRow = styleData.row // Update the current row
-                        //                        tensionMeterTable.currentRow = model.index
+                        // TensiometerManager.syncTensiometer(styleData.row)
                         console.debug("Selected Row: ", tensionMeterTable.currentRow)
                     }
 
@@ -165,7 +165,7 @@ Item{
         TableViewColumn {
             title: qsTr("操作")
             width: Math.round(270 * Style.scaleHint)
-
+            role: "Scaled";
             delegate: Rectangle {
 
                 color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
@@ -184,6 +184,8 @@ Item{
                         fontSize: tensionMeterTable.fontSize
                         onClicked: {
                             tensionMeterTable.currentRow = styleData.row
+                            TensiometerManager.setTensionmeterNumber(styleData.row)
+                            TensiometerScale.loadModel()
                             signalViewTensometer()
                         }
                     }
@@ -193,8 +195,11 @@ Item{
                         width: Math.round(80 * Style.scaleHint)
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: tensionMeterTable.fontSize
+                        visible: styleData.value
                         onClicked: {
                             tensionMeterTable.currentRow = styleData.row
+                            TensiometerManager.setTensionmeterNumber(styleData.row)
+                            TensiometerScale.initModel(2)
                             signalScaleTensometer()
                         }
                     }
@@ -206,9 +211,9 @@ Item{
                         fontSize: tensionMeterTable.fontSize
                         onClicked: {
                             var index = styleData.row;
-                            if (index >= 0 && index < tensiometerManager.rowCount())
+                            if (index >= 0 && index < TensiometerManager.rowCount())
                             {
-                                tensiometerManager.removeTensiometer(index);
+                                TensiometerManager.removeTensiometer(index);
                                 tensionMeterTable.currentRow = -1;
                             }
                         }

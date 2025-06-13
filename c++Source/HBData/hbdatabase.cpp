@@ -11,7 +11,6 @@
 #include "c++Source/HBScreen/depthsafe.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/tensionsafety.h"
-#include "c++Source/HBScreen/tensiometer.h"
 #include "c++Source/HBScreen/tensionsetting.h"
 #include <QVariant>
 
@@ -73,7 +72,7 @@ void HBDatabase::closeTransaction()
 }
 
 
-HBDatabase &HBDatabase::getInstance()
+HBDatabase &HBDatabase::GetInstance()
 {
     static HBDatabase instance; // 局部静态，线程安全单例
     return instance;
@@ -128,7 +127,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
 void HBDatabase::loadDataFromDatabase()
 {
     _WellParameter param;
-    bool ok = HBDatabase::getInstance().loadWellParameter(param);
+    bool ok = HBDatabase::GetInstance().loadWellParameter(param);
     if (ok) {
 
         qDebug() << "Loaded data:";
@@ -141,7 +140,7 @@ void HBDatabase::loadDataFromDatabase()
     }
 
     _DepthSet deptParam;
-    bool success = HBDatabase::getInstance().loadDepthSet(deptParam);
+    bool success = HBDatabase::GetInstance().loadDepthSet(deptParam);
     if (success) {
         qDebug() << "DepthSet loaded successfully!";
     } else {
@@ -149,7 +148,7 @@ void HBDatabase::loadDataFromDatabase()
     }
 
     _DepthSafe dsParam;
-    bool ds_ok = HBDatabase::getInstance().loadDepthSafe(dsParam);
+    bool ds_ok = HBDatabase::GetInstance().loadDepthSafe(dsParam);
     if (ds_ok) {
         qDebug() << "DepthSet loaded successfully!";
     } else {
@@ -157,7 +156,7 @@ void HBDatabase::loadDataFromDatabase()
     }
 
     _TensionSafe tsParam;
-    bool tsp_ok = HBDatabase::getInstance().loadTensionSafe(tsParam);
+    bool tsp_ok = HBDatabase::GetInstance().loadTensionSafe(tsParam);
     if (tsp_ok) {
         qDebug() << "DepthSet loaded successfully!";
     } else {
@@ -165,7 +164,7 @@ void HBDatabase::loadDataFromDatabase()
     }
 
     _TensionSet setParam;
-    bool set_ok = HBDatabase::getInstance().loadTensionSet(setParam);
+    bool set_ok = HBDatabase::GetInstance().loadTensionSet(setParam);
     if (set_ok) {
         qDebug() << "DepthSet loaded successfully!";
     } else {
@@ -174,7 +173,7 @@ void HBDatabase::loadDataFromDatabase()
 
     UnitSettings setUint;
 
-    bool set_Unit = HBDatabase::getInstance().getUnitSettings(setUint);
+    bool set_Unit = HBDatabase::GetInstance().getUnitSettings(setUint);
     if (set_Unit) {
         qDebug() << "set_Unit loaded successfully!";
     } else {
@@ -673,7 +672,7 @@ bool HBDatabase::loadTensiometerData(int id, TensiometerData &data)
 }
 
 // 插入新数据（自动生成 ID）
-bool HBDatabase::insertTensiometerData(TensiometerData &data)
+bool HBDatabase::InsertNewTensiometer(Tensiometer::TENSIONMETER &meter)
 {
     if (!m_database.isOpen()) {
         qDebug() << "Database is not open";
@@ -685,14 +684,15 @@ bool HBDatabase::insertTensiometerData(TensiometerData &data)
 
     QSqlQuery query(m_database);
     query.prepare(R"(
-        INSERT INTO tensiometer (tensiometerNumber, tensiometerType, tensiometerRange, tensiometerSignal)
-        VALUES (:tensiometerNumber, :tensiometerType, :tensiometerRange, :tensiometerSignal)
+        INSERT INTO tensiometer (Number, Type, Range, Signal, Scale)
+        VALUES (:Number, :Type, :Range, :Signal, :Scale)
     )");
 
-    query.bindValue(":tensiometerNumber", data.tensiometerNumber);
-    query.bindValue(":tensiometerType", data.tensiometerType);
-    query.bindValue(":tensiometerRange", data.tensiometerRange);
-    query.bindValue(":tensiometerSignal", data.tensiometerSignal);
+    query.bindValue(":Number",  meter.Number);
+    query.bindValue(":Type",    meter.Encoder);
+    query.bindValue(":Range",   meter.Range);
+    query.bindValue(":Signal",  meter.Analog);
+    query.bindValue(":Scale",   meter.Scale);
 
     if (!query.exec()) {
         qDebug() << "Insert tensiometer data failed:" << query.lastError();
@@ -700,12 +700,10 @@ bool HBDatabase::insertTensiometerData(TensiometerData &data)
         return false;
     }
 
-    data.id = query.lastInsertId().toInt();
-
+    int id = query.lastInsertId().toInt();
     if (!commitTransaction())
         return false;
-
-    qDebug() << "Insert tensiometer data successful, id:" << data.id;
+    qDebug() << "Insert tensiometer data successful, id:" << id;
     return true;
 }
 
@@ -754,7 +752,7 @@ bool HBDatabase::updateTensiometerData(const TensiometerData &data)
 }
 
 // 删除数据
-bool HBDatabase::deleteTensiometerData(int id)
+bool HBDatabase::deleteTensiometerData(int number)
 {
     if (!m_database.isOpen()) {
         qDebug() << "Database is not open";
@@ -765,8 +763,8 @@ bool HBDatabase::deleteTensiometerData(int id)
         return false;
 
     QSqlQuery query(m_database);
-    query.prepare("DELETE FROM tensiometer WHERE id = :id");
-    query.bindValue(":id", id);
+    query.prepare("DELETE FROM tensiometer WHERE Number = :Number");
+    query.bindValue(":Number", number);
 
     if (!query.exec()) {
         qDebug() << "Delete tensiometer data failed:" << query.lastError();
@@ -775,7 +773,7 @@ bool HBDatabase::deleteTensiometerData(int id)
     }
 
     if (query.numRowsAffected() == 0) {
-        qDebug() << "No tensiometer data deleted (id not found):" << id;
+        qDebug() << "No tensiometer data deleted (meter not found): " << number;
     }
 
     if (!commitTransaction())
@@ -786,10 +784,9 @@ bool HBDatabase::deleteTensiometerData(int id)
 }
 
 // 加载全部数据
-bool HBDatabase::loadAllTensiometerData(QList<TensiometerData> &list)
+bool HBDatabase::LoadTensiometerTable(QList<Tensiometer::TENSIONMETER> &list)
 {
     list.clear();
-
     QSqlQuery query(m_database);
     if (!query.exec("SELECT * FROM tensiometer")) {
         qDebug() << "Load all tensiometer data failed:" << query.lastError();
@@ -797,12 +794,12 @@ bool HBDatabase::loadAllTensiometerData(QList<TensiometerData> &list)
     }
 
     while (query.next()) {
-        TensiometerData data;
-        data.id = query.value("id").toInt();
-        data.tensiometerNumber = query.value("tensiometerNumber").toString();
-        data.tensiometerType = query.value("tensiometerType").toInt();
-        data.tensiometerRange = query.value("tensiometerRange").toInt();
-        data.tensiometerSignal = query.value("tensiometerSignal").toInt();
+        Tensiometer::TENSIONMETER data;
+        data.Number = query.value("Number").toInt();
+        data.Encoder = query.value("Type").toInt();
+        data.Range = query.value("Range").toInt();
+        data.Analog = query.value("Signal").toInt();
+        data.Scale = query.value("Scale").toString();
         list.append(data);
     }
 
@@ -811,15 +808,13 @@ bool HBDatabase::loadAllTensiometerData(QList<TensiometerData> &list)
 }
 
 
-bool HBDatabase::loadScalesForTensiometerNumber(const QString &tensioNumber,QList<ScaleData> &outRecords)
-
+bool HBDatabase::LoadScales(const int tensioNumber, QString& scale)
 {
     QSqlQuery q(m_database);
     q.prepare(R"SQL(
-              SELECT id, point_index, scale_value, tension_value, selected
-              FROM tension_scale
-              WHERE tensiometer_number = ?
-              ORDER BY point_index
+              SELECT Scale
+              FROM tensiometer
+              WHERE Number = ?
               )SQL");
     q.addBindValue(tensioNumber);
     if (!q.exec()) {
@@ -827,16 +822,8 @@ bool HBDatabase::loadScalesForTensiometerNumber(const QString &tensioNumber,QLis
                    << ":" << q.lastError().text();
         return false;
     }
-    outRecords.clear();
     while (q.next()) {
-        ScaleData data;
-        data.id = q.value(0).toInt();
-        data.pointIndex = q.value(1).toInt();
-        data.rawScaleValue = q.value(2).toDouble();
-        data.rawTensionValue = q.value(3).toDouble();
-        data.selected = q.value(4).toInt();
-        outRecords.append(data);
-
+        scale = q.value(0).toString();
     }
     return true;
 }
@@ -900,38 +887,22 @@ bool HBDatabase::updateTensionScale(int scaleId, int rawValue)
     return true;
 }
 
-bool HBDatabase::updateTensionValue(const QString &tensioNumber, int index, double scaleValue, double tensionValue, bool selected)
+bool HBDatabase::updateScaleJson(const int tensiometerNumber, const QString scaleJson)
 {
 
     QSqlQuery query;
-    query.prepare(R"(
-        UPDATE tension_scale
-        SET scale_value = :scale,
-            tension_value = :tension,
-            selected = :selected
-        WHERE tensiometer_number = :num AND point_index = :idx
-    )");
+    query.prepare(R"(UPDATE tensiometer SET Scale = :scale WHERE Number = :num)");
+    query.bindValue(":scale", scaleJson);
+    query.bindValue(":num", tensiometerNumber);
 
-    query.bindValue(":scale", scaleValue);
-    query.bindValue(":tension", tensionValue);
-    query.bindValue(":selected", selected ? 1 : 0);
-    query.bindValue(":num", tensioNumber);
-    query.bindValue(":idx", index);
 
     bool success = query.exec();
     if (!success) {
-        qWarning() << " Failed to update tension value in DB:"
+        qWarning() << " Failed to update scale value in DB:"
                    << query.lastError().text()
                    << "\nQuery:" << query.lastQuery();
-    } else {
-        qDebug() << " Updated tension successfully:"
-                 << "Tensio#" << tensioNumber << "Index:" << index
-                 << "Scale:" << scaleValue << "Tension:" << tensionValue << "Selected:" << selected;
     }
-
-    return query.exec();
-
-
+    return success;
 }
 
 // 删除某台张力计的所有刻度点

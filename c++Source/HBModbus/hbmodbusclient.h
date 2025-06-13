@@ -54,6 +54,7 @@ private:
         RECV_DATA m_TensionLimited;
         RECV_DATA m_TensionLimitedDelta;
         RECV_DATA m_TensionCableHead;
+        RECV_DATA m_ScaleCurrent;
         RECV_DATA m_K_Value;
         RECV_DATA m_TensiometerEncoder;
         RECV_DATA m_TensiometerAnalog;
@@ -205,6 +206,7 @@ private:
     static MODBUS_IO_VALUE5 m_IO_Value5;
 
     static QModbusClient *_ptrModbus;
+    static HBModbusClient *_ptrHBModbusClient;
     static int m_timerIdentifier;
     static QMap<int, SEND_DATA> m_RegisterSendMap;
     static QMutex m_mutexSending;
@@ -212,7 +214,7 @@ private:
     static constexpr int ONE_SECOND         = 100;
     static constexpr int MAX_TRIED_COUNT    = 5;
 public:
-    explicit HBModbusClient(QObject *parent = nullptr);
+    static HBModbusClient *GetInstance();
     ~HBModbusClient();
 
     Q_INVOKABLE void writeRegister  (const int address, const QVariant  value);
@@ -221,6 +223,7 @@ public:
     //historydata
     void insertDataToDatabase();
 protected:
+    explicit HBModbusClient(QObject *parent = nullptr);
     void timerEvent(QTimerEvent *event) override;
 
 private:

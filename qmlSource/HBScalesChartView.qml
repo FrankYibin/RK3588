@@ -58,20 +58,12 @@ Item {
     {
         clearGraph()
 
-        // weldGraphObj.appendSamples(graphChartView.series(collapseDistLeftPlotName), GraphAxisEnum.COLLAPSEDIST_IDX);
-        tensionLeftAxisPlot.append(10, 0.5)
-        tensionLeftAxisPlot.append(20, 1.0)
-        tensionLeftAxisPlot.append(30, 1.5)
-        tensionLeftAxisPlot.append(40, 2.0)
-        tensionLeftAxisPlot.append(50, 2.5)
-        tensionLeftAxisPlot.append(60, 3.0)
+        TensiometerScale.appendSamples(graphChartView.series(tensionsLeftPlotName), 0);
 
 
         /* Update the Min and Max values */
-        // var axisMinValues = weldGraphObj.getAxisMinParameters();
-        // var axisMaxValues = weldGraphObj.getAxisMaxParameters();
-        var axisMinValues = [0, 0]
-        var axisMaxValues = [60, 3.0]
+        var axisMinValues = TensiometerScale.getAxisMinParameters();
+        var axisMaxValues = TensiometerScale.getAxisMaxParameters();
         scaleAxis.min                    = axisMinValues[0];
         tensionLeftAxis.min              = axisMinValues[1];
 
@@ -89,7 +81,7 @@ Item {
     }
 
     Component.onCompleted: {
-        plotGraph()
+        // plotGraph()
 
     }
 

@@ -6,23 +6,11 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import TensionsGlobalDefine 1.0
-import HB.TensionScaleManager 1.0
 
 Item{
     id: newTensionMeter
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_VIEW
     signal signalReturnTensometer()
-
-    Component.onCompleted:
-    {
-       scalemodel.setTensiometerNumber(Tensiometer.TensiometerNumber)
-
-    }
-	
-    TensionScaleManager{
-        id:scalemodel
-        Component.onCompleted:scalemodel.resetModel()
-    }
 
     Rectangle
     {
@@ -51,7 +39,7 @@ Item{
             headerHeight: Math.round(40 * Style.scaleHint)
             rowHeight: Math.round(35 * Style.scaleHint)
             fontSize: Math.round(Style.style2 * Style.scaleHint)
-            model: scalemodel
+            model: TensiometerScale
             selectionMode: SelectionMode.SingleSelection
 
             itemDelegate: Rectangle {
@@ -72,17 +60,17 @@ Item{
             }
 
             TableViewColumn {
-                role: "Index";
+                role: "index";
                 title: qsTr("刻度点");
                 width: Math.round(90 * Style.scaleHint)
             }
             TableViewColumn {
-                role: "ScaleValue";
+                role: "scaleValue";
                 title: qsTr("刻度值");
                 width: Math.round(90 * Style.scaleHint)
             }
             TableViewColumn {
-                role: "TensionValue";
+                role: "tensionValue";
                 title: qsTr("张力值") + "(" + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + ")";
                 width: Math.round(90 * Style.scaleHint)
             }
@@ -127,8 +115,7 @@ Item{
             Text
             {
                 id: numberTensiometer
-                // text: qsTr("2412001")
-                text:Tensiometer.TensiometerNumber
+                text: TensiometerScale.TensiometerNumber
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 font.family: Style.regular.name
                 color: Style.whiteFontColor

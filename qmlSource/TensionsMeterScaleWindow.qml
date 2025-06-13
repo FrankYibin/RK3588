@@ -49,13 +49,7 @@ Item{
                 anchors.fill: parent
                 onSignalSaveTensometer:
                 {
-                    let number = Tensiometer.TensiometerNumber;
-                    console.log("number: ",number)
-                    let type = Tensiometer.TensiometerType;
-                    let range = Tensiometer.TensiometerRange;
-                    let signal = Tensiometer.TensiometerSignal;
-
-                    tensiometerManager.addTensiometer(number, type, range, signal);
+                    TensiometerManager.addTensiometer();
                     tensionMeterFeatures.currentIndex = 0
                 }
             }

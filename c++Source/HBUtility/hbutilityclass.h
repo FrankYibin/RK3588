@@ -1,7 +1,7 @@
 #ifndef HBUTILITYCLASS_H
 #define HBUTILITYCLASS_H
 #include <QString>
-
+#include "c++Source/HBScreen/tensionscalemanager.h"
 class HBUtilityClass
 {
 public:
@@ -44,6 +44,15 @@ public:
     static HBUtilityClass* GetInstance();
     QString FormatedDataToString(const DATA_FORMAT index, const int data);
     int StringToFormatedData(const DATA_FORMAT index, const QString strData);
+    bool ListJsonToString(QList<int>* _SourceList, QString &DestString);
+    bool StringJsonToList(QString SourceString, QList<int>* _DestList);
+
+    bool ListJsonToString(QList<TensionScaleManager::SCALE_RAW_DATA> *_SourceList, QString &DestString);
+    bool StringJsonToList(QString SourceString, QList<TensionScaleManager::SCALE_RAW_DATA> *_DestList);
+
+    void CalculateLargest(qreal &a_axisVal, qreal a_val);
+    void CalculateSmallest(qreal &a_axisVal, qreal a_val);
+
 protected:
     HBUtilityClass();
 };

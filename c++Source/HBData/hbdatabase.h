@@ -4,12 +4,13 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include "c++Source/HBDefine.h"
+#include "c++Source/HBScreen/tensiometer.h"
 
 class HBDatabase : public QObject
 {
     Q_OBJECT
 public:
-    static HBDatabase& getInstance();
+    static HBDatabase& GetInstance();
     HBDatabase(const HBDatabase&) = delete;
     HBDatabase& operator=(const HBDatabase&) = delete;
 
@@ -56,7 +57,7 @@ public:
     bool loadTensiometerData(int id, TensiometerData &data);
 
     // 插入新的 Tensiometer 数据（返回新 id）
-    bool insertTensiometerData(TensiometerData &data);
+    bool InsertNewTensiometer(Tensiometer::TENSIONMETER &meter);
 
     // 更新现有 Tensiometer 数据
     bool updateTensiometerData(const TensiometerData &data);
@@ -65,12 +66,12 @@ public:
     bool deleteTensiometerData(int id);
 
     // 加载所有 Tensiometer 数据（用于列表展示）
-    bool loadAllTensiometerData(QList<TensiometerData> &list);
+    bool LoadTensiometerTable(QList<Tensiometer::TENSIONMETER> &list);
 
 
 
     // 加载某台张力计的所有刻度点
-    bool loadScalesForTensiometerNumber(const QString &tensioNumber,QList<ScaleData> &outRecords);
+    bool LoadScales(const int tensioNumber, QString& scale);
 
     bool deleteScalesByTensiometerId(int tensioId);
 
@@ -82,7 +83,7 @@ public:
 
     bool updateTensionScale(int scaleId, int rawValue);
 
-    bool updateTensionValue(const QString &tensioNumber, int index, double scaleValue, double tensionValue, bool selected);
+    bool updateScaleJson(const int tensiometerNumber, const QString scaleJson);
 
 
     bool deleteScalesByTensiometerId(const QString &tensioNumber);

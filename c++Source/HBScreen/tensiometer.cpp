@@ -102,6 +102,20 @@ void Tensiometer::setTensiometerAnalog(int analog)
     }
 }
 
+QString Tensiometer::ScaleCurrent() const
+{
+    return m_ScaleCurrent;
+}
+
+void Tensiometer::setScaleCurrent(const QString scale)
+{
+    if (m_ScaleCurrent != scale) 
+    {
+        m_ScaleCurrent = scale;
+        emit ScaleCurrentChanged();
+    }
+}
+
 QString Tensiometer::Point1Scale() const
 {
     return m_Point1Scale;

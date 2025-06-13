@@ -98,7 +98,7 @@ QHash<int, QByteArray> HistoryDataTable::roleNames() const
 void HistoryDataTable::loadFromDatabase()
 {
     beginResetModel();
-      m_dataList = HBDatabase::getInstance().loadHistoryData();
+      m_dataList = HBDatabase::GetInstance().loadHistoryData();
       if (m_dataList.isEmpty()) {
           qDebug() << "HistoryDataTable: 数据库中没有历史数据或加载失败";
       }

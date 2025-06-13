@@ -113,7 +113,6 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     onCurrentIndexChanged: {
-                        ModbusClient.writeCoil(HQmlEnum.DEPTHORIENTATION,currentIndex)
                         Depth.DepthOrientation = currentIndex
                         ModbusClient.writeCoil(HQmlEnum.ORIENTATION_DEPTH, currentIndex)
                     }

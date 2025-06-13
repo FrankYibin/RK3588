@@ -27,10 +27,10 @@ HBModbusClient::MODBUS_IO_VALUE4 HBModbusClient::m_IO_Value4;
 HBModbusClient::MODBUS_IO_VALUE5 HBModbusClient::m_IO_Value5;
 
 QModbusClient* HBModbusClient::_ptrModbus = nullptr;
+HBModbusClient* HBModbusClient::_ptrHBModbusClient = nullptr;
 int HBModbusClient::m_timerIdentifier = -1;
 QMap<int, HBModbusClient::SEND_DATA> HBModbusClient::m_RegisterSendMap;
 QMutex HBModbusClient::m_mutexSending;
-
 
 HBModbusClient::HBModbusClient(QObject *parent)
     : QObject{parent}
@@ -52,7 +52,14 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
     static int iTick10MS = 0;
     if (!_ptrModbus || _ptrModbus->state() != QModbusDevice::ConnectedState)
     {
-        // qWarning() << "Modbus is not connected.";
+#ifndef RK3588
+        if(iTick10MS % 10 == 0)
+        {
+            QString strData = updateIntegerInterface(iTick10MS, 0);
+            Tensiometer::GetInstance()->setScaleCurrent(strData);
+        }
+        iTick10MS++;
+#endif
         return;
     }
 
@@ -75,11 +82,22 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
     }
 }
 
+HBModbusClient* HBModbusClient::GetInstance()
+{
+    if(_ptrHBModbusClient == nullptr)
+    {
+        _ptrHBModbusClient = new HBModbusClient();
+    }
+    return _ptrHBModbusClient;
+}
+
 HBModbusClient::~HBModbusClient()
 {
     if (_ptrModbus)
         _ptrModbus->disconnectDevice();
     delete _ptrModbus;
+    if(_ptrHBModbusClient != nullptr)
+        delete _ptrHBModbusClient;
 }
 
 void HBModbusClient::connectToServer()
@@ -306,6 +324,17 @@ void HBModbusClient::handleParseRegisters(const QModbusDataUnit &result)
             tmpData |= m_RegisterData.LOW_16BITS;
             m_RecvReg.m_TensionCableHead.Data = tmpData;
             m_RecvReg.m_TensionCableHead.Address = currentAddress;
+            break;
+        case HQmlEnum::SCALE_CURRENT_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::SCALE_CURRENT_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_ScaleCurrent.Data = tmpData;
+            m_RecvReg.m_ScaleCurrent.Address = currentAddress;
             break;
         case HQmlEnum::K_VALUE:
             m_RecvReg.m_K_Value.Data = value;
@@ -675,411 +704,175 @@ void HBModbusClient::handleRawData()
     m_DistanceUnit  = static_cast<DepthSetting::DISTANCE_UNIT>(DepthSetting::GetInstance()->DistanceUnit());
     m_TimeUnit      = static_cast<DepthSetting::TIME_UNIT>(DepthSetting::GetInstance()->TimeUnit());
     m_ForceUnit     = static_cast<TensionSetting::FORCE_UNIT>(TensionSetting::GetInstance()->TensionUnit());
-#ifndef RK3588
-    if(hashCode != prevHashCode)
+
+    for(int i = HQmlEnum::DEPTH_CURRENT_H; i < HQmlEnum::MAX_REGISTR; i++)
     {
-        qDebug() << "previous Register Hash Code: " << prevHashCode;
-        qDebug() << "current Register Hash Code: " << hashCode;
-#endif
-        for(int i = HQmlEnum::DEPTH_CURRENT_H; i < HQmlEnum::MAX_REGISTR; i++)
+        switch(i)
         {
-            switch(i)
-            {
-            case HQmlEnum::HQmlEnum::DEPTH_CURRENT_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthCurrent.Data != m_RecvReg.m_DepthCurrent.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthCurrent.Data, m_RecvReg.m_DepthCurrent.Address);
-                    HBHome::GetInstance()->setDepthCurrent(strData);
-                    DepthSetting::GetInstance()->setDepthCurrent(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::VELOCITY_CURRENT_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_VelocityCurrent.Data != m_RecvReg.m_VelocityCurrent.Data)
-                {
-#endif
-                    strData = updateVelocityInterface(m_RecvReg.m_VelocityCurrent.Data, m_RecvReg.m_VelocityCurrent.Address);
-                    HBHome::GetInstance()->setVelocityCurrent(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_CURRENT_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionCurrent.Data != m_RecvReg.m_TensionCurrent.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_TensionCurrent.Data, m_RecvReg.m_TensionCurrent.Address);
-                    HBHome::GetInstance()->setTensionCurrent(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_CURRENT_DELTA_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionCurrentDelta.Data != m_RecvReg.m_TensionCurrentDelta.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_TensionCurrentDelta.Data, m_RecvReg.m_TensionCurrentDelta.Address);
-                    HBHome::GetInstance()->setTensionCurrentDelta(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::PULSE_COUNT:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_PulseCount.Data != m_RecvReg.m_PulseCount.Data)
-                {
-#endif
-                    strData = updatePulseCount(m_RecvReg.m_PulseCount.Data, m_RecvReg.m_PulseCount.Address);
-                    HBHome::GetInstance()->setPulseCount(strData);
-                    DepthSetting::GetInstance()->setPulseCount(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_LIMITED_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionLimited.Data != m_RecvReg.m_TensionLimited.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_TensionLimited.Data, m_RecvReg.m_TensionLimited.Address);
-                    HBHome::GetInstance()->setTensionLimited(strData);
-                    TensionSafety::GetInstance()->setTensionLimited(strData);
-                    TensionSetting::GetInstance()->setTensionLimited(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_TARGET_LAYER_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthTargetLayer.Data != m_RecvReg.m_DepthTargetLayer.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthTargetLayer.Data, m_RecvReg.m_DepthTargetLayer.Address);
-                    HBHome::GetInstance()->setDepthTargetLayer(strData);
-                    DepthSetting::GetInstance()->setDepthTargetLayer(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::VELOCITY_LIMITED_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_VelocityLimited.Data != m_RecvReg.m_VelocityLimited.Data)
-                {
-#endif
-                    strData = updateVelocityInterface(m_RecvReg.m_VelocityLimited.Data, m_RecvReg.m_VelocityLimited.Address);
-                    HBHome::GetInstance()->setVelocityLimited(strData);
-                    DepthSetting::GetInstance()->setVelocityLimited(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_LIMITED_DELTA_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionLimitedDelta.Data != m_RecvReg.m_TensionLimitedDelta.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_TensionLimitedDelta.Data, m_RecvReg.m_TensionLimitedDelta.Address);
-                    HBHome::GetInstance()->setTensionLimitedDelta(strData);
-                    TensionSetting::GetInstance()->setTensionLimitedDelta(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::K_VALUE:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_K_Value.Data != m_RecvReg.m_K_Value.Data)
-                {
-#endif
-                    strData = updateKValue(m_RecvReg.m_K_Value.Data, m_RecvReg.m_K_Value.Address);
-                    HBHome::GetInstance()->setKValue(strData);
-                    TensionSetting::GetInstance()->setKValue(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_CABLE_HEAD_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionCableHead.Data != m_RecvReg.m_TensionCableHead.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_TensionCableHead.Data, m_RecvReg.m_TensionCableHead.Address);
-                    HBHome::GetInstance()->setTensionCableHead(strData);
-                    TensionSafety::GetInstance()->setTensionCableHead(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_SURFACE_COVER_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthSurfaceCover.Data != m_RecvReg.m_DepthSurfaceCover.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthSurfaceCover.Data, m_RecvReg.m_DepthSurfaceCover.Address);
-                    DepthSetting::GetInstance()->setDepthSurfaceCover(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_ENCODER:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthEncoder.Data != m_RecvReg.m_DepthEncoder.Data)
-                {
-#endif
-                    iData = updateDepthEncoder(m_RecvReg.m_DepthEncoder.Data, m_RecvReg.m_DepthEncoder.Address);
-                    DepthSetting::GetInstance()->setDepthEncoder(iData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::WELL_TYPE:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_WellType.Data != m_RecvReg.m_WellType.Data)
-                {
-#endif
-                    iData = updateWellType(m_RecvReg.m_WellType.Data, m_RecvReg.m_WellType.Address);
-                    TensionSafety::GetInstance()->setWellType(iData);
-                    WellParameter::GetInstance()->setWellType(iData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::WOKE_TYPE:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_WorkType.Data != m_RecvReg.m_WorkType.Data)
-                {
-#endif
-                    iData = updateWorkType(m_RecvReg.m_WorkType.Data, m_RecvReg.m_WorkType.Address);
-                    TensionSafety::GetInstance()->setWorkType(iData);
-                    WellParameter::GetInstance()->setWorkType(iData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::WEIGHT_EACH_KILOMETER_CABLE:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_WeightEachKilometerCable.Data != m_RecvReg.m_WeightEachKilometerCable.Data)
-                {
-#endif
-                    strData = updateIntegerInterface(m_RecvReg.m_WeightEachKilometerCable.Data, m_RecvReg.m_WeightEachKilometerCable.Address);
-                    TensionSafety::GetInstance()->setWeightEachKilometerCable(strData);
-                    WellParameter::GetInstance()->setWeightEachKilometerCable(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::WEIGHT_INSTRUMENT_STRING:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_WeightInstrumentString.Data != m_RecvReg.m_WeightInstrumentString.Data)
-                {
-#endif
-                    strData = updateIntegerInterface(m_RecvReg.m_WeightInstrumentString.Data, m_RecvReg.m_WeightInstrumentString.Address);
-                    TensionSafety::GetInstance()->setWeightInstrumentString(strData);
-                    WellParameter::GetInstance()->setWeightInstrumentString(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::BREAKING_FORCE_CABLE:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_BreakingForceCable.Data != m_RecvReg.m_BreakingForceCable.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_BreakingForceCable.Data, m_RecvReg.m_BreakingForceCable.Address);
-                    TensionSafety::GetInstance()->setBreakingForceCable(strData);
-                    WellParameter::GetInstance()->setBreakingForceCable(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::BREAKING_FORCE_WEAKNESS:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_BreakingForceWeakness.Data != m_RecvReg.m_BreakingForceWeakness.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_BreakingForceWeakness.Data, m_RecvReg.m_BreakingForceWeakness.Address);
-                    TensionSafety::GetInstance()->setBreakingForceWeakness(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_CABLE_HEAD_TREND:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionCableHeadTrend.Data != m_RecvReg.m_TensionCableHeadTrend.Data)
-                {
-#endif
-                    iData = updateCalbeHeadTrend(m_RecvReg.m_TensionCableHeadTrend.Data, m_RecvReg.m_TensionCableHeadTrend.Address);
-                    TensionSafety::GetInstance()->setTensionCableHeadTrend(iData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_SAFETY_COEFFICIENT:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionSafetyCoefficient.Data != m_RecvReg.m_TensionSafetyCoefficient.Data)
-                {
-#endif
-                    strData = updateSafetyCoefficient(m_RecvReg.m_TensionSafetyCoefficient.Data, m_RecvReg.m_TensionSafetyCoefficient.Address);
-                    TensionSafety::GetInstance()->setTensionSafetyCoefficient(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSION_CURRENT_SAFETY_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensionCurrentSafety.Data != m_RecvReg.m_TensionCurrentSafety.Data)
-                {
-#endif
-                    strData = updateTensionInterface(m_RecvReg.m_TensionCurrentSafety.Data, m_RecvReg.m_TensionCurrentSafety.Address);
-                    TensionSafety::GetInstance()->setTensionCurrentSafety(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TIME_SAFETY_STOP:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TimeSafetyStop.Data != m_RecvReg.m_TimeSafetyStop.Data)
-                {
-#endif
-                    strData = updateTimeSafetyStop(m_RecvReg.m_TimeSafetyStop.Data, m_RecvReg.m_TimeSafetyStop.Address);
-                    TensionSafety::GetInstance()->setTimeSafetyStop(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_TOLERANCE_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthTolerance.Data != m_RecvReg.m_DepthTolerance.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthTolerance.Data, m_RecvReg.m_DepthTolerance.Address);
-                    TensionSafety::GetInstance()->setDepthTolerance(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_ENCODER_1_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthEncoder1.Data != m_RecvReg.m_DepthEncoder1.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthEncoder1.Data, m_RecvReg.m_DepthEncoder1.Address);
-                    TensionSafety::GetInstance()->setDepthEncoder1(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_ENCODER_2_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthEncoder2.Data != m_RecvReg.m_DepthEncoder2.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthEncoder2.Data, m_RecvReg.m_DepthEncoder2.Address);
-                    TensionSafety::GetInstance()->setDepthEncoder2(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_ENCODER_3_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthEncoder3.Data != m_RecvReg.m_DepthEncoder3.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthEncoder3.Data, m_RecvReg.m_DepthEncoder3.Address);
-                    TensionSafety::GetInstance()->setDepthEncoder3(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::DEPTH_WELL_SETTING_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_DepthWellSetting.Data != m_RecvReg.m_DepthWellSetting.Data)
-                {
-#endif
-                    strData = updateDepthInterface(m_RecvReg.m_DepthWellSetting.Data, m_RecvReg.m_DepthWellSetting.Address);
-                    WellParameter::GetInstance()->setDepthWell(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::SLOPE_ANGLE_WELL_SETTING:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_SlopeAngleWellSetting.Data != m_RecvReg.m_SlopeAngleWellSetting.Data)
-                {
-#endif
-                    strData = updateSlopeAngleWell(m_RecvReg.m_SlopeAngleWellSetting.Data, m_RecvReg.m_SlopeAngleWellSetting.Address);
-                    WellParameter::GetInstance()->setSlopeAngleWellSetting(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::CABLE_SPEC:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_CableSpec.Data != m_RecvReg.m_CableSpec.Data)
-                {
-#endif
-                    iData = updateCableSpec(m_RecvReg.m_CableSpec.Data, m_RecvReg.m_CableSpec.Address);
-                    WellParameter::GetInstance()->setCableSpec(iData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TONNAGE_TENSION_STICK:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TonnageTensionStick.Data != m_RecvReg.m_TonnageTensionStick.Data)
-                {
-#endif
-                    strData = updateTonnageStick(m_RecvReg.m_TonnageTensionStick.Data, m_RecvReg.m_TonnageTensionStick.Address);
-                    WellParameter::GetInstance()->setTonnageTensionStick(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSIOMETER_NUM_H:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensiometerNum.Data != m_RecvReg.m_TensiometerNum.Data)
-                {
-#endif
-                    strData = updateIntegerInterface(m_RecvReg.m_TensiometerNum.Data, m_RecvReg.m_TensiometerNum.Address);
-                    Tensiometer::GetInstance()->setTensiometerNumber(strData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSIOMETER_ENCODER:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensiometerEncoder.Data != m_RecvReg.m_TensiometerEncoder.Data)
-                {
-#endif
-                    iData = updateTensiometerEncoder(m_RecvReg.m_TensiometerEncoder.Data, m_RecvReg.m_TensiometerEncoder.Address);
-                    Tensiometer::GetInstance()->setTensiometerEncoder(iData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            case HQmlEnum::TENSIOMETER_ANALOG:
-#ifndef RK3588
-                if(m_PrevRecvReg.m_TensiometerAnalog.Data != m_RecvReg.m_TensiometerAnalog.Data)
-                {
-#endif
-                    iData = updateTensiometerAnalog(m_RecvReg.m_TensiometerAnalog.Data, m_RecvReg.m_TensiometerAnalog.Address);
-                    Tensiometer::GetInstance()->setTensiometerAnalog(iData);
-#ifndef RK3588
-                }
-#endif
-                break;
-            default:
-                break;
-            }
-#ifndef RK3588
-            memcpy(&m_PrevRecvReg, &m_RecvReg, sizeof(MODBUS_REGISTER));
+        case HQmlEnum::HQmlEnum::DEPTH_CURRENT_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthCurrent.Data, m_RecvReg.m_DepthCurrent.Address);
+            HBHome::GetInstance()->setDepthCurrent(strData);
+            DepthSetting::GetInstance()->setDepthCurrent(strData);
+            break;
+        case HQmlEnum::VELOCITY_CURRENT_H:
+            strData = updateVelocityInterface(m_RecvReg.m_VelocityCurrent.Data, m_RecvReg.m_VelocityCurrent.Address);
+            HBHome::GetInstance()->setVelocityCurrent(strData);
+            break;
+        case HQmlEnum::TENSION_CURRENT_H:
+            strData = updateTensionInterface(m_RecvReg.m_TensionCurrent.Data, m_RecvReg.m_TensionCurrent.Address);
+            HBHome::GetInstance()->setTensionCurrent(strData);
+            break;
+        case HQmlEnum::TENSION_CURRENT_DELTA_H:
+            strData = updateTensionInterface(m_RecvReg.m_TensionCurrentDelta.Data, m_RecvReg.m_TensionCurrentDelta.Address);
+            HBHome::GetInstance()->setTensionCurrentDelta(strData);
+            break;
+        case HQmlEnum::PULSE_COUNT:
+            strData = updatePulseCount(m_RecvReg.m_PulseCount.Data, m_RecvReg.m_PulseCount.Address);
+            HBHome::GetInstance()->setPulseCount(strData);
+            DepthSetting::GetInstance()->setPulseCount(strData);
+            break;
+        case HQmlEnum::TENSION_LIMITED_H:
+            strData = updateTensionInterface(m_RecvReg.m_TensionLimited.Data, m_RecvReg.m_TensionLimited.Address);
+            HBHome::GetInstance()->setTensionLimited(strData);
+            TensionSafety::GetInstance()->setTensionLimited(strData);
+            TensionSetting::GetInstance()->setTensionLimited(strData);
+            break;
+        case HQmlEnum::DEPTH_TARGET_LAYER_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthTargetLayer.Data, m_RecvReg.m_DepthTargetLayer.Address);
+            HBHome::GetInstance()->setDepthTargetLayer(strData);
+            DepthSetting::GetInstance()->setDepthTargetLayer(strData);
+            break;
+        case HQmlEnum::VELOCITY_LIMITED_H:
+            strData = updateVelocityInterface(m_RecvReg.m_VelocityLimited.Data, m_RecvReg.m_VelocityLimited.Address);
+            HBHome::GetInstance()->setVelocityLimited(strData);
+            DepthSetting::GetInstance()->setVelocityLimited(strData);
+            break;
+        case HQmlEnum::TENSION_LIMITED_DELTA_H:
+            strData = updateTensionInterface(m_RecvReg.m_TensionLimitedDelta.Data, m_RecvReg.m_TensionLimitedDelta.Address);
+            HBHome::GetInstance()->setTensionLimitedDelta(strData);
+            TensionSetting::GetInstance()->setTensionLimitedDelta(strData);
+            break;
+        case HQmlEnum::SCALE_CURRENT_H:
+            strData = updateIntegerInterface(m_RecvReg.m_ScaleCurrent.Data, m_RecvReg.m_ScaleCurrent.Address);
+            Tensiometer::GetInstance()->setScaleCurrent(strData);
+            break;
+        case HQmlEnum::K_VALUE:
+            strData = updateKValue(m_RecvReg.m_K_Value.Data, m_RecvReg.m_K_Value.Address);
+            HBHome::GetInstance()->setKValue(strData);
+            TensionSetting::GetInstance()->setKValue(strData);
+            break;
+        case HQmlEnum::TENSION_CABLE_HEAD_H:
+            strData = updateTensionInterface(m_RecvReg.m_TensionCableHead.Data, m_RecvReg.m_TensionCableHead.Address);
+            HBHome::GetInstance()->setTensionCableHead(strData);
+            TensionSafety::GetInstance()->setTensionCableHead(strData);
+            break;
+        case HQmlEnum::DEPTH_SURFACE_COVER_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthSurfaceCover.Data, m_RecvReg.m_DepthSurfaceCover.Address);
+            DepthSetting::GetInstance()->setDepthSurfaceCover(strData);
+            break;
+        case HQmlEnum::DEPTH_ENCODER:
+            iData = updateDepthEncoder(m_RecvReg.m_DepthEncoder.Data, m_RecvReg.m_DepthEncoder.Address);
+            DepthSetting::GetInstance()->setDepthEncoder(iData);
+            break;
+        case HQmlEnum::WELL_TYPE:
+            iData = updateWellType(m_RecvReg.m_WellType.Data, m_RecvReg.m_WellType.Address);
+            TensionSafety::GetInstance()->setWellType(iData);
+            WellParameter::GetInstance()->setWellType(iData);
+            break;
+        case HQmlEnum::WOKE_TYPE:
+            iData = updateWorkType(m_RecvReg.m_WorkType.Data, m_RecvReg.m_WorkType.Address);
+            TensionSafety::GetInstance()->setWorkType(iData);
+            WellParameter::GetInstance()->setWorkType(iData);
+            break;
+        case HQmlEnum::WEIGHT_EACH_KILOMETER_CABLE:
+            strData = updateIntegerInterface(m_RecvReg.m_WeightEachKilometerCable.Data, m_RecvReg.m_WeightEachKilometerCable.Address);
+            TensionSafety::GetInstance()->setWeightEachKilometerCable(strData);
+            WellParameter::GetInstance()->setWeightEachKilometerCable(strData);
+            break;
+        case HQmlEnum::WEIGHT_INSTRUMENT_STRING:
+            strData = updateIntegerInterface(m_RecvReg.m_WeightInstrumentString.Data, m_RecvReg.m_WeightInstrumentString.Address);
+            TensionSafety::GetInstance()->setWeightInstrumentString(strData);
+            WellParameter::GetInstance()->setWeightInstrumentString(strData);
+            break;
+        case HQmlEnum::BREAKING_FORCE_CABLE:
+            strData = updateTensionInterface(m_RecvReg.m_BreakingForceCable.Data, m_RecvReg.m_BreakingForceCable.Address);
+            TensionSafety::GetInstance()->setBreakingForceCable(strData);
+            WellParameter::GetInstance()->setBreakingForceCable(strData);
+            break;
+        case HQmlEnum::BREAKING_FORCE_WEAKNESS:
+            strData = updateTensionInterface(m_RecvReg.m_BreakingForceWeakness.Data, m_RecvReg.m_BreakingForceWeakness.Address);
+            TensionSafety::GetInstance()->setBreakingForceWeakness(strData);
+            break;
+        case HQmlEnum::TENSION_CABLE_HEAD_TREND:
+            iData = updateCalbeHeadTrend(m_RecvReg.m_TensionCableHeadTrend.Data, m_RecvReg.m_TensionCableHeadTrend.Address);
+            TensionSafety::GetInstance()->setTensionCableHeadTrend(iData);
+            break;
+        case HQmlEnum::TENSION_SAFETY_COEFFICIENT:
+            strData = updateSafetyCoefficient(m_RecvReg.m_TensionSafetyCoefficient.Data, m_RecvReg.m_TensionSafetyCoefficient.Address);
+            TensionSafety::GetInstance()->setTensionSafetyCoefficient(strData);
+            break;
+        case HQmlEnum::TENSION_CURRENT_SAFETY_H:
+            strData = updateTensionInterface(m_RecvReg.m_TensionCurrentSafety.Data, m_RecvReg.m_TensionCurrentSafety.Address);
+            TensionSafety::GetInstance()->setTensionCurrentSafety(strData);
+            break;
+        case HQmlEnum::TIME_SAFETY_STOP:
+            strData = updateTimeSafetyStop(m_RecvReg.m_TimeSafetyStop.Data, m_RecvReg.m_TimeSafetyStop.Address);
+            TensionSafety::GetInstance()->setTimeSafetyStop(strData);
+            break;
+        case HQmlEnum::DEPTH_TOLERANCE_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthTolerance.Data, m_RecvReg.m_DepthTolerance.Address);
+            TensionSafety::GetInstance()->setDepthTolerance(strData);
+            break;
+        case HQmlEnum::DEPTH_ENCODER_1_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthEncoder1.Data, m_RecvReg.m_DepthEncoder1.Address);
+            TensionSafety::GetInstance()->setDepthEncoder1(strData);
+            break;
+        case HQmlEnum::DEPTH_ENCODER_2_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthEncoder2.Data, m_RecvReg.m_DepthEncoder2.Address);
+            TensionSafety::GetInstance()->setDepthEncoder2(strData);
+            break;
+        case HQmlEnum::DEPTH_ENCODER_3_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthEncoder3.Data, m_RecvReg.m_DepthEncoder3.Address);
+            TensionSafety::GetInstance()->setDepthEncoder3(strData);
+            break;
+        case HQmlEnum::DEPTH_WELL_SETTING_H:
+            strData = updateDepthInterface(m_RecvReg.m_DepthWellSetting.Data, m_RecvReg.m_DepthWellSetting.Address);
+            WellParameter::GetInstance()->setDepthWell(strData);
+            break;
+        case HQmlEnum::SLOPE_ANGLE_WELL_SETTING:
+            strData = updateSlopeAngleWell(m_RecvReg.m_SlopeAngleWellSetting.Data, m_RecvReg.m_SlopeAngleWellSetting.Address);
+            WellParameter::GetInstance()->setSlopeAngleWellSetting(strData);
+            break;
+        case HQmlEnum::CABLE_SPEC:
+            iData = updateCableSpec(m_RecvReg.m_CableSpec.Data, m_RecvReg.m_CableSpec.Address);
+            WellParameter::GetInstance()->setCableSpec(iData);
+            break;
+        case HQmlEnum::TONNAGE_TENSION_STICK:
+            strData = updateTonnageStick(m_RecvReg.m_TonnageTensionStick.Data, m_RecvReg.m_TonnageTensionStick.Address);
+            WellParameter::GetInstance()->setTonnageTensionStick(strData);
+            break;
+        // case HQmlEnum::TENSIOMETER_NUM_H:
+        //     if(m_PrevRecvReg.m_TensiometerNum.Data != m_RecvReg.m_TensiometerNum.Data)
+        //     {
+        //         strData = updateIntegerInterface(m_RecvReg.m_TensiometerNum.Data, m_RecvReg.m_TensiometerNum.Address);
+        //         Tensiometer::GetInstance()->setTensiometerNumber(strData);
+        //     }
+        //     break;
+        // case HQmlEnum::TENSIOMETER_ENCODER:
+        //     if(m_PrevRecvReg.m_TensiometerEncoder.Data != m_RecvReg.m_TensiometerEncoder.Data)
+        //     {
+
+        //         iData = updateTensiometerEncoder(m_RecvReg.m_TensiometerEncoder.Data, m_RecvReg.m_TensiometerEncoder.Address);
+        //         Tensiometer::GetInstance()->setTensiometerEncoder(iData);
+        //     }
+        //     break;
+        // case HQmlEnum::TENSIOMETER_ANALOG:
+        //         iData = updateTensiometerAnalog(m_RecvReg.m_TensiometerAnalog.Data, m_RecvReg.m_TensiometerAnalog.Address);
+        //         Tensiometer::GetInstance()->setTensiometerAnalog(iData);
+        //     break;
+        default:
+            break;
         }
-#endif
     }
 }
 
@@ -1142,7 +935,9 @@ void HBModbusClient::handleWriteCoil(const int address, const int value)
 QString HBModbusClient::updateDepthInterface(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "Depth Current Address: " << hexAddress << "----- Updated depth:" << hexData;
+#endif
     switch(m_DistanceUnit)
     {
     case DepthSetting::METER:
@@ -1161,7 +956,9 @@ QString HBModbusClient::updateDepthInterface(const int hexData, const int hexAdd
 QString HBModbusClient::updateVelocityInterface(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "Velocity Current Address: " << hexAddress << "----- Updated depth:" << hexData;
+#endif
     switch(m_VelocityUnit)
     {
     case DepthSetting::M_PER_HOUR:
@@ -1186,7 +983,9 @@ QString HBModbusClient::updateVelocityInterface(const int hexData, const int hex
 QString HBModbusClient::updateTensionInterface(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "Tension Current Address: " << hexAddress << "----- Updated depth:" << hexData;
+#endif
     switch(m_ForceUnit)
     {
     case TensionSetting::LB:
@@ -1272,7 +1071,9 @@ int HBModbusClient::updateTensiometerAnalog(const int hexData, const int hexAddr
 QString HBModbusClient::updateIntegerInterface(const int hexData, const int hexAddress)
 {
     QString strData = "";
-    qDebug() << "Integer Address: " << hexAddress << "----- Updated integer:" << hexData;
+#ifndef RK3588
+    // qDebug() << "Integer Address: " << hexAddress << "----- Updated integer:" << hexData;
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2INTEGER, hexData);
     return strData;
 }
@@ -1447,6 +1248,7 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
     case HQmlEnum::CABLE_SPEC:
     case HQmlEnum::TENSIOMETER_ENCODER:
     case HQmlEnum::TENSIOMETER_ANALOG:
+    case HQmlEnum::QUANTITY_OF_CALIBRATION:
         tmpValue = value.toInt();
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned short);
@@ -1526,6 +1328,22 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
     case HQmlEnum::TENSIOMETER_NUM_H:
         strValue = value.toString();
         tmpValue = getIntegerInterface(strValue, address);
+        stData.Data = tmpValue;
+        stData.Size = sizeof(unsigned int);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
+        m_RegisterSendMap.insert(address, stData);
+        break;
+    case HQmlEnum::SCALE_1_H:
+    case HQmlEnum::SCALE_2_H:
+    case HQmlEnum::SCALE_3_H:
+    case HQmlEnum::SCALE_4_H:
+    case HQmlEnum::SCALE_5_H:
+    case HQmlEnum::TENSION_1_H:
+    case HQmlEnum::TENSION_2_H:
+    case HQmlEnum::TENSION_3_H:
+    case HQmlEnum::TENSION_4_H:
+    case HQmlEnum::TENSION_5_H:
+        tmpValue = value.toInt();
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned int);
         stData.Type = QModbusDataUnit::HoldingRegisters;

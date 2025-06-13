@@ -125,7 +125,7 @@ void SensorGraphData::loadHistoryCurve(QAbstractSeries* series, const QString& f
 
     lineSeries->clear();
 
-    QVector<QPointF> points = HBDatabase::getInstance().loadGraphPoints(fieldName);
+    QVector<QPointF> points = HBDatabase::GetInstance().loadGraphPoints(fieldName);
     for (const QPointF& pt : points) {
         lineSeries->append(pt);
     }

@@ -101,6 +101,9 @@ public:
         TENSION_CABLE_HEAD_H,       //缆头张力高十六位
         TENSION_CABLE_HEAD_L,       //缆头张力低十六位
 
+        SCALE_CURRENT_H,            //当前刻度值高十六位
+        SCALE_CURRENT_L,            //当前刻度值低十六位
+
         K_VALUE,                    //K值
         TENSIOMETER_ENCODER,            //张力类型
         TENSIOMETER_ANALOG,             //模拟张力通道(张力计在线状态)

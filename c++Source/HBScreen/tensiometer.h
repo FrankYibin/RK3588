@@ -20,6 +20,7 @@ class Tensiometer : public QObject
     Q_PROPERTY(int TensiometerAnalog READ TensiometerAnalog WRITE setTensiometerAnalog NOTIFY TensiometerAnalogChanged)
 
     //Scale
+    Q_PROPERTY(QString ScaleCurrent READ ScaleCurrent WRITE setScaleCurrent NOTIFY ScaleCurrentChanged)
     Q_PROPERTY(QString Point1Scale READ Point1Scale WRITE setPoint1Scale NOTIFY Point1ScaleChanged)
     Q_PROPERTY(QString Point2Scale READ Point2Scale WRITE setPoint2Scale NOTIFY Point2ScaleChanged)
     Q_PROPERTY(QString Point3Scale READ Point3Scale WRITE setPoint3Scale NOTIFY Point3ScaleChanged)
@@ -33,6 +34,15 @@ class Tensiometer : public QObject
     Q_PROPERTY(QString Point5Tension READ Point5Tension WRITE setPoint5Tension NOTIFY Point5TensionChanged)
 
 public:
+    struct TENSIONMETER
+    {
+        int Number;
+        int Encoder;           //0 数字无线  1 数字有线   2 模拟有线
+        int Range;          //0 10T      1 15T       2 20T           3  30T
+        int Analog;         //0 无       1 30mV      2 0-1.5V 3      3 0-5V
+        QString Scale;      //Json format
+    };
+
     static Tensiometer* GetInstance();
     Q_INVOKABLE QString TensiometerNumber() const;
     Q_INVOKABLE void setTensiometerNumber(const QString number);
@@ -44,6 +54,8 @@ public:
     Q_INVOKABLE void setTensiometerAnalog(const int analog);
 
     //Scale
+    Q_INVOKABLE QString ScaleCurrent() const;
+    Q_INVOKABLE void setScaleCurrent(const QString scale);
     Q_INVOKABLE QString Point1Scale() const;
     Q_INVOKABLE void setPoint1Scale(const QString scale);
     Q_INVOKABLE QString Point2Scale() const;
@@ -72,6 +84,7 @@ signals:
     void TensiometerRangeChanged();
     void TensiometerAnalogChanged();
 
+    void ScaleCurrentChanged();
     void Point1ScaleChanged();
     void Point2ScaleChanged();
     void Point3ScaleChanged();
@@ -101,6 +114,7 @@ private:
     QString m_Point3Tension;
     QString m_Point4Tension;
     QString m_Point5Tension;
+    QString m_ScaleCurrent;
     QString m_Point1Scale;
     QString m_Point2Scale;
     QString m_Point3Scale;

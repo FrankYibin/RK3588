@@ -63,7 +63,7 @@ Item{
                 onSignalClickedEvent: {
                     mainWindow.showPrimaryNumpad(qsTr("请输入张力计编号"), " ", 0, 0, 9999999, txtTensionsNumber.text,txtTensionsNumber,function(val) {
                         Tensiometer.TensiometerNumber = val;
-                        ModbusClient.writeRegister(HQmlEnum.TENSIOMETER_NUM_H, val)
+                        // ModbusClient.writeRegister(HQmlEnum.TENSIOMETER_NUM_H, val)
                     })
                 }
             }
@@ -95,7 +95,7 @@ Item{
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
                     Tensiometer.TensiometerEncoder = currentIndex
-                    ModbusClient.writeRegister(HQmlEnum.TENSIOMETER_ENCODER, currentIndex)
+                    // ModbusClient.writeRegister(HQmlEnum.TENSIOMETER_ENCODER, currentIndex)
                 }
             }
         }
@@ -155,7 +155,7 @@ Item{
                 height:  parent.height
                 onCurrentIndexChanged: {
                     Tensiometer.TensiometerAnalog = currentIndex
-                    ModbusClient.writeRegister(HQmlEnum.TENSIOMETER_ANALOG, currentIndex)
+                    // ModbusClient.writeRegister(HQmlEnum.TENSIOMETER_ANALOG, currentIndex)
                 }
             }
         }

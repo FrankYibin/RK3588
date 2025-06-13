@@ -127,7 +127,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.round(260 * Style.scaleHint)
                 height: Math.round(30 * Style.scaleHint)
-                focus: true
+                focus: false
                 onlyForNumpad: true
                 onTextChanged:
                 {

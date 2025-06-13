@@ -1,4 +1,6 @@
 #include "hbutilityclass.h"
+#include <QJsonObject>
+#include <QJsonDocument>
 HBUtilityClass* HBUtilityClass::_ptrInstance = nullptr;
 void HBUtilityClass::SetTextData(DATA_FORMAT index, int data, float factor, QString formater)
 {
@@ -71,4 +73,112 @@ HBUtilityClass* HBUtilityClass::GetInstance()
 HBUtilityClass::HBUtilityClass()
 {
     InitTextData();
+}
+
+bool HBUtilityClass::ListJsonToString(QList<int>* _SourceList, QString &DestString)
+{
+    QJsonObject json;
+    if(_SourceList == nullptr)
+        return false;
+    for(int i = 0; i < _SourceList->size(); i++)
+        json.insert(QString::number(i,10),  QString::number(_SourceList->at(i), 10));
+    QJsonDocument document;
+    document.setObject(json);
+    QByteArray byte_array = document.toJson(QJsonDocument::Compact);
+    DestString = byte_array.data();
+    return true;
+}
+
+bool HBUtilityClass::StringJsonToList(QString SourceString, QList<int> *_DestList)
+{
+    bool bResult = false;
+    if(_DestList == nullptr)
+        return false;
+    QByteArray byte_array = SourceString.toLatin1();
+    QJsonParseError json_error;
+    QJsonDocument parse_document = QJsonDocument::fromJson(byte_array, &json_error);
+    if(json_error.error == QJsonParseError::NoError)
+    {
+        if(parse_document.isObject())
+        {
+            QJsonObject obj = parse_document.object();
+            if(_DestList->isEmpty() == false)
+                _DestList->clear();
+            QJsonObject::const_iterator tmp;
+            for (int i = 0; i < obj.count();i++)
+            {
+                tmp = obj.constFind(QString("%1").arg(i));
+                if(tmp != obj.constEnd())
+                    _DestList->append(tmp.value().toVariant().toInt());
+            }
+            bResult = true;
+
+        }
+    }
+    return bResult;
+}
+
+bool HBUtilityClass::ListJsonToString(QList<TensionScaleManager::SCALE_RAW_DATA> *_SourceList, QString &DestString)
+{
+    QJsonObject json;
+    if(_SourceList == nullptr)
+        return false;
+    for(int i = 0; i < _SourceList->size(); i++)
+    {
+        QJsonObject item;
+        item.insert("ScaleValue", _SourceList->at(i).ScaleRaw);
+        item.insert("TensionValue", _SourceList->at(i).TensionRaw);
+        json.insert(QString::number(i,10), item);
+    }
+    QJsonDocument document;
+    document.setObject(json);
+    QByteArray byte_array = document.toJson(QJsonDocument::Compact);
+    DestString = byte_array.data();
+    return true;
+}
+
+bool HBUtilityClass::StringJsonToList(QString SourceString, QList<TensionScaleManager::SCALE_RAW_DATA> *_DestList)
+{
+    bool bResult = false;
+    if(_DestList == nullptr)
+        return false;
+    QByteArray byte_array = SourceString.toLatin1();
+    QJsonParseError json_error;
+    TensionScaleManager::SCALE_RAW_DATA scale;
+    QJsonDocument parse_document = QJsonDocument::fromJson(byte_array, &json_error);
+    if(json_error.error == QJsonParseError::NoError)
+    {
+        if(parse_document.isObject())
+        {
+            QJsonObject obj = parse_document.object();
+            if(_DestList->isEmpty() == false)
+                _DestList->clear();
+            QJsonObject::const_iterator tmp;
+            for (int i = 0; i < obj.count();i++)
+            {
+                tmp = obj.constFind(QString::number(i));
+                if(tmp != obj.constEnd())
+                {
+                    QJsonObject item = tmp.value().toObject();
+                    scale.ScaleRaw = item.value("ScaleValue").toInt();
+                    scale.TensionRaw = item.value("TensionValue").toInt();
+                    _DestList->append(scale);
+                }
+            }
+            bResult = true;
+        }
+    }
+    return bResult;
+}
+
+void HBUtilityClass::CalculateLargest(qreal &a_axisVal, qreal a_val)
+{
+    if(a_axisVal < a_val)
+        a_axisVal = a_val;
+}
+
+void HBUtilityClass::CalculateSmallest(qreal &a_axisVal, qreal a_val)
+{
+    if(a_axisVal > a_val)
+        a_axisVal = a_val;
 }
