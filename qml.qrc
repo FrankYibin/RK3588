@@ -123,5 +123,6 @@
         <file>qmlSource/TensionsGlobalDefine.qml</file>
         <file>qmlSource/hdmiInputWindow.qml</file>
         <file>qmlSource/hikvisionCameraWindow.qml</file>
+        <file>qmlSource/HBComboBoxCalendar.qml</file>
     </qresource>
 </RCC>

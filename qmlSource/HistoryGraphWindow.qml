@@ -14,6 +14,19 @@ Item{
     readonly property int buttonWidth: 100
     readonly property int rowSpacing: 20
     readonly property int componentHeight: 30
+
+    HBCalendar{
+        id: calendarDate
+        anchors.centerIn: parent
+        width: Math.round(400 * Style.scaleHint)
+        height: Math.round(250 * Style.scaleHint)
+        z: 5
+        visible: false
+        onSelectedDateChanged: {
+            console.debug("3333333333333: ", selectedDate)
+        }
+    }
+
     Rectangle
     {
         id: background
@@ -64,11 +77,22 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBComboBox
+                HBComboBoxCalendar
                 {
                     id:comboBoxStartTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
+                    onSignalPopUp:
+                    {
+                        if(isShow === true)
+                            calendarDate.visible = true
+                        else
+                        {
+                            calendarDate.visible = false
+
+                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                        }
+                    }
                 }
             }
 
@@ -358,17 +382,6 @@ Item{
             }
         }
 
-    }
-
-    HBCalendar{
-        id: calendarDate
-        anchors.centerIn: parent
-        width: Math.round(400 * Style.scaleHint)
-        height: Math.round(250 * Style.scaleHint)
-        visible: false
-        onSelectedDateChanged: {
-            console.debug("3333333333333: ", selectedDate)
-        }
     }
 
 }
