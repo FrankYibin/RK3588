@@ -72,8 +72,8 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
         handleCANbus();
         if(iTick10MS % 10 == 0)
         {
-            readRegisters   (0, HQmlEnum::MAX_REGISTR);
-            readCoils       (0, HQmlEnum::MAX_COIL);
+            readRegisters   (0, HQmlEnum::MAX_REGISTR - 1);
+            readCoils       (0, HQmlEnum::MAX_COIL - 1);
         }
         else
         {
@@ -1009,7 +1009,9 @@ QString HBModbusClient::updateTensionInterface(const int hexData, const int hexA
 QString HBModbusClient::updatePulseCount(const int hexData, const int hexAddress)
 {
     QString strData = "";
-    qDebug() << "Tension Current Delta Address: " << hexAddress << "----- Updated depth:" << hexData;
+#ifndef RK3588
+    qDebug() << "Pulse Address: " << hexAddress << "----- pulse:" << hexData;
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2PULSE, hexData);
     return strData;
 }
@@ -1017,7 +1019,9 @@ QString HBModbusClient::updatePulseCount(const int hexData, const int hexAddress
 QString HBModbusClient::updateKValue(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "K Value Address: " << hexAddress << "----- Updated depth:" << hexData;
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2K_VALUE, hexData);
     return strData;
 }
@@ -1030,31 +1034,41 @@ void HBModbusClient::updateDepthOrientation(const int hexData, const int hexAddr
 
 int HBModbusClient::updateDepthEncoder(const int hexData, const int hexAddress)
 {
+#ifndef RK3588
     qDebug() << "Depth Encoder Address: " << hexAddress << "----- Updated depth:" << hexData;
+#endif
     return hexData;
 }
 
 int HBModbusClient::updateWellType(const int hexData, const int hexAddress)
 {
+#ifndef RK3588
     qDebug() << "Well Type Address: " << hexAddress << "----- Updated Well Type:" << hexData;
+#endif
     return hexData;
 }
 
 int HBModbusClient::updateWorkType(const int hexData, const int hexAddress)
 {
+#ifndef RK3588
     qDebug() << "Work Type Address: " << hexAddress << "----- Updated Work Type:" << hexData;
+#endif
     return hexData;
 }
 
 int HBModbusClient::updateCalbeHeadTrend(const int hexData, const int hexAddress)
 {
+#ifndef RK3588
     qDebug() << "Cable Head Trend Address: " << hexAddress << "----- Updated Head Trend: " << hexData;
+#endif
     return hexData;
 }
 
 int HBModbusClient::updateCableSpec(const int hexData, const int hexAddress)
 {
+#ifndef RK3588
     qDebug() << "Cable Spec Address: " << hexAddress << "----- Updated Cable Spec: " << hexData;
+#endif
     return hexData;
 }
 
@@ -1083,7 +1097,9 @@ QString HBModbusClient::updateIntegerInterface(const int hexData, const int hexA
 QString HBModbusClient::updateSafetyCoefficient(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "Tension Safety Coefficient Address: " << hexAddress << "----- Updated Coefficient:" << hexData;
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FACTOR, hexData);
     return strData;
 }
@@ -1091,7 +1107,9 @@ QString HBModbusClient::updateSafetyCoefficient(const int hexData, const int hex
 QString HBModbusClient::updateTimeSafetyStop(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "Time Safety Stop Address: " << hexAddress << "----- Updated Time Safety Stop:" << hexData;
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2SECOND, hexData);
     return strData;
 }
@@ -1099,7 +1117,9 @@ QString HBModbusClient::updateTimeSafetyStop(const int hexData, const int hexAdd
 QString HBModbusClient::updateSlopeAngleWell(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "Slope Angle Well Address: " << hexAddress << "----- Updated Slope Angle Well:" << hexData;
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2DEGREE, hexData);
     return strData;
 }
@@ -1107,7 +1127,9 @@ QString HBModbusClient::updateSlopeAngleWell(const int hexData, const int hexAdd
 QString HBModbusClient::updateTonnageStick(const int hexData, const int hexAddress)
 {
     QString strData = "";
+#ifndef RK3588
     qDebug() << "Tonnage Tension Stick Address: " << hexAddress << "----- Updated Tonnage Tension Stick:" << hexData;
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2TONAGE, hexData);
     return strData;
 }
