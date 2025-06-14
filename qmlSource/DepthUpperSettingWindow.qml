@@ -8,6 +8,8 @@ import Com.Branson.UIScreenEnum 1.0
 import HB.Database 1.0
 import DepthGlobalDefine 1.0
 import TensionsGlobalDefine 1.0
+import HB.Enums 1.0
+import HB.Modbus 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DEPTH_SETTING
     readonly property int textWidthColumn1: 100
@@ -43,7 +45,7 @@ Item{
         anchors.left: parent.left
         anchors.leftMargin: Math.round(5 * Style.scaleHint)
         width: parent.width / 2 - Math.round(10 * Style.scaleHint)
-        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        height: parent.height / 4 - Math.round(15 * Style.scaleHint)
         backgroundColor: Style.backgroundLightColor
 
         Column
@@ -78,11 +80,12 @@ Item{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     // text: qsTr("192")
-                    text: DepthSafe.DepthPreset
+                    text: DepthSiMan.DistanceUpperWellSetting
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
-                            DepthSafe.DepthPreset = val;
+                            DepthSiMan.DistanceUpperWellSetting = val;
+                            ModbusClient.writeRegister(HQmlEnum.DISTANCE_UPPER_WELL_SETTING_H, val)
                         })
                     }
                 }
@@ -97,107 +100,7 @@ Item{
                     color: Style.whiteFontColor
                 }
             }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + textWidthUnit+ componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Text {
-                    id: titleVelocityLimit
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    text: qsTr("稳速") + ":"
-                    font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-                HBTextField
-                {
-                    id: textVelocityLimit
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    // text: qsTr("8081")
-                    text:DepthSafe.VelocityLimit
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入井口段限速值"), " ", 3, 0, 99999, textVelocityLimit.text,textVelocityLimit,function(val){
-                            DepthSafe.VelocityLimit = val;})
-                    }
-                }
-                Text {
-                    id: unitVelocityLimit
-                    width: Math.round(textWidthUnit * Style.scaleHint)
-                    height: parent.height
-                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
-                    font.family: Style.regular.name
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + componentWidth + textWidthUnit + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Item{
-                    id: titleWarning
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("报警") + ":"
-                        font.family: "宋体"
-                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                        // verticalAlignment: Text.AlignVCenter
-                        color: Style.whiteFontColor
-                    }
-                }
-
-                BransonSwitch{
-                    id: switchWarning
-                    anchors.verticalCenter: titleWarning.verticalCenter
-                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
-                    rectHeight: Math.round(switchHeight * Style.scaleHint)
-                    maxWidth: Math.round(optionHeight * Style.scaleHint)
-                    maxHeight: maxWidth
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Item{
-                    id: titleBrake
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("停车") + ":"
-                        font.family: "宋体"
-                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                        color: Style.whiteFontColor
-                    }
-                }
-
-                BransonSwitch{
-                    id: switchBrake
-                    anchors.verticalCenter: titleBrake.verticalCenter
-                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
-                    rectHeight: Math.round(switchHeight * Style.scaleHint)
-                    maxWidth: Math.round(optionHeight * Style.scaleHint)
-                    maxHeight: maxWidth
-                }
-            }
         }
-
     }
 
     HBGroupBox
@@ -209,7 +112,7 @@ Item{
         anchors.right: parent.right
         anchors.rightMargin: Math.round(5 * Style.scaleHint)
         width: parent.width / 2 - Math.round(10 * Style.scaleHint)
-        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        height: parent.height / 4 - Math.round(15 * Style.scaleHint)
         backgroundColor: Style.backgroundLightColor
 
         Column
@@ -243,11 +146,12 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text: DepthSafe.DepthPreset
+                    text: DepthSiMan.DistanceLowerWellSetting
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
-                            DepthSafe.DepthPreset = val;
+                            DepthSiMan.DistanceLowerWellSetting = val;
+                            ModbusClient.writeRegister(HQmlEnum.DISTANCE_LOWER_WELL_SETTING_H, val)
                         })
                     }
                 }
@@ -262,118 +166,20 @@ Item{
                     color: Style.whiteFontColor
                 }
             }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + textWidthUnit+ componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Text {
-                    id: titleVelocityLowerLimit
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    text: qsTr("稳速") + ":"
-                    font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-                HBTextField
-                {
-                    id: textVelocityLowerLimit
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    text:DepthSafe.VelocityLimit
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入井口段限速值"), " ", 3, 0, 99999, textVelocityLimit.text,textVelocityLimit,function(val){
-                            DepthSafe.VelocityLimit = val;})
-                    }
-                }
-                Text {
-                    id: unitVelocityLowerLimit
-                    width: Math.round(textWidthUnit * Style.scaleHint)
-                    height: parent.height
-                    text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
-                    font.family: Style.regular.name
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + componentWidth + textWidthUnit + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Item{
-                    id: titleLowerWarning
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("报警") + ":"
-                        font.family: "宋体"
-                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                        // verticalAlignment: Text.AlignVCenter
-                        color: Style.whiteFontColor
-                    }
-                }
-
-                BransonSwitch{
-                    id: switchLowerWarning
-                    anchors.verticalCenter: titleLowerWarning.verticalCenter
-                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
-                    rectHeight: Math.round(switchHeight * Style.scaleHint)
-                    maxWidth: Math.round(optionHeight * Style.scaleHint)
-                    maxHeight: maxWidth
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Item{
-                    id: titleLowerBrake
-                    width: Math.round(textWidthColumn1 * Style.scaleHint)
-                    height: parent.height
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("停车") + ":"
-                        font.family: "宋体"
-                        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                        color: Style.whiteFontColor
-                    }
-                }
-
-                BransonSwitch{
-                    id: switchLowerBrake
-                    anchors.verticalCenter: titleLowerBrake.verticalCenter
-                    rectWidth: Math.round((switchWidth) * Style.scaleHint)
-                    rectHeight: Math.round(switchHeight * Style.scaleHint)
-                    maxWidth: Math.round(optionHeight * Style.scaleHint)
-                    maxHeight: maxWidth
-                }
-            }
         }
 
     }
 
     HBGroupBox
     {
-        id: parameterView
+        id: parameterSlopeView
         title: qsTr("大斜度井段")
         anchors.top: parameterUpperSetting.bottom
         anchors.topMargin: Math.round(10 * Style.scaleHint)
         anchors.left: parent.left
         anchors.leftMargin: Math.round(5 * Style.scaleHint)
         width: parent.width / 2 - Math.round(10 * Style.scaleHint)
-        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        height: parent.height / 4 - Math.round(15 * Style.scaleHint)
         backgroundColor: Style.backgroundMiddleColor
 
         Column
@@ -407,15 +213,74 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    text:DepthSafe.TotalDepth
+                    text: DepthSiMan.SlopeAngleWellSetting
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入总深度值"), " ", 3, 0, 99999, textTotalDepth.text,textTotalDepth,function(val){
-                            DepthSafe.TotalDepth = val;})
+                            DepthSiMan.SlopeAngleWellSetting = val;
+                            ModbusClient.writeRegister(HQmlEnum.SLOPE_ANGLE_WELL_SETTING, val)
+                        })
+                    }
+                }
+            }
+        }
+
+    }
+
+    HBGroupBox
+    {
+        id: parameterComplicatedSetting
+        title: qsTr("复杂井段")
+        anchors.top: parameterUpperSetting.bottom
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(5 * Style.scaleHint)
+        width: parent.width / 2 - Math.round(10 * Style.scaleHint)
+        height: parent.height / 4 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundLightColor
+
+        Column
+        {
+            anchors.left: parent.left
+            anchors.leftMargin: (20 * Style.scaleHint)
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Math.round(10 * Style.scaleHint)
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleComplicatedStartPreset
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("开始深度") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textComplicatedStartPreset
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: DepthSiMan.DepthStartSetting
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                            DepthSiMan.DepthStartSetting = val;
+                            ModbusClient.writeRegister(HQmlEnum.DEPTH_START_SETTING_H, val)
+                        })
                     }
                 }
                 Text {
-                    id: unitTotalDepth
+                    id: unitComplicatedStartPreset
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
                     text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
@@ -428,13 +293,79 @@ Item{
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidthColumn1 + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleComplicatedFinishPreset
+                    width: Math.round(textWidthColumn1 * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("结束深度") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textComplicatedFinishPreset
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
+                    }
+                    text: DepthSiMan.DepthFinishSetting
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入结束深度值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                            DepthSiMan.DepthFinishSetting = val;
+                            ModbusClient.writeRegister(HQmlEnum.DEPTH_FINISH_SETTING_H, val)
+                        })
+                    }
+                }
+                Text {
+                    id: unitComplicatedFinshPreset
+                    width: Math.round(textWidthUnit * Style.scaleHint)
+                    height: parent.height
+                    text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
+                    font.family: Style.regular.name
+                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+            }
+        }
+    }
+
+
+    HBGroupBox
+    {
+        id: velocitySetting
+        title: qsTr("四慢速度设定")
+        anchors.top: parameterComplicatedSetting.bottom
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(5 * Style.scaleHint)
+        width: parent.width / 2 - Math.round(10 * Style.scaleHint)
+        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
+        backgroundColor: Style.backgroundMiddleColor
+
+        Column
+        {
+            anchors.left: parent.left
+            anchors.leftMargin: (20 * Style.scaleHint)
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Math.round(10 * Style.scaleHint)
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidthColumn1 + textWidthUnit+ componentWidth + rowSpacing) * Style.scaleHint)
                 spacing: rowSpacing
                 Text {
                     id: titleDepthVelocityLimit
                     width: Math.round(textWidthColumn1 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("稳速") + ":"
+                    text: qsTr("速度") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -450,12 +381,14 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("8081")
-                    text: DepthSafe.DepthVelocityLimit
+
+                    text: DepthSiMan.VelocitySiman
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("稳速"), " ", 3, 0, 99999, textDepthVelocityLimit.text,textDepthVelocityLimit,function(val){
-                            DepthSafe.DepthVelocityLimit = val;})
+                            DepthSafe.VelocitySiman = val;
+                            ModbusClient.writeRegister(HQmlEnum.VELOCITY_SIMAN_H, val)
+                        })
                     }
                 }
                 Text {
@@ -495,8 +428,16 @@ Item{
                     rectHeight: Math.round(switchHeight * Style.scaleHint)
                     maxWidth: Math.round(optionHeight * Style.scaleHint)
                     maxHeight: maxWidth
+                    onCheckedChanged: {
+                        if(checked === true)
+                            DepthSiMan.IndicateSimanAlert = 1;
+                        else
+                            DepthSiMan.IndicateSimanAlert = 0;
+                        ModbusClient.writeCoil(HQmlEnum.INDICATE_SIMAN_ALERT, DepthSiMan.IndicateSimanAlert)
+                    }
                 }
             }
+
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
@@ -523,24 +464,16 @@ Item{
                     rectHeight: Math.round(switchHeight * Style.scaleHint)
                     maxWidth: Math.round(optionHeight * Style.scaleHint)
                     maxHeight: maxWidth
+                    onCheckedChanged: {
+                        if(checked === true)
+                            DepthSiMan.IndicateSimanStop = 1;
+                        else
+                            DepthSiMan.IndicateSimanStop = 0;
+                        ModbusClient.writeCoil(HQmlEnum.INDICATE_SIMAN_STOP, DepthSiMan.IndicateSimanStop)
+                    }
                 }
             }
         }
-
-    }
-
-
-    HBGroupBox
-    {
-        id: parameterComplicatedSetting
-        title: qsTr("复杂井段")
-        anchors.top: parameterUpperSetting.bottom
-        anchors.topMargin: Math.round(10 * Style.scaleHint)
-        anchors.right: parent.right
-        anchors.rightMargin: Math.round(5 * Style.scaleHint)
-        width: parent.width / 2 - Math.round(10 * Style.scaleHint)
-        height: parent.height / 2 - Math.round(15 * Style.scaleHint)
-        backgroundColor: Style.backgroundLightColor
     }
 }
 

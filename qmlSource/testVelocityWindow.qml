@@ -13,6 +13,8 @@ Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_VELOCITY
     Component.onCompleted: {
         modelDirectionMode.resetModel()
+        AutoTestSpeed.VelocityStatus = 0;
+        AutoTestSpeed.VelocitySetting = "0.00"
     }
 
     Rectangle
@@ -79,17 +81,34 @@ Item{
                         labelText:  model.OptionName
                         circleSize: height
                         exclusiveGroup: directionControlGroup
-                        checked: (index == 0) ? true : false //(index == languageConfig.CurrentLanguage) ? true : false
+                        checked: {
+                            switch(AutoTestSpeed.VelocityStatus)
+                            {
+                            case 0:
+                                return false;
+                            case 1:
+                                if(index === 0)
+                                    return true;
+                                else
+                                    return false;
+                            case 2:
+                                if(index === 1)
+                                    return false;
+                                else
+                                    return true;
+                            }
+                        }
                         onClicked:
                         {
                             // nCurrentLanguageIndex = model.itemIndex
                             console.debug("index: ", index)
 
-                            if(index===0){
-                                ModbusClient.writeRegister(HQmlEnum.SPEED_CONTROL_STATE,[0x01])
-                            }else{
-                                ModbusClient.writeRegister(HQmlEnum.SPEED_CONTROL_STATE,[0x02])
-                            }
+                            if(index === 0)
+                                AutoTestSpeed.VelocityStatus = 1
+                            else if (index === 1)
+                                AutoTestSpeed.VelocitySetting = 2
+                            else
+                                AutoTestSpeed.VelocitySetting = 3
                         }
                     }
                 }
@@ -117,15 +136,14 @@ Item{
                     id: textVelocitySetting
                     // text: qsTr("255.00")
                     //开机获取
-                    text: AutoTestSpeed.SpeedValue
+                    text: AutoTestSpeed.VelocitySetting
                     width: Math.round(200 * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
                     //输入写入
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入控速值"), " ", 2, 0, 99999, textVelocitySetting.text, textVelocitySetting, function(val) {
-                            AutoTestSpeed.SpeedValue = val;
-                            ModbusUtils.writeScaledValue(val,HQmlEnum.CONTROL_SPEED_H,100.0)
+                            AutoTestSpeed.VelocitySetting = val;
                         })
                     }
                 }
@@ -170,10 +188,12 @@ Item{
             width: Math.round(125 * Style.scaleHint)
             height: Math.round(40 * Style.scaleHint)
             text: qsTr("启动")
+            buttonColor: (AutoTestSpeed.EnableVelocityControl === 0) ? Style. backgroundLightColor : Style.hbButtonBackgroundColor
             onClicked:
             {
-                // controlLimitNumpad.visible = false
-                // ModbusClient.writeRegister(HQmlEnum.SPEED_CONTROL_STATE,[0x01])
+                var status = AutoTestSpeed.VelocityStatus
+                ModbusClient.writeRegister(HQmlEnum.VELOCITY_STATUS, status)
+                ModbusClient.writeRegister(HQmlEnum.VELOCITY_SETTING_H, AutoTestSpeed.VelocitySetting)
             }
         }
 
@@ -185,10 +205,7 @@ Item{
             text: qsTr("已停止")
             onClicked:
             {
-                // controlLimitNumpad.visible = false
-                profileLayout.visible = false
-                mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
-                // ModbusClient.writeRegister(55,[0x03])
+                ModbusClient.writeRegister(HQmlEnum.VELOCITY_STATUS, 0)
             }
         }
     }

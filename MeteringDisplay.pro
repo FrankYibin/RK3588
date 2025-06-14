@@ -40,8 +40,8 @@ SOURCES += main.cpp \
     c++Source/HBModbus/modbusutils.cpp \
     c++Source/HBScreen/autotestspeed.cpp \
     c++Source/HBScreen/depthmeter.cpp \
-    c++Source/HBScreen/depthsafe.cpp \
     c++Source/HBScreen/depthsetting.cpp \
+    c++Source/HBScreen/depthsiman.cpp \
     c++Source/HBScreen/hbhome.cpp \
     c++Source/HBScreen/history.cpp \
     c++Source/HBScreen/historydatatable.cpp \
@@ -92,8 +92,8 @@ HEADERS += \
     c++Source/HBQmlEnum.h \
     c++Source/HBScreen/autotestspeed.h \
     c++Source/HBScreen/depthmeter.h \
-    c++Source/HBScreen/depthsafe.h \
     c++Source/HBScreen/depthsetting.h \
+    c++Source/HBScreen/depthsiman.h \
     c++Source/HBScreen/hbhome.h \
     c++Source/HBScreen/history.h \
     c++Source/HBScreen/historydatatable.h \

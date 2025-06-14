@@ -1,69 +1,120 @@
 ﻿#include "autotestspeed.h"
 
-AutoTestSpeed* AutoTestSpeed::m_autoTestSpeed = nullptr;
+AutoTestSpeed* AutoTestSpeed::_ptrAutoTestSpeed = nullptr;
 
 
 AutoTestSpeed::AutoTestSpeed(QObject *parent)
     : QObject{parent}
-{}
-
-AutoTestSpeed *AutoTestSpeed::getInstance()
 {
-    if (!m_autoTestSpeed) {
-        m_autoTestSpeed = new AutoTestSpeed();
+    m_isDownCountStart = false;
+}
+
+AutoTestSpeed *AutoTestSpeed::GetInstance()
+{
+    if (!_ptrAutoTestSpeed) {
+        _ptrAutoTestSpeed = new AutoTestSpeed();
     }
-    return m_autoTestSpeed;
-
-}
-int AutoTestSpeed::Direction() const
-{
-    return m_direction;
+    return _ptrAutoTestSpeed;
 }
 
-void AutoTestSpeed::setDirection(int newDirection)
+int AutoTestSpeed::VelocityStatus() const
 {
-    if ( m_direction == newDirection )
+    return m_VelocityStatus;
+}
+
+void AutoTestSpeed::setVelocityStatus(const int status)
+{
+    if ( m_VelocityStatus == status )
         return;
-    m_direction = newDirection;
-    emit DirectionChanged();
+    m_VelocityStatus = status;
+    emit VelocityStatusChanged();
 }
-
-int AutoTestSpeed::SpeedValue()
+QString AutoTestSpeed::VelocitySetting() const
 {
-    return m_speedVlue;
+    return m_VelocitySetting;
 }
-
-void AutoTestSpeed::setSpeedValue(int newSpeedValue)
+void AutoTestSpeed::setVelocitySetting(QString velocity)
 {
-    if ( m_speedVlue == newSpeedValue )
+    if ( m_VelocitySetting == velocity )
         return;
-    m_speedVlue = newSpeedValue;
-    emit SpeedValueChanged();
+    m_VelocitySetting = velocity;
+    emit VelocitySettingChanged();
 }
 
-
-int AutoTestSpeed::DepthCountDown()
+int AutoTestSpeed::EnableVelocityControl() const
 {
-    return m_direction;
+    return m_EnableVelocityControl;
 }
 
-void AutoTestSpeed::setDepthCountDown(int newDepthCountDown)
+void AutoTestSpeed::setEnableVelocityControl(const int enable)
 {
-    if ( m_direction == newDepthCountDown )
+    if ( m_EnableVelocityControl == enable )
         return;
-    m_direction = newDepthCountDown;
-    emit DepthCurrentChanged();
+    m_EnableVelocityControl = enable;
+    emit EnableVelocityControlChanged();
 }
 
-int AutoTestSpeed::DepthCurrent()
+QString AutoTestSpeed::DepthDeviationSetting() const
 {
-    return m_depthCount;
+    return m_DepthDeviationSetting;
 }
-
-void AutoTestSpeed::setDepthCurrent(int newDepthCurrent)
+void AutoTestSpeed::setDepthDeviationSetting(const QString deviation)
 {
-    if ( m_depthCount == newDepthCurrent )
+    if (m_DepthDeviationSetting == deviation)
         return;
-    m_depthCount = newDepthCurrent;
-    emit DepthCurrentChanged();
+    m_DepthDeviationSetting = deviation;
+    m_isDownCountStart = false;
+    emit DepthDeviationSettingChanged();
+}
+QString AutoTestSpeed::DepthDeviationCurrent() const
+{
+    return m_DepthDeviationCurrent;
+}
+void AutoTestSpeed::setDepthDeviationCurrent(const QString current)
+{
+    if (m_DepthDeviationCurrent == current)
+        return;
+    m_DepthDeviationCurrent = current;
+    emit DepthDeviationChanged();
+}
+
+void AutoTestSpeed::startDepthDownCount()
+{
+    m_DepthBase = m_DepthCurrent;
+    m_isDownCountStart = true;
+}
+
+QString AutoTestSpeed::DepthCurrent() const
+{
+    return m_DepthCurrent;
+}
+
+void AutoTestSpeed::setDepthCurrent(QString depth)
+{
+    QString str;
+    if(m_DepthCurrent == depth )
+        return;
+    m_DepthCurrent = depth;
+    if(m_isDownCountStart == true)
+    {
+        double delta = m_DepthCurrent.toDouble() - m_DepthBase.toDouble();
+        str = QString::number(delta, 'f', 2); // 'f' for fixed-point, 2 decimal places
+    }
+    else
+    {
+        str = "0.00";
+        setDepthDeviationCurrent(str);
+    }
+}
+
+bool AutoTestSpeed::IsDownCountStart() const
+{
+    return m_isDownCountStart;
+}
+void AutoTestSpeed::setIsDownCountStart(const bool isStart)
+{
+    if (m_isDownCountStart == isStart)
+        return;
+    m_isDownCountStart = isStart;
+    emit IsDownCountStartChanged();
 }

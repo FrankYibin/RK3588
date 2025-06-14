@@ -8,7 +8,7 @@
 #include "c++Source/HBDefine.h"
 #include "c++Source/HBScreen/wellparameter.h"
 #include "c++Source/HBScreen/depthsetting.h"
-#include "c++Source/HBScreen/depthsafe.h"
+#include "c++Source/HBScreen/depthsiman.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/tensionsetting.h"
@@ -401,19 +401,17 @@ bool HBDatabase::loadDepthSafe(_DepthSafe &param)
     param.depthWarning = query.value("depthWarning").toInt();
     param.totalDepth = query.value("totalDepth").toInt();
     param.depthBrake = query.value("depthBrake").toInt();
-    param.depthVelocityLimit = query.value("depthVelocityLimit").toInt();
 
 
-    DepthSafe* ds = DepthSafe::getInstance();
+    DepthSiMan* ds = DepthSiMan::GetInstance();
 
-    ds->setDepthPreset(param.depthPreset);
-    ds->setWellWarnig(param.wellWarnig);
-    ds->setBrake(param.brake);
-    ds->setVelocityLimit(param.velocityLimit);
-    ds->setDepthWarning(param.depthWarning);
-    ds->setTotalDepth(param.totalDepth);
-    ds->setDepthBrake(param.depthBrake);
-    ds->setDepthVelocityLimit(param.depthVelocityLimit);
+    // ds->setDepthPreset(param.depthPreset);
+    // ds->setWellWarnig(param.wellWarnig);
+    // ds->setBrake(param.brake);
+    ds->setVelocitySiman(param.velocityLimit);
+    // ds->setDepthWarning(param.depthWarning);
+    // ds->setTotalDepth(param.totalDepth);
+    // ds->setDepthBrake(param.depthBrake);
 
     return true;
 }
@@ -449,7 +447,6 @@ bool HBDatabase::updateDepthSafe(const _DepthSafe &param)
     query.bindValue(":depthWarning", param.depthWarning);
     query.bindValue(":totalDepth", param.totalDepth);
     query.bindValue(":depthBrake", param.depthBrake);
-    query.bindValue(":depthVelocityLimit", param.depthVelocityLimit);
     query.bindValue(":id", param.id);
 
     if (!query.exec()) {
@@ -467,18 +464,17 @@ bool HBDatabase::updateDepthSafe(const _DepthSafe &param)
 
 bool HBDatabase::updateDepthSafeFromInstance()
 {
-    DepthSafe* ds = DepthSafe::getInstance();
+    DepthSiMan* ds = DepthSiMan::GetInstance();
 
     _DepthSafe param;
     param.id = 1;
-    param.depthPreset = ds->DepthPreset();
-    param.wellWarnig = ds->WellWarnig();
-    param.brake = ds->Brake();
-    param.velocityLimit = ds->VelocityLimit();
-    param.depthWarning = ds->DepthWarning();
-    param.totalDepth = ds->TotalDepth();
-    param.depthBrake = ds->DepthBrake();
-    param.depthVelocityLimit = ds->DepthVelocityLimit();
+    // param.depthPreset = ds->DepthPreset();
+    // param.wellWarnig = ds->WellWarnig();
+    // param.brake = ds->Brake();
+    param.velocityLimit = ds->VelocitySiman();
+    // param.depthWarning = ds->DepthWarning();
+    // param.totalDepth = ds->TotalDepth();
+    // param.depthBrake = ds->DepthBrake();
 
     return updateDepthSafe(param);
 }

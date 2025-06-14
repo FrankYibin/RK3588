@@ -167,6 +167,10 @@ public:
         DISTANCE_LOWER_WELL_SETTING_H,  // 井底报警距离设置高字节
         DISTANCE_LOWER_WELL_SETTING_L,  //   井底报警距离设置低字节
         SLOPE_ANGLE_WELL_SETTING,       // 大斜度井斜度设置
+        DEPTH_START_SETTING_H,
+        DEPTH_START_SETTING_L,
+        DEPTH_FINISH_SETTING_H,
+        DEPTH_FINISH_SETTING_L,
         MAX_REGISTR
 
     };

@@ -79,11 +79,9 @@ Item{
             regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
         }
         // text: "8081"
-        text:DepthMeter.CurrentDepth
+        text: AutoTestSpeed.DepthDeviationCurrent
         onlyForNumpad: true
-        onSignalClickedEvent: {
-            mainWindow.showPrimaryNumpad(qsTr("深度倒计"), " ", 3, 0, 99999, "0.123")
-        }
+        enabled: false
     }
 
     Text {

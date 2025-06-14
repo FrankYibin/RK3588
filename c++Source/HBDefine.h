@@ -71,7 +71,7 @@ struct _DepthSafe {
     int depthPreset;
     int wellWarnig;
     int brake;
-    int velocityLimit;
+    QString velocityLimit;
     int depthWarning;
     int totalDepth;
     int depthBrake;

@@ -34,6 +34,12 @@ Item{
         }
     }
 
+    Component.onCompleted:
+    {
+        AutoTestSpeed.IsDownCountStart = false;
+        AutoTestSpeed.DepthDeviationSetting = "0.00"
+    }
+
     Item
     {
         id: preset
@@ -68,14 +74,12 @@ Item{
                 validator: RegularExpressionValidator{
                     regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                 }
-                // text: qsTr("8081")
-                text:AutoTestSpeed.DepthCountDown
+                text: AutoTestSpeed.DepthDeviationSetting
                 onlyForNumpad: true
                 onSignalClickedEvent: {
                     mainWindow.showPrimaryNumpad(qsTr("请输入深度倒计值"), " ", 3, 0, 99999, textSDepthPreset.text,textSDepthPreset,function(val) {
-                        //TODO Need to Unit exchange function
-                        AutoTestSpeed.DepthCountDown = val;
-                        ModbusClient.writeRegister(HQmlEnum.DEPTH_COUNTDOWN,[parseInt(val)])
+                        AutoTestSpeed.DepthDeviationSetting = val;
+                        // ModbusClient.writeRegister(HQmlEnum.DEPTH_COUNTDOWN,[parseInt(val)])
                     })
                 }
             }
@@ -98,6 +102,8 @@ Item{
                 text: qsTr("确定")
                 onClicked:
                 {
+                    ModbusClient.writeRegister(HQmlEnum.DEPTH_CURRENT_DELTA, AutoTestSpeed.DepthDeviationSetting)
+                    AutoTestSpeed.startDepthDownCount();
                     mainWindow.showDepthCountDown()
                 }
             }
@@ -139,8 +145,8 @@ Item{
                 validator: RegularExpressionValidator{
                     regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                 }
-                // text: "8081"
-                text: HBHome.DepthCurrent
+
+                text: AutoTestSpeed.DepthDeviationCurrent
                 onlyForNumpad: true
                 enabled: false
             }

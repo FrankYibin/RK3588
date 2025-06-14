@@ -26,6 +26,7 @@ public:
         HEX2SECOND,
         HEX2DEGREE,
         HEX2INTEGER,
+        HEX2DECIMAL,
         END_FROMAT
     };
 private:
