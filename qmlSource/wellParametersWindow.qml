@@ -384,7 +384,7 @@ Item{
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入拉力磅吨位"), " ", 3, 0, 99999, textTensionUnit.text,textTensionUnit,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入拉力棒吨位"), " ", 2, 0, 99999, textTensionUnit.text, textTensionUnit, function(val) {
                             WellParameter.TonnageTensionStick = val;
                             ModbusClient.writeRegister(HQmlEnum.TONNAGE_TENSION_STICK, val)
                         })
@@ -487,4 +487,19 @@ Item{
     }
 }
 
+        HBPrimaryButton
+        {
+            id: buttonSave
+            width: Math.round(125 * Style.scaleHint)
+            height: Math.round(40 * Style.scaleHint)
+            text: qsTr("保存")
+            onClicked:
+            {
+                // controlLimitNumpad.visible = false
+                HBDatabase.updateWellParameterFromInstance()
+                //                  console.log("是否成功更新数据库：", ok)
+                profileLayout.visible = false
+                mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
+            }
+        }
 

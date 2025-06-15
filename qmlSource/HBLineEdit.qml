@@ -34,6 +34,7 @@ TextField {
     maximumLength: 32
     echoMode:TextInput.Normal
     readOnly: false
+    focus: true
     verticalAlignment: TextInput.AlignVCenter
     validator: RegExpValidator
     {

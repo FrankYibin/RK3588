@@ -1301,19 +1301,19 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
     switch(DepthSetting::GetInstance()->VelocityUnit())
     {
     case DepthSetting::FT_PER_HOUR:
-        query.bindValue(":velocityUnit", "ft/hour");
+        query.bindValue(":velocityUnit", "ft/h");
         break;
     case DepthSetting::FT_PER_MIN:
         query.bindValue(":velocityUnit", "ft/min");
         break;
     case DepthSetting::M_PER_HOUR:
-        query.bindValue(":velocityUnit", "m/hour");
+        query.bindValue(":velocityUnit", "m/h");
         break;
     case DepthSetting::M_PER_MIN:
         query.bindValue(":velocityUnit", "m/min");
         break;
     default:
-        query.bindValue(":velocityUnit", "m/hour");
+        query.bindValue(":velocityUnit", "m/h");
         break;
     }
     query.bindValue(":tensions", modbusData.tensions);

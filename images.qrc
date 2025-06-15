@@ -79,5 +79,6 @@
         <file>images/userIcon.png</file>
         <file>images/hdmi.jpg</file>
         <file>images/video.jpg</file>
+        <file>images/manual.jpg</file>
     </qresource>
 </RCC>

@@ -57,6 +57,7 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.WellNumber
+                    focus: true
                     onAccepted: {
                         WellParameter.WellNumber = text;
                         //TODO need to send number using modbus
