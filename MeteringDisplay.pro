@@ -1,4 +1,5 @@
 QT += quick gui charts serialport serialbus sql multimedia concurrent core
+# QT += webengine
 CONFIG += c++11
 #qtquickcompiler
 
