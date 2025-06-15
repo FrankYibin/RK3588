@@ -62,5 +62,5 @@ TextField {
         accepted()
     }
 
-    onFocusChanged: if (!focus) accepted()
+//    onFocusChanged: if (!focus) accepted()
 }

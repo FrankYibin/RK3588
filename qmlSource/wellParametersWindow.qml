@@ -370,7 +370,7 @@ Item{
                 {
                     id: titleTensionUnit
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("拉力磅吨位：")
+                    text: qsTr("拉力棒吨位：")
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
