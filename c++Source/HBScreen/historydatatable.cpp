@@ -1,4 +1,4 @@
-#include "historydatatable.h"
+﻿#include "historydatatable.h"
 #include "c++Source/HBData/hbdatabase.h"
 #include <QDebug>
 
@@ -66,34 +66,22 @@ QHash<int, QByteArray> HistoryDataTable::roleNames() const
     };
 }
 
-//void HistoryDataTable::resetModel()
-//{
-//    beginResetModel();
-//    m_dataList.clear();
+void HistoryDataTable::setRange(const QString &startIso, const QString &endIso)
+{
+    QDateTime s = QDateTime::fromString(startIso, Qt::ISODate);
+    QDateTime e = QDateTime::fromString(endIso,   Qt::ISODate);
+    if (!s.isValid() || !e.isValid()) {
+        qWarning() << "HistoryDataTable: invalid time strings";
+        return;
+    }
+    if (s == m_start && e == m_end)
+        return;
 
-//    for (int i = 0; i < 15; ++i) {
-//        m_dataList.append({
-//            i,
-//            "陕30H-3",
-//            "2025-4-80",
-//            "射孔",
-//            "1",
-//            100,
-//            100,
-//            "m/min",
-//            50,
-//            1,
-//            "kg",
-//            255,
-//            101,
-//            100,
-//            "无"
-//        });
-//    }
+    m_start = s;
+    m_end   = e;
+    loadFromDatabase(m_start, m_end);
 
-//    endResetModel();
-//}
-
+}
 
 void HistoryDataTable::loadFromDatabase()
 {
@@ -103,4 +91,11 @@ void HistoryDataTable::loadFromDatabase()
           qDebug() << "HistoryDataTable: 数据库中没有历史数据或加载失败";
       }
       endResetModel();
+}
+
+void HistoryDataTable::loadFromDatabase(const QDateTime &start, const QDateTime &end)
+{
+    beginResetModel();
+    m_dataList = HBDatabase::GetInstance().loadHistoryData(start, end);
+    endResetModel();
 }

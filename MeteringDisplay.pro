@@ -47,6 +47,7 @@ SOURCES += main.cpp \
     c++Source/HBScreen/hbhome.cpp \
     c++Source/HBScreen/history.cpp \
     c++Source/HBScreen/historydatatable.cpp \
+    c++Source/HBScreen/historyoperationmodel.cpp \
     c++Source/HBScreen/network.cpp \
     c++Source/HBScreen/rs232.cpp \
     c++Source/HBScreen/tensiometer.cpp \
@@ -101,6 +102,7 @@ HEADERS += \
     c++Source/HBScreen/hbhome.h \
     c++Source/HBScreen/history.h \
     c++Source/HBScreen/historydatatable.h \
+    c++Source/HBScreen/historyoperationmodel.h \
     c++Source/HBScreen/network.h \
     c++Source/HBScreen/rs232.h \
     c++Source/HBScreen/tensiometer.h \

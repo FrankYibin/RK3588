@@ -128,6 +128,7 @@ Item{
                     onCurrentIndexChanged: {
                         WellParameter.WellType = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.WELL_TYPE, currentIndex)
+                        console.log("comboWellType.text:" + WellParameter.WellType)
                     }
                 }
 

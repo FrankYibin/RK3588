@@ -1,4 +1,4 @@
-#ifndef HISTORYDATATABLE_H
+﻿#ifndef HISTORYDATATABLE_H
 #define HISTORYDATATABLE_H
 
 #include <QAbstractTableModel>
@@ -35,12 +35,21 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    Q_INVOKABLE void setRange(const QString& startIso,
+                              const QString& endIso);
+
 //    Q_INVOKABLE void resetModel();
 
     void loadFromDatabase();
 
+    Q_INVOKABLE void loadFromDatabase(const QDateTime& start,
+                          const QDateTime& end);
+
 private:
     QList<HistoryData> m_dataList;
+
+    QDateTime m_start;
+    QDateTime m_end;
 };
 
 #endif // HISTORYDATATABLE_H

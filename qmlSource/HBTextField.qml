@@ -22,7 +22,7 @@ TextField {
     property alias text: hbTextField.text
     property bool onlyForNumpad: false
     property bool isSelectedAll: false
-    property int fontSize: Math.round(Style.style6 * Style.scaleHint)
+    property int fontSize: Math.round(Style.style5 * Style.scaleHint)
     property string backgroundColor: Style.hbFrameBackgroundColor
     signal signalClickedEvent()
     implicitWidth: parent.width
