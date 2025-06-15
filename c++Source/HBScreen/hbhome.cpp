@@ -1,10 +1,12 @@
 ﻿#include "hbhome.h"
-
+#include "tensiometer.h"
 HBHome* HBHome::_ptrHome = nullptr;
 
 HBHome::HBHome(QObject *parent)
     : QObject{parent}
-{}
+{
+    setStatusNetwork(1);
+}
 
 HBHome *HBHome::GetInstance()
 {
@@ -189,6 +191,71 @@ void HBHome::setStatusNetwork(const int status)
     m_StatusNetwork = status;
     emit StatusNetworkChanged();
 
+}
+
+QString HBHome::TensiometerNumber() const
+{
+    return m_TensiometerNumber;
+}
+void HBHome::setTensiometerNumber(const QString value)
+{
+    if(m_TensiometerNumber == value)
+        return;
+    m_TensiometerNumber = value;
+    emit TensiometerNumberChanged();
+}
+QString HBHome::TensionEncoder() const
+{
+    return m_TensionEncoder;
+}
+void HBHome::setTensionEncoder(const QString value)
+{
+    if(m_TensionEncoder == value)
+        return;
+    m_TensionEncoder = value;
+    emit TensionEncoderChanged();
+}
+
+void HBHome::setTensionEncoder(const int value)
+{
+    switch(value)
+    {
+    case Tensiometer::WIRE:
+        setTensionEncoder(tr("有线"));
+        break;
+    case Tensiometer::WIRELESS:
+        setTensionEncoder(tr("无线"));
+        break;
+    case Tensiometer::ANALOG_WIRE:
+        setTensionEncoder(tr("模拟有线"));
+        break;
+    case Tensiometer::ANALOG_WIRELESS:
+        setTensionEncoder(tr("模拟无线"));
+        break;
+    default:
+        setTensionEncoder(tr("有线"));
+        break;
+    }
+}
+
+QString HBHome::StatusTensiometerOnline() const
+{
+    return m_StatusTensiometerOnline;
+}
+void HBHome::setStatusTensiometerOnline(const QString status)
+{
+    if(m_StatusTensiometerOnline == status)
+        return;
+    m_StatusTensiometerOnline = status;
+    emit StatusTensiometerOnlineChanged();
+}
+
+void HBHome::setStatusTensiometerOnline(const int status)
+{
+    if(status == 0)
+        setStatusTensiometerOnline(tr("离线"));
+    else
+        setStatusTensiometerOnline(tr("在线"));
 }
 
 

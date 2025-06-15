@@ -46,6 +46,10 @@ class HBHome : public QObject
     //NetworkStatus   网络状态
     Q_PROPERTY(int StatusNetwork READ StatusNetwork WRITE setStatusNetwork NOTIFY StatusNetworkChanged)
 
+    Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY TensiometerNumberChanged)
+    Q_PROPERTY(QString TensionEncoder READ TensionEncoder WRITE setTensionEncoder NOTIFY TensionEncoderChanged)
+    Q_PROPERTY(QString StatusTensiometerOnline READ StatusTensiometerOnline WRITE setStatusTensiometerOnline NOTIFY StatusTensiometerOnlineChanged)
+
 public:
 
     static HBHome* GetInstance();
@@ -89,6 +93,17 @@ public:
     Q_INVOKABLE int StatusNetwork() const;
     Q_INVOKABLE void setStatusNetwork(const int status);
 
+    Q_INVOKABLE QString TensiometerNumber() const;
+    Q_INVOKABLE void setTensiometerNumber(const QString value);
+
+    Q_INVOKABLE QString TensionEncoder() const;
+    Q_INVOKABLE void setTensionEncoder(const QString value);
+    void setTensionEncoder(const int value);
+
+    Q_INVOKABLE QString StatusTensiometerOnline() const;
+    Q_INVOKABLE void setStatusTensiometerOnline(const QString status);
+    void setStatusTensiometerOnline(const int status);
+
 
 
 signals:
@@ -119,6 +134,10 @@ signals:
 
     void StatusNetworkChanged();
 
+    void TensiometerNumberChanged();
+    void TensionEncoderChanged();
+    void StatusTensiometerOnlineChanged();
+
 private:
     explicit HBHome(QObject *parent = nullptr);
 
@@ -141,6 +160,9 @@ private:
     QString m_TensionCableHead;
     int m_StatusLimitedPara;
     int m_StatusNetwork;
+    QString m_TensiometerNumber;
+    QString m_TensionEncoder;
+    QString m_StatusTensiometerOnline;
 
 };
 

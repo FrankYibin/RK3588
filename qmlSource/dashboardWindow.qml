@@ -386,7 +386,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                    // text: "100"
-                    text: HBHome.PulseCount
+                    text: HBHome.TensiometerNumber
                     enabled: false
                 }
             }
@@ -526,7 +526,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                    // text: "100"
-                    text: HBHome.PulseCount
+                    text: HBHome.TensionEncoder
                     enabled: false
                 }
             }
@@ -661,7 +661,7 @@ Item{
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
                    // text: "100"
-                    text: HBHome.PulseCount
+                    text: HBHome.StatusTensiometerOnline
                     enabled: false
                 }
             }

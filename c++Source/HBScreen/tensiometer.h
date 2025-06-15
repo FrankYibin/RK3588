@@ -43,6 +43,14 @@ public:
         QString Scale;      //Json format
     };
 
+    enum TENSIOMETER_ENCODER
+    {
+        WIRE = 0,
+        WIRELESS,
+        ANALOG_WIRE,
+        ANALOG_WIRELESS
+    };
+
     static Tensiometer* GetInstance();
     Q_INVOKABLE QString TensiometerNumber() const;
     Q_INVOKABLE void setTensiometerNumber(const QString number);

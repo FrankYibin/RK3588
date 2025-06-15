@@ -18,7 +18,12 @@
 #include <cstring>
 #include <QVariant>
 #include <stdio.h>
+
+#ifdef RK3588
 #include <arpa/inet.h>
+#else
+#include <winsock2.h>
+#endif
 
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_RecvReg;
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_PrevRecvReg;
@@ -887,21 +892,16 @@ void HBModbusClient::handleRawData()
             strData = updateTonnageStick(m_RecvReg.m_TonnageTensionStick.Data, m_RecvReg.m_TonnageTensionStick.Address);
             WellParameter::GetInstance()->setTonnageTensionStick(strData);
             break;
-        // case HQmlEnum::TENSIOMETER_NUM_H:
-        //     if(m_PrevRecvReg.m_TensiometerNum.Data != m_RecvReg.m_TensiometerNum.Data)
-        //     {
-        //         strData = updateIntegerInterface(m_RecvReg.m_TensiometerNum.Data, m_RecvReg.m_TensiometerNum.Address);
-        //         Tensiometer::GetInstance()->setTensiometerNumber(strData);
-        //     }
-        //     break;
-        // case HQmlEnum::TENSIOMETER_ENCODER:
-        //     if(m_PrevRecvReg.m_TensiometerEncoder.Data != m_RecvReg.m_TensiometerEncoder.Data)
-        //     {
-
-        //         iData = updateTensiometerEncoder(m_RecvReg.m_TensiometerEncoder.Data, m_RecvReg.m_TensiometerEncoder.Address);
-        //         Tensiometer::GetInstance()->setTensiometerEncoder(iData);
-        //     }
-        //     break;
+        case HQmlEnum::TENSIOMETER_NUM_H:
+            strData = updateIntegerInterface(m_RecvReg.m_TensiometerNum.Data, m_RecvReg.m_TensiometerNum.Address);
+            // Tensiometer::GetInstance()->setTensiometerNumber(strData);
+            HBHome::GetInstance()->setTensiometerNumber(strData);
+            break;
+        case HQmlEnum::TENSIOMETER_ENCODER:
+            iData = updateTensiometerEncoder(m_RecvReg.m_TensiometerEncoder.Data, m_RecvReg.m_TensiometerEncoder.Address);
+            // Tensiometer::GetInstance()->setTensiometerEncoder(iData);
+            HBHome::GetInstance()->setTensionEncoder(iData);
+            break;
         // case HQmlEnum::TENSIOMETER_ANALOG:
         //         iData = updateTensiometerAnalog(m_RecvReg.m_TensiometerAnalog.Data, m_RecvReg.m_TensiometerAnalog.Address);
         //         Tensiometer::GetInstance()->setTensiometerAnalog(iData);
@@ -1660,6 +1660,7 @@ void HBModbusClient::handleDevice()
     AutoTestSpeed::GetInstance()->setEnableVelocityControl(m_IO_Value0.bits_Value0.m_EnableVelocityControl);
     DepthSiMan::GetInstance()->setIndicateSimanAlert(m_IO_Value1.bits_Value1.m_IndicateSimanAlert);
     DepthSiMan::GetInstance()->setIndicateSimanStop(m_IO_Value1.bits_Value1.m_IndicateSimanStop);
+    HBHome::GetInstance()->setStatusTensiometerOnline(m_IO_Value0.bits_Value0.m_StatusTensiometerOnline);
 }
 
 void HBModbusClient::insertDataToDatabase()
@@ -1686,6 +1687,7 @@ void HBModbusClient::insertDataToDatabase()
 
 void HBModbusClient::Insert4GData()
 {
+#ifdef RK3588
     QByteArray array;
     int deep    = m_RecvReg.m_DepthCurrent.Data;
     int speed   = m_RecvReg.m_VelocityCurrent.Data;
@@ -1700,8 +1702,10 @@ void HBModbusClient::Insert4GData()
     len = MakeReport(Value, len, Buffer);
     array.append(Buffer, len);
     _ptrSocketObj->insertMessageToMap(0, array);
+#endif
 }
 
+#ifdef RK3588
 int HBModbusClient::MakeReportData(char* pBuffer, int deep, int speed, int tension, int tension_delta, short pulse, short kValue, char* wellNum)
 {
     if (!pBuffer)
@@ -1794,3 +1798,4 @@ int HBModbusClient::MakeReport(const char* pData, int len, char* pOutbuf)
     pOutbuf[index++] = crc;
     return index;
 }
+#endif
