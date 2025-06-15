@@ -183,3 +183,34 @@ void HBUtilityClass::CalculateSmallest(qreal &a_axisVal, qreal a_val)
     if(a_axisVal > a_val)
         a_axisVal = a_val;
 }
+
+void HBUtilityClass::TestFaceDetection()
+{
+    // 创建 QProcess 对象
+    QProcess process;
+
+    // 设置要执行的命令
+    QString program = "./faceTest.sh"; // 你可以替换为其他 Linux 命令
+    QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
+    arguments.append("-compare");
+    arguments.append("/opt/face_offline_sdk/images/1.jpg");
+
+    // 启动进程
+    process.start(program, arguments);
+
+    // 等待进程结束
+    process.waitForFinished();
+
+    // 获取命令输出
+    QString output = process.readAllStandardOutput();
+    QString error = process.readAllStandardError();
+
+    // 输出结果
+    if (!output.isEmpty()) {
+        qDebug() << "Command Output 1111111111111111111:" << output;
+    }
+    if (!error.isEmpty()) {
+        qDebug() << "Command Error:" << error;
+    }
+}
+

@@ -244,13 +244,15 @@ Item{
         anchors.right: basicSection.right
         anchors.rightMargin: Math.round(10 * Style.scaleHint)
         anchors.bottom: basicSection.bottom
-        spacing: Math.round(20 * Style.scaleHint)
+        spacing: Math.round(5 * Style.scaleHint)
 
         property int rowHeight: 25
-        property int titleWidth: 100
-        property int textWidth: 70
+        property int titleWidth2: 100
+        property int textWidth: 100
+        property int titleWidth1: 80
+        property int titleWidth3: 80
         property int rowSpacing: 5
-        property int columnSpacing: 40
+        property int columnSpacing: 20
         property int txtFontSize: Style.style3
         property int txtFontFieldSize: Style.style4
 
@@ -270,7 +272,7 @@ Item{
                 Text
                 {
                     id: titlePulse
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth1 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("脉冲数：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -298,7 +300,7 @@ Item{
                 Text
                 {
                     id: titleMaxVelocity
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth1 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("极限速度：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -334,7 +336,7 @@ Item{
                 Text
                 {
                     id: titleHarnessTension
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth1 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("揽头张力：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -360,12 +362,41 @@ Item{
                     color: Style.whiteFontColor
                 }
             }
+
+            Row
+            {
+                id: tensiometerNum
+                width: parent.width
+                height: Math.round(sensorInfo.rowHeight * Style.scaleHint)
+                spacing: Math.round(sensorInfo.rowSpacing * Style.scaleHint)
+                Text
+                {
+                    id: titleTensiometerNum
+                    width: Math.round(sensorInfo.titleWidth1 * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("张力计编号：")
+                    font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                    verticalAlignment: Text.AlignVCenter
+                }
+                HBTextField {
+                    id: textTensiometerNum
+                    width: Math.round(sensorInfo.textWidth * Style.scaleHint)
+                    height: parent.height
+                    font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+                   // text: "100"
+                    text: HBHome.PulseCount
+                    enabled: false
+                }
+            }
+
         }
 
         Column
         {
             id: middleInfo
-            width: Math.round(210 * Style.scaleHint)
+            width: Math.round(240 * Style.scaleHint)
             height: parent.height
             spacing: Math.round(sensorInfo.columnSpacing * Style.scaleHint)
             Row
@@ -377,7 +408,7 @@ Item{
                 Text
                 {
                     id: titleMaxTension
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth2 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("极限张力：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -414,7 +445,7 @@ Item{
                 Text
                 {
                     id: titleMaxTensionIncrement
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth2 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("极限张力增量：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -451,7 +482,7 @@ Item{
                 Text
                 {
                     id: titleMaxParameterStatus
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth2 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("极限参数状态：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -470,12 +501,42 @@ Item{
                     enabled: false
                 }
             }
+
+
+            Row
+            {
+                id: tensiometerType
+                width: parent.width
+                height: Math.round(sensorInfo.rowHeight * Style.scaleHint)
+                spacing: Math.round(sensorInfo.rowSpacing * Style.scaleHint)
+                Text
+                {
+                    id: titleTensiometerType
+                    width: Math.round(sensorInfo.titleWidth2 * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("张力计类型：")
+                    font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                    verticalAlignment: Text.AlignVCenter
+                }
+                HBTextField {
+                    id: textTensiometerType
+                    width: Math.round(sensorInfo.textWidth * Style.scaleHint)
+                    height: parent.height
+                    font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+                   // text: "100"
+                    text: HBHome.PulseCount
+                    enabled: false
+                }
+            }
+
         }
 
         Column
         {
             id: rightInfo
-            width: Math.round(240 * Style.scaleHint)
+            width: Math.round(220 * Style.scaleHint)
             height: parent.height
             spacing: Math.round(sensorInfo.columnSpacing * Style.scaleHint)
             Row
@@ -487,7 +548,7 @@ Item{
                 Text
                 {
                     id: titleTargetDepth
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth3 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("目的深度：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -525,7 +586,7 @@ Item{
                 Text
                 {
                     id: titleK_Value
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth3 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("K值：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -555,7 +616,7 @@ Item{
                 Text
                 {
                     id: titleNetworkStatus
-                    width: Math.round(sensorInfo.titleWidth * Style.scaleHint)
+                    width: Math.round(sensorInfo.titleWidth3 * Style.scaleHint)
                     height: parent.height
                     text: qsTr("网络状态：")
                     font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
@@ -575,6 +636,36 @@ Item{
                     enabled: false
                 }
             }
+
+
+            Row
+            {
+                id: tensiometerStatus
+                width: parent.width
+                height: Math.round(sensorInfo.rowHeight * Style.scaleHint)
+                spacing: Math.round(sensorInfo.rowSpacing * Style.scaleHint)
+                Text
+                {
+                    id: titleTensiometerStatus
+                    width: Math.round(sensorInfo.titleWidth3 * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("张力计状态：")
+                    font.pixelSize: Math.round(sensorInfo.txtFontSize * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                    verticalAlignment: Text.AlignVCenter
+                }
+                HBTextField {
+                    id: textTensiometerStatus
+                    width: Math.round(sensorInfo.textWidth * Style.scaleHint)
+                    height: parent.height
+                    font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+                   // text: "100"
+                    text: HBHome.PulseCount
+                    enabled: false
+                }
+            }
+
         }
     }
 }

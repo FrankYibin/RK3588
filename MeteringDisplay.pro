@@ -71,7 +71,6 @@ SOURCES += main.cpp \
     c++Source/languageitem.cpp \
     c++Source/languagemodel.cpp \
     c++Source/login.cpp \
-    c++Source/netSend.cpp \
     c++Source/productionruninterface.cpp \
     c++Source/protocolformat.cpp \
     c++Source/quickcrc32algorithm.cpp \
@@ -131,7 +130,6 @@ HEADERS += \
     c++Source/languagemodel.h \
     c++Source/login.h \
     c++Source/logindef.h \
-    c++Source/netSend.h \
     c++Source/productionruninterface.h \
     c++Source/protocolformat.h \
     c++Source/quickcrc32algorithm.h \

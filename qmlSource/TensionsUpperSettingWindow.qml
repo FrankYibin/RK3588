@@ -123,7 +123,7 @@ Item{
                     id: unitHarnessWeightPerEachKilometers
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
+                    text: qsTr("kg")
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -198,7 +198,7 @@ Item{
                     id: unitSensorWeight
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
+                    text: qsTr("kg")
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -243,7 +243,7 @@ Item{
                     id: unitHarnessPullingStrength
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
+                    text: qsTr("kg")
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -289,7 +289,7 @@ Item{
                     id: unitWeaknessPullingStrength
                     width: Math.round(textWidthUnit * Style.scaleHint)
                     height: parent.height
-                    text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
+                    text: qsTr("kg")
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -483,7 +483,7 @@ Item{
                     id: titleCurrentDepth1
                     width: Math.round(textWidthColumn3 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("当前深度1") + ":"
+                    text: qsTr("编码器1深度") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -502,7 +502,7 @@ Item{
                     text: TensionSafety.DepthEncoder1
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入当前深度1", "s", 3, 0, 99999, textCurrentDepth1.text,textCurrentDepth1,function(val) {
+                        mainWindow.showPrimaryNumpad("请输入编码器1深度", "s", 3, 0, 99999, textCurrentDepth1.text,textCurrentDepth1,function(val) {
                             TensionSafety.DepthEncoder1 = val;
                             ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER_1_H, val)
                         })
@@ -618,7 +618,7 @@ Item{
                     id: titleCurrentDepth2
                     width: Math.round(textWidthColumn3 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("当前深度2") + ":"
+                    text: qsTr("编码器2深度") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -638,7 +638,7 @@ Item{
                     text: TensionSafety.DepthEncoder2
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入当前深度2", "s", 3, 0, 99999, textCurrentDepth2.text,textCurrentDepth2,function(val) {
+                        mainWindow.showPrimaryNumpad("请输入编码器2深度", "s", 3, 0, 99999, textCurrentDepth2.text,textCurrentDepth2,function(val) {
                             TensionSafety.DepthEncoder2 = val;
                             ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER_2_H, val)
                         })
@@ -754,7 +754,7 @@ Item{
                     id: titleCurrentDepth3
                     width: Math.round(textWidthColumn3 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("当前深度3") + ":"
+                    text: qsTr("编码器3深度") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -774,7 +774,7 @@ Item{
                     text:TensionSafety.DepthEncoder3
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入当前深度3", "s", 3, 0, 99999, textCurrentDepth3.text,textCurrentDepth3,function(val) {
+                        mainWindow.showPrimaryNumpad("请输入编码器3深度", "s", 3, 0, 99999, textCurrentDepth3.text,textCurrentDepth3,function(val) {
                             TensionSafety.DepthEncoder3 = val;
                             ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER_3_H, val)
                         })

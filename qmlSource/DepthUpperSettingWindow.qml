@@ -71,7 +71,7 @@ Item{
                 }
                 HBTextField
                 {
-                    id: textDepthPreset
+                    id: textDepthUpperPreset
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
@@ -79,11 +79,11 @@ Item{
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("192")
                     text: DepthSiMan.DistanceUpperWellSetting
+
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthUpperPreset.text,textDepthUpperPreset,function(val){
                             DepthSiMan.DistanceUpperWellSetting = val;
                             ModbusClient.writeRegister(HQmlEnum.DISTANCE_UPPER_WELL_SETTING_H, val)
                         })
@@ -130,7 +130,7 @@ Item{
                     id: titleDepthLowerPreset
                     width: Math.round(textWidthColumn1 * Style.scaleHint)
                     height: parent.height
-                    text: qsTr("距井口距离") + ":"
+                    text: qsTr("距井底距离") + ":"
                     font.family: "宋体"
                     font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
@@ -149,7 +149,7 @@ Item{
                     text: DepthSiMan.DistanceLowerWellSetting
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthLowerPreset.text,textDepthLowerPreset,function(val){
                             DepthSiMan.DistanceLowerWellSetting = val;
                             ModbusClient.writeRegister(HQmlEnum.DISTANCE_LOWER_WELL_SETTING_H, val)
                         })
@@ -273,7 +273,7 @@ Item{
                     text: DepthSiMan.DepthStartSetting
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井口距离值"), " ", 3, 0, 99999, textComplicatedStartPreset.text,textComplicatedStartPreset,function(val){
                             DepthSiMan.DepthStartSetting = val;
                             ModbusClient.writeRegister(HQmlEnum.DEPTH_START_SETTING_H, val)
                         })
@@ -318,7 +318,7 @@ Item{
                     text: DepthSiMan.DepthFinishSetting
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入结束深度值"), " ", 3, 0, 99999, textDepthPreset.text,textDepthPreset,function(val){
+                        mainWindow.showPrimaryNumpad(qsTr("请输入结束深度值"), " ", 3, 0, 99999, textComplicatedFinishPreset.text,textComplicatedFinishPreset,function(val){
                             DepthSiMan.DepthFinishSetting = val;
                             ModbusClient.writeRegister(HQmlEnum.DEPTH_FINISH_SETTING_H, val)
                         })
@@ -386,7 +386,7 @@ Item{
                     onlyForNumpad: true
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("稳速"), " ", 3, 0, 99999, textDepthVelocityLimit.text,textDepthVelocityLimit,function(val){
-                            DepthSafe.VelocitySiman = val;
+                            DepthSiMan.VelocitySiman = val;
                             ModbusClient.writeRegister(HQmlEnum.VELOCITY_SIMAN_H, val)
                         })
                     }
@@ -428,6 +428,7 @@ Item{
                     rectHeight: Math.round(switchHeight * Style.scaleHint)
                     maxWidth: Math.round(optionHeight * Style.scaleHint)
                     maxHeight: maxWidth
+                    checked: (DepthSiMan.IndicateSimanAlert === 0) ? false : true
                     onCheckedChanged: {
                         if(checked === true)
                             DepthSiMan.IndicateSimanAlert = 1;
@@ -464,6 +465,7 @@ Item{
                     rectHeight: Math.round(switchHeight * Style.scaleHint)
                     maxWidth: Math.round(optionHeight * Style.scaleHint)
                     maxHeight: maxWidth
+                    checked: (DepthSiMan.IndicateSimanStop === 0) ? false : true
                     onCheckedChanged: {
                         if(checked === true)
                             DepthSiMan.IndicateSimanStop = 1;

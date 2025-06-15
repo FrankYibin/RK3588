@@ -105,6 +105,8 @@ private:
         RECV_DATA m_DistanceUpperWellSetting;
         RECV_DATA m_DistanceLowerWellSetting;
         RECV_DATA m_SlopeAngleWellSetting;
+        RECV_DATA m_DepthStartSetting;
+        RECV_DATA m_DepthFinishSetting;
     };
 
     union MODBUS_IO_VALUE0
@@ -275,6 +277,7 @@ private:
     // void updateVelocityLimited(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
     // void updateDepthEncoder(const int hexData, const int hexAddress);
+    QString updateTwoDecimal        (const int hexData, const int hexAddress);
 
     int     getDepthInterface       (const QString strData, const int hexAddress);
     int     getTensionInterface     (const QString strData, const int hexAddress);

@@ -376,26 +376,26 @@ void clientSocket::slotSocketStateChange(QAbstractSocket::SocketState socketStat
     {
     case QAbstractSocket::UnconnectedState:
         setSocketErrorCode(clientSocket::ConnectErr);
-        qDebug()<<"Socket status：UnconnectedState";
+        // qDebug()<<"Socket status：UnconnectedState";
         break;
     case QAbstractSocket::HostLookupState:
-        qDebug()<<"Socket status：HostLookupState";
+        // qDebug()<<"Socket status：HostLookupState";
         break;
     case QAbstractSocket::ConnectingState:
-        qDebug()<<"Socket status：ConnectingState";
+        // qDebug()<<"Socket status：ConnectingState";
         break;
     case QAbstractSocket::ConnectedState:
         setSocketErrorCode(clientSocket::NoErr);
         qDebug()<<"Socket status：ConnectedState";
         break;
     case QAbstractSocket::BoundState:
-        qDebug()<<"Socket status：BoundState";
+        // qDebug()<<"Socket status：BoundState";
         break;
     case QAbstractSocket::ClosingState:
-        qDebug()<<"Socket status：ClosingState";
+        // qDebug()<<"Socket status：ClosingState";
         break;
     case QAbstractSocket::ListeningState:
-        qDebug()<<"Socket status：ListeningState";
+        // qDebug()<<"Socket status：ListeningState";
         break;
     }
 }
@@ -417,7 +417,7 @@ void clientSocket::slotSocketConnecting()
         setSocketErrorCode(clientSocket::AlreadyConnected);
         return;
     }
-    qDebug()<<"reconnecting...";
+    // qDebug()<<"reconnecting...";
     this->connectToHost(m_HostAddress.toString(), m_port);
     if(!this->waitForConnected(MAX_CONNECT_WAIT_TIME_CLIENT))
     {

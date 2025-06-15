@@ -1,4 +1,5 @@
 ﻿#include "depthsiman.h"
+#include <QDebug>
 
 DepthSiMan* DepthSiMan::_ptrDepthSiMan = nullptr;
 

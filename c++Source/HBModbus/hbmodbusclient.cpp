@@ -12,7 +12,7 @@
 #include "c++Source/HBScreen/tensiometer.h"
 #include "c++Source/HBScreen/autotestspeed.h"
 #include "c++Source/HBUtility/hbutilityclass.h"
-#include "c++Source/netSend.h"
+#include "c++Source/HBScreen/depthsiman.h"
 #include <QtConcurrent>
 #include <QHash>
 #include <cstring>
@@ -78,8 +78,8 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
         handleCANbus();
         if(iTick10MS % 10 == 0)
         {
-            readRegisters   (0, HQmlEnum::MAX_REGISTR - 1);
-            readCoils       (0, HQmlEnum::MAX_COIL - 1);
+            readRegisters   (0, HQmlEnum::MAX_REGISTR);
+            readCoils       (0, HQmlEnum::MAX_COIL);
             Insert4GData    ();
         }
         else
@@ -274,10 +274,10 @@ void HBModbusClient::handleParseRegisters(const QModbusDataUnit &result)
             m_RecvReg.m_DepthTolerance.Data = tmpData;
             m_RecvReg.m_DepthTolerance.Address = currentAddress;
             break;
-        // case HQmlEnum::DEPTH_CURRENT_DELTA:
-        //     m_RecvReg.m_DepthCurrentDelta.Data = value;
-        //     m_RecvReg.m_DepthCurrentDelta.Address = currentAddress;
-        //     break;
+        case HQmlEnum::DEPTH_CURRENT_DELTA:
+            m_RecvReg.m_DepthCurrentDelta.Data = value;
+            m_RecvReg.m_DepthCurrentDelta.Address = currentAddress;
+            break;
         case HQmlEnum::TENSION_CURRENT_H: // TENSION_H
             m_RegisterData.HIGH_16BITS = value;
             break;
@@ -612,32 +612,54 @@ void HBModbusClient::handleParseRegisters(const QModbusDataUnit &result)
             m_RecvReg.m_TimeSafetyStop.Data = value;
             m_RecvReg.m_TimeSafetyStop.Address = currentAddress;
             break;
-        // case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_H:
-        //     m_RegisterData.HIGH_16BITS = value;
-        //     break;
-        // case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_L:
-        //     m_RegisterData.LOW_16BITS = value;
-        //     tmpData = m_RegisterData.HIGH_16BITS;
-        //     tmpData <<= 16;
-        //     tmpData |= m_RegisterData.LOW_16BITS;
-        //     m_RecvReg.m_DistanceUpperWellSetting.Data = tmpData;
-        //     m_RecvReg.m_DistanceUpperWellSetting.Address = currentAddress;
-        //     break;
-        // case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_H:
-        //     m_RegisterData.HIGH_16BITS = value;
-        //     break;
-        // case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_L:
-        //     m_RegisterData.LOW_16BITS = value;
-        //     tmpData = m_RegisterData.HIGH_16BITS;
-        //     tmpData <<= 16;
-        //     tmpData |= m_RegisterData.LOW_16BITS;
-        //     m_RecvReg.m_DistanceLowerWellSetting.Data = tmpData;
-        //     m_RecvReg.m_DistanceLowerWellSetting.Address = currentAddress;
-        //     break;
-        // case HQmlEnum::SLOPE_ANGLE_WELL_SETTING:
-        //     m_RecvReg.m_SlopeAngleWellSetting.Data = value;
-        //     m_RecvReg.m_SlopeAngleWellSetting.Address = currentAddress;
-        //     break;
+        case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DistanceUpperWellSetting.Data = tmpData;
+            m_RecvReg.m_DistanceUpperWellSetting.Address = currentAddress;
+            break;
+        case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DistanceLowerWellSetting.Data = tmpData;
+            m_RecvReg.m_DistanceLowerWellSetting.Address = currentAddress;
+            break;
+        case HQmlEnum::SLOPE_ANGLE_WELL_SETTING:
+            m_RecvReg.m_SlopeAngleWellSetting.Data = value;
+            m_RecvReg.m_SlopeAngleWellSetting.Address = currentAddress;
+            break;
+        case HQmlEnum::DEPTH_START_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DEPTH_START_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthStartSetting.Data = tmpData;
+            m_RecvReg.m_DepthStartSetting.Address = currentAddress;
+            break;
+        case HQmlEnum::DEPTH_FINISH_SETTING_H:
+            m_RegisterData.HIGH_16BITS = value;
+            break;
+        case HQmlEnum::DEPTH_FINISH_SETTING_L:
+            m_RegisterData.LOW_16BITS = value;
+            tmpData = m_RegisterData.HIGH_16BITS;
+            tmpData <<= 16;
+            tmpData |= m_RegisterData.LOW_16BITS;
+            m_RecvReg.m_DepthFinishSetting.Data = tmpData;
+            m_RecvReg.m_DepthFinishSetting.Address = currentAddress;
+            break;
         default:
             // 其他地址不处理
             break;
@@ -761,6 +783,10 @@ void HBModbusClient::handleRawData()
             HBHome::GetInstance()->setTensionLimitedDelta(strData);
             TensionSetting::GetInstance()->setTensionLimitedDelta(strData);
             break;
+        case HQmlEnum::VELOCITY_SIMAN_H:
+            strData = updateTwoDecimal(m_RecvReg.m_VelocitySiman.Data, m_RecvReg.m_VelocitySiman.Address);
+            DepthSiMan::GetInstance()->setVelocitySiman(strData);
+            break;
         case HQmlEnum::SCALE_CURRENT_H:
             strData = updateIntegerInterface(m_RecvReg.m_ScaleCurrent.Data, m_RecvReg.m_ScaleCurrent.Address);
             Tensiometer::GetInstance()->setScaleCurrent(strData);
@@ -851,6 +877,7 @@ void HBModbusClient::handleRawData()
         case HQmlEnum::SLOPE_ANGLE_WELL_SETTING:
             strData = updateSlopeAngleWell(m_RecvReg.m_SlopeAngleWellSetting.Data, m_RecvReg.m_SlopeAngleWellSetting.Address);
             WellParameter::GetInstance()->setSlopeAngleWellSetting(strData);
+            DepthSiMan::GetInstance()->setSlopeAngleWellSetting(strData);
             break;
         case HQmlEnum::CABLE_SPEC:
             iData = updateCableSpec(m_RecvReg.m_CableSpec.Data, m_RecvReg.m_CableSpec.Address);
@@ -879,6 +906,22 @@ void HBModbusClient::handleRawData()
         //         iData = updateTensiometerAnalog(m_RecvReg.m_TensiometerAnalog.Data, m_RecvReg.m_TensiometerAnalog.Address);
         //         Tensiometer::GetInstance()->setTensiometerAnalog(iData);
         //     break;
+        case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_H:
+            strData = updateTwoDecimal(m_RecvReg.m_DistanceUpperWellSetting.Data, m_RecvReg.m_DistanceUpperWellSetting.Address);
+            DepthSiMan::GetInstance()->setDistanceUpperWellSetting(strData);
+            break;
+        case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_H:
+            strData = updateTwoDecimal(m_RecvReg.m_DistanceLowerWellSetting.Data, m_RecvReg.m_DistanceLowerWellSetting.Address);
+            DepthSiMan::GetInstance()->setDistanceLowerWellSetting(strData);
+            break;
+        case HQmlEnum::DEPTH_START_SETTING_H:
+            strData = updateTwoDecimal(m_RecvReg.m_DepthStartSetting.Data, m_RecvReg.m_DepthStartSetting.Address);
+            DepthSiMan::GetInstance()->setDepthStartSetting(strData);
+            break;
+        case HQmlEnum::DEPTH_FINISH_SETTING_H:
+            strData = updateTwoDecimal(m_RecvReg.m_DepthFinishSetting.Data, m_RecvReg.m_DepthFinishSetting.Address);
+            DepthSiMan::GetInstance()->setDepthFinishSetting(strData);
+            break;
         default:
             break;
         }
@@ -923,10 +966,12 @@ void HBModbusClient::handleWriteCoil(const int address, const int value)
 
     if (auto *reply = _ptrModbus->sendWriteRequest(writeUnit, 1))
     {
-        connect(reply, &QModbusReply::finished, this, [reply]() {
+        connect(reply, &QModbusReply::finished, this, [reply, address]() {
             if (reply->error() == QModbusDevice::NoError)
             {
-                qDebug() << "Coil write successful";
+                m_mutexSending.lock();
+                m_RegisterSendMap.remove(address);
+                m_mutexSending.unlock();
             }
             else
             {
@@ -1138,6 +1183,16 @@ QString HBModbusClient::updateTonnageStick(const int hexData, const int hexAddre
     qDebug() << "Tonnage Tension Stick Address: " << hexAddress << "----- Updated Tonnage Tension Stick:" << hexData;
 #endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2TONAGE, hexData);
+    return strData;
+}
+
+QString HBModbusClient::updateTwoDecimal(const int hexData, const int hexAddress)
+{
+    QString strData = "";
+#ifndef RK3588
+    qDebug() << "Two Decimal Address: " << hexAddress << "----- Updated Two Decimal: " << hexData;
+ #endif
+    strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2DECIMAL, hexData);
     return strData;
 }
 
@@ -1495,12 +1550,12 @@ void HBModbusClient::handleParseCoils(const QModbusDataUnit &result)
         case HQmlEnum::INDICATE_MOVEUP_MOVEDOWN:
             m_IO_Value0.bits_Value0.m_IndicateMoveUpMoveDown = val ? 1 : 0;
             break;
-        // case HQmlEnum::INDICATE_SAFETY_STOP:
-        //     m_IO_Value1.bits_Value1.m_IndicateSafetyStop = val ? 1 : 0;
-        //     break;
-        // case HQmlEnum::INDICATE_SIMAN_ALERT:
-        //     m_IO_Value1.bits_Value1.m_IndicateSimanAlert = val ? 1 : 0;
-        //     break;
+        case HQmlEnum::INDICATE_SAFETY_STOP:
+            m_IO_Value1.bits_Value1.m_IndicateSafetyStop = val ? 1 : 0;
+            break;
+        case HQmlEnum::INDICATE_SIMAN_ALERT:
+            m_IO_Value1.bits_Value1.m_IndicateSimanAlert = val ? 1 : 0;
+            break;
         case HQmlEnum::INDICATE_SIMAN_STOP:
             m_IO_Value1.bits_Value1.m_IndicateSimanStop = val ? 1 : 0;
             break;
@@ -1603,6 +1658,8 @@ void HBModbusClient::handleDevice()
 {
     DepthSetting::GetInstance()->setDepthOrientation(m_IO_Value0.bits_Value0.m_OrientationDepth);
     AutoTestSpeed::GetInstance()->setEnableVelocityControl(m_IO_Value0.bits_Value0.m_EnableVelocityControl);
+    DepthSiMan::GetInstance()->setIndicateSimanAlert(m_IO_Value1.bits_Value1.m_IndicateSimanAlert);
+    DepthSiMan::GetInstance()->setIndicateSimanStop(m_IO_Value1.bits_Value1.m_IndicateSimanStop);
 }
 
 void HBModbusClient::insertDataToDatabase()

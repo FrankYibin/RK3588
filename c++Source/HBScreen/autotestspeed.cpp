@@ -1,4 +1,5 @@
 ﻿#include "autotestspeed.h"
+#include <QDebug>
 
 AutoTestSpeed* AutoTestSpeed::_ptrAutoTestSpeed = nullptr;
 
@@ -80,7 +81,8 @@ void AutoTestSpeed::setDepthDeviationCurrent(const QString current)
 
 void AutoTestSpeed::startDepthDownCount()
 {
-    m_DepthBase = m_DepthCurrent;
+    double tmp = m_DepthCurrent.toDouble() + m_DepthDeviationSetting.toDouble();
+    m_DepthBase = QString::number(tmp, 'f', 2);
     m_isDownCountStart = true;
 }
 
@@ -92,19 +94,17 @@ QString AutoTestSpeed::DepthCurrent() const
 void AutoTestSpeed::setDepthCurrent(QString depth)
 {
     QString str;
-    if(m_DepthCurrent == depth )
-        return;
     m_DepthCurrent = depth;
     if(m_isDownCountStart == true)
     {
-        double delta = m_DepthCurrent.toDouble() - m_DepthBase.toDouble();
+        double delta = m_DepthBase.toDouble() - m_DepthCurrent.toDouble();
         str = QString::number(delta, 'f', 2); // 'f' for fixed-point, 2 decimal places
     }
     else
     {
         str = "0.00";
-        setDepthDeviationCurrent(str);
     }
+    setDepthDeviationCurrent(str);
 }
 
 bool AutoTestSpeed::IsDownCountStart() const

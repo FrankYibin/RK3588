@@ -54,6 +54,8 @@ public:
     void CalculateLargest(qreal &a_axisVal, qreal a_val);
     void CalculateSmallest(qreal &a_axisVal, qreal a_val);
 
+    void TestFaceDetection();
+
 protected:
     HBUtilityClass();
 };

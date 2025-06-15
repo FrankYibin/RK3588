@@ -182,6 +182,7 @@ int main(int argc, char *argv[])
 
 //    qDebug() << "OPENCV Version: " << CV_VERSION;
 //    std::cout << "Video I/O support: " << cv::getBuildInformation() << std::endl;
+    HBUtilityClass::GetInstance()->TestFaceDetection();
 
     if(QFile::exists(logUrl) == true)
         QFile::remove(logUrl);
