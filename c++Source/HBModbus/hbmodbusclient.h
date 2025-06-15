@@ -280,6 +280,7 @@ private:
     int     getTimeSafetyStop       (const QString strData, const int hexAddress);
     int     getSlopeAngleWell       (const QString strData, const int hexAddress);
     int     getTonnageStick         (const QString strData, const int hexAddress);
+    int     getKValue               (const QString strData, const int hexAddress);
 signals:
 
 private:

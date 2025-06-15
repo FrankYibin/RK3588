@@ -1242,6 +1242,13 @@ int HBModbusClient::getTonnageStick(const QString strData, const int hexAddress)
     return iData;
 }
 
+int HBModbusClient::getKValue(const QString strData, const int hexAddress)
+{
+    int iData = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2K_VALUE, strData);
+    qDebug() << "K Value: " << hexAddress << "----- update K Value: " << iData;
+    return iData;
+}
+
 void HBModbusClient::writeRegister(const int address, const QVariant value)
 {
     int tmpValue = 0;
@@ -1361,6 +1368,14 @@ void HBModbusClient::writeRegister(const int address, const QVariant value)
         tmpValue = getIntegerInterface(strValue, address);
         stData.Data = tmpValue;
         stData.Size = sizeof(unsigned int);
+        stData.Type = QModbusDataUnit::HoldingRegisters;
+        m_RegisterSendMap.insert(address, stData);
+        break;
+    case HQmlEnum::K_VALUE:
+        strValue = value.toString();
+        tmpValue = getKValue(strValue, address);
+        stData.Data = tmpValue;
+        stData.Size = sizeof(unsigned short);
         stData.Type = QModbusDataUnit::HoldingRegisters;
         m_RegisterSendMap.insert(address, stData);
         break;

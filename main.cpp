@@ -61,6 +61,7 @@
 #include "c++Source/HBVoice/hbvoice.h"
 #include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBUtility/hbutilityclass.h"
+#include "c++Source/usermanual.h"
 
 //#include "c++Source/HBVideoCapture/videocaptureitem.h"
 //#include "opencv2/opencv.hpp"
@@ -160,6 +161,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("TensiometerManager", TensiometerManager::GetInstance());
     pQmlContext->setContextProperty("TensionSetting", TensionSetting::GetInstance());
     pQmlContext->setContextProperty("TensiometerScale", TensionScaleManager::GetInstance());
+    pQmlContext->setContextProperty("UserManual", UserManual::GetInstance());
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);
@@ -176,6 +178,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("login", Login::getInstance());
     pQmlContext->setContextProperty("communicationInterface", CommunicationInterface::getInstance(&app));
     pQmlContext->setContextProperty("systemInformationModel", SystemInformationInterface::getInstance());
+
 
 //    qDebug() << "OPENCV Version: " << CV_VERSION;
 //    std::cout << "Video I/O support: " << cv::getBuildInformation() << std::endl;

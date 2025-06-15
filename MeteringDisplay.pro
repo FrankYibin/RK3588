@@ -1,4 +1,5 @@
 QT += quick gui charts serialport serialbus sql multimedia concurrent core
+QT += network
 CONFIG += c++11
 #qtquickcompiler
 
@@ -79,6 +80,7 @@ SOURCES += main.cpp \
     c++Source/weldgraphdata.cpp \
     c++Source/weldrecipeparameter.cpp \
     c++Source/weldresultmodel.cpp \
+    c++Source/usermanual.cpp \
 
 
 
@@ -143,6 +145,7 @@ HEADERS += \
     c++Source/weldgraphdata.h \
     c++Source/weldrecipeparameter.h \
     c++Source/weldresultmodel.h \
+    c++Source/usermanual.h \
 
 
 RESOURCES += images.qrc \

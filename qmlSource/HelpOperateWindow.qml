@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import QtWebEngine 1.10
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_HELP
 
@@ -20,6 +21,20 @@ Item{
         GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
+
+    WebEngineView {
+        id: webView
+        anchors.fill: parent
+        url:
+        {
+            var str = UserManual.getUserManualByPDFJS()
+            console.debug("11111111111111111: ", str)
+            return str
+        }
+
+    }
+
+
 }
 
 
