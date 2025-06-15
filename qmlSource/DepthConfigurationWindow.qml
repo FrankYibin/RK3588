@@ -113,7 +113,7 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     onCurrentIndexChanged: {
-                        Depth.DepthOrientation = currentIndex
+                        // Depth.DepthOrientation = currentIndex
                         ModbusClient.writeCoil(HQmlEnum.ORIENTATION_DEPTH, currentIndex)
                     }
                 }
@@ -233,7 +233,7 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
                     onCurrentIndexChanged: {
-                        Depth.DepthEncoder = currentIndex
+                        // Depth.DepthEncoder = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER, currentIndex)
                     }
                 }

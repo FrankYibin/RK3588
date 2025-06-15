@@ -79,7 +79,7 @@ Item{
                     fontFamily: "宋体"
                     fontSize: Math.round(Style.style3 * Style.scaleHint)
                     onCurrentIndexChanged: {
-                        TensionSafety.WellType = currentIndex
+                        // TensionSafety.WellType = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.WELL_TYPE, currentIndex)
                     }
                 }
@@ -155,7 +155,7 @@ Item{
                     fontFamily: "宋体"
                     fontSize: Math.round(Style.style3 * Style.scaleHint)
                     onCurrentIndexChanged: {
-                        TensionSafety.WorkType = currentIndex
+                        // TensionSafety.WorkType = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.WOKE_TYPE, currentIndex)
                     }
                 }
@@ -469,7 +469,7 @@ Item{
                     fontFamily: "宋体"
                     fontSize: Math.round(Style.style3 * Style.scaleHint)
                     onCurrentIndexChanged: {
-                        TensionSafety.TensionCableHeadTrend = currentIndex
+                        // TensionSafety.TensionCableHeadTrend = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.TENSION_CABLE_HEAD_TREND, currentIndex)
                     }
                 }

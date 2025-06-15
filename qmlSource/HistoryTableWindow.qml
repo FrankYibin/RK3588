@@ -34,6 +34,10 @@ Item{
     Component.onCompleted:
     {
         headerModel.resetModel()
+
+        var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
+        var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
+        historyDataModel.loadFromDatabase(startStamp, endStamp)
     }
 
     Rectangle
@@ -92,6 +96,11 @@ Item{
                     id:comboBoxStartTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
+                    text: {
+                        var now = new Date()
+                        var yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+                        return Qt.formatDate(yesterday, "yyyy-MM-dd")
+                    }
                     onSignalPopUp:
                     {
                         if(isShow === true)
@@ -127,6 +136,11 @@ Item{
                     id:comboBoxFinishTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
+                    text: {
+                        var now = new Date()
+                        return Qt.formatDate(now, "yyyy-MM-dd")
+                    }
+
                     onSignalPopUp:
                     {
                         if(isShow === true)
@@ -154,10 +168,10 @@ Item{
                     text: qsTr("查询")
                     onClicked:
                     {
-                        var startIso = comboBoxStartTimeStamp.text + "T00:00:00"
-                        var endIso   = comboBoxFinishTimeStamp.text + "T23:59:59"
-                        historyDataModel.loadFromDatabase(startIso,endIso)
-                        console.log("startIso: ",startIso,"endIso: ",endIso)
+                        var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
+                        var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
+                        historyDataModel.loadFromDatabase(startStamp, endStamp)
+                        console.log("startStamp: ", startStamp,"endStamp: ", endStamp)
                     }
                 }
 
@@ -177,84 +191,6 @@ Item{
         }
     }
 
-    //        Item {
-    //            id: buttonArray
-    //            width: parent.width
-    //            height: parent.height / 2
-    //            anchors.top: parent.top
-    //            anchors.left: parent.left
-    ////            Row
-    ////            {
-    ////                id: argumentLayout
-    ////                spacing: Math.round(30 * Style.scaleHint)
-    ////                width: Math.round((buttonWidth * 3 ) * Style.scaleHint) + argumentLayout.columnSpacing * 2
-    ////                height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
-    ////                anchors.left: parent.left
-    ////                anchors.leftMargin: Math.round(20 * Style.scaleHint)
-    ////                anchors.top: parent.top
-    ////                anchors.topMargin: Math.round(20 * Style.scaleHint)
-
-    ////                HBPrimaryButton
-    ////                {
-    ////                    id: buttonInquiresSetting
-    ////                    width: Math.round(buttonWidth * Style.scaleHint)
-    ////                    height: Math.round(componentHeight * Style.scaleHint)
-    ////                    text: qsTr("设置查询条件")
-    ////                    onClicked:
-    ////                    {
-    ////                        // controlLimitNumpad.visible = false
-    ////                    }
-    ////                }
-
-    ////                HBPrimaryButton
-    ////                {
-    ////                    id: buttonInquire
-    ////                    width: Math.round(buttonWidth * Style.scaleHint)
-    ////                    height: Math.round(componentHeight * Style.scaleHint)
-    ////                    text: qsTr("查询")
-    ////                    onClicked:
-    ////                    {
-    ////                        // controlLimitNumpad.visible = false
-    ////                    }
-    ////                }
-
-    ////                HBPrimaryButton
-    ////                {
-    ////                    id: buttonExport
-    ////                    width: Math.round(buttonWidth * Style.scaleHint)
-    ////                    height: Math.round(componentHeight * Style.scaleHint)
-    ////                    text: qsTr("导出选中")
-    ////                    onClicked:
-    ////                    {
-    ////                        // controlLimitNumpad.visible = false
-    ////                    }
-    ////                }
-
-
-    ////            }
-    //            //        Item {
-    //            //            id: textContent
-    //            //            width: parent.width
-    //            //            height: parent.height / 2
-    //            //            anchors.top: buttonArray.bottom
-    //            //            anchors.left: parent.left
-    //            //            Text {
-    //            //                id: titleStartTimeStamp
-    //            //                anchors.left: parent.left
-    //            //                anchors.leftMargin: Math.round(20 * Style.scaleHint)
-    //            //                anchors.verticalCenter: parent.verticalCenter
-    //            //                width: parent.width
-    //            //                height: Math.round(componentHeight * Style.scaleHint)
-    //            //                text: qsTr("查询方式") + ":"
-    //            //                font.family: "宋体"
-    //            //                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-    //            //                verticalAlignment: Text.AlignVCenter
-    //            //                color: Style.whiteFontColor
-    //            //            }
-
-    //            //        }
-
-    //    }
     ListModel
     {
         id: headerModel
@@ -263,7 +199,7 @@ Item{
             headerModel.clear()
             headerModel.append({"role": "Index",                "title": qsTr("序号"),      "headerWidth": 50})
             headerModel.append({"role": "WellNumber",           "title": qsTr("井号"),      "headerWidth": 100})
-            headerModel.append({"role": "Date",                 "title": qsTr("日期"),      "headerWidth": 100})
+            headerModel.append({"role": "Date",                 "title": qsTr("日期"),      "headerWidth": 200})
             headerModel.append({"role": "OperateType",          "title": qsTr("操作类型"),  "headerWidth": 100})
             headerModel.append({"role": "Operater",             "title": qsTr("操作员"),    "headerWidth": 100})
             headerModel.append({"role": "Depth",                "title": qsTr("深度"),      "headerWidth": 100})

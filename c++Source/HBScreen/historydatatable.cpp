@@ -8,7 +8,7 @@
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    loadFromDatabase();
+
 }
 
 int HistoryDataTable::rowCount(const QModelIndex &) const
@@ -86,15 +86,6 @@ void HistoryDataTable::setRange(const QString &startIso, const QString &endIso)
 
 }
 
-void HistoryDataTable::loadFromDatabase()
-{
-    beginResetModel();
-      m_dataList = HBDatabase::GetInstance().loadHistoryData();
-      if (m_dataList.isEmpty()) {
-          qDebug() << "HistoryDataTable: 数据库中没有历史数据或加载失败";
-      }
-      endResetModel();
-}
 
 void HistoryDataTable::loadFromDatabase(const QDateTime &start, const QDateTime &end)
 {
