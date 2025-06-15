@@ -224,9 +224,6 @@ public:
 
     Q_INVOKABLE void writeRegister  (const int address, const QVariant  value);
     Q_INVOKABLE void writeCoil      (const int address, const int       value);
-
-    //historydata
-    void insertDataToDatabase();
 protected:
     explicit HBModbusClient(QObject *parent = nullptr);
     void timerEvent(QTimerEvent *event) override;
@@ -250,6 +247,9 @@ private:
     void handleCANbus();
 
     void Insert4GData();
+
+    //historydata
+    void InsertDataToDatabase();
 
 
 

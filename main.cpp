@@ -50,6 +50,7 @@
 #include "c++Source/HBScreen/tensionscalemanager.h"
 #include "c++Source/HBScreen/tensionsetting.h"
 #include "c++Source/HBScreen/tensiometermanager.h"
+#include "c++Source/HBScreen/historyoperationmodel.h"
 
 #include "c++Source/HBModbus/hbmodbusclient.h"
 // #include "c++Source/HBModbus/modbusutils.h"
@@ -124,6 +125,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", HBModbusClient::GetInstance());
     qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::GetInstance());
     qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
+    qmlRegisterType<HistoryOperationModel>("HB.HistoryOperationModel", 1, 0, "HistoryOperationModel");
     qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
                                           "HQmlEnum is an enum container and cannot be created in QML");
 

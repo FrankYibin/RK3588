@@ -236,6 +236,90 @@ void HBDatabase::closeTransaction()
 
 }
 
+QList<HistoryOperationModel::Row> HBDatabase::loadOperationData(const QDateTime &start, const QDateTime &end)
+{
+    QList<HistoryOperationModel::Row> list;
+
+    if (!m_database.isOpen()) {
+        qWarning() << "DB not open";
+        return list;
+    }
+
+    static const char *sql =
+        "SELECT well_number, work_type, username, datetime, operate "
+        "FROM operating_data "
+        "WHERE datetime(datetime) BETWEEN datetime(:start) AND datetime(:end) "
+        "ORDER BY datetime(datetime) ASC";
+
+    QSqlQuery q(m_database);
+    if (!q.prepare(sql)) {
+        qWarning() << q.lastError();
+        return list;
+    }
+
+    q.bindValue(":start", start.toString("yyyy-MM-dd HH:mm:ss"));
+    q.bindValue(":end",   end.toString("yyyy-MM-dd HH:mm:ss"));
+
+    if (!q.exec()) {
+        qWarning() << q.lastError();
+        return list;
+    }
+
+    int idx = 0;
+    while (q.next()) {
+        HistoryOperationModel::Row r;
+        r.index       = ++idx;
+        r.wellNumber  = q.value("well_number").toString();
+        r.operateType = q.value("work_type").toString();
+        r.operater    = q.value("username").toString();
+        r.date        = QDateTime::fromString(
+            q.value("datetime").toString(),
+            "yyyy-MM-dd HH:mm:ss");
+        r.description = q.value("operate").toString();
+        list.append(r);
+    }
+    return list;
+
+}
+
+QList<HistoryOperationModel::Row> HBDatabase::loadAllOperationData()
+{
+    QList<HistoryOperationModel::Row> list;
+
+    if (!m_database.isOpen()) {
+        qWarning() << "DB not open";
+        return list;
+    }
+
+    QSqlQuery q(m_database);
+    QString sql = R"(
+        SELECT well_number, work_type, username, datetime, operate
+        FROM operating_data
+        ORDER BY datetime(datetime) ASC
+    )";
+
+    if (!q.exec(sql)) {
+        qWarning() << q.lastError();
+        return list;
+    }
+
+    int idx = 0;
+    while (q.next()) {
+        HistoryOperationModel::Row r;
+        r.index       = ++idx;
+        r.wellNumber  = q.value("well_number").toString();
+        r.operateType = q.value("work_type").toString();
+        r.operater    = q.value("username").toString();
+        r.date        = QDateTime::fromString(
+            q.value("datetime").toString(),
+            "yyyy-MM-dd HH:mm:ss");
+        r.description = q.value("operate").toString();
+        list.append(r);
+    }
+    return list;
+
+}
+
 
 HBDatabase &HBDatabase::GetInstance()
 {
@@ -1121,15 +1205,15 @@ QList<HistoryData> HBDatabase::loadHistoryData()
         }
         item.operateType = query.value("operateType").toString();
         item.operater = query.value("operater").toString();
-        item.depth = query.value("depth").toInt();
-        item.velocity = query.value("velocity").toInt();
+        item.depth = query.value("depth").toString();
+        item.velocity = query.value("velocity").toString();
         item.velocityUnit = query.value("velocityUnit").toString();
-        item.tensions = query.value("tensions").toInt();
-        item.tensionIncrement = query.value("tensionIncrement").toInt();
+        item.tensions = query.value("tensions").toString();
+        item.tensionIncrement = query.value("tensionIncrement").toString();
         item.tensionUnit = query.value("tensionUnit").toString();
-        item.maxTension = query.value("maxTension").toInt();
-        item.harnessTension = query.value("harnessTension").toInt();
-        item.safetyTension = query.value("safetyTension").toInt();
+        item.maxTension = query.value("maxTension").toString();
+        item.harnessTension = query.value("harnessTension").toString();
+        item.safetyTension = query.value("safetyTension").toString();
         item.exception = query.value("exception").toString();
 
         dataList.append(item);
@@ -1182,15 +1266,15 @@ QList<HistoryData> HBDatabase::loadHistoryData(const QDateTime &start, const QDa
 
         item.operateType       = query.value("operateType").toString();
         item.operater          = query.value("operater").toString();
-        item.depth             = query.value("depth").toInt();
-        item.velocity          = query.value("velocity").toInt();
+        item.depth             = query.value("depth").toString();
+        item.velocity          = query.value("velocity").toString();
         item.velocityUnit      = query.value("velocityUnit").toString();
-        item.tensions          = query.value("tensions").toInt();
-        item.tensionIncrement  = query.value("tensionIncrement").toInt();
+        item.tensions          = query.value("tensions").toString();
+        item.tensionIncrement  = query.value("tensionIncrement").toString();
         item.tensionUnit       = query.value("tensionUnit").toString();
-        item.maxTension        = query.value("maxTension").toInt();
-        item.harnessTension    = query.value("harnessTension").toInt();
-        item.safetyTension     = query.value("safetyTension").toInt();
+        item.maxTension        = query.value("maxTension").toString();
+        item.harnessTension    = query.value("harnessTension").toString();
+        item.safetyTension     = query.value("safetyTension").toString();
         item.exception         = query.value("exception").toString();
 
         dataList.append(item);

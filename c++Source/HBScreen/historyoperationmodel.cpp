@@ -1,8 +1,12 @@
 ﻿#include "historyoperationmodel.h"
+#include <QDebug>
+#include "c++Source/HBData/hbdatabase.h"
+
 
 HistoryOperationModel::HistoryOperationModel(QObject *parent)
     : QAbstractListModel(parent)
 {
+    loadAll();
 }
 
 int HistoryOperationModel::rowCount(const QModelIndex &parent) const
@@ -52,5 +56,27 @@ void HistoryOperationModel::reset(const QList<Row> &rows)
 {
     beginResetModel();
     m_rows = rows;
+    endResetModel();
+}
+
+void HistoryOperationModel::setRange(const QString &startIso, const QString &endIso)
+{
+    QDateTime s = QDateTime::fromString(startIso, Qt::ISODate);
+    QDateTime e = QDateTime::fromString(endIso,   Qt::ISODate);
+    if (!s.isValid() || !e.isValid()) {
+        qWarning() << "invalid time strings";
+        return;
+    }
+
+    beginResetModel();
+    m_rows = HBDatabase::GetInstance().loadOperationData(s, e);
+    endResetModel();
+
+}
+
+void HistoryOperationModel::loadAll()
+{
+    beginResetModel();
+    m_rows = HBDatabase::GetInstance().loadAllOperationData();
     endResetModel();
 }

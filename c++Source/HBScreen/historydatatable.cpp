@@ -1,6 +1,9 @@
 ﻿#include "historydatatable.h"
 #include "c++Source/HBData/hbdatabase.h"
+#include <QFile>
+#include <QTextStream>
 #include <QDebug>
+#include <QStringList>
 
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
@@ -31,15 +34,15 @@ QVariant HistoryDataTable::data(const QModelIndex &index, int role) const
     case DateRole: return item.date;
     case OperateTypeRole: return item.operateType;
     case OperaterRole: return item.operater;
-    case DepthRole: return item.depth / 100.0;
-    case VelocityRole: return item.velocity / 100.0;
+    case DepthRole: return item.depth;
+    case VelocityRole: return item.velocity ;
     case VelocityUnitRole: return item.velocityUnit;
-    case TensionsRole: return item.tensions / 100.0;
-    case TensionIncreamentRole: return item.tensionIncrement / 100.0;
+    case TensionsRole: return item.tensions ;
+    case TensionIncreamentRole: return item.tensionIncrement ;
     case TensionUnitRole: return item.tensionUnit;
-    case MaxTensionRole: return item.maxTension / 100.0;
-    case HarnessTensionRole: return item.harnessTension / 100.0;
-    case SafetyTensionRole: return item.safetyTension / 100.0;
+    case MaxTensionRole: return item.maxTension ;
+    case HarnessTensionRole: return item.harnessTension ;
+    case SafetyTensionRole: return item.safetyTension ;
     case ExceptionRole: return item.exception;
     default: return QVariant();
     }
@@ -98,4 +101,61 @@ void HistoryDataTable::loadFromDatabase(const QDateTime &start, const QDateTime 
     beginResetModel();
     m_dataList = HBDatabase::GetInstance().loadHistoryData(start, end);
     endResetModel();
+}
+
+void HistoryDataTable:: exportData()
+{
+#ifdef RK3588
+    QList<QStringList> rows;
+    QStringList headers = {"wellNumber", "date", "operateType", "operater", "depth", "velocity","velocityUnit","tensions","tensionIncrement","tensionUnit","maxTension",
+                           "harnessTension", "safetyTension",
+                           "exception"   };
+
+    // 导出到CSV文件
+    QString filePath = "/run/media/sdb1/output.csv";
+    for(int i=0;i<m_dataList.count();i++)
+    {
+        QStringList value= {
+            m_dataList[i].wellNumber,
+            m_dataList[i].date,
+            m_dataList[i].operateType,
+            m_dataList[i].operater,
+            m_dataList[i].depth,
+            m_dataList[i].velocity,
+            m_dataList[i].velocityUnit,
+            m_dataList[i].tensions,
+            m_dataList[i].tensionIncrement,
+            m_dataList[i].tensionUnit,
+            m_dataList[i].maxTension,
+            m_dataList[i].harnessTension,
+            m_dataList[i].safetyTension,
+            m_dataList[i].exception,
+        };
+        rows.append(value);
+    }
+    ExportToCSV(filePath, headers, rows);
+#endif
+}
+
+
+void HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "无法打开文件：" << filePath;
+        return;
+    }
+
+    QTextStream out(&file);
+
+    // 写入表头
+    out << headers.join(",") << "\n";
+
+    // 写入数据
+    for (const auto& row : data) {
+        out << row.join(",") << "\n";
+    }
+
+    file.close();
+    qDebug() << "数据已成功导出到：" << filePath;
 }

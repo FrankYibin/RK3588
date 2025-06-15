@@ -37,6 +37,11 @@ public:
     Q_INVOKABLE void clear();
     Q_INVOKABLE void reset(const QList<Row> &rows);
 
+    Q_INVOKABLE void setRange(const QString &startIso,
+                              const QString &endIso);
+
+    Q_INVOKABLE void loadAll();
+
 
 signals:
 

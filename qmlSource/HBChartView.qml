@@ -17,6 +17,7 @@ import QtQuick.Controls 2.2
 import Style 1.0
 import HBAxisDefine 1.0
 import Com.Branson.HBGraphAxisEnum 1.0
+import HB.GraphData 1.0
 Item {
     id: weldGraph
     property bool flagDragDrop: false
@@ -35,6 +36,7 @@ Item {
     property bool isVelocityLeftAxisVisible:           false
     property bool isTensionsLeftAxisVisible:           false
     property bool isTensionIncrementLeftAxisVisible:   false
+
 
     /**
     *@breif: Rounding of axis values for proper representation
@@ -59,6 +61,7 @@ Item {
         }
         return retVal ;
     }
+
 
     /**
     *@breif: Plots the graph
@@ -302,4 +305,5 @@ Item {
             }
         }
     }
+
 }

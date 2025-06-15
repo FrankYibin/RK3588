@@ -1663,26 +1663,25 @@ void HBModbusClient::handleDevice()
     HBHome::GetInstance()->setStatusTensiometerOnline(m_IO_Value0.bits_Value0.m_StatusTensiometerOnline);
 }
 
-void HBModbusClient::insertDataToDatabase()
+void HBModbusClient::InsertDataToDatabase()
 {
-    // HBHome* _dashboard = HBHome::getInstance();
-    // ModbusData modData;
-    // modData.wellNumber = WellParameter::getInstance()->WellNumber();
-    // modData.operateType = WellParameter::getInstance()->OperatorType();
-    // modData.operater = WellParameter::getInstance()->UserName();
-    // modData.depth = _dashboard->DepthCurrent();
-    // modData.velocity = _dashboard->Speed();
-    // modData.tensions = _dashboard->Tension();
-    // modData.tensionIncrement = _dashboard->TensionIncrement();
-    // modData.harnessTension = m_RecvReg.m_TensionCableHead.Data;
-    // modData.maxTension = _dashboard->MaxTension();
-    // modData.safetyTension = m_RecvReg.m_TensionCurrentSafety.Data;
-    // modData.exception = "none";
+    ModbusData modData;
+    modData.wellNumber = WellParameter::GetInstance()->WellNumber();
+    modData.operateType = WellParameter::GetInstance()->OperatorType();
+    modData.operater = WellParameter::GetInstance()->UserName();
+    modData.depth = HBHome::GetInstance()->DepthCurrent();
+    modData.velocity = HBHome::GetInstance()->VelocityCurrent();
+    modData.tensions = HBHome::GetInstance()->TensionCurrent();
+    modData.tensionIncrement = HBHome::GetInstance()->TensionCurrentDelta();
+    modData.harnessTension = TensionSafety::GetInstance()->TensionCableHead();
+    modData.maxTension = HBHome::GetInstance()->TensionLimited();
+    modData.safetyTension = TensionSafety::GetInstance()->TensionCurrentSafety();
+    modData.exception = "none";
 
-    // HBDatabase::getInstance().insertHistoryData(modData);
-    // QtConcurrent::run([modData]() {
-    //     HBDatabase::getInstance().insertHistoryData(modData);
-    // });
+    HBDatabase::GetInstance().insertHistoryData(modData);
+    QtConcurrent::run([modData]() {
+        HBDatabase::GetInstance().insertHistoryData(modData);
+    });
 }
 
 void HBModbusClient::Insert4GData()

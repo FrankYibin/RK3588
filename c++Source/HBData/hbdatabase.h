@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include "c++Source/HBDefine.h"
 #include "c++Source/HBScreen/tensiometer.h"
+#include "c++Source/HBScreen/historyoperationmodel.h"
 
 class HBDatabase : public QObject
 {
@@ -102,7 +103,16 @@ public:
 
     void closeTransaction();
 
+    //historyoperate
+    QList<HistoryOperationModel::Row>
+    loadOperationData(const QDateTime &start, const QDateTime &end);
+    QList<HistoryOperationModel::Row> loadAllOperationData();
+
     QVector<QPointF> loadGraphPoints(const QString& fieldName);
+
+    QVector<QPointF> historyPoints(const QString& fieldName,
+                                   const QDateTime& start,
+                                   const QDateTime& end) const;
 
 
 

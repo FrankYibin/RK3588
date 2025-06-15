@@ -170,6 +170,7 @@ Item{
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
+                        historyDataModel.exportData()
                     }
                 }
             }
@@ -279,96 +280,6 @@ Item{
         }
 
     }
-    //    ListModel
-    //    {
-    //        id: dataModel
-    //        function resetModel()
-    //        {
-    //            dataModel.clear()
-    //            dataModel.append({"Index": 0,               "WellNumber": "陕30H-3",    "Date": "2025-4-22",
-    //                              "OperateType": "射孔",    "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 1,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 2,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 3,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 4,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 5,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 6,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 7,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 8,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 9,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 10,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 11,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 12,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 13,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 14,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-    //            dataModel.append({"Index": 15,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-
-    //        }
-
-    //    }
 
     HBTableView {
         id: gridParentFrame

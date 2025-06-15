@@ -6,7 +6,7 @@ import QtCharts 2.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
-//import HB.GraphData 1.0
+import HB.GraphData 1.0
 import HBAxisDefine 1.0
 Item{
     readonly property int textWidth: 100
@@ -143,13 +143,13 @@ Item{
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
-                        // weldGraphObj.loadHistoryCurve(depthLeftAxisPlot, "depth");
-                        // weldGraphObj.loadHistoryCurve(velocityLeftAxisPlot, "velocity");
-                        // weldGraphObj.loadHistoryCurve(tensionsLeftAxisPlot, "tensions");
-                        // weldGraphObj.loadHistoryCurve(tensionIncrementLeftAxisPlot, "tension_increment");
-//                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
-                        console.log("开始时间: "+ comboBoxStartTimeStamp.text)
-                         console.log("结束时间: "+ comboBoxFinishTimeStamp.text)
+                        var startIso = comboBoxStartTimeStamp.text + "T00:00:00"
+                        var endIso   = comboBoxFinishTimeStamp.text + "T23:59:59"
+                        SensorGraphData.setQueryRange(
+                                  new Date(Date.parse(startIso)),
+                                  new Date(Date.parse(endIso))
+                              )
+                         SensorGraphData.fetchHistory()
                     }
                 }
 

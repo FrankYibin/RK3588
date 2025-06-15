@@ -126,30 +126,30 @@ struct HistoryData {
     QString date;
     QString operateType;
     QString operater;
-    int depth;
-    int velocity;
+    QString depth;
+    QString velocity;
     QString velocityUnit;
-    int tensions;
-    int tensionIncrement;
+    QString tensions;
+    QString tensionIncrement;
     QString tensionUnit;
-    int maxTension;
-    int harnessTension;
-    int safetyTension;
+    QString maxTension;
+    QString harnessTension;
+    QString safetyTension;
     QString exception;
 };
 
 struct ModbusData {
 
-    QString wellNumber;   //
+    QString wellNumber;
     QString operateType;
     QString operater;
-    int depth;
-    int velocity;
-    int tensions;
-    int tensionIncrement;
-    int maxTension;
-    int harnessTension;
-    int safetyTension;
+    QString depth;
+    QString velocity;
+    QString tensions;
+    QString tensionIncrement;
+    QString maxTension;
+    QString harnessTension;
+    QString safetyTension;
     QString exception;
 };
 
