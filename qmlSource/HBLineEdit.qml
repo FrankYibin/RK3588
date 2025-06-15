@@ -57,10 +57,10 @@ TextField {
 
 
 
-    Keys.onReturnPressed: {
-        event.accepted = true
-        accepted()
-    }
+    // Keys.onReturnPressed: {
+    //     event.accepted = true
+    //     accepted()
+    // }
 
 //    onFocusChanged: if (!focus) accepted()
 }
