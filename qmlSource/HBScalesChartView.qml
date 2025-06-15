@@ -24,7 +24,7 @@ Item {
     property bool isNormalScreen: true
     property int fontsize: Math.round(Style.style3 * Style.scaleHint)
 
-    readonly property string tensionsLeftPlotName:  qsTr("张力 Vs 距离")
+    readonly property string tensionsLeftPlotName:  qsTr("")
     readonly property string qmltextSecUnit:        "s"
 
     /**
