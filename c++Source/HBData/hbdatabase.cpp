@@ -106,6 +106,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     param.workType = query.value("workType").toInt();
     param.userName = query.value("userName").toString();
     param.operatorType = query.value("operatorType").toString();
+    param.slopeAngle = query.value("slopeAngle").toString();
 
     WellParameter* wp = WellParameter::GetInstance();
     wp->setWellNumber(param.wellNumber);
@@ -120,6 +121,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     wp->setWorkType(param.workType);
     wp->setUserName(param.userName);
     wp->setOperatorType(param.operatorType);
+    wp->setSlopeAngleWellSetting(param.slopeAngle);
 
     return true;
 }

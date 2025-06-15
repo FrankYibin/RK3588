@@ -799,7 +799,7 @@ void HBModbusClient::handleRawData()
             WellParameter::GetInstance()->setWeightInstrumentString(strData);
             break;
         case HQmlEnum::BREAKING_FORCE_CABLE:
-            strData = updateTensionInterface(m_RecvReg.m_BreakingForceCable.Data, m_RecvReg.m_BreakingForceCable.Address);
+            strData = updateIntegerInterface(m_RecvReg.m_BreakingForceCable.Data, m_RecvReg.m_BreakingForceCable.Address);
             TensionSafety::GetInstance()->setBreakingForceCable(strData);
             WellParameter::GetInstance()->setBreakingForceCable(strData);
             break;

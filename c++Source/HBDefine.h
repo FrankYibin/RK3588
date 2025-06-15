@@ -54,6 +54,7 @@ struct _WellParameter {
     int workType = 0;
     QString userName;
     QString operatorType;
+    QString slopeAngle;
 };
 
 struct _DepthSet {

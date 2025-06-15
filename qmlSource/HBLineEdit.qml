@@ -20,9 +20,9 @@ TextField {
     id: input
     property int minWidth: Math.round(140 * Style.scaleHint)
     property int maxHeight: Math.round(30 * Style.scaleHint)
-//    property alias readOnlyText: input.readOnly
-//    property alias echoMode: input.echoMode
-//    property alias text: input.text
+    //    property alias readOnlyText: input.readOnly
+    //    property alias echoMode: input.echoMode
+    //    property alias text: input.text
     property color backgroundcolor: Style.hbFrameBackgroundColor
     property color textfieldcolor: Style.whiteFontColor
     property color bordercolor: Style.hbFrameBorderColor
@@ -53,4 +53,14 @@ TextField {
             border.width: 2
         }
     }
+
+
+
+
+    Keys.onReturnPressed: {
+        event.accepted = true
+        accepted()
+    }
+
+//    onFocusChanged: if (!focus) accepted()
 }

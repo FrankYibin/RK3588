@@ -60,8 +60,14 @@ Item{
                     onAccepted: {
                         WellParameter.WellNumber = text;
                         //TODO need to send number using modbus
+                        console.log("titleWellNumber.text: "+textWellNumber.text)
                     }
+                    onEditingFinished: {
+                         WellParameter.WellNumber = text
+                         console.log("editingFinished, text =", text)
+                     }
                 }
+
             }
 
             Row

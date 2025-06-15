@@ -6,7 +6,7 @@ import QtCharts 2.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
-import HB.GraphData 1.0
+//import HB.GraphData 1.0
 import HBAxisDefine 1.0
 Item{
     readonly property int textWidth: 100
@@ -110,11 +110,23 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBComboBox
+
+                HBComboBoxCalendar
                 {
                     id:comboBoxFinishTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
+                    onSignalPopUp:
+                    {
+                        if(isShow === true)
+                            calendarDate.visible = true
+                        else
+                        {
+                            calendarDate.visible = false
+
+                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                        }
+                    }
                 }
             }
 
@@ -135,7 +147,9 @@ Item{
                         // weldGraphObj.loadHistoryCurve(velocityLeftAxisPlot, "velocity");
                         // weldGraphObj.loadHistoryCurve(tensionsLeftAxisPlot, "tensions");
                         // weldGraphObj.loadHistoryCurve(tensionIncrementLeftAxisPlot, "tension_increment");
-                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
+//                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
+                        console.log("开始时间: "+ comboBoxStartTimeStamp.text)
+                         console.log("结束时间: "+ comboBoxFinishTimeStamp.text)
                     }
                 }
 
@@ -144,7 +158,7 @@ Item{
                     id: buttonExport
                     width: Math.round(buttonWidth * Style.scaleHint)
                     height: Math.round(componentHeight * Style.scaleHint)
-                    text: qsTr("导出选中")
+                    text: qsTr("导出")
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
