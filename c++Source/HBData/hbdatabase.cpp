@@ -1198,11 +1198,6 @@ QList<HistoryData> HBDatabase::loadHistoryData()
         item.wellNumber = query.value("wellNumber").toString();
         //        item.date = query.value("date").toString();
         QString fullDate = query.value("date").toString();
-        if (fullDate.length() >= 7) {
-            item.date = fullDate.left(10);
-        } else {
-            item.date = "";
-        }
         item.operateType = query.value("operateType").toString();
         item.operater = query.value("operater").toString();
         item.depth = query.value("depth").toString();
@@ -1303,10 +1298,42 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
     query.bindValue(":operater", modbusData.operater);
     query.bindValue(":depth", modbusData.depth);
     query.bindValue(":velocity", modbusData.velocity);
-    query.bindValue(":velocityUnit", "m/min");
+    switch(DepthSetting::GetInstance()->VelocityUnit())
+    {
+    case DepthSetting::FT_PER_HOUR:
+        query.bindValue(":velocityUnit", "ft/hour");
+        break;
+    case DepthSetting::FT_PER_MIN:
+        query.bindValue(":velocityUnit", "ft/min");
+        break;
+    case DepthSetting::M_PER_HOUR:
+        query.bindValue(":velocityUnit", "m/hour");
+        break;
+    case DepthSetting::M_PER_MIN:
+        query.bindValue(":velocityUnit", "m/min");
+        break;
+    default:
+        query.bindValue(":velocityUnit", "m/hour");
+        break;
+    }
+
     query.bindValue(":tensions", modbusData.tensions);
     query.bindValue(":tensionIncrement", modbusData.tensionIncrement);
-    query.bindValue(":tensionUnit", "kg");
+    switch(TensionSetting::GetInstance()->TensionUnit())
+    {
+    case TensionSetting::KG:
+        query.bindValue(":tensionUnit", "kg");
+        break;
+    case TensionSetting::KN:
+        query.bindValue(":tensionUnit", "kn");
+        break;
+    case TensionSetting::LB:
+        query.bindValue(":tensionUnit", "lb");
+        break;
+    default:
+        query.bindValue(":tensionUnit", "lb");
+        break;
+    }
     query.bindValue(":maxTension", modbusData.maxTension);
     query.bindValue(":harnessTension", modbusData.harnessTension);
     query.bindValue(":safetyTension", modbusData.safetyTension);

@@ -122,7 +122,7 @@ Item{
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        WellParameter.WellType = currentIndex
+                        // WellParameter.WellType = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.WELL_TYPE, currentIndex)
                     }
                 }
@@ -311,7 +311,7 @@ Item{
                     height: parent.height
                     fontFamily: Style.regular.name
                     onCurrentIndexChanged: {
-                        WellParameter.CableSpec = currentIndex
+                        // WellParameter.CableSpec = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.CABLE_SPEC, currentIndex)
                     }
                 }
@@ -421,7 +421,7 @@ Item{
                     height: parent.height
                     fontFamily: "宋体"
                     onCurrentIndexChanged: {
-                        WellParameter.WorkType = currentIndex
+                        // WellParameter.WorkType = currentIndex
                         ModbusClient.writeRegister(HQmlEnum.WOKE_TYPE, currentIndex)
                     }
                 }

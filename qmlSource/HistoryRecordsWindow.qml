@@ -166,12 +166,6 @@ Item{
                         verticalAlignment: Text.AlignVCenter
                         color: Style.whiteFontColor
                     }
-                    //                    HBComboBox
-                    //                    {
-                    //                        id:comboBoxStartTimeStamp
-                    //                        width: Math.round(comboBoxWidth * Style.scaleHint)
-                    //                        height: parent.height
-                    //                    }
                     HBComboBoxCalendar
                     {
                         id:comboBoxStartTimeStamp
@@ -205,12 +199,6 @@ Item{
                         verticalAlignment: Text.AlignVCenter
                         color: Style.whiteFontColor
                     }
-                    //                    HBComboBox
-                    //                    {
-                    //                        id:comboBoxFinishTimeStamp
-                    //                        width: Math.round(comboBoxWidth * Style.scaleHint)
-                    //                        height: parent.height
-                    //                    }
                     HBComboBoxCalendar
                     {
                         id:comboBoxFinishTimeStamp
