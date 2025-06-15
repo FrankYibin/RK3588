@@ -1303,6 +1303,7 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
     query.bindValue(":operater", modbusData.operater);
     query.bindValue(":depth", modbusData.depth);
     query.bindValue(":velocity", modbusData.velocity);
+    // DepthSetting::GetInstance()->
     query.bindValue(":velocityUnit", "m/min");
     query.bindValue(":tensions", modbusData.tensions);
     query.bindValue(":tensionIncrement", modbusData.tensionIncrement);
@@ -1317,8 +1318,6 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
         qDebug() << "Failed to insert data:" << query.lastError();
         return false;
     }
-
-    qDebug() << "Data inserted successfully!";
     return true;
 }
 

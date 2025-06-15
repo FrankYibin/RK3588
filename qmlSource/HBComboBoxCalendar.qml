@@ -86,12 +86,10 @@ Rectangle {
             if(isPopUp === false)
             {
                 changeImageUp()
-                console.debug("111111111111111111")
             }
             else
             {
                 changeImageDown()
-                console.debug("22222222222222222222")
             }
             signalPopUp(isPopUp)
         }

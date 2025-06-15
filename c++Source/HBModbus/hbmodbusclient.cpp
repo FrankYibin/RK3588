@@ -86,6 +86,7 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
             readRegisters   (0, HQmlEnum::MAX_REGISTR);
             readCoils       (0, HQmlEnum::MAX_COIL);
             Insert4GData    ();
+            InsertDataToDatabase();
         }
         else
         {
@@ -670,7 +671,6 @@ void HBModbusClient::handleParseRegisters(const QModbusDataUnit &result)
             break;
         }
     }
-    // insertDataToDatabase();
 }
 
 void HBModbusClient::handleWriteRequest()
@@ -1126,7 +1126,9 @@ int HBModbusClient::updateCableSpec(const int hexData, const int hexAddress)
 
 int HBModbusClient::updateTensiometerEncoder(const int hexData, const int hexAddress)
 {
+#ifndef RK3588
     qDebug() << "Tensiometer Encoder Address: " << hexAddress << "----- Updated Tensiometer Encoder: " << hexData;
+#endif
     return hexData;
 }
 
