@@ -221,10 +221,10 @@ void HBHome::setTensionEncoder(const int value)
     switch(value)
     {
     case Tensiometer::WIRE:
-        setTensionEncoder(tr("有线"));
+        setTensionEncoder(tr("数字有线"));
         break;
     case Tensiometer::WIRELESS:
-        setTensionEncoder(tr("无线"));
+        setTensionEncoder(tr("数字无线"));
         break;
     case Tensiometer::ANALOG_WIRE:
         setTensionEncoder(tr("模拟有线"));
