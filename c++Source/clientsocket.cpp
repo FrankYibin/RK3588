@@ -37,6 +37,7 @@ clientSocket::clientSocket(QHostAddress address, unsigned short port)
 {
     m_PackageDebugRevCounter = 0;
     m_PackageDebugTmtCounter = 0;
+
     m_ThreadObj = new QThread();
     m_reconnectingTimer = new QTimer();
     connect(m_reconnectingTimer, &QTimer::timeout, this, &clientSocket::slotSocketConnecting);
@@ -44,13 +45,13 @@ clientSocket::clientSocket(QHostAddress address, unsigned short port)
     connect(this, &clientSocket::signalMessageReadyToSend, this, &clientSocket::slotDataSending);
     connect(this, &QAbstractSocket::stateChanged, this, &clientSocket::slotSocketStateChange, Qt::QueuedConnection);
     connect(this, &clientSocket::signalSocketReadyToClose, this, &clientSocket::slotSocketDisconnected);
-    connect(this, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(slotSslErrors(QList<QSslError>)));
+    // connect(this, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(slotSslErrors(QList<QSslError>)));
 
     m_SocketErr = clientSocket::NoErr;
     m_RecvBuffMap.clear();
     m_SendBuffMap.clear();
     m_reconnectingTimer->setInterval(MAX_CONNECT_WAIT_TIME_CLIENT);
-    // m_reconnectingTimer->start();
+    m_reconnectingTimer->start();
     this->moveToThread(m_ThreadObj);
     m_ThreadObj->start();
 
@@ -92,8 +93,7 @@ bool clientSocket::insertMessageToMap(const int key, const QByteArray buff)
     bool bResult = false;
     if(this->state() == QAbstractSocket::ConnectedState)
     {
-        if(this->isEncrypted())
-            m_SendBuffMap.insert(key, buff);
+        m_SendBuffMap.insert(key, buff);
         bResult = true;
         emit signalMessageReadyToSend();
     }
@@ -263,14 +263,12 @@ void clientSocket::handleSslError(const QSslError &error)
     case QSslError::CertificateNotYetValid:
         break;
     case QSslError::CertificateExpired:
-        this->ignoreSslErrors();
         break;
     case QSslError::InvalidNotBeforeField:
         break;
     case QSslError::InvalidNotAfterField:
         break;
     case QSslError::SelfSignedCertificate:
-        this->ignoreSslErrors();
         break;
     case QSslError::SelfSignedCertificateInChain:
         break;
@@ -297,10 +295,8 @@ void clientSocket::handleSslError(const QSslError &error)
     case QSslError::NoPeerCertificate:
         break;
     case QSslError::HostNameMismatch:
-        this->ignoreSslErrors();
         break;
     case QSslError::UnspecifiedError:
-        this->ignoreSslErrors();
         break;
     case QSslError::NoSslSupport:
         break;
@@ -418,20 +414,12 @@ void clientSocket::slotSocketConnecting()
 {
     if(this->state() == QAbstractSocket::ConnectedState)
     {
-        if(!this->isEncrypted())
-        {
-            this->slotSocketDisconnected();
-            setSocketErrorCode(clientSocket::SecurityErr);
-        }
-		else
-		{
-        	setSocketErrorCode(clientSocket::AlreadyConnected);
-		}
+        setSocketErrorCode(clientSocket::AlreadyConnected);
         return;
     }
     qDebug()<<"reconnecting...";
-    this->connectToHostEncrypted(m_HostAddress.toString(), m_port);
-    if(!this->waitForEncrypted(MAX_CONNECT_WAIT_TIME_CLIENT))
+    this->connectToHost(m_HostAddress.toString(), m_port);
+    if(!this->waitForConnected(MAX_CONNECT_WAIT_TIME_CLIENT))
     {
 //        qDebug()<<this->errorString();
         setSocketErrorCode(clientSocket::ConnectErr);

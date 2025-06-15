@@ -11,6 +11,7 @@
 #include <QString>
 #include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/tensionsetting.h"
+#include "c++Source/clientsocket.h"
 class HBModbusClient : public QObject
 {
     Q_OBJECT
@@ -213,6 +214,8 @@ private:
 
     static constexpr int ONE_SECOND         = 100;
     static constexpr int MAX_TRIED_COUNT    = 5;
+
+    static clientSocket* _ptrSocketObj;
 public:
     static HBModbusClient *GetInstance();
     ~HBModbusClient();

@@ -14,8 +14,8 @@
 #define CLIENTSOCKET_H
 
 #include <QObject>
-//#include <QTcpSocket>
-#include <QSslSocket>
+#include <QTcpSocket>
+// #include <QSslSocket>
 #include <QTimer>
 #include <QTime>
 #include <QHostAddress>
@@ -28,7 +28,7 @@
 #define MAX_CONNECT_WAIT_TIME_CLIENT 1000
 #define MAX_DISCONNECT_WAIT_TIME_CLIENT 1000
 #define MAX_READ_BUFF_LEN 10240
-class clientSocket : public QSslSocket
+class clientSocket : public QTcpSocket
 {
     Q_OBJECT
 public:

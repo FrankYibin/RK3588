@@ -32,7 +32,7 @@ HBModbusClient* HBModbusClient::_ptrHBModbusClient = nullptr;
 int HBModbusClient::m_timerIdentifier = -1;
 QMap<int, HBModbusClient::SEND_DATA> HBModbusClient::m_RegisterSendMap;
 QMutex HBModbusClient::m_mutexSending;
-
+clientSocket* HBModbusClient::_ptrSocketObj = nullptr;
 HBModbusClient::HBModbusClient(QObject *parent)
     : QObject{parent}
 {
@@ -46,6 +46,8 @@ HBModbusClient::HBModbusClient(QObject *parent)
     m_TimeUnit      = DepthSetting::HOUR;
     m_ForceUnit     = TensionSetting::LB;
     memset(&m_PrevRecvReg, 0xff, sizeof(MODBUS_REGISTER));
+
+    _ptrSocketObj = new clientSocket(QHostAddress("47.93.187.236"), 12345);
 }
 
 void HBModbusClient::timerEvent(QTimerEvent *event)
@@ -797,7 +799,7 @@ void HBModbusClient::handleRawData()
             WellParameter::GetInstance()->setWeightInstrumentString(strData);
             break;
         case HQmlEnum::BREAKING_FORCE_CABLE:
-            strData = updateTensionInterface(m_RecvReg.m_BreakingForceCable.Data, m_RecvReg.m_BreakingForceCable.Address);
+            strData = updateIntegerInterface(m_RecvReg.m_BreakingForceCable.Data, m_RecvReg.m_BreakingForceCable.Address);
             TensionSafety::GetInstance()->setBreakingForceCable(strData);
             WellParameter::GetInstance()->setBreakingForceCable(strData);
             break;

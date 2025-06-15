@@ -22,6 +22,7 @@ Item{
         anchors.left: parent.left
         width: parent.width
         height: parent.height
+        focus: true
         gradient: Gradient {
         GradientStop { position: 0.0; color: Style.backgroundLightColor }
         GradientStop { position: 1.0; color: Style.backgroundDeepColor }
@@ -369,7 +370,7 @@ Item{
                 {
                     id: titleTensionUnit
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("拉力磅吨位：")
+                    text: qsTr("拉力棒吨位：")
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor

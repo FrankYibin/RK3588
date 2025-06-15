@@ -6,7 +6,7 @@ import QtCharts 2.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
-import HB.GraphData 1.0
+//import HB.GraphData 1.0
 import HBAxisDefine 1.0
 Item{
     readonly property int textWidth: 100
@@ -14,6 +14,19 @@ Item{
     readonly property int buttonWidth: 100
     readonly property int rowSpacing: 20
     readonly property int componentHeight: 30
+
+    HBCalendar{
+        id: calendarDate
+        anchors.centerIn: parent
+        width: Math.round(400 * Style.scaleHint)
+        height: Math.round(250 * Style.scaleHint)
+        z: 5
+        visible: false
+        onSelectedDateChanged: {
+            console.debug("3333333333333: ", selectedDate)
+        }
+    }
+
     Rectangle
     {
         id: background
@@ -64,11 +77,22 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBComboBox
+                HBComboBoxCalendar
                 {
                     id:comboBoxStartTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
+                    onSignalPopUp:
+                    {
+                        if(isShow === true)
+                            calendarDate.visible = true
+                        else
+                        {
+                            calendarDate.visible = false
+
+                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                        }
+                    }
                 }
             }
 
@@ -86,11 +110,23 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBComboBox
+
+                HBComboBoxCalendar
                 {
                     id:comboBoxFinishTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
+                    onSignalPopUp:
+                    {
+                        if(isShow === true)
+                            calendarDate.visible = true
+                        else
+                        {
+                            calendarDate.visible = false
+
+                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                        }
+                    }
                 }
             }
 
@@ -111,7 +147,9 @@ Item{
                         // weldGraphObj.loadHistoryCurve(velocityLeftAxisPlot, "velocity");
                         // weldGraphObj.loadHistoryCurve(tensionsLeftAxisPlot, "tensions");
                         // weldGraphObj.loadHistoryCurve(tensionIncrementLeftAxisPlot, "tension_increment");
-                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
+//                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
+                        console.log("开始时间: "+ comboBoxStartTimeStamp.text)
+                         console.log("结束时间: "+ comboBoxFinishTimeStamp.text)
                     }
                 }
 
@@ -120,7 +158,7 @@ Item{
                     id: buttonExport
                     width: Math.round(buttonWidth * Style.scaleHint)
                     height: Math.round(componentHeight * Style.scaleHint)
-                    text: qsTr("导出选中")
+                    text: qsTr("导出")
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
@@ -358,17 +396,6 @@ Item{
             }
         }
 
-    }
-
-    HBCalendar{
-        id: calendarDate
-        anchors.centerIn: parent
-        width: Math.round(400 * Style.scaleHint)
-        height: Math.round(250 * Style.scaleHint)
-        visible: false
-        onSelectedDateChanged: {
-            console.debug("3333333333333: ", selectedDate)
-        }
     }
 
 }

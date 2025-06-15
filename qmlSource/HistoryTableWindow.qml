@@ -13,6 +13,18 @@ Item{
     readonly property int rowSpacing: 20
     readonly property int componentHeight: 30
 
+    HBCalendar{
+        id: calendarDate
+        anchors.centerIn: parent
+        width: Math.round(400 * Style.scaleHint)
+        height: Math.round(250 * Style.scaleHint)
+        z: 5
+        visible: false
+        onSelectedDateChanged: {
+            console.debug("3333333333333: ", selectedDate)
+        }
+    }
+
     DataTableModel {
         id: historyDataModel
     }
@@ -46,36 +58,92 @@ Item{
         width: parent.width - Math.round(10 * Style.scaleHint)
         height: parent.height / 3 - Math.round(40 * Style.scaleHint)
         backgroundColor: Style.backgroundLightColor
-
-        Item {
-            id: buttonArray
-            width: parent.width
-            height: parent.height / 2
-            anchors.top: parent.top
+        Grid
+        {
+            id: argumentLayout
+            columns: 2
+            rows: 2
+            columnSpacing: Math.round(80 * Style.scaleHint)
+            rowSpacing: Math.round(10 * Style.scaleHint)
+            width: Math.round((textWidth + rowSpacing + comboBoxWidth) * 2 * Style.scaleHint) + argumentLayout.columnSpacing
+            height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
             anchors.left: parent.left
-            Row
-            {
-                id: argumentLayout
-                spacing: Math.round(30 * Style.scaleHint)
-                width: Math.round((buttonWidth * 3 ) * Style.scaleHint) + argumentLayout.columnSpacing * 2
-                height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
-                anchors.left: parent.left
-                anchors.leftMargin: Math.round(20 * Style.scaleHint)
-                anchors.top: parent.top
-                anchors.topMargin: Math.round(20 * Style.scaleHint)
+            anchors.leftMargin: Math.round(20 * Style.scaleHint)
+            anchors.verticalCenter: parent.verticalCenter
 
-                HBPrimaryButton
+            Row{
+                spacing: Math.round(rowSpacing * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                width: Math.round((textWidth + rowSpacing + comboBoxWidth) * Style.scaleHint)
+                Text {
+                    id: titleStartTimeStamp
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("开始时间") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBComboBoxCalendar
                 {
-                    id: buttonInquiresSetting
-                    width: Math.round(buttonWidth * Style.scaleHint)
-                    height: Math.round(componentHeight * Style.scaleHint)
-                    text: qsTr("设置查询条件")
-                    onClicked:
+                    id:comboBoxStartTimeStamp
+                    width: Math.round(comboBoxWidth * Style.scaleHint)
+                    height: parent.height
+                    onSignalPopUp:
                     {
-                        // controlLimitNumpad.visible = false
+                        if(isShow === true)
+                            calendarDate.visible = true
+                        else
+                        {
+                            calendarDate.visible = false
+
+                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                        }
                     }
                 }
+            }
 
+            Row{
+                spacing: Math.round(rowSpacing * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                width: Math.round((textWidth + rowSpacing + comboBoxWidth) * Style.scaleHint)
+                anchors.right: parent.right
+                Text {
+                    id: titleFinishTimeStamp
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("结束时间") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+
+                HBComboBoxCalendar
+                {
+                    id:comboBoxFinishTimeStamp
+                    width: Math.round(comboBoxWidth * Style.scaleHint)
+                    height: parent.height
+                    onSignalPopUp:
+                    {
+                        if(isShow === true)
+                            calendarDate.visible = true
+                        else
+                        {
+                            calendarDate.visible = false
+
+                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                        }
+                    }
+                }
+            }
+
+            Row{
+                spacing: Math.round(rowSpacing * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                width: Math.round((buttonWidth + rowSpacing + buttonWidth) * Style.scaleHint)
+                anchors.bottom: parent.bottom
                 HBPrimaryButton
                 {
                     id: buttonInquire
@@ -85,6 +153,13 @@ Item{
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
+                        // weldGraphObj.loadHistoryCurve(depthLeftAxisPlot, "depth");
+                        // weldGraphObj.loadHistoryCurve(velocityLeftAxisPlot, "velocity");
+                        // weldGraphObj.loadHistoryCurve(tensionsLeftAxisPlot, "tensions");
+                        // weldGraphObj.loadHistoryCurve(tensionIncrementLeftAxisPlot, "tension_increment");
+//                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
+                        console.log("开始时间: "+ comboBoxStartTimeStamp.text)
+                         console.log("结束时间: "+ comboBoxFinishTimeStamp.text)
                     }
                 }
 
@@ -93,39 +168,94 @@ Item{
                     id: buttonExport
                     width: Math.round(buttonWidth * Style.scaleHint)
                     height: Math.round(componentHeight * Style.scaleHint)
-                    text: qsTr("导出选中")
+                    text: qsTr("导出")
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
                     }
                 }
-
-
             }
-        }
-
-        Item {
-            id: textContent
-            width: parent.width
-            height: parent.height / 2
-            anchors.top: buttonArray.bottom
-            anchors.left: parent.left
-            Text {
-                id: titleStartTimeStamp
-                anchors.left: parent.left
-                anchors.leftMargin: Math.round(20 * Style.scaleHint)
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
-                height: Math.round(componentHeight * Style.scaleHint)
-                text: qsTr("查询方式") + ":"
-                font.family: "宋体"
-                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-                verticalAlignment: Text.AlignVCenter
-                color: Style.whiteFontColor
-            }
-
         }
     }
+
+//        Item {
+//            id: buttonArray
+//            width: parent.width
+//            height: parent.height / 2
+//            anchors.top: parent.top
+//            anchors.left: parent.left
+////            Row
+////            {
+////                id: argumentLayout
+////                spacing: Math.round(30 * Style.scaleHint)
+////                width: Math.round((buttonWidth * 3 ) * Style.scaleHint) + argumentLayout.columnSpacing * 2
+////                height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
+////                anchors.left: parent.left
+////                anchors.leftMargin: Math.round(20 * Style.scaleHint)
+////                anchors.top: parent.top
+////                anchors.topMargin: Math.round(20 * Style.scaleHint)
+
+////                HBPrimaryButton
+////                {
+////                    id: buttonInquiresSetting
+////                    width: Math.round(buttonWidth * Style.scaleHint)
+////                    height: Math.round(componentHeight * Style.scaleHint)
+////                    text: qsTr("设置查询条件")
+////                    onClicked:
+////                    {
+////                        // controlLimitNumpad.visible = false
+////                    }
+////                }
+
+////                HBPrimaryButton
+////                {
+////                    id: buttonInquire
+////                    width: Math.round(buttonWidth * Style.scaleHint)
+////                    height: Math.round(componentHeight * Style.scaleHint)
+////                    text: qsTr("查询")
+////                    onClicked:
+////                    {
+////                        // controlLimitNumpad.visible = false
+////                    }
+////                }
+
+////                HBPrimaryButton
+////                {
+////                    id: buttonExport
+////                    width: Math.round(buttonWidth * Style.scaleHint)
+////                    height: Math.round(componentHeight * Style.scaleHint)
+////                    text: qsTr("导出选中")
+////                    onClicked:
+////                    {
+////                        // controlLimitNumpad.visible = false
+////                    }
+////                }
+
+
+////            }
+//            //        Item {
+//            //            id: textContent
+//            //            width: parent.width
+//            //            height: parent.height / 2
+//            //            anchors.top: buttonArray.bottom
+//            //            anchors.left: parent.left
+//            //            Text {
+//            //                id: titleStartTimeStamp
+//            //                anchors.left: parent.left
+//            //                anchors.leftMargin: Math.round(20 * Style.scaleHint)
+//            //                anchors.verticalCenter: parent.verticalCenter
+//            //                width: parent.width
+//            //                height: Math.round(componentHeight * Style.scaleHint)
+//            //                text: qsTr("查询方式") + ":"
+//            //                font.family: "宋体"
+//            //                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+//            //                verticalAlignment: Text.AlignVCenter
+//            //                color: Style.whiteFontColor
+//            //            }
+
+//            //        }
+
+//    }
     ListModel
     {
         id: headerModel
