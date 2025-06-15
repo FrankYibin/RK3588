@@ -1,4 +1,4 @@
-import QtQuick.Controls 1.4
+﻿import QtQuick.Controls 1.4
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
@@ -6,6 +6,8 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.HistoryDataTable 1.0
+import HB.Database 1.0
+
 Item{
     readonly property int textWidth: 100
     readonly property int comboBoxWidth: 150
@@ -42,8 +44,8 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -152,14 +154,10 @@ Item{
                     text: qsTr("查询")
                     onClicked:
                     {
-                        // controlLimitNumpad.visible = false
-                        // weldGraphObj.loadHistoryCurve(depthLeftAxisPlot, "depth");
-                        // weldGraphObj.loadHistoryCurve(velocityLeftAxisPlot, "velocity");
-                        // weldGraphObj.loadHistoryCurve(tensionsLeftAxisPlot, "tensions");
-                        // weldGraphObj.loadHistoryCurve(tensionIncrementLeftAxisPlot, "tension_increment");
-//                        weldGraphObj.appendSamples(graphChartView.series(depthLeftPlotName), GraphAxisEnum.DEPTH_IDX);
-                        console.log("开始时间: "+ comboBoxStartTimeStamp.text)
-                         console.log("结束时间: "+ comboBoxFinishTimeStamp.text)
+                        var startIso = comboBoxStartTimeStamp.text + "T00:00:00"
+                        var endIso   = comboBoxFinishTimeStamp.text + "T23:59:59"
+                        historyDataModel.loadFromDatabase(startIso,endIso)
+                        console.log("startIso: ",startIso,"endIso: ",endIso)
                     }
                 }
 
@@ -178,84 +176,84 @@ Item{
         }
     }
 
-//        Item {
-//            id: buttonArray
-//            width: parent.width
-//            height: parent.height / 2
-//            anchors.top: parent.top
-//            anchors.left: parent.left
-////            Row
-////            {
-////                id: argumentLayout
-////                spacing: Math.round(30 * Style.scaleHint)
-////                width: Math.round((buttonWidth * 3 ) * Style.scaleHint) + argumentLayout.columnSpacing * 2
-////                height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
-////                anchors.left: parent.left
-////                anchors.leftMargin: Math.round(20 * Style.scaleHint)
-////                anchors.top: parent.top
-////                anchors.topMargin: Math.round(20 * Style.scaleHint)
+    //        Item {
+    //            id: buttonArray
+    //            width: parent.width
+    //            height: parent.height / 2
+    //            anchors.top: parent.top
+    //            anchors.left: parent.left
+    ////            Row
+    ////            {
+    ////                id: argumentLayout
+    ////                spacing: Math.round(30 * Style.scaleHint)
+    ////                width: Math.round((buttonWidth * 3 ) * Style.scaleHint) + argumentLayout.columnSpacing * 2
+    ////                height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
+    ////                anchors.left: parent.left
+    ////                anchors.leftMargin: Math.round(20 * Style.scaleHint)
+    ////                anchors.top: parent.top
+    ////                anchors.topMargin: Math.round(20 * Style.scaleHint)
 
-////                HBPrimaryButton
-////                {
-////                    id: buttonInquiresSetting
-////                    width: Math.round(buttonWidth * Style.scaleHint)
-////                    height: Math.round(componentHeight * Style.scaleHint)
-////                    text: qsTr("设置查询条件")
-////                    onClicked:
-////                    {
-////                        // controlLimitNumpad.visible = false
-////                    }
-////                }
+    ////                HBPrimaryButton
+    ////                {
+    ////                    id: buttonInquiresSetting
+    ////                    width: Math.round(buttonWidth * Style.scaleHint)
+    ////                    height: Math.round(componentHeight * Style.scaleHint)
+    ////                    text: qsTr("设置查询条件")
+    ////                    onClicked:
+    ////                    {
+    ////                        // controlLimitNumpad.visible = false
+    ////                    }
+    ////                }
 
-////                HBPrimaryButton
-////                {
-////                    id: buttonInquire
-////                    width: Math.round(buttonWidth * Style.scaleHint)
-////                    height: Math.round(componentHeight * Style.scaleHint)
-////                    text: qsTr("查询")
-////                    onClicked:
-////                    {
-////                        // controlLimitNumpad.visible = false
-////                    }
-////                }
+    ////                HBPrimaryButton
+    ////                {
+    ////                    id: buttonInquire
+    ////                    width: Math.round(buttonWidth * Style.scaleHint)
+    ////                    height: Math.round(componentHeight * Style.scaleHint)
+    ////                    text: qsTr("查询")
+    ////                    onClicked:
+    ////                    {
+    ////                        // controlLimitNumpad.visible = false
+    ////                    }
+    ////                }
 
-////                HBPrimaryButton
-////                {
-////                    id: buttonExport
-////                    width: Math.round(buttonWidth * Style.scaleHint)
-////                    height: Math.round(componentHeight * Style.scaleHint)
-////                    text: qsTr("导出选中")
-////                    onClicked:
-////                    {
-////                        // controlLimitNumpad.visible = false
-////                    }
-////                }
+    ////                HBPrimaryButton
+    ////                {
+    ////                    id: buttonExport
+    ////                    width: Math.round(buttonWidth * Style.scaleHint)
+    ////                    height: Math.round(componentHeight * Style.scaleHint)
+    ////                    text: qsTr("导出选中")
+    ////                    onClicked:
+    ////                    {
+    ////                        // controlLimitNumpad.visible = false
+    ////                    }
+    ////                }
 
 
-////            }
-//            //        Item {
-//            //            id: textContent
-//            //            width: parent.width
-//            //            height: parent.height / 2
-//            //            anchors.top: buttonArray.bottom
-//            //            anchors.left: parent.left
-//            //            Text {
-//            //                id: titleStartTimeStamp
-//            //                anchors.left: parent.left
-//            //                anchors.leftMargin: Math.round(20 * Style.scaleHint)
-//            //                anchors.verticalCenter: parent.verticalCenter
-//            //                width: parent.width
-//            //                height: Math.round(componentHeight * Style.scaleHint)
-//            //                text: qsTr("查询方式") + ":"
-//            //                font.family: "宋体"
-//            //                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//            //                verticalAlignment: Text.AlignVCenter
-//            //                color: Style.whiteFontColor
-//            //            }
+    ////            }
+    //            //        Item {
+    //            //            id: textContent
+    //            //            width: parent.width
+    //            //            height: parent.height / 2
+    //            //            anchors.top: buttonArray.bottom
+    //            //            anchors.left: parent.left
+    //            //            Text {
+    //            //                id: titleStartTimeStamp
+    //            //                anchors.left: parent.left
+    //            //                anchors.leftMargin: Math.round(20 * Style.scaleHint)
+    //            //                anchors.verticalCenter: parent.verticalCenter
+    //            //                width: parent.width
+    //            //                height: Math.round(componentHeight * Style.scaleHint)
+    //            //                text: qsTr("查询方式") + ":"
+    //            //                font.family: "宋体"
+    //            //                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+    //            //                verticalAlignment: Text.AlignVCenter
+    //            //                color: Style.whiteFontColor
+    //            //            }
 
-//            //        }
+    //            //        }
 
-//    }
+    //    }
     ListModel
     {
         id: headerModel
@@ -281,96 +279,96 @@ Item{
         }
 
     }
-//    ListModel
-//    {
-//        id: dataModel
-//        function resetModel()
-//        {
-//            dataModel.clear()
-//            dataModel.append({"Index": 0,               "WellNumber": "陕30H-3",    "Date": "2025-4-22",
-//                              "OperateType": "射孔",    "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 1,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 2,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 3,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 4,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 5,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 6,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 7,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 8,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 9,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 10,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 11,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 12,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 13,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 14,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
-//            dataModel.append({"Index": 15,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
-//                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
-//                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
-//                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
-//                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //    ListModel
+    //    {
+    //        id: dataModel
+    //        function resetModel()
+    //        {
+    //            dataModel.clear()
+    //            dataModel.append({"Index": 0,               "WellNumber": "陕30H-3",    "Date": "2025-4-22",
+    //                              "OperateType": "射孔",    "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 1,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 2,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 3,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 4,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 5,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 6,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 7,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 8,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 9,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 10,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 11,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 12,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 13,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 14,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
+    //            dataModel.append({"Index": 15,               "WellNumber": "陕30H-3",     "Date": "2025-4-22",
+    //                              "OperateType": "射孔",      "Operater": "1",              "Depth": 100.0,
+    //                              "Velocity": 100.0,        "VelocityUnit": "m/min",    "Tensions": 50.0,
+    //                              "TensionIncreament": 1.0, "TensionUnit": "kg",        "MaxTension": 255.0,
+    //                              "HarnessTension": 101.0,  "SafetyTension": 100.0,     "Exception": "无"})
 
-//        }
+    //        }
 
-//    }
+    //    }
 
     HBTableView {
         id: gridParentFrame
@@ -392,7 +390,7 @@ Item{
             Text {
                 anchors.centerIn: parent
                 color: Style.whiteFontColor
-//                text: styleData.value
+                //                text: styleData.value
                 text: styleData.column === 0 ? (styleData.row + 1) : styleData.value
                 font.family: "宋体"
                 font.pixelSize: gridParentFrame.fontSize

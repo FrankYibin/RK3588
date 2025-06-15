@@ -95,6 +95,9 @@ public:
     ///加载历史数据
     QList<HistoryData> loadHistoryData();
 
+    QList<HistoryData> loadHistoryData(const QDateTime& start,
+                                       const QDateTime& end);
+
     bool insertHistoryData(const ModbusData& modbusData);
 
     void closeTransaction();

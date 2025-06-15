@@ -13,7 +13,8 @@
 #include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/tensionsetting.h"
 #include <QVariant>
-
+#include <QDir>
+#include <QFile>
 
 HBDatabase::HBDatabase(QObject *parent)
     : QObject{parent}
@@ -29,19 +30,183 @@ HBDatabase::~HBDatabase()
     closeTransaction();
 }
 
+// void HBDatabase::init()
+// {
+//     m_database = QSqlDatabase::addDatabase("QSQLITE");
+//     QString dbPath = QCoreApplication::applicationDirPath() + "/DVTT.db";
+//     qDebug() << "DB Path: " << dbPath;
+//     m_database.setDatabaseName(dbPath);
+
+//     if (!m_database.open())
+//     {
+//         qDebug() << "Database Open Fail ";
+//         qDebug() << m_database.lastError();
+//     }
+
+// }
+
 void HBDatabase::init()
 {
-    m_database = QSqlDatabase::addDatabase("QSQLITE");
-    QString dbPath = QCoreApplication::applicationDirPath() + "/DVTT.db";
-    qDebug() << "DB Path: " << dbPath;
-    m_database.setDatabaseName(dbPath);
+    QDir execDir(QCoreApplication::applicationDirPath());
 
-    if (!m_database.open())
-    {
-        qDebug() << "Database Open Fail ";
-        qDebug() << m_database.lastError();
+    QString dbPath;
+    QDir searchDir = execDir;
+    while (true) {
+        QString candidate = searchDir.filePath("DVTT.db");
+        if (QFile::exists(candidate)) {
+            dbPath = candidate;
+            break;
+        }
+        if (!searchDir.cdUp()) {
+            break;
+        }
     }
 
+    if (dbPath.isEmpty()) {
+        QString srcPath = execDir.absoluteFilePath("../DVTT.db");
+        QString destPath = execDir.filePath("DVTT.db");
+
+        if (QFile::exists(srcPath)) {
+            qDebug() << "Copying DVTT.db from" << srcPath << "to" << destPath;
+            if (QFile::copy(srcPath, destPath)) {
+                dbPath = destPath;
+            }
+        }
+    }
+
+    if (dbPath.isEmpty()) {
+        dbPath = execDir.filePath("DVTT.db");
+        qDebug() << "DVTT.db not found, will create new one at" << dbPath;
+    }
+
+    qDebug() << "Final DB Path:" << dbPath;
+
+    m_database = QSqlDatabase::addDatabase("QSQLITE");
+    m_database.setDatabaseName(dbPath);
+
+    if (!m_database.open()) {
+        qWarning() << "Database open failed:" << m_database.lastError();
+        return;
+    }
+
+    QSqlQuery qry("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+    if (!qry.next()) {
+        qDebug() << "Empty database, creating tables...";
+
+        const QStringList sqlList = {
+            R"(CREATE TABLE IF NOT EXISTS depthsafe (
+                id INTEGER PRIMARY KEY,
+                depthPreset INTEGER,
+                wellWarnig INTEGER,
+                brake INTEGER,
+                velocityLimit INTEGER,
+                depthWarning INTEGER,
+                totalDepth INTEGER,
+                depthBrake INTEGER,
+                depthVelocityLimit INTEGER
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS depthset (
+                id INTEGER PRIMARY KEY,
+                targetLayerDepth INTEGER,
+                depthOrientation INTEGER,
+                meterDepth INTEGER,
+                depthCalculateType INTEGER,
+                codeOption INTEGER,
+                pulse INTEGER
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS history_table (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                wellNumber TEXT,
+                date TEXT DEFAULT (datetime('now', 'localtime')),
+                operateType TEXT,
+                operater TEXT,
+                depth INTEGER,
+                velocity INTEGER,
+                velocityUnit TEXT,
+                tensions INTEGER,
+                tensionIncrement INTEGER,
+                tensionUnit TEXT,
+                maxTension INTEGER,
+                harnessTension INTEGER,
+                safetyTension INTEGER,
+                exception TEXT
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS operating_data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                well_number TEXT,
+                work_type TEXT,
+                username TEXT,
+                datetime TEXT,
+                operate TEXT
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS tensiometer (
+                Number INTEGER PRIMARY KEY UNIQUE NOT NULL,
+                Type INTEGER,
+                Range INTEGER,
+                Signal INTEGER,
+                Scale TEXT
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS tensionsafe (
+                id INTEGER PRIMARY KEY UNIQUE,
+                wellType TEXT,
+                maxTension INTEGER,
+                weakForce TEXT,
+                tensionSafeFactor TEXT
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS tensionset (
+                id INTEGER PRIMARY KEY UNIQUE,
+                kValue INTEGER,
+                tensionUnit INTEGER
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS unit_settings (
+                id INTEGER PRIMARY KEY CHECK(id = 1) UNIQUE,
+                tension_unit INTEGER NOT NULL,
+                depth_unit INTEGER NOT NULL
+            ))",
+
+            R"(CREATE TABLE IF NOT EXISTS wellparameter (
+                id INTEGER PRIMARY KEY NOT NULL UNIQUE,
+                wellNumber TEXT,
+                areaBlock TEXT,
+                wellType INTEGER,
+                wellDepth TEXT,
+                harnessWeight TEXT,
+                sensorWeight TEXT,
+                harnessType INTEGER,
+                harnessForce TEXT,
+                tensionUnit INTEGER,
+                workType INTEGER,
+                userName TEXT,
+                operatorType TEXT
+            ))",
+
+            R"(CREATE TABLE "operating_data" (
+               "id"	INTEGER UNIQUE,
+               "well_number"	TEXT,
+               "work_type"	TEXT,
+               "username"	TEXT,
+               "datetime"	TEXT,
+               "operate"	TEXT,
+            PRIMARY KEY("id" AUTOINCREMENT)
+            ))"
+        };
+
+        QSqlQuery create;
+        for (const QString &sql : sqlList) {
+            if (!create.exec(sql)) {
+                qWarning() << "Create table failed:" << create.lastError().text();
+            }
+        }
+    } else {
+        qDebug() << "Database already initialized.";
+    }
 }
 
 bool HBDatabase::beginTransaction()
@@ -102,7 +267,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     param.sensorWeight = query.value("sensorWeight").toString();
     param.harnessType = query.value("harnessType").toInt();
     param.harnessForce = query.value("harnessForce").toString();
-//    param.tensionUnit = query.value("tensionUnit").toInt();
+    //    param.tensionUnit = query.value("tensionUnit").toInt();
     param.workType = query.value("workType").toInt();
     param.userName = query.value("userName").toString();
     param.operatorType = query.value("operatorType").toString();
@@ -973,7 +1138,67 @@ QList<HistoryData> HBDatabase::loadHistoryData()
     return dataList;
 }
 
+QList<HistoryData> HBDatabase::loadHistoryData(const QDateTime &start, const QDateTime &end)
+{
+    QList<HistoryData> dataList;
 
+    if (!m_database.isOpen()) {
+        qWarning() << "HBDatabase::loadHistoryData - database not open";
+        return dataList;
+    }
+
+    const char* sql =
+        "SELECT wellNumber, date, operateType, operater, depth, velocity, "
+        "velocityUnit, tensions, tensionIncrement, tensionUnit, maxTension, "
+        "harnessTension, safetyTension, exception "
+        "FROM history_table "
+        "WHERE datetime(date) BETWEEN datetime(:start) AND datetime(:end) "
+        "ORDER BY datetime(date) ASC";    //DESC
+
+    QSqlQuery query(m_database);
+
+    if (!query.prepare(sql)) {
+        qWarning() << "HBDatabase::loadHistoryData - prepare failed:"
+                   << query.lastError();
+        return dataList;
+    }
+
+    query.bindValue(":start", start.toString("yyyy-MM-dd HH:mm:ss"));
+    query.bindValue(":end",   end.toString("yyyy-MM-dd HH:mm:ss"));
+
+    if (!query.exec()) {
+        qWarning() << "HBDatabase::loadHistoryData - exec failed:"
+                   << query.lastError();
+        return dataList;
+    }
+
+
+    while (query.next()) {
+        HistoryData item;
+        item.wellNumber        = query.value("wellNumber").toString();
+
+        const QString fullDate = query.value("date").toString();
+        item.date = fullDate.left(10);
+
+        item.operateType       = query.value("operateType").toString();
+        item.operater          = query.value("operater").toString();
+        item.depth             = query.value("depth").toInt();
+        item.velocity          = query.value("velocity").toInt();
+        item.velocityUnit      = query.value("velocityUnit").toString();
+        item.tensions          = query.value("tensions").toInt();
+        item.tensionIncrement  = query.value("tensionIncrement").toInt();
+        item.tensionUnit       = query.value("tensionUnit").toString();
+        item.maxTension        = query.value("maxTension").toInt();
+        item.harnessTension    = query.value("harnessTension").toInt();
+        item.safetyTension     = query.value("safetyTension").toInt();
+        item.exception         = query.value("exception").toString();
+
+        dataList.append(item);
+    }
+
+    return dataList;
+
+}
 
 bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
 {
