@@ -422,7 +422,7 @@ void clientSocket::slotSocketConnecting()
     if(!this->waitForConnected(MAX_CONNECT_WAIT_TIME_CLIENT))
     {
 //        qDebug()<<this->errorString();
-        setSocketErrorCode(clientSocket::ConnectErr);
+        // setSocketErrorCode(clientSocket::ConnectErr);
     }
 }
 
@@ -468,7 +468,7 @@ void clientSocket::slotDataSending()
     while((m_SendBuffMap.size() > 0) && (this->state() == QAbstractSocket::ConnectedState))
     {
         firstKey = m_SendBuffMap.firstKey();
-        ProtocolFormat::buildProtocolPackage(firstKey, m_SendBuffMap[firstKey], dataBuff);
+        dataBuff = m_SendBuffMap[firstKey];
         if((this->write(dataBuff) != -1) && this->waitForBytesWritten() != false)
         {
 #ifdef COMMUNICATION_TEST

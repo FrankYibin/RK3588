@@ -247,6 +247,8 @@ private:
     void handleAlarm();
     void handleCANbus();
 
+    void Insert4GData();
+
 
 
 
@@ -284,6 +286,10 @@ private:
     int     getSlopeAngleWell       (const QString strData, const int hexAddress);
     int     getTonnageStick         (const QString strData, const int hexAddress);
     int     getKValue               (const QString strData, const int hexAddress);
+
+    int     MakeReportData(char* pBuffer, int deep, int speed, int tension, int tension_delta, short pulse, short kValue, char* wellNum);
+    int     MakeReport(const char* pData, int len, char* pOutbuf);
+
 signals:
 
 private:

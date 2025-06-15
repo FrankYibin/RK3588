@@ -25,7 +25,7 @@
 #include "heartbeatformat.h"
 #define MAX_READ_WAIT_TIME_CLIENT 3000 // milliseconds.  2000 milliseconds required if network is too busy.
 #define MAX_WRITE_WAIT_TIME_CLIENT 2000
-#define MAX_CONNECT_WAIT_TIME_CLIENT 1000
+#define MAX_CONNECT_WAIT_TIME_CLIENT 5000
 #define MAX_DISCONNECT_WAIT_TIME_CLIENT 1000
 #define MAX_READ_BUFF_LEN 10240
 class clientSocket : public QTcpSocket

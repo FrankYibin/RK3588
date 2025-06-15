@@ -169,14 +169,14 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("debug", false);
 #endif
     pQmlContext->setContextProperty("languageConfig", LanguageConfig::getInstance());
-    pQmlContext->setContextProperty("languageModel", LanguageConfig::getInstance()->getLanguageModelInstance());
-    pQmlContext->setContextProperty("productionRunInterface", ProductionRun::getInstance());
-    pQmlContext->setContextProperty("weldGraphObj", WeldGraphData::getInstance());
-    pQmlContext->setContextProperty("softwareUpgrade", SoftwareUpgrading::getInstance());
-    pQmlContext->setContextProperty("recipeModel", RecipeModel::getInstance());
-    pQmlContext->setContextProperty("alarmNotification", AlarmNotification::getInstance());
+    // pQmlContext->setContextProperty("languageModel", LanguageConfig::getInstance()->getLanguageModelInstance());
+    // pQmlContext->setContextProperty("productionRunInterface", ProductionRun::getInstance());
+    // pQmlContext->setContextProperty("weldGraphObj", WeldGraphData::getInstance());
+    // pQmlContext->setContextProperty("softwareUpgrade", SoftwareUpgrading::getInstance());
+    // pQmlContext->setContextProperty("recipeModel", RecipeModel::getInstance());
+    // pQmlContext->setContextProperty("alarmNotification", AlarmNotification::getInstance());
     pQmlContext->setContextProperty("login", Login::getInstance());
-    pQmlContext->setContextProperty("communicationInterface", CommunicationInterface::getInstance(&app));
+    // pQmlContext->setContextProperty("communicationInterface", CommunicationInterface::getInstance(&app));
     pQmlContext->setContextProperty("systemInformationModel", SystemInformationInterface::getInstance());
 
 

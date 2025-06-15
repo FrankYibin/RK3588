@@ -515,34 +515,34 @@ Window{
             }
         }
 
-        NormalScreenAlarmNotificationWindow {
-            id: alarmNotificationNormalScreen
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            scaleRate: Math.sqrt(1/6)
-            width: parent.width * scaleRate
-            height: parent.height * scaleRate
-            visible: false
+        // NormalScreenAlarmNotificationWindow {
+        //     id: alarmNotificationNormalScreen
+        //     anchors.bottom: parent.bottom
+        //     anchors.right: parent.right
+        //     scaleRate: Math.sqrt(1/6)
+        //     width: parent.width * scaleRate
+        //     height: parent.height * scaleRate
+        //     visible: false
 
-        }
+        // }
     }
 
-    TranslationView {
-        id: languageSelectView
-        visible: false
-        anchors.centerIn: parent
-        width: mainWindow.showWidth
-        height: mainWindow.showHeight
-    }
+    // TranslationView {
+    //     id: languageSelectView
+    //     visible: false
+    //     anchors.centerIn: parent
+    //     width: mainWindow.showWidth
+    //     height: mainWindow.showHeight
+    // }
 
     /*update*/
-    SoftwareUpgradeView {
-        id: softwareUpgrading
-        visible: false
-        anchors.centerIn: parent
-        width: mainWindow.showWidth
-        height: mainWindow.showHeight
-    }
+    // SoftwareUpgradeView {
+    //     id: softwareUpgrading
+    //     visible: false
+    //     anchors.centerIn: parent
+    //     width: mainWindow.showWidth
+    //     height: mainWindow.showHeight
+    // }
 
     /*KeyBoard*/
     BransonPrimaryNumpad
@@ -591,21 +591,21 @@ Window{
         height: mainWindow.showHeight
     }
 
-    FullScreenGraphWindow {
-        id: chartViewFullScreen
-        visible: false
-        anchors.centerIn: parent
-        width: mainWindow.showWidth
-        height: mainWindow.showHeight
-    }
+    // FullScreenGraphWindow {
+    //     id: chartViewFullScreen
+    //     visible: false
+    //     anchors.centerIn: parent
+    //     width: mainWindow.showWidth
+    //     height: mainWindow.showHeight
+    // }
 
-    FullScreenAlarmNotificationWindow {
-        id: alarmNotificationFullScreen
-        visible: false
-        anchors.centerIn: parent
-        width: mainWindow.showWidth
-        height: mainWindow.showHeight
-    }
+    // FullScreenAlarmNotificationWindow {
+    //     id: alarmNotificationFullScreen
+    //     visible: false
+    //     anchors.centerIn: parent
+    //     width: mainWindow.showWidth
+    //     height: mainWindow.showHeight
+    // }
 
     Login
     {

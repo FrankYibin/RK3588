@@ -12,10 +12,13 @@
 #include "c++Source/HBScreen/tensiometer.h"
 #include "c++Source/HBScreen/autotestspeed.h"
 #include "c++Source/HBUtility/hbutilityclass.h"
+#include "c++Source/netSend.h"
 #include <QtConcurrent>
 #include <QHash>
 #include <cstring>
 #include <QVariant>
+#include <stdio.h>
+#include <arpa/inet.h>
 
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_RecvReg;
 HBModbusClient::MODBUS_REGISTER HBModbusClient::m_PrevRecvReg;
@@ -47,7 +50,8 @@ HBModbusClient::HBModbusClient(QObject *parent)
     m_ForceUnit     = TensionSetting::LB;
     memset(&m_PrevRecvReg, 0xff, sizeof(MODBUS_REGISTER));
 
-    _ptrSocketObj = new clientSocket(QHostAddress("47.93.187.236"), 12345);
+    _ptrSocketObj = new clientSocket(QHostAddress("47.93.187.236"), 123456);
+    // _ptrSocketObj = new clientSocket(QHostAddress("192.168.1.38"), 4200);
 }
 
 void HBModbusClient::timerEvent(QTimerEvent *event)
@@ -76,6 +80,7 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
         {
             readRegisters   (0, HQmlEnum::MAX_REGISTR - 1);
             readCoils       (0, HQmlEnum::MAX_COIL - 1);
+            Insert4GData    ();
         }
         else
         {
@@ -1593,6 +1598,7 @@ void HBModbusClient::handleCANbus()
 
 }
 
+
 void HBModbusClient::handleDevice()
 {
     DepthSetting::GetInstance()->setDepthOrientation(m_IO_Value0.bits_Value0.m_OrientationDepth);
@@ -1621,3 +1627,113 @@ void HBModbusClient::insertDataToDatabase()
     // });
 }
 
+void HBModbusClient::Insert4GData()
+{
+    QByteArray array;
+    int deep    = m_RecvReg.m_DepthCurrent.Data;
+    int speed   = m_RecvReg.m_VelocityCurrent.Data;
+    int tension = m_RecvReg.m_TensionCurrent.Data;
+    int tension_delta = m_RecvReg.m_TensionCurrentDelta.Data;
+    short pulse = m_RecvReg.m_PulseCount.Data;
+    short kValue = m_RecvReg.m_K_Value.Data;
+    char WellNum[16] = "555555555555555";
+    char Value[40];
+    char Buffer[100];
+    int len = MakeReportData(Value, deep, speed, tension, tension_delta, pulse, kValue, WellNum);
+    len = MakeReport(Value, len, Buffer);
+    array.append(Buffer, len);
+    _ptrSocketObj->insertMessageToMap(0, array);
+}
+
+int HBModbusClient::MakeReportData(char* pBuffer, int deep, int speed, int tension, int tension_delta, short pulse, short kValue, char* wellNum)
+{
+    if (!pBuffer)
+        return 0;
+    int index = 0;
+    // 深度
+    int value = htonl(deep);
+    memcpy(&pBuffer[index], &value, sizeof(value));
+    index += sizeof(value);
+    // 速度
+    value = htonl(speed);
+    memcpy(&pBuffer[index], &value, sizeof(value));
+    index += sizeof(value);
+    // 张力
+    value = htonl(tension);
+    memcpy(&pBuffer[index], &value, sizeof(value));
+    index += sizeof(value);
+    // 张力增量
+    value = htonl(tension_delta);
+    memcpy(&pBuffer[index], &value, sizeof(value));
+    index += sizeof(value);
+    // 脉冲
+    short sValue = htons(pulse);
+    memcpy(&pBuffer[index], &sValue, sizeof(sValue));
+    index += sizeof(sValue);
+    // K值
+    sValue = htons(kValue);
+    memcpy(&pBuffer[index], &sValue, sizeof(sValue));
+    index += sizeof(sValue);
+    // 井号
+    memcpy(&pBuffer[index], wellNum, 16);
+    index += 16;
+    ///
+    return index;
+}
+
+int HBModbusClient::MakeReport(const char* pData, int len, char* pOutbuf)
+{
+    int retLen = 0;
+    char g_devId[11] = {} ;
+    if (!pData)
+        return retLen;
+    int index = 0;
+    pOutbuf[index++] = (char)0x16;
+    pOutbuf[index++] = (char)0x25;
+    pOutbuf[index++] = (char)0x08;
+    pOutbuf[index++] = (char)0x17;
+    //设备ID号
+    memset(&pOutbuf[index], 0, 11);
+    int devLen = sizeof(g_devId);
+    if(devLen > 11)
+    {
+        devLen = 11;
+    }
+    memcpy(&pOutbuf[index], g_devId, devLen);
+    index += 11;
+    pOutbuf[index++] = (char)0x00;
+    pOutbuf[index++] = (char)0x00;
+    pOutbuf[index++] = (char)0x00;
+    pOutbuf[index++] = (char)0x00;
+    pOutbuf[index++] = (char)0x00;
+    pOutbuf[index++] = (char)0x00;
+    //帧头
+    pOutbuf[index++] = (char)0xaa;
+    pOutbuf[index++] = (char)0x55;
+    pOutbuf[index++] = (char)0x1c;
+    pOutbuf[index++] = (char)0x12;
+    //内容，经度
+    pOutbuf[index++] = (char)0x11;
+    pOutbuf[index++] = (char)0x44;
+    pOutbuf[index++] = (char)0x33;
+    pOutbuf[index++] = (char)0x50;
+    //内容，纬度
+    pOutbuf[index++] = (char)0x11;
+    pOutbuf[index++] = (char)0x44;
+    pOutbuf[index++] = (char)0x33;
+    pOutbuf[index++] = (char)0x50;
+
+
+    pOutbuf[index++] = (char)0x00;
+    pOutbuf[index++] = (char)0x00;
+    memcpy(&pOutbuf[index], pData, len);
+    index += len;
+    char crc = 0;
+    for (int i = 23; i < index; i++)
+    {
+        crc += pOutbuf[i];
+    }
+    printf("crc:0x%x\n", crc);
+    pOutbuf[index++] = crc;
+    return index;
+}
