@@ -272,7 +272,9 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入斜度值"), " ", 2, 0, 90, textSlopeAngle.text, textSlopeAngle, function(val) {
                             WellParameter.SlopeAngleWellSetting = val;
+                            console.log("textSlopeAngle: ",val)
                             ModbusClient.writeRegister(HQmlEnum.SLOPE_ANGLE_WELL_SETTING, val)
+
                         })
                     }
                 }
@@ -366,7 +368,7 @@ Item{
                 {
                     id: titleTensionUnit
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("拉力磅吨位：")
+                    text: qsTr("拉力棒吨位：")
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -379,7 +381,7 @@ Item{
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入拉力磅吨位"), " ", 2, 0, 99999, textTensionUnit.text, textTensionUnit, function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入拉力棒吨位"), " ", 2, 0, 99999, textTensionUnit.text, textTensionUnit, function(val) {
                             WellParameter.TonnageTensionStick = val;
                             ModbusClient.writeRegister(HQmlEnum.TONNAGE_TENSION_STICK, val)
                         })

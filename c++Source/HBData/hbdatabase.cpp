@@ -102,7 +102,7 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
     param.sensorWeight = query.value("sensorWeight").toString();
     param.harnessType = query.value("harnessType").toInt();
     param.harnessForce = query.value("harnessForce").toString();
-    param.tensionUnit = query.value("tensionUnit").toInt();
+//    param.tensionUnit = query.value("tensionUnit").toInt();
     param.workType = query.value("workType").toInt();
     param.userName = query.value("userName").toString();
     param.operatorType = query.value("operatorType").toString();
@@ -207,7 +207,8 @@ bool HBDatabase::updateWellParameter(const _WellParameter &param)
                   tensionUnit = :tensionUnit,
                   workType = :workType,
                   userName = :userName,
-                  operatorType = :operatorType
+                  operatorType = :operatorType,
+                  slopeAngle = : slopeAngle
                   WHERE id = :id
                   )");
 
@@ -223,6 +224,7 @@ bool HBDatabase::updateWellParameter(const _WellParameter &param)
     query.bindValue(":workType", param.workType);
     query.bindValue(":userName", param.userName);
     query.bindValue(":operatorType", param.operatorType);
+    query.bindValue(":slopeAngle", param.slopeAngle);
     query.bindValue(":id", param.id);
 
     if (!query.exec()) {
@@ -255,6 +257,7 @@ bool HBDatabase::updateWellParameterFromInstance()
     param.workType = wp->WorkType();
     param.userName = wp->UserName();
     param.operatorType = wp->OperatorType();
+    param.slopeAngle = wp->SlopeAngleWellSetting();
 
     qDebug() << "Updating record id:" << param.id;
     qDebug() << "wellNumber:" << param.wellNumber;
@@ -269,6 +272,7 @@ bool HBDatabase::updateWellParameterFromInstance()
     qDebug() << "workType:" << param.workType;
     qDebug() << "userName:" << param.userName;
     qDebug() << "operatorType:" << param.operatorType;
+    qDebug() << "slopeAngle:" << param.slopeAngle;
 
     return updateWellParameter(param);
 }

@@ -58,7 +58,7 @@ Item{
             systemSettingModel.append({"Title":      "主题切换",
                                         "Width":      100,
                                         "Index":      systemScreenIndex.theme})
-            systemSettingModel.append({"Title":      "时间与语言设置",
+            systemSettingModel.append({"Title":      "时间和语言设置",
                                         "Width":      110,
                                         "Index":      systemScreenIndex.language})
 
