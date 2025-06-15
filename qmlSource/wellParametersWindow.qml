@@ -22,6 +22,7 @@ Item{
         anchors.left: parent.left
         width: parent.width
         height: parent.height
+        focus: true
         gradient: Gradient {
         GradientStop { position: 0.0; color: Style.backgroundLightColor }
         GradientStop { position: 1.0; color: Style.backgroundDeepColor }
