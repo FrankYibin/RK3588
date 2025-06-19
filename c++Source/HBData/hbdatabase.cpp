@@ -457,7 +457,7 @@ bool HBDatabase::updateWellParameter(const _WellParameter &param)
                   workType = :workType,
                   userName = :userName,
                   operatorType = :operatorType,
-                  slopeAngle = : slopeAngle
+                  slopeAngle = :slopeAngle
                   WHERE id = :id
                   )");
 

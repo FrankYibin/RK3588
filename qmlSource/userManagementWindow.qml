@@ -13,11 +13,11 @@ Item{
     }
     QtObject {
         id: userScreenIndex
-        readonly property int currentUser:      0
-        readonly property int userManagement:   1
-        readonly property int seriseID:         2
-        readonly property int createNewUser:    3
-        readonly property int superUser:        4
+        // readonly property int currentUser:      0
+        readonly property int userManagement:   0
+        // readonly property int seriseID:         2
+        // readonly property int createNewUser:    3
+        // readonly property int superUser:        4
     }
 
     function updateTabBar(index)
@@ -51,21 +51,21 @@ Item{
         function resetModel()
         {
             userTabModel.clear()
-            userTabModel.append({"Title":     "当前用户",
-                                "Width":      100,
-                                "Index":      userScreenIndex.currentUser})
+            // userTabModel.append({"Title":     "当前用户",
+            //                     "Width":      100,
+            //                     "Index":      userScreenIndex.currentUser})
             userTabModel.append({"Title":     "用户信息管理",
                                 "Width":      100,
                                 "Index":      userScreenIndex.userManagement})
-            userTabModel.append({"Title":     "设置仪器ID",
-                                "Width":      100,
-                                "Index":      userScreenIndex.seriseID})
-            userTabModel.append({"Title":     "创建新用户",
-                                "Width":      100,
-                                "Index":      userScreenIndex.createNewUser})
-            userTabModel.append({"Title":     "查看超级用户",
-                                "Width":      100,
-                                "Index:":     userScreenIndex.superUser})
+            // userTabModel.append({"Title":     "设置仪器ID",
+            //                     "Width":      100,
+            //                     "Index":      userScreenIndex.seriseID})
+            // userTabModel.append({"Title":     "创建新用户",
+            //                     "Width":      100,
+            //                     "Index":      userScreenIndex.createNewUser})
+            // userTabModel.append({"Title":     "查看超级用户",
+            //                     "Width":      100,
+            //                     "Index:":     userScreenIndex.superUser})
         }
     }
 
@@ -104,7 +104,7 @@ Item{
         anchors.top: userTabBar.bottom
         anchors.topMargin: Math.round(20 * Style.scaleHint)
         anchors.bottom: parent.bottom
-        source:  "qrc:/qmlSource/UserCurrentWindow.qml"
+        source:  "qrc:/qmlSource/UserTableWindow.qml"
     }
 }
 
