@@ -15,7 +15,6 @@ public:
     static SensorGraphData* GetInstance();
     ~SensorGraphData();
 public:
-    Q_INVOKABLE int appendSamples(QAbstractSeries* a_series, quint8 a_type);
 
     Q_INVOKABLE void setAxisMinParameters(QList<qreal> &a_axisVal);
     Q_INVOKABLE void setAxisMaxParameters(QList<qreal> &a_axisVal);
@@ -24,35 +23,37 @@ public:
     Q_INVOKABLE QList<qreal> getAxisMaxParameters();
 
     Q_INVOKABLE void clearGraph();
+    Q_INVOKABLE void loadSensorGraphPoint(const QDateTime &start, const QDateTime &end);
 
-    Q_INVOKABLE void generateRandomNumber();
+    Q_INVOKABLE QVariantList getDateTimes() const;
+    Q_INVOKABLE QVariantList getDepths() const;
+    Q_INVOKABLE QVariantList getVelocitys() const;
+    Q_INVOKABLE QVariantList getTensions() const;
+    Q_INVOKABLE QVariantList getTensionDeltas() const;
 
-    Q_INVOKABLE void loadHistoryCurve(QAbstractSeries* series, const QString& fieldName);
+
 protected:
     explicit SensorGraphData(QObject *parent = nullptr);
 private:
     inline void calculateLargest(qreal &a_axisVal , qreal a_val);
     inline void calculateSmallest(qreal &a_axisVal , qreal a_val);
-    int receiveWeldGraphData(double *receiveData, int length);
+
 
 private:
     static SensorGraphData* m_objInstance;
 
-    int m_GraphPointsCount;
-    static double m_RoughData[9000];
-
-    QVector<QPointF> m_TimePoints ;
-    QVector<QPointF> m_DepthPoints ;
-    QVector<QPointF> m_VelocityPoints ;
-    QVector<QPointF> m_TensionsPoints;
-    QVector<QPointF> m_TensionIncrementPoints;
+    QList<QDateTime> m_TimeRealPoints;
+    QList<qreal> m_DepthRealPoints;
+    QList<qreal> m_VelocityRealPoints;
+    QList<qreal> m_TensionRealPoints;
+    QList<qreal> m_TensionDeltaRealPoints;
 
     /* Axis Parameters */
     QList<qreal> m_axisMinParameters ;
     QList<qreal> m_axisMaxParameters;
 
 signals:
-
+    void isDataReady();
 };
 
 #endif // SENSORGRAPHDATA_H

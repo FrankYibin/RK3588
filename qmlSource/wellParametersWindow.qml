@@ -485,21 +485,28 @@ Item{
             }
         }
     }
+
+    HBPrimaryButton
+    {
+        id: buttonSave
+        width: Math.round(125 * Style.scaleHint)
+        height: Math.round(40 * Style.scaleHint)
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(20 * Style.Hintscale)
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Math.round(20 * Style.Hintscale)
+        text: qsTr("保存")
+        onClicked:
+        {
+            // controlLimitNumpad.visible = false
+            HBDatabase.updateWellParameterFromInstance()
+            //                  console.log("是否成功更新数据库：", ok)
+            profileLayout.visible = false
+            mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
+        }
+    }
+
 }
 
-        HBPrimaryButton
-        {
-            id: buttonSave
-            width: Math.round(125 * Style.scaleHint)
-            height: Math.round(40 * Style.scaleHint)
-            text: qsTr("保存")
-            onClicked:
-            {
-                // controlLimitNumpad.visible = false
-                HBDatabase.updateWellParameterFromInstance()
-                //                  console.log("是否成功更新数据库：", ok)
-                profileLayout.visible = false
-                mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
-            }
-        }
+
 

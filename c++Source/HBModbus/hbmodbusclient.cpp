@@ -1680,7 +1680,7 @@ void HBModbusClient::InsertDataToDatabase()
     modData.safetyTension = TensionSafety::GetInstance()->TensionCurrentSafety();
     modData.exception = "none";
 
-    HBDatabase::GetInstance().insertHistoryData(modData);
+    // HBDatabase::GetInstance().insertHistoryData(modData);
     QtConcurrent::run([modData]() {
         HBDatabase::GetInstance().insertHistoryData(modData);
     });

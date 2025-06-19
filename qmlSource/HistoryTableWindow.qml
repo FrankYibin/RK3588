@@ -11,7 +11,7 @@ import HB.Database 1.0
 Item{
     readonly property int textWidth: 100
     readonly property int comboBoxWidth: 150
-    readonly property int buttonWidth: 150
+    readonly property int buttonWidth: 100
     readonly property int rowSpacing: 20
     readonly property int componentHeight: 30
 
@@ -23,7 +23,7 @@ Item{
         z: 5
         visible: false
         onSelectedDateChanged: {
-            console.debug("3333333333333: ", selectedDate)
+            console.debug("selected Date: ", selectedDate)
         }
     }
 
@@ -52,7 +52,6 @@ Item{
             GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
-
     HBGroupBox
     {
         id: info
@@ -93,7 +92,7 @@ Item{
                 }
                 HBComboBoxCalendar
                 {
-                    id:comboBoxStartTimeStamp
+                    id: comboBoxStartTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
                     text: {
@@ -101,6 +100,7 @@ Item{
                         var yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
                         return Qt.formatDate(yesterday, "yyyy-MM-dd")
                     }
+
                     onSignalPopUp:
                     {
                         if(isShow === true)
@@ -108,7 +108,6 @@ Item{
                         else
                         {
                             calendarDate.visible = false
-
                             comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
@@ -119,7 +118,6 @@ Item{
                 spacing: Math.round(rowSpacing * Style.scaleHint)
                 height: Math.round(componentHeight * Style.scaleHint)
                 width: Math.round((textWidth + rowSpacing + comboBoxWidth) * Style.scaleHint)
-                anchors.right: parent.right
                 Text {
                     id: titleFinishTimeStamp
                     width: Math.round(textWidth * Style.scaleHint)
@@ -133,14 +131,13 @@ Item{
 
                 HBComboBoxCalendar
                 {
-                    id:comboBoxFinishTimeStamp
+                    id: comboBoxFinishTimeStamp
                     width: Math.round(comboBoxWidth * Style.scaleHint)
                     height: parent.height
                     text: {
                         var now = new Date()
                         return Qt.formatDate(now, "yyyy-MM-dd")
                     }
-
                     onSignalPopUp:
                     {
                         if(isShow === true)
@@ -148,7 +145,6 @@ Item{
                         else
                         {
                             calendarDate.visible = false
-
                             comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
@@ -159,7 +155,6 @@ Item{
                 spacing: Math.round(rowSpacing * Style.scaleHint)
                 height: Math.round(componentHeight * Style.scaleHint)
                 width: Math.round((buttonWidth + rowSpacing + buttonWidth) * Style.scaleHint)
-                anchors.bottom: parent.bottom
                 HBPrimaryButton
                 {
                     id: buttonInquire
@@ -183,7 +178,6 @@ Item{
                     text: qsTr("导出")
                     onClicked:
                     {
-                        // controlLimitNumpad.visible = false
                         historyDataModel.exportData()
                     }
                 }

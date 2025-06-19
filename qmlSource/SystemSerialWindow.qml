@@ -83,7 +83,7 @@ Item{
                 id: comboBoxBaudrate
                 model: comboBoxBaudratemodel
                 currentIndex: 1
-                width: Math.round(comboBoxWidthRight * Style.scaleHint)
+                width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
@@ -114,7 +114,7 @@ Item{
                 id: comboBoxDataBits
                 model: comboBoxDataBitsmodel
                 currentIndex:2
-                width: Math.round(comboBoxWidthRight * Style.scaleHint)
+                width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
@@ -145,7 +145,7 @@ Item{
                 id: comboBoxStandard
                 model: comboBoxStandardmodel
                 currentIndex: 0
-                width: Math.round(comboBoxWidthRight * Style.scaleHint)
+                width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
@@ -175,7 +175,7 @@ Item{
                 id: comboBoxStopBits
                 model: comboBoxStopBitsmodel
                 currentIndex: 0
-                width: Math.round(comboBoxWidthRight * Style.scaleHint)
+                width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {

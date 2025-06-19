@@ -108,7 +108,7 @@ public:
     loadOperationData(const QDateTime &start, const QDateTime &end);
     QList<HistoryOperationModel::Row> loadAllOperationData();
 
-    QVector<QPointF> loadGraphPoints(const QString& fieldName);
+    bool LoadGraphPoints(const QDateTime start, const QDateTime end, QList<QDateTime> &timePoints, QList<qreal> &depthPoints, QList<qreal> &velocityPoints, QList<qreal> &tensionPoints, QList<qreal> &tensionDeltaPoints);
 
     QVector<QPointF> historyPoints(const QString& fieldName,
                                    const QDateTime& start,

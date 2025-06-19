@@ -31,11 +31,11 @@ public:
     enum HBGRAPHAXISINDEX
     {
         NONE_IDX =              -1,
-        DEPTH_IDX =             0,
-        VELOCITY_IDX =          1,
-        TENSIONS_IDX =          2,
-        TENSION_INCREMENT_IDX = 3,
-        TIME_IDX =              4,
+        TIME_IDX =              0,
+        DEPTH_IDX =             1,
+        VELOCITY_IDX =          2,
+        TENSIONS_IDX =          3,
+        TENSION_INCREMENT_IDX = 4,
         TOTAL_IDX =             5,
     };
 
