@@ -22,12 +22,20 @@ Item{
         z: 5
         visible: false
         onSelectedDateChanged: {
-            console.debug("3333333333333: ", selectedDate)
+            console.debug("selected Date: ", selectedDate)
         }
     }
 
     HistoryOperationModel{
         id: historyOperationModel
+    }
+
+    Component.onCompleted: {
+        historyOperationModel.clear()
+
+        var startStemp = comboBoxStartTimeStamp.text + "T00:00:00"
+        var endStemp   = comboBoxFinishTimeStamp.text + "T23:59:59"
+        historyOperationModel.setRange(startStemp, endStemp)
     }
 
     Rectangle
@@ -171,6 +179,11 @@ Item{
                         id:comboBoxStartTimeStamp
                         width: Math.round(comboBoxWidth * Style.scaleHint)
                         height: parent.height
+                        text: {
+                            var now = new Date()
+                            var yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+                            return Qt.formatDate(yesterday, "yyyy-MM-dd")
+                        }
                         onSignalPopUp:
                         {
                             if(isShow === true)
@@ -204,6 +217,10 @@ Item{
                         id:comboBoxFinishTimeStamp
                         width: Math.round(comboBoxWidth * Style.scaleHint)
                         height: parent.height
+                        text: {
+                            var now = new Date()
+                            return Qt.formatDate(now, "yyyy-MM-dd")
+                        }
                         onSignalPopUp:
                         {
                             if(isShow === true)
@@ -226,10 +243,9 @@ Item{
                     text: qsTr("查询")
                     onClicked:
                     {
-                        // controlLimitNumpad.visible = false
-                        var startIso = comboBoxStartTimeStamp.text + "T00:00:00"
-                        var endIso   = comboBoxFinishTimeStamp.text + "T23:59:59"
-                        historyOperationModel.setRange(startIso, endIso)
+                        var startStemp = comboBoxStartTimeStamp.text + "T00:00:00"
+                        var endStemp   = comboBoxFinishTimeStamp.text + "T23:59:59"
+                        historyOperationModel.setRange(startStemp, endStemp)
                     }
                 }
             }

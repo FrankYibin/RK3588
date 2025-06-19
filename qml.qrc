@@ -124,5 +124,9 @@
         <file>qmlSource/hdmiInputWindow.qml</file>
         <file>qmlSource/hikvisionCameraWindow.qml</file>
         <file>qmlSource/HBComboBoxCalendar.qml</file>
+        <file>qmlSource/HBDateTimeSetting.qml</file>
+        <file>qmlSource/TextButton.qml</file>
+        <file>qmlSource/CustomSpinBox.qml</file>
+        <file>qmlSource/CustomTextField.qml</file>
     </qresource>
 </RCC>

@@ -24,18 +24,17 @@ Item {
     property string qmltextTensionIncrementAxis:             qsTr("张力增量")
     property string qmltextTimeAxis:                         qsTr("时间")
 
-    property var qmlTextArray: [qmltextDepthAxis, qmltextVelocityAxis, qmltextTensionsAxis,
-        qmltextTensionIncrementAxis, qmltextTimeAxis]
-    property var qmlTextComboxModel: [qmltextDepthAxis, qmltextVelocityAxis, qmltextTensionsAxis,
-        qmltextTensionIncrementAxis, qmltextTimeAxis]
+    property var qmlTextArray: [qmltextTimeAxis, qmltextDepthAxis, qmltextVelocityAxis, qmltextTensionsAxis,
+        qmltextTensionIncrementAxis]
+    property var qmlTextComboxModel: [qmltextTimeAxis, qmltextDepthAxis, qmltextVelocityAxis, qmltextTensionsAxis,
+        qmltextTensionIncrementAxis]
 
     readonly property color depthAxisColor:                 "#ef7c7d"
     readonly property color velocityAxisColor:              "#00afe9"
     readonly property color tensionsAxisColor:              "#00aa7e"
     readonly property color tensionIncrementAxisColor:      "#d31245"
     readonly property color timeAxisColor:                  "#ffffff"
-    readonly property var colorArray: [depthAxisColor, velocityAxisColor, tensionsAxisColor,
-        tensionIncrementAxisColor, timeAxisColor]
+    readonly property var colorArray: [timeAxisColor, depthAxisColor, velocityAxisColor, tensionsAxisColor, tensionIncrementAxisColor]
 
     function getAxisModel()
     {

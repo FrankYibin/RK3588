@@ -130,8 +130,6 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
                                           "HQmlEnum is an enum container and cannot be created in QML");
 
-    qmlRegisterSingletonInstance<SensorGraphData>("HB.GraphData", 1, 0, "SensorGraphData", SensorGraphData::GetInstance());
-
 
 //    qmlRegisterType<VideoCaptureItem>("HB.VideoCapture", 1, 0, "CV");
 
@@ -166,6 +164,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("TensiometerScale", TensionScaleManager::GetInstance());
     pQmlContext->setContextProperty("userModel", &UserManagerModel::GetInstance());
     pQmlContext->setContextProperty("UserManual", UserManual::GetInstance());
+    pQmlContext->setContextProperty("SensorGraphData", SensorGraphData::GetInstance());
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

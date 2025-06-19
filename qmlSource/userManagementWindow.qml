@@ -13,11 +13,11 @@ Item{
     }
     QtObject {
         id: userScreenIndex
-        readonly property int currentUser:      0
-        readonly property int userManagement:   1
-        readonly property int seriseID:         2
-        readonly property int createNewUser:    3
-        readonly property int superUser:        4
+        // readonly property int currentUser:      0
+        readonly property int userManagement:   0
+        // readonly property int seriseID:         2
+        // readonly property int createNewUser:    3
+        // readonly property int superUser:        4
     }
 
     function updateTabBar(index)
@@ -104,7 +104,7 @@ Item{
         anchors.top: userTabBar.bottom
         anchors.topMargin: Math.round(20 * Style.scaleHint)
         anchors.bottom: parent.bottom
-        source:  "qrc:/qmlSource/UserCurrentWindow.qml"
+        source:  "qrc:/qmlSource/UserTableWindow.qml"
     }
 }
 
