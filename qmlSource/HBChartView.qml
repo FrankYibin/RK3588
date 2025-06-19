@@ -71,13 +71,13 @@ Item {
         clearGraph()
         var depthPoint, velocityPoint , tensionsPoint, tensionIncrementPoint;
 
-        if(isFreqLeftAxisVisible === true)
+        if(isDepthLeftAxisVisible === true)
             SensorGraphData.appendSamples(graphChartView.series(depthLeftPlotName), HBGraphAxisEnum.DEPTH_IDX);
-        if(isPowerLeftAxisVisible === true)
+        if(isVelocityLeftAxisVisible === true)
             SensorGraphData.appendSamples(graphChartView.series(velocityLeftPlotName), HBGraphAxisEnum.VELOCITY_IDX);
-        if(isAmpLeftAxisVisible === true)
+        if(isTensionsLeftAxisVisible === true)
             SensorGraphData.appendSamples(graphChartView.series(tensionsLeftPlotName), HBGraphAxisEnum.TENSIONS_IDX);
-        if(isEnergyLeftAxisVisible === true)
+        if(isTensionIncrementLeftAxisVisible === true)
             SensorGraphData.appendSamples(graphChartView.series(tensionIncrementPlotName), HBGraphAxisEnum.TENSION_INCREMENT_IDX);
 
 
@@ -87,20 +87,20 @@ Item {
         timeAxis.min                    = axisMinValues[HBGraphAxisEnum.TIME_IDX];
         depthLeftAxis.min               = axisMinValues[HBGraphAxisEnum.DEPTH_IDX];
         velocityLeftAxis.min            = axisMinValues[HBGraphAxisEnum.VELOCITY_IDX]
-        tensionsLeftAxisPlot.min        = axisMinValues[HBGraphAxisEnum.TENSIONS_IDX]
+        tensionsLeftAxis.min        = axisMinValues[HBGraphAxisEnum.TENSIONS_IDX]
         tensionIncrementLeftAxis.min    = axisMinValues[HBGraphAxisEnum.TENSION_INCREMENT_IDX]
 
         timeAxis.max                    = axisMaxValues[HBGraphAxisEnum.TIME_IDX];
         depthLeftAxis.max               = axisMaxValues[HBGraphAxisEnum.DEPTH_IDX];
         velocityLeftAxis.max            = axisMaxValues[HBGraphAxisEnum.VELOCITY_IDX];
-        tensionsLeftAxisPlot.max        = axisMaxValues[HBGraphAxisEnum.TENSIONS_IDX];
+        tensionsLeftAxis.max        = axisMaxValues[HBGraphAxisEnum.TENSIONS_IDX];
         tensionIncrementLeftAxis.max    = axisMaxValues[HBGraphAxisEnum.TENSION_INCREMENT_IDX];
 
         /* Rounding of axis values for proper representation */
         // timeAxis.max                    = roundAxisValues(timeAxis.max,                 timeAxis.min);
         depthLeftAxis.max               = roundAxisValues(depthLeftAxis.max,            depthLeftAxis.min);
         velocityLeftAxis.max            = roundAxisValues(velocityLeftAxis.max,         velocityLeftAxis.min);
-        tensionsLeftAxisPlot.max        = roundAxisValues(tensionsLeftAxisPlot.max,     tensionsLeftAxisPlot.min);
+        tensionsLeftAxis.max        = roundAxisValues(tensionsLeftAxisPlot.max,     tensionsLeftAxisPlot.min);
         tensionIncrementLeftAxis.max    = roundAxisValues(tensionIncrementLeftAxis.max, tensionIncrementLeftAxis.min);
     }
 

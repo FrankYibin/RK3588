@@ -51,6 +51,7 @@
 #include "c++Source/HBScreen/tensionsetting.h"
 #include "c++Source/HBScreen/tensiometermanager.h"
 #include "c++Source/HBScreen/historyoperationmodel.h"
+#include "c++Source/HBScreen/usermanagermodel.h"
 
 #include "c++Source/HBModbus/hbmodbusclient.h"
 // #include "c++Source/HBModbus/modbusutils.h"
@@ -163,6 +164,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("TensiometerManager", TensiometerManager::GetInstance());
     pQmlContext->setContextProperty("TensionSetting", TensionSetting::GetInstance());
     pQmlContext->setContextProperty("TensiometerScale", TensionScaleManager::GetInstance());
+    pQmlContext->setContextProperty("userModel", &UserManagerModel::GetInstance());
     pQmlContext->setContextProperty("UserManual", UserManual::GetInstance());
 
 #ifdef QT_DEBUG

@@ -57,7 +57,7 @@ Item{
             userTabModel.append({"Title":     "用户信息管理",
                                 "Width":      100,
                                 "Index":      userScreenIndex.userManagement})
-            userTabModel.append({"Title":     "设置仪器ID",
+            userTabModel.append({"Title":     "人脸信息采集",
                                 "Width":      100,
                                 "Index":      userScreenIndex.seriseID})
             userTabModel.append({"Title":     "创建新用户",

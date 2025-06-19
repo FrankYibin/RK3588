@@ -1379,6 +1379,77 @@ QVector<QPointF> HBDatabase::loadGraphPoints(const QString& fieldName)
     return points;
 }
 
+QVector<UserInfo> HBDatabase::loadAllUsers()
+{
+    QVector<UserInfo> users;
+
+    QSqlQuery query("SELECT username, nickname, groupname, createtime FROM userinfo");
+
+    while (query.next()) {
+        UserInfo user;
+        user.userName = query.value(0).toString();
+        user.nickName = query.value(1).toString();
+        user.groupName = query.value(2).toString();
+        user.createTime = query.value(3).toString().left(10);
+        user.userHandleVisible = true;
+        users.append(user);
+    }
+
+    return users;
+
+}
+
+bool HBDatabase::insertUser(const QString &username, const QString &password, const QString &groupname, const QString &nickname)
+{
+    QSqlQuery query;
+    query.prepare("INSERT INTO userinfo (username,password,groupname,nickname)"
+                  "VALUES(:username, :password, :groupname, :nickname)");
+
+    query.bindValue(":username", username);
+    query.bindValue(":password", password);
+    query.bindValue(":groupname", groupname);
+    query.bindValue(":nickname", nickname);
+
+    if (!query.exec()) {
+        qWarning() << "insert fial:" << query.lastError().text();
+        return false;
+    }
+
+    return true;
+
+}
+
+bool HBDatabase::updateUser(const QString &oldUserName,const QString &newUserName, const QString &password, const QString &groupname, const QString &nickname)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE userinfo SET username = :newUserName, password = :password, groupname = :groupname, nickname = :nickname WHERE username = :oldUserName");
+    query.bindValue(":oldUserName", oldUserName);
+    query.bindValue(":newUserName", newUserName);
+    query.bindValue(":password", password);
+    query.bindValue(":groupname", groupname);
+    query.bindValue(":nickname", nickname);
+
+    if (!query.exec()) {
+        qWarning() << "Update user failed:" << query.lastError().text();
+        return false;
+    }
+
+    return true;;
+}
+
+bool HBDatabase::deleteUserByName(const QString &username)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM userinfo WHERE username = :username");
+    query.bindValue(":username", username);
+    if (!query.exec()) {
+        qWarning() << "Delete user failed:" << query.lastError().text();
+        return false;
+    }
+    return true;
+
+}
+
 bool HBDatabase::getUnitSettings(UnitSettings &settings) {
 
     QSqlQuery query("SELECT tension_unit, depth_unit FROM unit_settings WHERE id = 1");
