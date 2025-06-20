@@ -51,21 +51,21 @@ Item{
         function resetModel()
         {
             userTabModel.clear()
-            // userTabModel.append({"Title":     "当前用户",
-            //                     "Width":      100,
-            //                     "Index":      userScreenIndex.currentUser})
+            userTabModel.append({"Title":     "当前用户",
+                                "Width":      100,
+                                "Index":      userScreenIndex.currentUser})
             userTabModel.append({"Title":     "用户信息管理",
                                 "Width":      100,
                                 "Index":      userScreenIndex.userManagement})
-            // userTabModel.append({"Title":     "设置仪器ID",
-            //                     "Width":      100,
-            //                     "Index":      userScreenIndex.seriseID})
-            // userTabModel.append({"Title":     "创建新用户",
-            //                     "Width":      100,
-            //                     "Index":      userScreenIndex.createNewUser})
-            // userTabModel.append({"Title":     "查看超级用户",
-            //                     "Width":      100,
-            //                     "Index:":     userScreenIndex.superUser})
+            userTabModel.append({"Title":     "人脸信息采集",
+                                "Width":      100,
+                                "Index":      userScreenIndex.seriseID})
+            userTabModel.append({"Title":     "创建新用户",
+                                "Width":      100,
+                                "Index":      userScreenIndex.createNewUser})
+            userTabModel.append({"Title":     "查看超级用户",
+                                "Width":      100,
+                                "Index:":     userScreenIndex.superUser})
         }
     }
 

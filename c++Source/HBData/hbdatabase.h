@@ -20,7 +20,7 @@ public:
     //wellnum
     _Measurements_data queryWellDataByWellnum(QString wellnum);
 
-    _USER_DATA queryUsertById(int id);
+    // _USER_DATA queryUsertById(int id);
 
 
     //wellparameter
@@ -114,7 +114,13 @@ public:
                                    const QDateTime& start,
                                    const QDateTime& end) const;
 
+    QVector<UserInfo> loadAllUsers();
 
+    bool insertUser(const QString &username, const QString &password, const QString &groupname, const QString &nickname);
+
+    bool updateUser(const QString &oldUserName,const QString &newUserName, const QString &password, const QString &groupname, const QString &nickname);
+
+    bool deleteUserByName(const QString &username);
 
     //
     bool getUnitSettings(UnitSettings &settings);

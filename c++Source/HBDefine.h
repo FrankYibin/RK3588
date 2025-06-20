@@ -225,11 +225,14 @@ struct _Measurements_data{
 
 };
 
-struct _USER_DATA {
-    int id;
-    QString username;
-    int  password;
+struct UserInfo {
+    QString userName;
+    QString nickName;
+    QString groupName;
+    QString createTime;
+    bool userHandleVisible;
 };
+
 
 
 

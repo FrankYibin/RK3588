@@ -1,4 +1,4 @@
-import QtQuick 2.0
+﻿import QtQuick 2.0
 import QtGraphicalEffects 1.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
