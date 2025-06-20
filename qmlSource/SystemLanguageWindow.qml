@@ -70,7 +70,9 @@ Item{
             text: qsTr("确认")
             onClicked:
             {
-                console.debug("Time Setting： ", dateTimeSetting.getDateTimeString())
+                var strDateTime = dateTimeSetting.getDateTimeString()
+                console.debug("Time Setting： ", strDateTime)
+                DateTime.setSystemDateTime(strDateTime)
             }
         }
 

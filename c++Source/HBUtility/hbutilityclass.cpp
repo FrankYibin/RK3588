@@ -214,3 +214,77 @@ void HBUtilityClass::TestFaceDetection()
     }
 }
 
+bool HBUtilityClass::SetSystemClock(QString strDateTime)
+{
+    QString cmd = "date -s ";
+    cmd += strDateTime;
+    cmd += " \n";
+
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    QStringList cmdlist;
+    process.start("bash", cmdlist);
+    if(!process.waitForStarted())
+    {
+        qDebug() << "Failed to start process";
+        return false;
+    }
+
+    process.write(cmd.toUtf8());
+    process.waitForBytesWritten();
+
+    process.closeWriteChannel();
+    process.waitForFinished();
+
+    // 获取命令输出
+    QString output = process.readAllStandardOutput();
+    QString error = process.readAllStandardError();
+
+    // 输出结果
+    if (!output.isEmpty()) {
+        qDebug() << "DateTime Setting Output:" << output;
+        return true;
+    }
+    if (!error.isEmpty()) {
+        qDebug() << "Command Error:" << error;
+        return false;
+    }
+    return true;
+}
+
+bool HBUtilityClass::SyncHardwareRTC()
+{
+    QString cmd = "hwclock -w -f /dev/rtc0\n";
+
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels);
+    QStringList cmdlist;
+    process.start("bash", cmdlist);
+    if(!process.waitForStarted())
+    {
+        qDebug() << "Failed to start process";
+        return false;
+    }
+
+    process.write(cmd.toUtf8());
+    process.waitForBytesWritten();
+
+    process.closeWriteChannel();
+    process.waitForFinished();
+
+    // 获取命令输出
+    QString output = process.readAllStandardOutput();
+    QString error = process.readAllStandardError();
+
+    // 输出结果
+    if (!output.isEmpty()) {
+        qDebug() << "Hardware Clock Sync Output:" << output;
+        return true;
+    }
+    if (!error.isEmpty()) {
+        qDebug() << "Command Error:" << error;
+        return false;
+    }
+    return true;
+}
+

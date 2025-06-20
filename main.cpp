@@ -52,6 +52,7 @@
 #include "c++Source/HBScreen/tensiometermanager.h"
 #include "c++Source/HBScreen/historyoperationmodel.h"
 #include "c++Source/HBScreen/usermanagermodel.h"
+#include "c++Source/HBScreen/datetime.h"
 
 #include "c++Source/HBModbus/hbmodbusclient.h"
 // #include "c++Source/HBModbus/modbusutils.h"
@@ -165,6 +166,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("UserManual", UserManual::GetInstance());
     pQmlContext->setContextProperty("SensorGraphData", SensorGraphData::GetInstance());
     pQmlContext->setContextProperty("HistoryDataTable", HistoryDataTable::GetInstance());
+    pQmlContext->setContextProperty("DateTime", DateTime::GetInstance());
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

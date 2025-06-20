@@ -55,6 +55,8 @@ public:
     void CalculateSmallest(qreal &a_axisVal, qreal a_val);
 
     void TestFaceDetection();
+    bool SetSystemClock(QString strDateTime);
+    bool SyncHardwareRTC();
 
 protected:
     HBUtilityClass();
