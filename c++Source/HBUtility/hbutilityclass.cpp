@@ -216,9 +216,7 @@ void HBUtilityClass::TestFaceDetection()
 
 bool HBUtilityClass::SetSystemClock(QString strDateTime)
 {
-    QString cmd = "date -s ";
-    cmd += strDateTime;
-    cmd += " \n";
+    QString cmd = QString("date -s %1%2%3").arg('"').arg(strDateTime).arg('"');
 
     QProcess process;
     process.setProcessChannelMode(QProcess::MergedChannels);
@@ -230,6 +228,7 @@ bool HBUtilityClass::SetSystemClock(QString strDateTime)
         return false;
     }
 
+    qDebug() << "Cmd: " << cmd;
     process.write(cmd.toUtf8());
     process.waitForBytesWritten();
 
