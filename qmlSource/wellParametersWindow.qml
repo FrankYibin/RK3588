@@ -486,6 +486,7 @@ Item{
         onClicked:
         {
             // controlLimitNumpad.visible = false
+            ProfileGlobalDefine.saveWellParameter(textWellNumber.text,textAreaBlock.text,textUserName.text,textUserLevel.text)
             HBDatabase.updateWellParameterFromInstance()
             //                  console.log("是否成功更新数据库：", ok)
             // profileLayout.visible = false
