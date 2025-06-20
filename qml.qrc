@@ -128,5 +128,7 @@
         <file>qmlSource/TextButton.qml</file>
         <file>qmlSource/CustomSpinBox.qml</file>
         <file>qmlSource/CustomTextField.qml</file>
+        <file>qmlSource/HBDialog.qml</file>
+        <file>qmlSource/LoginTextField.qml</file>
     </qresource>
 </RCC>

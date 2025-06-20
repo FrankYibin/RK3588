@@ -58,15 +58,6 @@ Item{
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.WellNumber
                     focus: true
-                    onAccepted: {
-                        WellParameter.WellNumber = text;
-                        //TODO need to send number using modbus
-                        console.log("titleWellNumber.text: "+textWellNumber.text)
-                    }
-                    onEditingFinished: {
-                         WellParameter.WellNumber = text
-                         console.log("editingFinished, text =", text)
-                     }
                 }
 
             }
@@ -92,9 +83,6 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.AreaBlock
-                    onAccepted: {
-                        WellParameter.AreaBlock = text;
-                    }
                 }
             }
 
@@ -127,7 +115,6 @@ Item{
                         ModbusClient.writeRegister(HQmlEnum.WELL_TYPE, currentIndex)
                     }
                 }
-
             }
 
             Row
@@ -449,9 +436,6 @@ Item{
                     height: Math.round(25 * Style.scaleHint)
                     text:WellParameter.UserName
                     font.family: "宋体"
-                    onAccepted: {
-                        WellParameter.UserName = text;
-                    }
                 }
             }
 
@@ -476,9 +460,6 @@ Item{
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.OperatorType
                     font.family: "宋体"
-                    onAccepted: {
-                        WellParameter.OperatorType = text;
-                    }
                 }
             }
         }

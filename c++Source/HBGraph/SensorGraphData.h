@@ -24,6 +24,7 @@ public:
 
     Q_INVOKABLE void clearGraph();
     Q_INVOKABLE void loadSensorGraphPoint(const QDateTime &start, const QDateTime &end);
+    Q_INVOKABLE void exportData();
 
     Q_INVOKABLE QVariantList getDateTimes() const;
     Q_INVOKABLE QVariantList getDepths() const;

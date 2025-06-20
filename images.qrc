@@ -80,5 +80,7 @@
         <file>images/hdmi.jpg</file>
         <file>images/video.jpg</file>
         <file>images/manual.jpg</file>
+        <file>images/login_password.png</file>
+        <file>images/login_user.png</file>
     </qresource>
 </RCC>

@@ -74,6 +74,11 @@ void SensorGraphData::loadSensorGraphPoint(const QDateTime &start, const QDateTi
     emit isDataReady();
 }
 
+void SensorGraphData::exportData()
+{
+
+}
+
 QVariantList SensorGraphData::getDateTimes() const
 {
     QVariantList list;

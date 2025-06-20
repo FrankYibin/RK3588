@@ -527,18 +527,6 @@ bool HBDatabase::updateWellParameterFromInstance()
     return updateWellParameter(param);
 }
 
-//bool HBDatabase::testUpdate()
-//{
-//    QSqlQuery query(m_database);
-//    query.prepare("UPDATE wellparameter SET wellNumber = 'Test123' WHERE id = 1");
-//    if (!query.exec()) {
-//        qDebug() << "Test update failed:" << query.lastError();
-//        return false;
-//    }
-//    qDebug() << "Test update successful, rows affected:" << query.numRowsAffected();
-//    return true;
-//}
-
 bool HBDatabase::loadDepthSet(_DepthSet &param)
 {
     QSqlQuery query(m_database);
@@ -895,8 +883,6 @@ bool HBDatabase::updateTensionSetFromInstance()
     return updateTensionSet(param);
 }
 
-
-
 // 加载单条数据
 bool HBDatabase::loadTensiometerData(int id, TensiometerData &data)
 {
@@ -1058,7 +1044,6 @@ bool HBDatabase::LoadTensiometerTable(QList<Tensiometer::TENSIONMETER> &list)
     qDebug() << "Loaded" << list.size() << "tensiometer records.";
     return true;
 }
-
 
 bool HBDatabase::LoadScales(const int tensioNumber, QString& scale)
 {
@@ -1363,7 +1348,8 @@ bool HBDatabase::LoadGraphPoints(const QDateTime start, const QDateTime end,
     const char* sql =
         "SELECT date, depth, velocity, velocityUnit, tensions, tensionIncrement, tensionUnit "
         "FROM history_table "
-        "WHERE datetime(date) BETWEEN datetime(:start) AND datetime(:end) "
+        "WHERE (datetime(date) BETWEEN datetime(:start) AND datetime(:end)) AND velocityUnit = :velocityUnit "
+        "AND tensionUnit = :tensionUnit "
         "ORDER BY datetime(date) ASC";
 
     QSqlQuery query(m_database);
@@ -1376,6 +1362,40 @@ bool HBDatabase::LoadGraphPoints(const QDateTime start, const QDateTime end,
 
     query.bindValue(":start", start.toString("yyyy-MM-dd HH:mm:ss"));
     query.bindValue(":end",   end.toString("yyyy-MM-dd HH:mm:ss"));
+    switch(DepthSetting::GetInstance()->VelocityUnit())
+    {
+    case DepthSetting::M_PER_HOUR:
+        query.bindValue(":velocityUnit", "m/h");
+        break;
+    case DepthSetting::M_PER_MIN:
+        query.bindValue(":velocityUnit", "m/min");
+        break;
+    case DepthSetting::FT_PER_HOUR:
+        query.bindValue(":velocityUnit", "ft/h");
+        break;
+    case DepthSetting::FT_PER_MIN:
+        query.bindValue(":velocityUnit", "ft/min");
+        break;
+    default:
+        query.bindValue(":velocityUnit", "m/h");
+        break;
+    }
+
+    switch(TensionSetting::GetInstance()->TensionUnit())
+    {
+    case TensionSetting::LB:
+        query.bindValue(":tensionUnit", "lb");
+        break;
+    case TensionSetting::KG:
+        query.bindValue(":tensionUnit", "kg");
+        break;
+    case TensionSetting::KN:
+        query.bindValue(":tensionUnit", "kn");
+        break;
+    default:
+        query.bindValue(":tensionUnit", "lb");
+        break;
+    }
 
     if (!query.exec()) {
         qWarning() << "HBDatabase::loadGraphData - exec failed:"
@@ -1386,74 +1406,30 @@ bool HBDatabase::LoadGraphPoints(const QDateTime start, const QDateTime end,
     QDateTime date;
     QString depth = "";
     QString velocity = "";
-    int iDepth = 0;
-    int iVelocity = 0;
     QString tension = "";
     QString tensionDelta = "";
-    int iTension = 0;
-    int iTensionDelta = 0;
+
     while (query.next())
     {
         str = query.value("date").toString();
         date = QDateTime::fromString(str, "yyyy-MM-dd HH:mm:ss");
         timePoints.append(date);
         depth       = query.value("depth").toString();
+        qDebug() << "1111111111111111111111: " << depth;
         velocity    = query.value("velocity").toString();
+        qDebug() << "2222222222222222222222: " << velocity;
         str         = query.value("velocityUnit").toString();
-        if(str == "ft/h")
-        {
-            iDepth = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2FEET, depth);
-            iVelocity = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2FEET_PER_HOUR, velocity);
-        }
-        else if(str == "ft/min")
-        {
-            iDepth = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2FEET, depth);
-            iVelocity = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2FEET_PER_MIN, velocity);
-        }
-        else if(str == "m/h")
-        {
-            iDepth = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER, depth);
-            iVelocity = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER_PER_HOUR, velocity);
-        }
-        else if(str == "m/min")
-        {
-            iDepth = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER, depth);
-            iVelocity = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER_PER_MIN, velocity);
-        }
-        else //"m/h"
-        {
-            iDepth = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER, depth);
-            iVelocity = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER_PER_HOUR, velocity);
-        }
 
-        depthPoints.append(iDepth / 100);
-        velocityPoints.append(iVelocity / 100);
+        depthPoints.append(depth.toDouble());
+        velocityPoints.append(velocity.toDouble());
         tension         = query.value("tensions").toString();
+        qDebug() << "33333333333333333333: " << tension;
         tensionDelta    = query.value("tensionIncrement").toString();
+        qDebug() << "44444444444444444444: " << tensionDelta;
         str             = query.value("tensionUnit").toString();
 
-        if(str == "kg")
-        {
-            iTension = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tension);
-            iTensionDelta = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tensionDelta);
-        }
-        else if(str == "kn")
-        {
-            iTension = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tension);
-            iTensionDelta = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tensionDelta);
-        }
-        else if(str == "lb")
-        {
-            iTension = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tension);
-            iTensionDelta = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tensionDelta);
-        }
-        else
-        {
-            iTension = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tension);
-            iTensionDelta = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2KILOGRAM, tensionDelta);
-        }
-        tensionPoints.append(iTension / 100);
-        tensionDeltaPoints.append(iTensionDelta / 100);
+        tensionPoints.append(tension.toDouble());
+        tensionDeltaPoints.append(tensionDelta.toDouble());
     }
     return true;
 }

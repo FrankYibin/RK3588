@@ -28,7 +28,7 @@ public:
         ExceptionRole
     };
 
-    explicit HistoryDataTable(QObject *parent = nullptr);
+    static HistoryDataTable* GetInstance();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -46,12 +46,14 @@ public:
     Q_INVOKABLE void exportData();
 public slots:
 
+protected:
+    explicit HistoryDataTable(QObject *parent = nullptr);
 
 private:
-    QList<HistoryData> m_dataList;
-
-    QDateTime m_start;
-    QDateTime m_end;
+    QList<HistoryData>  m_dataList;
+    QDateTime           m_start;
+    QDateTime           m_end;
+    static HistoryDataTable* _ptrHistoryDataTable;
 private:
     void ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data);
 };

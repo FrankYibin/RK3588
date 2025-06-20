@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
-import HB.HistoryDataTable 1.0
 import HB.Database 1.0
 
 Item{
@@ -27,17 +26,13 @@ Item{
         }
     }
 
-    DataTableModel {
-        id: historyDataModel
-    }
-
     Component.onCompleted:
     {
         headerModel.resetModel()
 
         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-        historyDataModel.loadFromDatabase(startStamp, endStamp)
+        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
     }
 
     Rectangle
@@ -165,7 +160,7 @@ Item{
                     {
                         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
                         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-                        historyDataModel.loadFromDatabase(startStamp, endStamp)
+                        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
                         console.log("startStamp: ", startStamp,"endStamp: ", endStamp)
                     }
                 }
@@ -178,7 +173,8 @@ Item{
                     text: qsTr("导出")
                     onClicked:
                     {
-                        historyDataModel.exportData()
+                        HistoryDataTable.exportData()
+                        mainWindow.showDialogScreen(qsTr("导出数据已完成"), null)
                     }
                 }
             }
@@ -193,7 +189,7 @@ Item{
             headerModel.clear()
             headerModel.append({"role": "Index",                "title": qsTr("序号"),      "headerWidth": 50})
             headerModel.append({"role": "WellNumber",           "title": qsTr("井号"),      "headerWidth": 100})
-            headerModel.append({"role": "Date",                 "title": qsTr("日期"),      "headerWidth": 200})
+            headerModel.append({"role": "Date",                 "title": qsTr("日期"),      "headerWidth": 300})
             headerModel.append({"role": "OperateType",          "title": qsTr("操作类型"),  "headerWidth": 100})
             headerModel.append({"role": "Operater",             "title": qsTr("操作员"),    "headerWidth": 100})
             headerModel.append({"role": "Depth",                "title": qsTr("深度"),      "headerWidth": 100})
@@ -219,7 +215,7 @@ Item{
         anchors.topMargin: Math.round(10 * Style.scaleHint)
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(5 * Style.scaleHint)
-        model: historyDataModel
+        model: HistoryDataTable
 
         fontSize: Math.round(Style.style0 * Style.scaleHint)
         rowHeight: Math.round(25 * Style.scaleHint)
@@ -243,7 +239,7 @@ Item{
 
         TableViewColumn { role: "Index";                title: qsTr("");            width: 30}
         TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
-        TableViewColumn { role: "Date";                 title: qsTr("日期");        width: 100}
+        TableViewColumn { role: "Date";                 title: qsTr("日期");        width: 200}
         TableViewColumn { role: "OperateType";          title: qsTr("操作类型");    width: 80}
         TableViewColumn { role: "Operater";             title: qsTr("操作员");      width: 80}
         TableViewColumn { role: "Depth";                title: qsTr("深度");        width: 80}

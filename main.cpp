@@ -124,7 +124,6 @@ int main(int argc, char *argv[])
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", HBModbusClient::GetInstance());
     qmlRegisterSingletonInstance("HB.Database", 1, 0, "HBDatabase", &HBDatabase::GetInstance());
-    qmlRegisterType<HistoryDataTable>("HB.HistoryDataTable", 1, 0, "DataTableModel");
     qmlRegisterType<HistoryOperationModel>("HB.HistoryOperationModel", 1, 0, "HistoryOperationModel");
     qmlRegisterUncreatableType<HQmlEnum>("HB.Enums", 1, 0, "HQmlEnum",
                                           "HQmlEnum is an enum container and cannot be created in QML");
@@ -146,8 +145,8 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-    engine.addImportPath(":/VirtualKeyboardStyles");
-    qputenv("QT_VIRTUALKEYBOARD_STYLE", "styleVirtualKeyboard");
+    // engine.addImportPath(":/VirtualKeyboardStyles");
+    // qputenv("QT_VIRTUALKEYBOARD_STYLE", "styleVirtualKeyboard");
     QQmlContext *pQmlContext = engine.rootContext();
     // pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
     pQmlContext->setContextProperty("HBHome", HBHome::GetInstance());
@@ -163,6 +162,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("TensiometerScale", TensionScaleManager::GetInstance());
     pQmlContext->setContextProperty("UserManual", UserManual::GetInstance());
     pQmlContext->setContextProperty("SensorGraphData", SensorGraphData::GetInstance());
+    pQmlContext->setContextProperty("HistoryDataTable", HistoryDataTable::GetInstance());
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

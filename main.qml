@@ -131,7 +131,7 @@ Window{
 
     function showFaceLogin()
     {
-        inputPanel.active = false
+        // inputPanel.active = false
         loginLayout.visible = false
         faceRecognition.visible = true
     }
@@ -316,6 +316,13 @@ Window{
         primaryNumpad.targetTextField = targetObj
         primaryNumpad.confirmCallback = onConfirmCallback
         primaryNumpad.visible = true
+    }
+
+    function showDialogScreen(strText, onConfirmCallback)
+    {
+        infoDialog.contentText = strText
+        infoDialog.confirmCallback = onConfirmCallback
+        infoDialog.open()
     }
 
     function showSteppingNumpad(strTitle, strUnit, iDecimals, realMinimum, realMaximum, strCurrentValue)
@@ -636,22 +643,20 @@ Window{
 
     InputPanel {
         id: inputPanel
-        visible: false
-        z: 2
+        z: 99
         y: windowArea.y + windowArea.height
         anchors.left: windowArea.left
         anchors.right: windowArea.right
         // active: false
-        states:
-            State {
-                name: "visible"
-                when: (inputPanel.active === true) ? true : false
-                PropertyChanges {
-                    target: inputPanel
-                    y: windowArea.y + windowArea.height - inputPanel.height
-                    visible: true
-                }
+        states: State {
+            name: "visible"
+            when: inputPanel.active
+            PropertyChanges {
+                target: inputPanel
+                y: windowArea.y + windowArea.height - inputPanel.height
+                visible: true
             }
+        }
 
         transitions:
             Transition {
@@ -667,10 +672,10 @@ Window{
                 }
             }
 
-        Component.onCompleted: {
-//            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
-            VirtualKeyboardSettings.locale = "en_US"
-        }
+//         Component.onCompleted: {
+// //            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
+//             VirtualKeyboardSettings.locale = "en_US"
+//         }
     }
 
     HBDepthCountDown {
@@ -680,5 +685,13 @@ Window{
         visible: false
         x: parent.width / 2
         y: parent.height / 2
+    }
+
+    HBDialog {
+        id: infoDialog
+        width: showWidth / 2
+        height: showHeight / 2
+        anchors.centerIn: parent
+        visible: false
     }
 }

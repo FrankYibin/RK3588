@@ -178,7 +178,10 @@ Item{
                     text: qsTr("导出")
                     onClicked:
                     {
-                        historyDataModel.exportData()
+                        SensorGraphData.exportData()
+                        mainWindow.showDialogScreen(qsTr("导出数据已完成"),function(val){
+                            console.debug("Dialog Function Callback")
+                        })
                     }
                 }
             }

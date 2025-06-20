@@ -4,11 +4,20 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QStringList>
-
+HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
 {
 
+}
+
+HistoryDataTable *HistoryDataTable::GetInstance()
+{
+    if (!_ptrHistoryDataTable)
+    {
+        _ptrHistoryDataTable = new HistoryDataTable();
+    }
+    return _ptrHistoryDataTable;
 }
 
 int HistoryDataTable::rowCount(const QModelIndex &) const
