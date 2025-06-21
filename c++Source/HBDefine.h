@@ -228,7 +228,7 @@ struct _Measurements_data{
 struct UserInfo {
     QString userName;
     QString nickName;
-    QString groupName;
+    int     groupIndex;
     QString createTime;
     bool userHandleVisible;
 };

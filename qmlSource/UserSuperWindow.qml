@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtGraphicalEffects 1.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import UserGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_USER_MANAGEMENT
 

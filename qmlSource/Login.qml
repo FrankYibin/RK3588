@@ -149,10 +149,24 @@ Rectangle{
             text: qsTr("密码登录")
             onClicked:
             {
-                if(debug === true)
+                // if(debug === true)
+                //     mainWindow.loginProcess()
+                // else if(debug === false)
+                //     mainWindow.loginProcess()
+                if(userInput.text === "")
+                {
+                    mainWindow.showDialogScreen(qsTr("用户名不能为空"), null)
+                }
+                else if(passwordInput.text === "")
+                {
+                    mainWindow.showDialogScreen(qsTr("密码不能为空"), null)
+                }
+                else if(UserModel.validateUser(userInput.text, passwordInput.text) === true)
                     mainWindow.loginProcess()
-                else if(debug === false)
-                    mainWindow.loginProcess()
+                else
+                {
+                    mainWindow.showDialogScreen(qsTr("此用户不存在或密码错误"), null)
+                }
             }
         }
     }

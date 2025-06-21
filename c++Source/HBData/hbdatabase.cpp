@@ -486,7 +486,7 @@ bool HBDatabase::updateWellParameter(const _WellParameter &param)
     if (!commitTransaction())
         return false;
 
-    qDebug() << "Update successful";
+    qDebug() << "Well Parameter Update successful";
     return true;
 }
 
@@ -1434,35 +1434,92 @@ bool HBDatabase::LoadGraphPoints(const QDateTime start, const QDateTime end,
     return true;
 }
 
-QVector<UserInfo> HBDatabase::loadAllUsers()
+QVector<UserInfo> HBDatabase::LoadAllUsers()
 {
     QVector<UserInfo> users;
 
-    QSqlQuery query("SELECT username, nickname, groupname, createtime FROM userinfo");
-
+    const char* sql = "SELECT username, nickname, groupindex, createtime FROM userinfo WHERE groupindex != :groupindex";
+    QSqlQuery query(m_database);
+    if (!query.prepare(sql)) {
+        qWarning() << "users::loadallusers - prepare failed:"
+                    << query.lastError();
+        return users;
+    }
+    query.bindValue(":groupindex", static_cast<int>(-1)); //SuperUser
+    if (!query.exec()) { // 关键：必须exec
+        qWarning() << "users::loadallusers - exec failed:"
+                    << query.lastError();
+        return users;
+    }
     while (query.next()) {
         UserInfo user;
         user.userName = query.value(0).toString();
         user.nickName = query.value(1).toString();
-        user.groupName = query.value(2).toString();
+        user.groupIndex = query.value(2).toInt();
         user.createTime = query.value(3).toString().left(10);
         user.userHandleVisible = true;
         users.append(user);
     }
-
     return users;
 
 }
 
-bool HBDatabase::insertUser(const QString &username, const QString &password, const QString &groupname, const QString &nickname)
+bool HBDatabase::QueryUser(QString &username, QString &password, int &groupindex, QString &nickname)
+{
+    bool bResult = false;
+    QSqlQuery query(m_database);
+    query.prepare("SELECT username, groupindex, nickname, password, createtime FROM userinfo WHERE username = :username");
+    query.bindValue(":username", username);
+
+    if (!query.exec()) {
+        qDebug() << "Query user data failed:" << query.lastError();
+        return false;
+    }
+
+    if (!query.next()) {
+        qDebug() << "No user data found for username:" << username;
+        return false;
+    }
+
+    username = query.value(0).toString();
+    groupindex = query.value(1).toInt();
+    nickname = query.value(2).toString();
+    password = query.value(3).toString();
+    bResult = true;
+    return bResult;
+}
+
+bool HBDatabase::QueryUser(const QString username, const QString password)
+{
+    bool bResult = false;
+    QSqlQuery query(m_database);
+    query.prepare("SELECT username, password, createtime FROM userinfo WHERE username = :username AND password = :password");
+    query.bindValue(":username", username);
+    query.bindValue(":password", password);
+
+    if (!query.exec()) {
+        qDebug() << "Query user data failed:" << query.lastError();
+        return false;
+    }
+
+    if (!query.next()) {
+        qDebug() << "No user data found for username:" << username;
+        return false;
+    }
+
+    bResult = true;
+    return bResult;
+}
+
+bool HBDatabase::InsertUser(const QString username, const QString password, const int groupindex, const QString nickname)
 {
     QSqlQuery query;
-    query.prepare("INSERT INTO userinfo (username,password,groupname,nickname)"
-                  "VALUES(:username, :password, :groupname, :nickname)");
+    query.prepare("INSERT INTO userinfo (username,password,groupindex,nickname)"
+                  "VALUES(:username, :password, :groupindex, :nickname)");
 
     query.bindValue(":username", username);
     query.bindValue(":password", password);
-    query.bindValue(":groupname", groupname);
+    query.bindValue(":groupindex", groupindex);
     query.bindValue(":nickname", nickname);
 
     if (!query.exec()) {
@@ -1474,14 +1531,14 @@ bool HBDatabase::insertUser(const QString &username, const QString &password, co
 
 }
 
-bool HBDatabase::updateUser(const QString &oldUserName,const QString &newUserName, const QString &password, const QString &groupname, const QString &nickname)
+bool HBDatabase::UpdateUser(const QString oldUserName, const QString newUserName, const QString password, const int groupindex, const QString nickname)
 {
     QSqlQuery query;
-    query.prepare("UPDATE userinfo SET username = :newUserName, password = :password, groupname = :groupname, nickname = :nickname WHERE username = :oldUserName");
+    query.prepare("UPDATE userinfo SET username = :newUserName, password = :password, groupindex = :groupindex, nickname = :nickname WHERE username = :oldUserName");
     query.bindValue(":oldUserName", oldUserName);
     query.bindValue(":newUserName", newUserName);
     query.bindValue(":password", password);
-    query.bindValue(":groupname", groupname);
+    query.bindValue(":groupindex", groupindex);
     query.bindValue(":nickname", nickname);
 
     if (!query.exec()) {

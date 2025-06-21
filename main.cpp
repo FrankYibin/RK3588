@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/DepthGlobalDefine.qml"), "DepthGlobalDefine", 1, 0, "DepthGlobalDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/ProfileGlobalDefine.qml"), "ProfileGlobalDefine", 1, 0, "ProfileGlobalDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/TensionsGlobalDefine.qml"), "TensionsGlobalDefine", 1, 0, "TensionsGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/UserGlobalDefine.qml"), "UserGlobalDefine", 1, 0, "UserGlobalDefine");
 
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", HBModbusClient::GetInstance());
@@ -162,7 +163,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("TensiometerManager", TensiometerManager::GetInstance());
     pQmlContext->setContextProperty("TensionSetting", TensionSetting::GetInstance());
     pQmlContext->setContextProperty("TensiometerScale", TensionScaleManager::GetInstance());
-    pQmlContext->setContextProperty("userModel", &UserManagerModel::GetInstance());
+    pQmlContext->setContextProperty("UserModel", &UserManagerModel::GetInstance());
     pQmlContext->setContextProperty("UserManual", UserManual::GetInstance());
     pQmlContext->setContextProperty("SensorGraphData", SensorGraphData::GetInstance());
     pQmlContext->setContextProperty("HistoryDataTable", HistoryDataTable::GetInstance());
