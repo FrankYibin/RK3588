@@ -14,7 +14,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.12
 import QtMultimedia 5.15
-
 import Style 1.0
 Rectangle {
     property int minWidthNumpad: Math.round(50 * Style.scaleHint)

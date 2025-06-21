@@ -3,6 +3,7 @@ import QtGraphicalEffects 1.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import UserGlobalDefine 1.0
+import FaceDetector 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_USER_MANAGEMENT
     signal currentScreenIndexChanged(var index)
@@ -41,7 +42,7 @@ Item{
         //     visible: !enableFaceRecord
         // }
 
-        HBFaceDetector
+        FaceDetector
         {
             id: faceDetector
             anchors.fill: parent

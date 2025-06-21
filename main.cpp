@@ -123,6 +123,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/ProfileGlobalDefine.qml"), "ProfileGlobalDefine", 1, 0, "ProfileGlobalDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/TensionsGlobalDefine.qml"), "TensionsGlobalDefine", 1, 0, "TensionsGlobalDefine");
     qmlRegisterSingletonType(QUrl("qrc:/qmlSource/UserGlobalDefine.qml"), "UserGlobalDefine", 1, 0, "UserGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HBCamera.qml"), "HBCamera", 1, 0, "HBCamera");
 
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", HBModbusClient::GetInstance());
