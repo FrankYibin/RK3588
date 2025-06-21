@@ -10,7 +10,7 @@ WellParameter* WellParameter::_ptrWellParameter = nullptr;
 WellParameter::WellParameter(QObject *parent)
     : QObject(parent),m_settings(QCoreApplication::applicationDirPath() + "/wellsettings.ini", QSettings::IniFormat)
 {
-
+    m_settings.setIniCodec("UTF-8");
     m_WellNumber = "";
     m_AreaBlock = "";
     m_WeightEachKilometerCable = "";
@@ -241,18 +241,19 @@ void WellParameter::importFromIniFile()
     if (filePath.isEmpty())
         return;
     QSettings settings(filePath, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
     setWellNumber(settings.value("wellParameter/number", "陕50H-30").toString());
     setAreaBlock(settings.value("wellParameter/area", "---").toString());
     setUserName(settings.value("wellParameter/userName", "张强").toString());
-    setOperatorType(settings.value("wellParameter/operatorType", "11111111").toString());
+    setOperatorType(settings.value("wellParameter/operatorType", "操作员").toString());
 #endif
-
 }
 
 void WellParameter::saveToIniFile()
 {
     QString filePath = QCoreApplication::applicationDirPath() + "/wellsettings.ini";
     QSettings settings(filePath, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
     settings.setValue("wellParameter/number", m_WellNumber);
     settings.setValue("wellParameter/area", m_AreaBlock);
     settings.setValue("wellParameter/userName", m_UserName);
@@ -273,5 +274,5 @@ QString WellParameter::findWellSettingsPath()
             return filePath;
         }
     }
-    return QString(); // 没有找到
+    return QString();
 }
