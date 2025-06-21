@@ -6,6 +6,12 @@ UserManagerModel::UserManagerModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
 
+    m_rowIndex = -1;
+    m_userName = "";
+    m_groupIndex = 5;
+    m_nickName = "";
+    m_password = "";
+
     loadFromDatabase();
 }
 
@@ -40,7 +46,7 @@ QVariant UserManagerModel::data(const QModelIndex &index, int role) const
     case IndexRole: return index.row();
     case UserNameRole: return user.userName;
     case NickNameRole: return user.nickName;
-    case GroupNameRole: return user.groupName;
+    case GroupNameRole: return user.groupIndex;
     case CreateTimeRole: return user.createTime;
     case UserHandleRole: return user.userHandleVisible;
     default: return QVariant();
@@ -80,40 +86,123 @@ bool UserManagerModel::removeUser(int row)
     return true;
 }
 
-void UserManagerModel::updateUser(int row, const QString &username, const QString &password,const QString &groupname, const QString &nickname)
+bool UserManagerModel::updateUser(const int row, const QString username, const QString password,const int groupindex, const QString nickname)
 {
     if (row < 0 || row >= m_users.size())
-        return;
+        return false;
 
     const QString &oldUserName = m_users[row].userName;
-    bool success = HBDatabase::GetInstance().updateUser(oldUserName, username, password, groupname, nickname);
+    bool success = HBDatabase::GetInstance().UpdateUser(oldUserName, username, password, groupindex, nickname);
     if (!success) {
         qWarning() << "Failed to update user in database:" << oldUserName;
-        return;
-    }
-    m_users[row].userName = username;
-    m_users[row].groupName = groupname;
-    m_users[row].nickName = nickname;
-
-    emit dataChanged(index(row, 0), index(row, columnCount() - 1));
-
-
-}
-
-bool UserManagerModel::addUser(const QString &username, const QString &password, const QString &groupname, const QString &nickname)
-{
-    if(!HBDatabase::GetInstance().insertUser(username,password,groupname,nickname)){
-        qWarning() << "add user fail ";
         return false;
     }
-
-    loadFromDatabase();
+    m_users[row].userName = username;
+    m_users[row].groupIndex = groupindex;
+    m_users[row].nickName = nickname;
     return true;
-
 }
 
-void UserManagerModel::loadFromDatabase() {
+bool UserManagerModel::getUser(int row)
+{
+    QString username, password, nickname;
+    int groupindex;
+    username = m_users[row].userName;
+    bool success = HBDatabase::GetInstance().QueryUser(username, password, groupindex, nickname);
+    if(success == true)
+    {
+        setUserName(username);
+        setPassword(password);
+        setGroupIndex(groupindex);
+        setNickName(nickname);
+        setRowIndex(row);
+    }
+    return true;
+}
+
+bool UserManagerModel::resetUser()
+{
+    setRowIndex(-1);
+    setUserName("");
+    setPassword("");
+    setGroupIndex(3);
+    setNickName("");
+    return true;
+}
+
+bool UserManagerModel::addNewUser(const QString username, const QString password, const int groupindex, const QString nickname)
+{
+    if(!HBDatabase::GetInstance().InsertUser(username, password, groupindex, nickname))
+        return false;
+    return true;
+}
+
+bool UserManagerModel::validateUser(const QString username, const QString password)
+{
+    if(HBDatabase::GetInstance().QueryUser(username, password) == true)
+        return true;
+    return false;
+}
+
+void UserManagerModel::loadFromDatabase()
+{
     beginResetModel();
-    m_users = HBDatabase::GetInstance().loadAllUsers();
+    m_users = HBDatabase::GetInstance().LoadAllUsers();
     endResetModel();
+}
+
+void UserManagerModel::setRowIndex(int rowIndex)
+{
+    if (m_rowIndex != rowIndex) {
+        m_rowIndex = rowIndex;
+        emit RowIndexChanged(rowIndex);
+    }
+}
+int UserManagerModel::RowIndex() const
+{
+    return m_rowIndex;
+}
+void UserManagerModel::setUserName(const QString &userName)
+{
+    if (m_userName != userName) {
+        m_userName = userName;
+        emit UserNameChanged(userName);
+    }
+}
+QString UserManagerModel::UserName() const
+{
+    return m_userName;
+}
+void UserManagerModel::setGroupIndex(const int &groupIndex)
+{
+    if (m_groupIndex != groupIndex) {
+        m_groupIndex = groupIndex;
+        emit GroupIndexChanged(groupIndex);
+    }
+}
+int UserManagerModel::GroupIndex() const
+{
+    return m_groupIndex;
+}
+void UserManagerModel::setNickName(const QString &nickName)
+{
+    if (m_nickName != nickName) {
+        m_nickName = nickName;
+        emit NickNameChanged(nickName);
+    }
+}
+QString UserManagerModel::NickName() const
+{
+    return m_nickName;
+}
+void UserManagerModel::setPassword(const QString &password)
+{
+    if (m_password != password) {
+        m_password = password;
+        emit PasswordChanged(password);
+    }
+}
+QString UserManagerModel::Password() const
+{
+    return m_password;
 }

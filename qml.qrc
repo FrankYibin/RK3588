@@ -130,5 +130,6 @@
         <file>qmlSource/CustomTextField.qml</file>
         <file>qmlSource/HBDialog.qml</file>
         <file>qmlSource/LoginTextField.qml</file>
+        <file>qmlSource/UserGlobalDefine.qml</file>
     </qresource>
 </RCC>

@@ -2,13 +2,17 @@
 import QtGraphicalEffects 1.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
+import UserGlobalDefine 1.0
 Item{
+    id: newUser
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_USER_MANAGEMENT
-    readonly property var userGroupNameModel:["超级用户", "操作员", "普通用户", "访客"]
-    readonly property int comboBoxWidthLeft:    120
-    readonly property int comboBoxWidthRight:   120
-    readonly property int componentWidth:       120
-
+    readonly property int comboBoxWidth:        150
+    readonly property int componentWidth:       150
+    readonly property int componentHeight:      30
+    readonly property int titleWidth:           100
+    readonly property int rowSpacing:           10
+    readonly property int columnSpacing:        20
+    signal currentScreenIndexChanged(var index)
     Rectangle
     {
         id: background
@@ -21,202 +25,225 @@ Item{
             GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
-
-    Item
+    Component.onCompleted:
     {
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: Math.round(175 * Style.scaleHint)
-        height: iconUser.height + Math.round((20 + 20) * Style.scaleHint) + newUserSetting.height
-        Image
-        {
-            id: iconUser
-            anchors.left: parent.left
-            anchors.top: parent.top
-            width: Math.round(175 * Style.scaleHint)
-            height: Math.round(200 * Style.scaleHint)
-            source: "qrc:/images/userManagement.png"
-            fillMode: Image.PreserveAspectFit
-            smooth: true
-            sourceSize.width: width
-            sourceSize.height: height
-            visible: true
-        }
-
-        HBFaceDetector
-        {
-            id: faceDetector
-            anchors.left: iconUser.left
-            anchors.top: parent.top
-            width: iconUser.width
-            height: iconUser.height
-            visible: false
-        }
-
-        Column{
-            id: newUserSetting
-            spacing: Math.round(10 * Style.scaleHint)
-            anchors.horizontalCenter: iconUser.horizontalCenter
-            anchors.top: iconUser.bottom
-            width: Math.round(200 * Style.scaleHint)
-            height: Math.round(70 * Style.scaleHint)
-            Row{
-                id: userName
-                spacing: Math.round(5 * Style.scaleHint)
-                width: Math.round(200 * Style.scaleHint)
-                height: Math.round(30 * Style.scaleHint)
-
-                Item{
-                    height: parent.height
-                    width: Math.round(100 * Style.scaleHint)
-                    Text{
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: Style.whiteFontColor
-                        font.family: "宋体"
-                        text: "用户名："
-                        font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-                    }
-
-                }
-                HBLineEdit {
-                    id: textuserName
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: Math.round(25 * Style.scaleHint)
-                    text: ""
-                    onAccepted: {
-
-                        //TODO need to send number using modbus
-                    }
-                }
-            }
-
-
-            Row{
-                id: nickName
-                spacing: Math.round(5 * Style.scaleHint)
-                width: Math.round(200 * Style.scaleHint)
-                height: Math.round(30 * Style.scaleHint)
-
-                Item{
-                    height: parent.height
-                    width: Math.round(100 * Style.scaleHint)
-                    Text{
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: Style.whiteFontColor
-                        font.family: "宋体"
-                        text: "昵称："
-                        font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-                    }
-                }
-                HBLineEdit {
-                    id: textNickName
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: Math.round(25 * Style.scaleHint)
-                    text: ""
-                    onAccepted: {
-
-                        //TODO need to send number using modbus
-                    }
-                }
-            }
-
-            Row{
-                id: groupName
-                spacing: Math.round(5 * Style.scaleHint)
-                width: Math.round(200 * Style.scaleHint)
-                height: Math.round(30 * Style.scaleHint)
-
-                Item{
-                    height: parent.height
-                    width: Math.round(100 * Style.scaleHint)
-                    Text{
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: Style.whiteFontColor
-                        font.family: "宋体"
-                        text: "用户等级："
-                        font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-                    }
-                }
-                HBComboBox
-                {
-                    id: comboHarnessType
-                    model: userGroupNameModel
-                    currentIndex:2
-                    width: Math.round(comboBoxWidthRight * Style.scaleHint)
-                    height: parent.height
-                    fontFamily: Style.regular.name
-                    onCurrentIndexChanged: {
-
-                    }
-                }
-
-            }
-
-            Row{
-                id: userPassword
-                spacing: Math.round(5 * Style.scaleHint)
-                width: Math.round(200 * Style.scaleHint)
-                height: Math.round(30 * Style.scaleHint)
-
-                Item{
-                    height: parent.height
-                    width: Math.round(100 * Style.scaleHint)
-                    Text{
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: Style.whiteFontColor
-                        font.family: "宋体"
-                        text: "密码："
-                        font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-                    }
-                }
-                HBLineEdit {
-                    id: textPassWord
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: Math.round(25 * Style.scaleHint)
-                    text: ""
-                    onAccepted: {
-
-                        //TODO need to send number using modbus
-                    }
-                }
-            }
-        }
-        Row{
-            id: buttonGroup
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin:  Math.round(-90 * Style.scaleHint)
-            // height: Math.round(40 * Style.scaleHint)
-            // width: Math.round((150 * 2 + 20) * Style.scaleHint)
-            HBPrimaryButton
+        Qt.inputMethod.visibleChanged.connect(function(){
+            if(!Qt.inputMethod.visible)
             {
-                id: buttonExit
-                width: Math.round(150 * Style.scaleHint)
-                height: Math.round(40 * Style.scaleHint)
-                text: qsTr("保存")
-                onClicked:
-                {
-                    // controlLimitNumpad.visible = false
-                    const username = textuserName.text
-                    const password = textPassWord.text
-                    const groupname = comboHarnessType.currentText
-                    const nickname = textNickName.text
+                newUserSetting.anchors.top = iconUser.bottom
+                iconUser.visible = true
+            }
+        })
+    }
 
-                    if (username === "" || password === "") {
-                        console.log("用户名和密码不能为空")
-                        return
-                    }
+    Image
+    {
+        id: iconUser
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        width: Math.round(175 * Style.scaleHint)
+        height: Math.round(200 * Style.scaleHint)
+        source: "qrc:/images/userManagement.png"
+        fillMode: Image.PreserveAspectFit
+        smooth: true
+        sourceSize.width: width
+        sourceSize.height: height
+        visible: true
+    }
 
-                    if (success) {
-                        console.log("添加成功")
-                        //
-                    } else {
-                        console.log("添加失败")
+        // HBFaceDetector
+        // {
+        //     id: faceDetector
+        //     anchors.left: iconUser.left
+        //     anchors.top: parent.top
+        //     width: iconUser.width
+        //     height: iconUser.height
+        //     visible: false
+        // }
+
+    Column{
+        id: newUserSetting
+        spacing: Math.round(columnSpacing * Style.scaleHint)
+        anchors.top: iconUser.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: Math.round((titleWidth + componentWidth + rowSpacing) * Style.scaleHint)
+        height: Math.round((componentWidth * 4 + columnSpacing * 3) * Style.scaleHint)
+        Row{
+            id: userName
+            spacing: Math.round(rowSpacing * Style.scaleHint)
+            width: Math.round((titleWidth + componentWidth + rowSpacing) * Style.scaleHint)
+            height: Math.round(componentHeight * Style.scaleHint)
+            Item{
+                height: parent.height
+                width: Math.round(titleWidth * Style.scaleHint)
+                Text{
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: Style.whiteFontColor
+                    font.family: "宋体"
+                    text: "用户名："
+                    font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                }
+            }
+            HBLineEdit {
+                id: textuserName
+                width: Math.round(componentWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                text: UserModel.UserName
+                onFocusChanged: {
+                    if(focus === true)
+                    {
+                        newUserSetting.anchors.top = newUser.top
+                        iconUser.visible = false
                     }
                 }
+            }
+        }
+
+        Row{
+            id: nickName
+            spacing: Math.round(rowSpacing * Style.scaleHint)
+            width: Math.round((titleWidth + componentWidth + rowSpacing) * Style.scaleHint)
+            height: Math.round(componentHeight * Style.scaleHint)
+
+            Item{
+                height: parent.height
+                width: Math.round(titleWidth * Style.scaleHint)
+                Text{
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: Style.whiteFontColor
+                    font.family: "宋体"
+                    text: "昵称："
+                    font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                }
+            }
+            HBLineEdit {
+                id: textNickName
+                width: Math.round(componentWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                text: UserModel.NickName
+                onFocusChanged: {
+                    if(focus === true)
+                    {
+                        newUserSetting.anchors.top = newUser.top
+                        iconUser.visible = false
+                    }
+                }
+            }
+        }
+
+        Row{
+            id: groupName
+            spacing: Math.round(rowSpacing * Style.scaleHint)
+            width: Math.round((titleWidth + componentWidth + rowSpacing) * Style.scaleHint)
+            height: Math.round(componentHeight * Style.scaleHint)
+
+            Item{
+                height: parent.height
+                width: Math.round(titleWidth * Style.scaleHint)
+                Text{
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: Style.whiteFontColor
+                    font.family: "宋体"
+                    text: "用户等级："
+                    font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                }
+            }
+            HBComboBox
+            {
+                id: comboHarnessType
+                model: UserGlobalDefine.userGroupNameModel
+                currentIndex: UserModel.GroupIndex
+                width: Math.round(comboBoxWidth * Style.scaleHint)
+                height: parent.height
+                fontFamily: "宋体"
+                onCurrentIndexChanged: {
+
+                }
+            }
+        }
+
+        Row{
+            id: userPassword
+            spacing: Math.round(rowSpacing * Style.scaleHint)
+            width: Math.round((titleWidth + componentWidth + rowSpacing) * Style.scaleHint)
+            height: Math.round(componentHeight * Style.scaleHint)
+
+            Item{
+                height: parent.height
+                width: Math.round(titleWidth * Style.scaleHint)
+                Text{
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: Style.whiteFontColor
+                    font.family: "宋体"
+                    text: "密码："
+                    font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                }
+            }
+            HBLineEdit {
+                id: textPassWord
+                width: Math.round(componentWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                text: UserModel.Password
+                echoMode: TextInput.Password
+                onFocusChanged: {
+                    if(focus === true)
+                    {
+                        newUserSetting.anchors.top = newUser.top
+                        iconUser.visible = false
+                    }
+                }
+            }
+        }
+    }
+
+
+    HBPrimaryButton
+    {
+        id: buttonExit
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Math.round(20 * Style.scaleHint)
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(20 * Style.scaleHint)
+        width: Math.round(100 * Style.scaleHint)
+        height: Math.round(40 * Style.scaleHint)
+        text: qsTr("保存")
+        onClicked:
+        {
+            // controlLimitNumpad.visible = false
+            var username = textuserName.text
+            var password = textPassWord.text
+            var groupindex = comboHarnessType.currentIndex
+            var nickname = textNickName.text
+
+            if (username === "" || password === "") {
+                console.log("用户名和密码不能为空")
+                mainWindow.showDialogScreen(qsTr("用户名和密码不能为空"), null)
+                return
+            }
+
+            var success = false
+            if(UserModel.RowIndex == -1)
+            {
+                console.log("添加成功")
+                success = UserModel.addNewUser(username, password, groupindex, nickname)
+            }
+            else
+            {
+                console.log("更新成功")
+                success = UserModel.updateUser(UserModel.RowIndex, username, password, groupindex, nickname)
+            }
+            if (success)
+            {
+                currentScreenIndexChanged(UserGlobalDefine.userManagement)
+            }
+            else
+            {
+                console.log("添加失败")
+                mainWindow.showDialogScreen(qsTr("用户名已存在"), null)
             }
         }
     }

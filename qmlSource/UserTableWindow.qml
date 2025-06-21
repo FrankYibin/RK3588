@@ -6,10 +6,10 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 import Com.Branson.UIScreenEnum 1.0
-
+import UserGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_USER_MANAGEMENT
-
+    signal currentScreenIndexChanged(var index)
     Rectangle
     {
         id: background
@@ -21,6 +21,10 @@ Item{
             GradientStop { position: 0.0; color: Style.backgroundLightColor }
             GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
+    }
+    Component.onCompleted:
+    {
+        UserModel.loadFromDatabase()
     }
 
     HBTableView {
@@ -37,7 +41,7 @@ Item{
         headerHeight: Math.round(40 * Style.scaleHint)
         rowHeight: Math.round(35 * Style.scaleHint)
         fontSize: Math.round(Style.style2 * Style.scaleHint)
-        model: userModel
+        model: UserModel
         isMouseMoving: false
         rowDelegate: Rectangle{
             height: userManagerTable.rowHeight
@@ -54,7 +58,6 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    //                    text: styleData.value +1
                     text: styleData.row + 1
                     font.family: Style.regular.name
                     font.pixelSize: userManagerTable.fontSize
@@ -72,9 +75,8 @@ Item{
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
                     text: styleData.value
-                    font.family: Style.regular.name
+                    font.family: "宋体"
                     font.pixelSize: userManagerTable.fontSize
-                    Component.onCompleted: console.log("UserName :", styleData.value)
                 }
                 MouseArea {
                     anchors.fill: parent
@@ -125,8 +127,8 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
-                    text:  styleData.value
-                    font.family: Style.regular.name
+                    text: UserGlobalDefine.userGroupNameModel[styleData.value]
+                    font.family: "宋体"
                     font.pixelSize: userManagerTable.fontSize
                 }
             }
@@ -142,7 +144,7 @@ Item{
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
                     text:  styleData.value
-                    font.family: "宋体"
+                    font.family: Style.regular.name
                     font.pixelSize: userManagerTable.fontSize
                 }
             }
@@ -167,19 +169,30 @@ Item{
                         fontSize: userManagerTable.fontSize
                         visible: styleData.value
                         onClicked: {
-
-
+                            UserModel.getUser(styleData.row)
+                            currentScreenIndexChanged(UserGlobalDefine.createNewUser)
                         }
                     }
+
+                    HBPrimaryButton {
+                        text: qsTr("人脸录入")
+                        width: Math.round(80 * Style.scaleHint)
+                        height: Math.round(25 * Style.scaleHint)
+                        fontSize: userManagerTable.fontSize
+                        visible: styleData.value
+                        onClicked: {
+                            UserModel.getUser(styleData.row)
+                            currentScreenIndexChanged(UserGlobalDefine.seriseID)
+                        }
+                    }
+
                     HBPrimaryButton {
                         text: qsTr("删除")
                         width: Math.round(80 * Style.scaleHint)
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: userManagerTable.fontSize
                         onClicked: {
-
-                           userModel.removeUser(styleData.row)
-
+                           UserModel.removeUser(styleData.row)
                         }
                     }
                 }
@@ -200,7 +213,8 @@ Item{
         fontSize: Math.round(Style.style5 * Style.scaleHint)
         onClicked:
         {
-            // userModel.addUser()
+            UserModel.resetUser()
+            currentScreenIndexChanged(UserGlobalDefine.createNewUser)
         }
     }
 

@@ -114,11 +114,11 @@ public:
                                    const QDateTime& start,
                                    const QDateTime& end) const;
 
-    QVector<UserInfo> loadAllUsers();
-
-    bool insertUser(const QString &username, const QString &password, const QString &groupname, const QString &nickname);
-
-    bool updateUser(const QString &oldUserName,const QString &newUserName, const QString &password, const QString &groupname, const QString &nickname);
+    QVector<UserInfo> LoadAllUsers();
+    bool QueryUser(QString& username, QString& password, int &groupindex, QString& nickname);
+    bool QueryUser(const QString username, const QString password);
+    bool InsertUser(const QString username, const QString password, const int groupindex, const QString nickname);
+    bool UpdateUser(const QString oldUserName, const QString newUserName, const QString password, const int groupindex, const QString nickname);
 
     bool deleteUserByName(const QString &username);
 
