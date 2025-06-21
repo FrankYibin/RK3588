@@ -6,13 +6,11 @@
 #include <QSqlRecord>
 #include <QSqlDriver>
 #include "c++Source/HBDefine.h"
-#include "c++Source/HBScreen/wellparameter.h"
 #include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/depthsiman.h"
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/tensionsetting.h"
-#include "c++Source/HBUtility/hbutilityclass.h"
 #include <QVariant>
 #include <QDir>
 #include <QFile>
@@ -21,8 +19,6 @@ HBDatabase::HBDatabase(QObject *parent)
     : QObject{parent}
 {
     init();
-    //    loadDataFromDatabase();
-
 }
 
 HBDatabase::~HBDatabase()
@@ -31,56 +27,24 @@ HBDatabase::~HBDatabase()
     closeTransaction();
 }
 
-// void HBDatabase::init()
-// {
-//     m_database = QSqlDatabase::addDatabase("QSQLITE");
-//     QString dbPath = QCoreApplication::applicationDirPath() + "/DVTT.db";
-//     qDebug() << "DB Path: " << dbPath;
-//     m_database.setDatabaseName(dbPath);
-
-//     if (!m_database.open())
-//     {
-//         qDebug() << "Database Open Fail ";
-//         qDebug() << m_database.lastError();
-//     }
-
-// }
-
 void HBDatabase::init()
 {
     QDir execDir(QCoreApplication::applicationDirPath());
+    QString dbPath = execDir.filePath("DVTT.db");
 
-    QString dbPath;
-    QDir searchDir = execDir;
-    while (true) {
-        QString candidate = searchDir.filePath("DVTT.db");
-        if (QFile::exists(candidate)) {
-            dbPath = candidate;
-            break;
-        }
-        if (!searchDir.cdUp()) {
-            break;
-        }
-    }
-
-    if (dbPath.isEmpty()) {
+    if (!QFile::exists(dbPath)) {
         QString srcPath = execDir.absoluteFilePath("../DVTT.db");
-        QString destPath = execDir.filePath("DVTT.db");
-
         if (QFile::exists(srcPath)) {
-            qDebug() << "Copying DVTT.db from" << srcPath << "to" << destPath;
-            if (QFile::copy(srcPath, destPath)) {
-                dbPath = destPath;
+            qDebug() << "Copying DVTT.db from" << srcPath << "to" << dbPath;
+            if (!QFile::copy(srcPath, dbPath)) {
+                qWarning() << "Failed to copy database file from" << srcPath << "to" << dbPath;
+                return;
             }
+        } else {
+            qWarning() << "Source database file not found at" << srcPath;
+            return;
         }
     }
-
-    if (dbPath.isEmpty()) {
-        dbPath = execDir.filePath("DVTT.db");
-        qDebug() << "DVTT.db not found, will create new one at" << dbPath;
-    }
-
-    qDebug() << "Final DB Path:" << dbPath;
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
     m_database.setDatabaseName(dbPath);
@@ -90,124 +54,8 @@ void HBDatabase::init()
         return;
     }
 
-    QSqlQuery qry("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
-    if (!qry.next()) {
-        qDebug() << "Empty database, creating tables...";
+    qDebug() << "Database opened successfully at" << dbPath;
 
-        const QStringList sqlList = {
-            R"(CREATE TABLE IF NOT EXISTS depthsafe (
-                id INTEGER PRIMARY KEY,
-                depthPreset INTEGER,
-                wellWarnig INTEGER,
-                brake INTEGER,
-                velocityLimit INTEGER,
-                depthWarning INTEGER,
-                totalDepth INTEGER,
-                depthBrake INTEGER,
-                depthVelocityLimit INTEGER
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS depthset (
-                id INTEGER PRIMARY KEY,
-                targetLayerDepth INTEGER,
-                depthOrientation INTEGER,
-                meterDepth INTEGER,
-                depthCalculateType INTEGER,
-                codeOption INTEGER,
-                pulse INTEGER
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS history_table (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                wellNumber TEXT,
-                date TEXT DEFAULT (datetime('now', 'localtime')),
-                operateType TEXT,
-                operater TEXT,
-                depth INTEGER,
-                velocity INTEGER,
-                velocityUnit TEXT,
-                tensions INTEGER,
-                tensionIncrement INTEGER,
-                tensionUnit TEXT,
-                maxTension INTEGER,
-                harnessTension INTEGER,
-                safetyTension INTEGER,
-                exception TEXT
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS operating_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                well_number TEXT,
-                work_type TEXT,
-                username TEXT,
-                datetime TEXT,
-                operate TEXT
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS tensiometer (
-                Number INTEGER PRIMARY KEY UNIQUE NOT NULL,
-                Type INTEGER,
-                Range INTEGER,
-                Signal INTEGER,
-                Scale TEXT
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS tensionsafe (
-                id INTEGER PRIMARY KEY UNIQUE,
-                wellType TEXT,
-                maxTension INTEGER,
-                weakForce TEXT,
-                tensionSafeFactor TEXT
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS tensionset (
-                id INTEGER PRIMARY KEY UNIQUE,
-                kValue INTEGER,
-                tensionUnit INTEGER
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS unit_settings (
-                id INTEGER PRIMARY KEY CHECK(id = 1) UNIQUE,
-                tension_unit INTEGER NOT NULL,
-                depth_unit INTEGER NOT NULL
-            ))",
-
-            R"(CREATE TABLE IF NOT EXISTS wellparameter (
-                id INTEGER PRIMARY KEY NOT NULL UNIQUE,
-                wellNumber TEXT,
-                areaBlock TEXT,
-                wellType INTEGER,
-                wellDepth TEXT,
-                harnessWeight TEXT,
-                sensorWeight TEXT,
-                harnessType INTEGER,
-                harnessForce TEXT,
-                tensionUnit INTEGER,
-                workType INTEGER,
-                userName TEXT,
-                operatorType TEXT
-            ))",
-
-            R"(CREATE TABLE "operating_data" (
-               "id"	INTEGER UNIQUE,
-               "well_number"	TEXT,
-               "work_type"	TEXT,
-               "username"	TEXT,
-               "datetime"	TEXT,
-               "operate"	TEXT,
-            PRIMARY KEY("id" AUTOINCREMENT)
-            ))"
-        };
-
-        QSqlQuery create;
-        for (const QString &sql : sqlList) {
-            if (!create.exec(sql)) {
-                qWarning() << "Create table failed:" << create.lastError().text();
-            }
-        }
-    } else {
-        qDebug() << "Database already initialized.";
-    }
 }
 
 bool HBDatabase::beginTransaction()
@@ -321,76 +169,14 @@ QList<HistoryOperationModel::Row> HBDatabase::loadAllOperationData()
 
 }
 
-
 HBDatabase &HBDatabase::GetInstance()
 {
-    static HBDatabase instance; // 局部静态，线程安全单例
+    static HBDatabase instance;
     return instance;
-}
-
-bool HBDatabase::loadWellParameter(_WellParameter &param)
-{
-    QSqlQuery query(m_database);
-    query.prepare("SELECT * FROM wellparameter LIMIT 1");
-
-    if (!query.exec()) {
-        qDebug() << "Load failed:" << query.lastError();
-        return false;
-    }
-
-    if (!query.next()) {
-        qDebug() << "No data found in wellparameter table";
-        return false;
-    }
-
-    param.id = query.value("id").toInt();
-    param.wellNumber = query.value("wellNumber").toString();
-    param.areaBlock = query.value("areaBlock").toString();
-    param.wellType = query.value("wellType").toInt();
-    param.wellDepth = query.value("wellDepth").toString();
-    param.harnessWeight = query.value("harnessWeight").toString();
-    param.sensorWeight = query.value("sensorWeight").toString();
-    param.harnessType = query.value("harnessType").toInt();
-    param.harnessForce = query.value("harnessForce").toString();
-    //    param.tensionUnit = query.value("tensionUnit").toInt();
-    param.workType = query.value("workType").toInt();
-    param.userName = query.value("userName").toString();
-    param.operatorType = query.value("operatorType").toString();
-    param.slopeAngle = query.value("slopeAngle").toString();
-
-    WellParameter* wp = WellParameter::GetInstance();
-    wp->setWellNumber(param.wellNumber);
-    wp->setAreaBlock(param.areaBlock);
-    wp->setWellType(param.wellType);
-    wp->setDepthWell(param.wellDepth);
-    wp->setWeightEachKilometerCable(param.harnessWeight);
-    wp->setWeightInstrumentString(param.sensorWeight);
-    wp->setCableSpec(param.harnessType);
-    wp->setBreakingForceCable(param.harnessForce);
-    // wp->setTonnageTensionStick(param.tensionUnit);
-    wp->setWorkType(param.workType);
-    wp->setUserName(param.userName);
-    wp->setOperatorType(param.operatorType);
-    wp->setSlopeAngleWellSetting(param.slopeAngle);
-
-    return true;
 }
 
 void HBDatabase::loadDataFromDatabase()
 {
-    // _WellParameter param;
-    // bool ok = HBDatabase::GetInstance().loadWellParameter(param);
-    // if (ok) {
-
-    //     qDebug() << "Loaded data:";
-    //     qDebug() << "Updating record id:" << param.id;
-    //     qDebug() << "WellNumber:" << param.wellNumber;
-    //     qDebug() << "AreaBlock:" << param.areaBlock;
-
-    // } else {
-    //     qDebug() << "Failed to load data from database";
-    // }
-
     _DepthSet deptParam;
     bool success = HBDatabase::GetInstance().loadDepthSet(deptParam);
     if (success) {
@@ -431,100 +217,6 @@ void HBDatabase::loadDataFromDatabase()
     } else {
         qDebug() << "Failed to load set_Unit from DB.";
     }
-}
-
-bool HBDatabase::updateWellParameter(const _WellParameter &param)
-{
-    if (!m_database.isOpen()) {
-        qDebug() << "Database is not open";
-        return false;
-    }
-
-    if (!beginTransaction())
-        return false;
-
-    QSqlQuery query(m_database);
-    query.prepare(R"(
-                  UPDATE wellparameter SET
-                  wellNumber = :wellNumber,
-                  areaBlock = :areaBlock,
-                  wellType = :wellType,
-                  wellDepth = :wellDepth,
-                  harnessWeight = :harnessWeight,
-                  sensorWeight = :sensorWeight,
-                  harnessType = :harnessType,
-                  harnessForce = :harnessForce,
-                  tensionUnit = :tensionUnit,
-                  workType = :workType,
-                  userName = :userName,
-                  operatorType = :operatorType,
-                  slopeAngle = :slopeAngle
-                  WHERE id = :id
-                  )");
-
-    query.bindValue(":wellNumber", param.wellNumber);
-    query.bindValue(":areaBlock", param.areaBlock);
-    query.bindValue(":wellType", param.wellType);
-    query.bindValue(":wellDepth", param.wellDepth);
-    query.bindValue(":harnessWeight", param.harnessWeight);
-    query.bindValue(":sensorWeight", param.sensorWeight);
-    query.bindValue(":harnessType", param.harnessType);
-    query.bindValue(":harnessForce", param.harnessForce);
-    query.bindValue(":tensionUnit", param.tensionUnit);
-    query.bindValue(":workType", param.workType);
-    query.bindValue(":userName", param.userName);
-    query.bindValue(":operatorType", param.operatorType);
-    query.bindValue(":slopeAngle", param.slopeAngle);
-    query.bindValue(":id", param.id);
-
-    if (!query.exec()) {
-        qDebug() << "Update failed:" << query.lastError();
-        m_database.rollback();
-        return false;
-    }
-
-    if (!commitTransaction())
-        return false;
-
-    qDebug() << "Well Parameter Update successful";
-    return true;
-}
-
-bool HBDatabase::updateWellParameterFromInstance()
-{
-    WellParameter* wp = WellParameter::GetInstance();
-    _WellParameter param;
-    param.id = 1;
-    param.wellNumber = wp->WellNumber();
-    param.areaBlock = wp->AreaBlock();
-    param.wellType = wp->WellType();
-    param.wellDepth = wp->DepthWell();
-    param.harnessWeight = wp->WeightEachKilometerCable();
-    param.sensorWeight = wp->WeightInstrumentString();
-    param.harnessType = wp->CableSpec();
-    param.harnessForce = wp->BreakingForceCable();
-    param.tensionUnit = wp->TonnageTensionStick();
-    param.workType = wp->WorkType();
-    param.userName = wp->UserName();
-    param.operatorType = wp->OperatorType();
-    param.slopeAngle = wp->SlopeAngleWellSetting();
-
-    qDebug() << "Updating record id:" << param.id;
-    qDebug() << "wellNumber:" << param.wellNumber;
-    qDebug() << "areaBlock:" << param.areaBlock;
-    qDebug() << "wellType:" << param.wellType;
-    qDebug() << "wellDepth:" << param.wellDepth;
-    qDebug() << "harnessWeight:" << param.harnessWeight;
-    qDebug() << "sensorWeight:" << param.sensorWeight;
-    qDebug() << "harnessType:" << param.harnessType;
-    qDebug() << "harnessForce:" << param.harnessForce;
-    qDebug() << "tensionUnit:" << param.tensionUnit;
-    qDebug() << "workType:" << param.workType;
-    qDebug() << "userName:" << param.userName;
-    qDebug() << "operatorType:" << param.operatorType;
-    qDebug() << "slopeAngle:" << param.slopeAngle;
-
-    return updateWellParameter(param);
 }
 
 bool HBDatabase::loadDepthSet(_DepthSet &param)
@@ -1272,12 +964,12 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
     QSqlQuery query(m_database);
     QString sql = "INSERT INTO history_table (wellNumber, date, operateType, operater, depth, velocity, "
                   "velocityUnit, tensions,tensionIncrement, tensionUnit, maxTension, harnessTension, safetyTension, exception) "
-                  "VALUES (:wellNumber, CURRENT_DATE, :operateType, :operater, :depth, :velocity, "
+                  "VALUES (:wellNumber, :date, :operateType, :operater, :depth, :velocity, "
                   ":velocityUnit, :tensions,:tensionIncrement,:tensionUnit, :maxTension, :harnessTension, :safetyTension, :exception)";
     query.prepare(sql);
-
-
     query.bindValue(":wellNumber", modbusData.wellNumber);
+    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    query.bindValue(":date", timestamp);
     query.bindValue(":operateType", modbusData.operateType);
     query.bindValue(":operater", modbusData.operater);
     query.bindValue(":depth", modbusData.depth);
@@ -1331,9 +1023,9 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
 }
 
 bool HBDatabase::LoadGraphPoints(const QDateTime start, const QDateTime end,
-                                             QList<QDateTime>& timePoints, QList<qreal>& depthPoints,
-                                             QList<qreal>& velocityPoints, QList<qreal>& tensionPoints,
-                                            QList<qreal>& tensionDeltaPoints)
+                                 QList<QDateTime>& timePoints, QList<qreal>& depthPoints,
+                                 QList<qreal>& velocityPoints, QList<qreal>& tensionPoints,
+                                 QList<qreal>& tensionDeltaPoints)
 {
     if (!m_database.isOpen()) {
         qDebug() << "Database is not open!";
@@ -1442,13 +1134,13 @@ QVector<UserInfo> HBDatabase::LoadAllUsers()
     QSqlQuery query(m_database);
     if (!query.prepare(sql)) {
         qWarning() << "users::loadallusers - prepare failed:"
-                    << query.lastError();
+                   << query.lastError();
         return users;
     }
     query.bindValue(":groupindex", static_cast<int>(-1)); //SuperUser
     if (!query.exec()) { // 关键：必须exec
         qWarning() << "users::loadallusers - exec failed:"
-                    << query.lastError();
+                   << query.lastError();
         return users;
     }
     while (query.next()) {
@@ -1581,8 +1273,6 @@ bool HBDatabase::getUnitSettings(UnitSettings &settings) {
     }
     return false;
 }
-
-
 
 bool HBDatabase::updateTensionUnit(int tensionUnit) {
     QSqlQuery query;

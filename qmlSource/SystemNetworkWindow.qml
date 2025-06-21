@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -45,61 +45,6 @@ Item{
             rows: 3
             rowSpacing: Math.round(20 * Style.scaleHint)
             columnSpacing: Math.round(50 * Style.scaleHint)
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                Text {
-//                    id: titleLocalProtocol
-//                    width: Math.round(textWidth * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("协议") + ":"
-//                    font.family: "宋体"
-//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//                    verticalAlignment: Text.AlignVCenter
-//                    color: Style.whiteFontColor
-//                }
-//                HBComboBox
-//                {
-//                    id: comboBoxLocalProtocol
-//                    width: Math.round(componentWidth * Style.scaleHint)
-//                    height: parent.height
-//                }
-//            }
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                Text {
-//                    id: titleLocalRemoteIP
-//                    width: Math.round(textWidth * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("远程IP") + ":"
-//                    font.family: "宋体"
-//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//                    verticalAlignment: Text.AlignVCenter
-//                    color: Style.whiteFontColor
-//                }
-//                HBTextField
-//                {
-//                    id: textLocalRemoteIP
-//                    width: Math.round(componentWidth * Style.scaleHint)
-//                    height: parent.height
-//                    maximumLength: 16
-//                    validator: RegularExpressionValidator{
-//                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-//                    }
-//                    text: qsTr("192.168.111.101")
-//                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-//                    onlyForNumpad: true
-//                    onSignalClickedEvent: {
-//                        mainWindow.showPrimaryNumpad(qsTr("远程IP"), "IPV4", 3, 0, 255, "0.123")
-//                    }
-//                }
-//            }
-
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
@@ -114,53 +59,18 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBTextField
-                {
+
+                HBLineEdit {
                     id: textLocalIP
                     width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    text: qsTr("192.168.111.101")
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("本地IP"), "IPV4", 3, 0, 255, "0.123")
-                    }
+                    height: Math.round(25 * Style.scaleHint)
+                    text: Configuration.LocalIP
+                    font.family: "宋体"
+                    onEditingFinished: {
+                           Configuration.setLocalIP(text)
+                       }
                 }
             }
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                Text {
-//                    id: titleLocalRemotePort
-//                    width: Math.round(textWidth * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("远程端口") + ":"
-//                    font.family: "宋体"
-//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//                    verticalAlignment: Text.AlignVCenter
-//                    color: Style.whiteFontColor
-//                }
-//                HBTextField
-//                {
-//                    id: textLocalRemotePort
-//                    width: Math.round(componentWidth * Style.scaleHint)
-//                    height: parent.height
-//                    maximumLength: 16
-//                    validator: RegularExpressionValidator{
-//                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-//                    }
-//                    text: qsTr("8081")
-//                    onlyForNumpad: true
-//                    onSignalClickedEvent: {
-//                        mainWindow.showPrimaryNumpad(qsTr("远程端口"), " ", 3, 1, 99999, "0.123")
-//                    }
-//                }
-//            }
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
@@ -176,51 +86,18 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBTextField
-                {
+
+                HBLineEdit {
                     id: textLocalPort
                     width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    text: qsTr("8080")
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("本地端口"), " ", 3, 0, 99999, "0.123")
-                    }
+                    height: Math.round(25 * Style.scaleHint)
+                    text: Configuration.LocalPort
+                    font.family: "宋体"
+                    onEditingFinished: {
+                           Configuration.setLocalPort(text)
+                       }
                 }
             }
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                HBPrimaryButton
-//                {
-//                    id: buttonLocalConnect
-//                    width: Math.round(105 * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("连接")
-//                    onClicked:
-//                    {
-//                        // controlLimitNumpad.visible = false
-//                    }
-//                }
-
-//                HBPrimaryButton
-//                {
-//                    id: buttonLocalDisconnect
-//                    width: Math.round(105 * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("断开")
-//                    onClicked:
-//                    {
-//                        // controlLimitNumpad.visible = false
-//                    }
-//                }
-//            }
         }
     }
 
@@ -244,28 +121,6 @@ Item{
             rowSpacing: Math.round(20 * Style.scaleHint)
             columnSpacing: Math.round(50 * Style.scaleHint)
 
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                Text {
-//                    id: titleCloudProtocol
-//                    width: Math.round(textWidth * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("协议") + ":"
-//                    font.family: "宋体"
-//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//                    verticalAlignment: Text.AlignVCenter
-//                    color: Style.whiteFontColor
-//                }
-//                HBComboBox
-//                {
-//                    id: comboBoxCloudProtocol
-//                    width: Math.round(componentWidth * Style.scaleHint)
-//                    height: parent.height
-//                }
-//            }
-
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
@@ -280,53 +135,17 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBTextField
-                {
+                HBLineEdit {
                     id: textCloudRemoteIP
                     width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    text: qsTr("192.168.111.101")
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("远程IP"), "IPV4", 3, 0, 255, "0.123")
-                    }
+                    height: Math.round(25 * Style.scaleHint)
+                    text: Configuration.RemoteIP
+                    font.family: "宋体"
+                    onEditingFinished: {
+                           Configuration.setRemoteIP(text)
+                       }
                 }
             }
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                Text {
-//                    id: titleCloudLocalIP
-//                    width: Math.round(textWidth * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("本地IP") + ":"
-//                    font.family: "宋体"
-//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//                    verticalAlignment: Text.AlignVCenter
-//                    color: Style.whiteFontColor
-//                }
-//                HBTextField
-//                {
-//                    id: textCloudLocalIP
-//                    width: Math.round(componentWidth * Style.scaleHint)
-//                    height: parent.height
-//                    maximumLength: 16
-//                    validator: RegularExpressionValidator{
-//                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-//                    }
-//                    text: qsTr("192.168.111.101")
-//                    onlyForNumpad: true
-//                    onSignalClickedEvent: {
-//                        mainWindow.showPrimaryNumpad(qsTr("本地IP"), "IPV4", 3, 0, 255, "0.123")
-//                    }
-//                }
-//            }
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
@@ -342,82 +161,17 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBTextField
-                {
+                HBLineEdit {
                     id: textCloudRemotePort
                     width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-                    }
-                    text: qsTr("8081")
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("远程端口"), " ", 3, 0, 99999, "0.123")
-                    }
+                    height: Math.round(25 * Style.scaleHint)
+                    text: Configuration.RemotePort
+                    font.family: "宋体"
+                    onEditingFinished: {
+                           Configuration.setRemotePort(text)
+                       }
                 }
             }
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                Text {
-//                    id: titleCloudLocalPort
-//                    width: Math.round(textWidth * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("本地端口") + ":"
-//                    font.family: "宋体"
-//                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-//                    verticalAlignment: Text.AlignVCenter
-//                    color: Style.whiteFontColor
-//                }
-//                HBTextField
-//                {
-//                    id: textCloudLocalPort
-//                    width: Math.round(componentWidth * Style.scaleHint)
-//                    height: parent.height
-//                    maximumLength: 16
-//                    validator: RegularExpressionValidator{
-//                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
-//                    }
-//                    text: qsTr("8080")
-//                    onlyForNumpad: true
-//                    onSignalClickedEvent: {
-//                        mainWindow.showPrimaryNumpad(qsTr("本地端口"), " ", 3, 0, 99999, "0.123")
-//                    }
-//                }
-//            }
-
-//            Row{
-//                height: Math.round(optionHeight * Style.scaleHint)
-//                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-//                spacing: rowSpacing
-//                HBPrimaryButton
-//                {
-//                    id: buttonCloudConnect
-//                    width: Math.round(105 * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("连接")
-//                    onClicked:
-//                    {
-//                        // controlLimitNumpad.visible = false
-//                    }
-//                }
-
-//                HBPrimaryButton
-//                {
-//                    id: buttonCloudDisconnect
-//                    width: Math.round(105 * Style.scaleHint)
-//                    height: parent.height
-//                    text: qsTr("断开")
-//                    onClicked:
-//                    {
-//                        // controlLimitNumpad.visible = false
-//                    }
-//                }
-//            }
         }
     }
 

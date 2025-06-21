@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -27,9 +27,9 @@ Item{
         case manualScreenIndex.manual:
             screenLoader.source = "qrc:/qmlSource/HelpOperateWindow.qml"
             break;
-        case manualScreenIndex.device:
-            screenLoader.source = "qrc:/qmlSource/HelpDeviceWindow.qml"
-            break;
+            // case manualScreenIndex.device:
+            //     screenLoader.source = "qrc:/qmlSource/HelpDeviceWindow.qml"
+            //     break;
         default:
             break;
         }
@@ -41,11 +41,11 @@ Item{
         {
             helpModel.clear()
             helpModel.append({"Title":  qsTr("操作说明"),
-                              "Width":  100,
-                              "Index":  0})
-            helpModel.append({"Title":  qsTr("设备说明"),
-                              "Width":  100,
-                              "Index":  1})
+                                 "Width":  100,
+                                 "Index":  0})
+            // helpModel.append({"Title":  qsTr("设备说明"),
+            //                      "Width":  100,
+            //                      "Index":  1})
 
         }
     }
@@ -76,6 +76,41 @@ Item{
                     updateTabBar(model.Index)
                 }
             }
+        }
+    }
+
+    Row {
+        id: versionInfoRow
+        anchors.top: parent.top
+        anchors.topMargin: Math.round(7 * Style.scaleHint)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(150 * Style.scaleHint)
+        spacing: Math.round(15 * Style.scaleHint)
+        z:10
+
+        Text {
+            id: deviceIDInfo
+            text: qsTr("设备ID") + ": " + Configuration.DeviceID
+            font.family: "宋体"
+            font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+            verticalAlignment: Text.AlignVCenter
+            color: Style.whiteFontColor
+        }
+        Text {
+            id: softwareVersionInfo
+            text: qsTr("软件版本") + ": " + Configuration.SoftwareVersion
+            font.family: "宋体"
+            font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+            verticalAlignment: Text.AlignVCenter
+            color: Style.whiteFontColor
+        }
+        Text {
+            id: hardwareVersionInfo
+            text: qsTr("硬件版本") + ": " + Configuration.HardwareVersion
+            font.family: "宋体"
+            font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+            verticalAlignment: Text.AlignVCenter
+            color: Style.whiteFontColor
         }
     }
 

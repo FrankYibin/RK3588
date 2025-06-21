@@ -72,7 +72,7 @@ void WellParameter::setAreaBlock(const QString &value)
 {
     if (m_AreaBlock != value) {
         m_AreaBlock = value;
-        m_settings.setValue("well/area", value);
+        m_settings.setValue("wellParameter/area", value);
         emit AreaBlockChanged();
     }
 
