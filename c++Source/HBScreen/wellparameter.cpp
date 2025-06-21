@@ -3,6 +3,7 @@
 #include <QTextStream>
 #include <QApplication>
 #include <QDebug>
+#include <QDir>
 
 WellParameter* WellParameter::_ptrWellParameter = nullptr;
 
@@ -236,7 +237,7 @@ void WellParameter::setOperatorType(const QString &value)
 void WellParameter::importFromIniFile()
 {
 #ifdef RK3588
-    QString filePath = "/run/media/sdb1/wellsettings.ini";
+    QString filePath = findWellSettingsPath();
     if (filePath.isEmpty())
         return;
     QSettings settings(filePath, QSettings::IniFormat);
@@ -256,4 +257,21 @@ void WellParameter::saveToIniFile()
     settings.setValue("wellParameter/area", m_AreaBlock);
     settings.setValue("wellParameter/userName", m_UserName);
     settings.setValue("wellParameter/operatorType", m_OperatorType);
+}
+
+
+QString WellParameter::findWellSettingsPath()
+{
+    QDir mediaDir("/run/media");
+    QStringList subDirs = mediaDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString &subDir : subDirs)
+    {
+        QString filePath = "/run/media/" + subDir + "/wellsettings.ini";
+        if (QFile::exists(filePath))
+        {
+            qDebug() << "Found wellsettings.ini at:" << filePath;
+            return filePath;
+        }
+    }
+    return QString(); // 没有找到
 }

@@ -113,6 +113,7 @@ public:
     Q_INVOKABLE void importFromIniFile();
     Q_INVOKABLE void saveToIniFile();
 
+    QString findWellSettingsPath();
 
 
 
@@ -143,6 +144,9 @@ private:
     WellParameter(const WellParameter&) = delete;              // 禁止拷贝
     WellParameter& operator=(const WellParameter&) = delete;   // 禁止赋值
     static WellParameter* _ptrWellParameter;
+
+
+
 
 private:
     QString m_WellNumber;
