@@ -45,7 +45,7 @@ Item
             WellParameter.AreaBlock = areaBlock
             WellParameter.UserName = userName
             WellParameter.OperatorType = operatorType
-
+            WellParameter.saveToIniFile();
             console.log("Well parameters assigned successfully.")
         }
 }

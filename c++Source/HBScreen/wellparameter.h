@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <QSettings>
 
 //well condition parameter
 class WellParameter : public QObject
@@ -109,15 +110,18 @@ public:
     Q_INVOKABLE QString SlopeAngleWellSetting() const;
     Q_INVOKABLE void setSlopeAngleWellSetting(const QString angle);
 
+    Q_INVOKABLE void importFromIniFile();
+    Q_INVOKABLE void saveToIniFile();
+
 
 
 
     // CSV methods
-//    QString toCSVLine() const;
-//    static QString csvHeader();
-//    Q_INVOKABLE static WellParameter* fromCSVLine(const QString &line, QObject *parent = nullptr);
-//    static QList<WellParameter*> loadFromCSV(const QString &filePath, QObject *parent = nullptr);
-//    Q_INVOKABLE static bool saveToCSV(const QString &filePath, const QList<WellParameter*> &list);
+    //    QString toCSVLine() const;
+    //    static QString csvHeader();
+    //    Q_INVOKABLE static WellParameter* fromCSVLine(const QString &line, QObject *parent = nullptr);
+    //    static QList<WellParameter*> loadFromCSV(const QString &filePath, QObject *parent = nullptr);
+    //    Q_INVOKABLE static bool saveToCSV(const QString &filePath, const QList<WellParameter*> &list);
 
 signals:
     void WellNumberChanged();
@@ -154,6 +158,8 @@ private:
     int     m_WellType;
     QString m_DepthWell;
     QString m_SlopeAngleWellSetting;
+
+    QSettings m_settings;
 };
 
 #endif // WELLPARAMETER_H
