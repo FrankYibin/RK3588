@@ -378,18 +378,18 @@ bool HBDatabase::loadWellParameter(_WellParameter &param)
 
 void HBDatabase::loadDataFromDatabase()
 {
-    _WellParameter param;
-    bool ok = HBDatabase::GetInstance().loadWellParameter(param);
-    if (ok) {
+    // _WellParameter param;
+    // bool ok = HBDatabase::GetInstance().loadWellParameter(param);
+    // if (ok) {
 
-        qDebug() << "Loaded data:";
-        qDebug() << "Updating record id:" << param.id;
-        qDebug() << "WellNumber:" << param.wellNumber;
-        qDebug() << "AreaBlock:" << param.areaBlock;
+    //     qDebug() << "Loaded data:";
+    //     qDebug() << "Updating record id:" << param.id;
+    //     qDebug() << "WellNumber:" << param.wellNumber;
+    //     qDebug() << "AreaBlock:" << param.areaBlock;
 
-    } else {
-        qDebug() << "Failed to load data from database";
-    }
+    // } else {
+    //     qDebug() << "Failed to load data from database";
+    // }
 
     _DepthSet deptParam;
     bool success = HBDatabase::GetInstance().loadDepthSet(deptParam);

@@ -58,6 +58,7 @@ Item{
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.WellNumber
                     focus: true
+                    onTextChanged: WellParameter.WellNumber = text
                 }
 
             }
@@ -483,6 +484,8 @@ Item{
             onClicked:
             {
                 // controlLimitNumpad.visible = false
+                WellParameter.importFromIniFile()
+
             }
         }
 
@@ -495,8 +498,9 @@ Item{
             onClicked:
             {
                 // controlLimitNumpad.visible = false
-                HBDatabase.updateWellParameterFromInstance()
-                //                  console.log("是否成功更新数据库：", ok)
+                ProfileGlobalDefine.saveWellParameter(textWellNumber.text,textAreaBlock.text,textUserName.text,textUserLevel.text)
+                console.log("ttttttttttttttttttttttt")
+                // HBDatabase.updateWellParameterFromInstance()
                 profileLayout.visible = false
                 mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
             }

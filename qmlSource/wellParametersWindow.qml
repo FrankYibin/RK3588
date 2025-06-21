@@ -24,8 +24,8 @@ Item{
         height: parent.height
         focus: true
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -486,10 +486,9 @@ Item{
         onClicked:
         {
             // controlLimitNumpad.visible = false
-            HBDatabase.updateWellParameterFromInstance()
-            //                  console.log("是否成功更新数据库：", ok)
-            // profileLayout.visible = false
-            // mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
+            ProfileGlobalDefine.saveWellParameter(textWellNumber.text,textAreaBlock.text,textUserName.text,textUserLevel.text)
+            profileLayout.visible = false
+            mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)
         }
     }
 }
