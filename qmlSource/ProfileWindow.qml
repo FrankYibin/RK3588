@@ -435,7 +435,8 @@ Item{
                     id: textUserName
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    text:WellParameter.UserName
+                    text: UserModel.CurrentUser
+                    readOnly: true
                     font.family: "宋体"
                 }
             }
@@ -459,7 +460,8 @@ Item{
                     id: textUserLevel
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
-                    text: WellParameter.OperatorType
+                    text: UserModel.CurrentGroup
+                    readOnly: true
                     font.family: "宋体"
                 }
             }
