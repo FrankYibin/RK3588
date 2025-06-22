@@ -7,6 +7,7 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Modbus 1.0
 import HB.Enums 1.0
+import HB.Database 1.0
 import TensionsGlobalDefine 1.0
 Item{
     id: newTensionMeter
@@ -180,6 +181,8 @@ Item{
             onClicked:
             {
                 signalSaveTensometer()
+                let logText = `新增张力计编号为：${Tensiometer.TensiometerNumber}`;
+                HBDatabase.insertOperationLog(logText)
             }
         }
     }

@@ -11,6 +11,7 @@ import HB.Enums 1.0
 import ProfileGlobalDefine 1.0
 import DepthGlobalDefine 1.0
 import TensionsGlobalDefine 1.0
+
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidthColumn1: 100
@@ -191,6 +192,8 @@ Item{
                         mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeightValue.text,textSensorWeightValue,function(val) {
                             TensionSafety.WeightInstrumentString = val;
                             ModbusClient.writeRegister(HQmlEnum.WEIGHT_INSTRUMENT_STRING, val)
+                            var logText = `仪器串重量值被修改为：${val}`;
+                            HBDatabase.insertOperationLog(logText);
                         })
                     }
                 }
@@ -236,6 +239,8 @@ Item{
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessPullingStrength.text,textHarnessPullingStrength,function(val) {
                             TensionSafety.BreakingForceCable = val;
                             ModbusClient.writeRegister(HQmlEnum.BREAKING_FORCE_CABLE, val)
+                            var logText = `电缆拉断力值被修改为：${val}`;
+                            HBDatabase.insertOperationLog(logText);
                         })
                     }
                 }
@@ -282,6 +287,8 @@ Item{
                         mainWindow.showPrimaryNumpad(qsTr("请输入弱点拉断力值"), " ", 3, 0, 99999, textWeaknessPullingStrength.text,textWeaknessPullingStrength,function(val) {
                             TensionSafety.BreakingForceWeakness = val;
                             ModbusClient.writeRegister(HQmlEnum.BREAKING_FORCE_WEAKNESS, val)
+                            var logText = `弱点拉断力值被修改为：${val}`;
+                            HBDatabase.insertOperationLog(logText);
                         })
                     }
                 }

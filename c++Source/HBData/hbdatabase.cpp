@@ -170,24 +170,21 @@ QList<HistoryOperationModel::Row> HBDatabase::loadAllOperationData()
 
 }
 
-bool HBDatabase::insertOperationLog(const QString workType, const QString operateText)
+bool HBDatabase::insertOperationLog(const QString operateText)
 {
     if (!m_database.isOpen()) {
         qWarning() << "Database not open";
         return false;
     }
 
-    QString wellNumber = WellParameter::GetInstance()->WellNumber();
-    QString username   = WellParameter::GetInstance()->UserName();
-    QString datetime   = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    QString username = WellParameter::GetInstance()->UserName();
+    QString datetime = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
 
     QSqlQuery query(m_database);
     query.prepare(R"(
-        INSERT INTO operating_data (well_number, work_type, username, datetime, operate)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO operating_data (username, datetime, operate)
+        VALUES (?, ?, ?)
     )");
-    query.addBindValue(wellNumber);
-    query.addBindValue(workType);
     query.addBindValue(username);
     query.addBindValue(datetime);
     query.addBindValue(operateText);
@@ -198,7 +195,6 @@ bool HBDatabase::insertOperationLog(const QString workType, const QString operat
     }
 
     return true;
-
 }
 
 HBDatabase &HBDatabase::GetInstance()

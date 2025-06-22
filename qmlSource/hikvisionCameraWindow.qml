@@ -35,6 +35,51 @@ Item{
             fillMode: VideoOutput.Stretch
         }
     }
+
+    Column {
+        spacing: Math.round(10 * Style.scaleHint)
+        anchors.top: parent.top
+        anchors.right: parent.right
+        Text {
+                id: textCurrentTime
+                text: "时间：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
+                font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                color: Style.whiteFontColor
+
+                Timer {
+                    interval: 1000
+                    running: true
+                    repeat: true
+                    onTriggered: {
+                        textCurrentTime.text = "时间：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
+                    }
+                }
+            }
+
+        Text {
+            text: "深度：" + HBHome.DepthCurrent + " " + DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+            color: Style.whiteFontColor
+        }
+
+        Text {
+            text: "速度：" + HBHome.VelocityCurrent + " " + DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+            color: Style.whiteFontColor
+        }
+
+        Text {
+            text: "张力：" + HBHome.TensionCurrent + " " + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+            color: Style.whiteFontColor
+        }
+
+        Text {
+            text: "张力增量：" + HBHome.TensionCurrentDelta + " " + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + "/s"
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+            color: Style.whiteFontColor
+        }
+    }
 }
 
 

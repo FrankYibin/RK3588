@@ -3,6 +3,7 @@ import QtGraphicalEffects 1.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import UserGlobalDefine 1.0
+import HB.Database 1.0
 Item{
     id: newUser
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_USER_MANAGEMENT
@@ -219,6 +220,8 @@ Item{
             {
                 console.log("添加成功")
                 success = UserModel.addNewUser(username, password, groupindex, nickname)
+                let logText = `${username}用户添加成功！`;
+                HBDatabase.insertOperationLog(logText);
             }
             else
             {
