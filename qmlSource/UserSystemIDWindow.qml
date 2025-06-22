@@ -19,32 +19,45 @@ Item{
         }
     }
 
+    Item{
+        id: loadingVisible
+        anchors.top: parent.top
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
+        anchors.left: parent.left
+        width: parent.width
+        height: Math.round(30 * Style.scaleHint)
+        visible: false
+        clip: true
+        AnimatedImage{
+            anchors.centerIn: parent
+            source: "qrc:/images/loading.gif"
+            playing: loadingVisible.visible
+        }
+    }
+
 
     Item{
-        anchors.top: parent.top
-        anchors.topMargin: Math.round(20 * Style.scaleHint)
+        anchors.top: loadingVisible.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        width:  Math.round(200 * Style.scaleHint)
-        height: Math.round(200 * Style.scaleHint)
-        // Image
-        // {
-        //     id: iconUser
-        //     anchors.left: parent.left
-        //     anchors.top: parent.top
-        //     width: Math.round(175 * Style.scaleHint)
-        //     height: Math.round(200 * Style.scaleHint)
-        //     source: "qrc:/images/userManagement.png"
-        //     fillMode: Image.PreserveAspectFit
-        //     smooth: true
-        //     sourceSize.width: width
-        //     sourceSize.height: height
-        //     visible: !enableFaceRecord
-        // }
-
+        width:  Math.round(600 * Style.scaleHint)
+        height: Math.round(300 * Style.scaleHint)
         HBFaceDetector
         {
             id: faceDetector
             anchors.fill: parent
+            onImageIsReady:
+            {
+                if(VideoCapture.generateFaceEigenValue() === true)
+                {
+                    // mainWindow.loginProcess()
+                }
+                else
+                {
+                    faceDetector.showPreview = false
+                    loadingVisible.visible = false
+                    mainWindow.showDialogScreen(qsTr("请重新人脸录入"), null)
+                }
+            }
         }
 
     }
@@ -65,15 +78,11 @@ Item{
             {
                 if(faceDetector.showPreview == false)
                 {
-                    faceDetector.imageCapture.capture()
-                    // signalButtonFunc(BransonNumpadDefine.EnumKeyboard.Login)
+                    // 指定保存路径到当前工作目录
+                    var filePath = VideoCapture.getImageDirectory() + "/tmpImage.jpg";// 保存到当前目录
+                    faceDetector.imageCapture.captureToLocation(filePath)
                     faceDetector.showPreview = true // 切换为显示图片
-                    // loadingVisible.visible = true
-                }
-                else
-                {
-                    faceDetector.showPreview = false
-                    // loadingVisible.visible = false
+                    loadingVisible.visible = true
                 }
             }
         }

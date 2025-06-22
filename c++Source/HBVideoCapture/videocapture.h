@@ -10,11 +10,13 @@ class VideoCapture : public QObject
 {
     Q_OBJECT
 private:
-    QImage m_CurrentFrame;
+    QString m_ImagePath;
     static VideoCapture* _ptrVideoCapture;
 public:
     static VideoCapture* GetInstance();
-    Q_INVOKABLE void saveLoginImage(const QString &imageSource);
+    Q_INVOKABLE bool    detectFaceImage();
+    Q_INVOKABLE bool    generateFaceEigenValue();
+    Q_INVOKABLE QString getImageDirectory();
 protected:
     explicit VideoCapture(QQuickItem *parent = nullptr);
 signals:

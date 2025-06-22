@@ -58,6 +58,19 @@ Rectangle {
             anchors.fill: parent
             height: parent.height
             width: parent.width
+            onImageIsReady:
+            {
+                if(VideoCapture.detectFaceImage() === true)
+                {
+                    mainWindow.loginProcess()
+                }
+                else
+                {
+                    faceDetector.showPreview = false
+                    loadingVisible.visible = false
+                    mainWindow.showDialogScreen(qsTr("请重新人脸登录"), null)
+                }
+            }
         }
     }
 
@@ -78,17 +91,11 @@ Rectangle {
             if(faceDetector.showPreview == false)
             {
                 // 指定保存路径到当前工作目录
-                var filePath = "/opt/MeteringDisplay/bin"+ "/saved_image.jpg"; // 保存到当前目录
-                console.debug("222222222222222222", filePath)
-                faceDetector.imageCapture.capture(filePath)
+                var filePath = VideoCapture.getImageDirectory() + "/tmpImage.jpg";// 保存到当前目录
+                faceDetector.imageCapture.captureToLocation(filePath)
                 signalButtonFunc(BransonNumpadDefine.EnumKeyboard.Login)
                 faceDetector.showPreview = true // 切换为显示图片
                 loadingVisible.visible = true
-            }
-            else
-            {
-                faceDetector.showPreview = false
-                loadingVisible.visible = false
             }
         }
     }
