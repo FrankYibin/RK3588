@@ -67,10 +67,10 @@ bool VideoCapture::ParseComparedLog(const QString &log)
             double score = resultObj["score"].toDouble();
             QString userId = resultObj["user_id"].toString();
 
-            // qDebug() << QString("  Group ID: %1, Score: %2, User ID: %3")
-            //                 .arg(groupId)
-            //                 .arg(score)
-            //                 .arg(userId);
+            qDebug() << QString("  Group ID: %1, Score: %2, User ID: %3")
+                            .arg(groupId)
+                            .arg(score)
+                            .arg(userId);
             m_ComparedResult.GroupID = groupId;
             m_ComparedResult.Score = score;
             m_ComparedResult.UserID = userId;
@@ -179,6 +179,8 @@ bool VideoCapture::detectFaceImage()
     QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
     arguments.append("-compare");
     arguments.append("/opt/MeteringDisplay/bin/image/tmpImage.jpg");
+
+    RunCommand(program, arguments);
 
     // 启动进程
     process.start(program, arguments);
@@ -326,8 +328,19 @@ bool VideoCapture::deleteFaceRecord(QString username_password)
 
 bool VideoCapture::getUsersList()
 {
-    // 创建 QProcess 对象
+
+    // QString cmd = QString("./factTest.sh -get userlist HB");
     QProcess process;
+    // process.setProcessChannelMode(QProcess::MergedChannels);
+    // QStringList cmdlist;
+    // process.start("bash", cmdlist);
+    // if(!process.waitForStarted())
+    // {
+    //     qDebug() << "Failed to start process";
+    //     return false;
+    // }
+
+    // qDebug() << "Cmd: " << cmd;
 
     // 设置要执行的命令
     QString program = "./faceTest.sh"; // 你可以替换为其他 Linux 命令
@@ -335,13 +348,10 @@ bool VideoCapture::getUsersList()
     arguments.append("-get");
     arguments.append("userlist");
     arguments.append("HB");
-
     RunCommand(program, arguments);
 
     // 启动进程
     process.start(program, arguments);
-
-    // 等待进程结束
     process.waitForFinished();
 
     // 获取命令输出
