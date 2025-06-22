@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -37,30 +37,6 @@ Item{
         width: Math.round((textWidth + comboBoxWidth + rowSpacing) * Style.scaleHint)
         height: Math.round((optionHeight * 4 + columnSpacing * 3) * Style.scaleHint)
         spacing: Math.round(columnSpacing * Style.scaleHint)
-        //        Row
-        //        {
-        //            width: parent.width
-        //            height: Math.round(optionHeight * Style.scaleHint)
-        //            spacing: Math.round(rowSpacing * Style.scaleHint)
-        //            anchors.horizontalCenter: parent.horizontalCenter
-        //            Text {
-        //                id: titlePort
-        //                width: Math.round(textWidth * Style.scaleHint)
-        //                height: parent.height
-        //                text: qsTr("端口") + ":"
-        //                font.family: "宋体"
-        //                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-        //                verticalAlignment: Text.AlignVCenter
-        //                color: Style.whiteFontColor
-        //            }
-        //            HBComboBox
-        //            {
-        //                id:comboBoxPort
-        //                width: Math.round(comboBoxWidth * Style.scaleHint)
-        //                height: parent.height
-        //            }
-        //        }
-
         Row
         {
             width: parent.width
@@ -82,12 +58,12 @@ Item{
             {
                 id: comboBoxBaudrate
                 model: comboBoxBaudratemodel
-                currentIndex: 1
+                currentIndex: comboBoxBaudratemodel.indexOf(Configuration.BaudRate)
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
-
+                    Configuration.setBaudRate(comboBoxBaudratemodel[currentIndex])
                 }
             }
         }
@@ -113,12 +89,12 @@ Item{
             {
                 id: comboBoxDataBits
                 model: comboBoxDataBitsmodel
-                currentIndex:2
+                currentIndex: comboBoxDataBitsmodel.indexOf(Configuration.DataBits)
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
-
+                    Configuration.setDataBits(comboBoxDataBitsmodel[currentIndex])
                 }
             }
         }
@@ -144,12 +120,12 @@ Item{
             {
                 id: comboBoxStandard
                 model: comboBoxStandardmodel
-                currentIndex: 0
+                currentIndex: comboBoxStandardmodel.indexOf(Configuration.Parity)
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
-
+                    Configuration.setParity(comboBoxStandardmodel[currentIndex])
                 }
             }
         }
@@ -174,32 +150,16 @@ Item{
             {
                 id: comboBoxStopBits
                 model: comboBoxStopBitsmodel
-                currentIndex: 0
+                currentIndex: comboBoxStopBitsmodel.indexOf(Configuration.StopBits)
                 width: Math.round(comboBoxWidth * Style.scaleHint)
                 height: parent.height
                 fontFamily: "宋体"
                 onCurrentIndexChanged: {
-
+                    Configuration.setStopBits(comboBoxStopBitsmodel[currentIndex])
                 }
             }
         }
     }
-
-//    HBPrimaryButton
-//    {
-//        id: buttonConnect
-//        anchors.bottom: parent.bottom
-//        anchors.bottomMargin: Math.round(20 * Style.scaleHint)
-//        anchors.right: parent.right
-//        anchors.rightMargin: Math.round(20 * Style.scaleHint)
-//        width: Math.round(125 * Style.scaleHint)
-//        height: Math.round(40 * Style.scaleHint)
-//        text: qsTr("连接")
-//        onClicked:
-//        {
-//            console.debug("Serial Connecting")
-//        }
-//    }
 
 }
 

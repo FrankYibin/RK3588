@@ -58,7 +58,6 @@ void WellParameter::setWellNumber(const QString &value)
 {
     if (m_WellNumber != value) {
         m_WellNumber = value;
-        // m_settings.setValue("wellParameter/number", value);
         emit WellNumberChanged();
     }
 }
@@ -72,7 +71,6 @@ void WellParameter::setAreaBlock(const QString &value)
 {
     if (m_AreaBlock != value) {
         m_AreaBlock = value;
-        // m_settings.setValue("well/area", value);
         emit AreaBlockChanged();
     }
 

@@ -41,6 +41,7 @@ SOURCES += main.cpp \
     c++Source/HBModbus/hbmodbusclient.cpp \
     c++Source/HBModbus/modbusutils.cpp \
     c++Source/HBScreen/autotestspeed.cpp \
+    c++Source/HBScreen/configuration.cpp \
     c++Source/HBScreen/datetime.cpp \
     c++Source/HBScreen/depthmeter.cpp \
     c++Source/HBScreen/depthsetting.cpp \
@@ -49,8 +50,6 @@ SOURCES += main.cpp \
     c++Source/HBScreen/history.cpp \
     c++Source/HBScreen/historydatatable.cpp \
     c++Source/HBScreen/historyoperationmodel.cpp \
-    c++Source/HBScreen/network.cpp \
-    c++Source/HBScreen/rs232.cpp \
     c++Source/HBScreen/tensiometer.cpp \
     c++Source/HBScreen/tensiometermanager.cpp \
 #    c++Source/HBScreen/tensionscale.cpp \
@@ -97,6 +96,7 @@ HEADERS += \
     c++Source/HBModbus/modbusutils.h \
     c++Source/HBQmlEnum.h \
     c++Source/HBScreen/autotestspeed.h \
+    c++Source/HBScreen/configuration.h \
     c++Source/HBScreen/datetime.h \
     c++Source/HBScreen/depthmeter.h \
     c++Source/HBScreen/depthsetting.h \
@@ -105,8 +105,6 @@ HEADERS += \
     c++Source/HBScreen/history.h \
     c++Source/HBScreen/historydatatable.h \
     c++Source/HBScreen/historyoperationmodel.h \
-    c++Source/HBScreen/network.h \
-    c++Source/HBScreen/rs232.h \
     c++Source/HBScreen/tensiometer.h \
     c++Source/HBScreen/tensiometermanager.h \
 #    c++Source/HBScreen/tensionscale.h \
