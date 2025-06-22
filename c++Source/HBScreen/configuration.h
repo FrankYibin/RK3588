@@ -87,10 +87,6 @@ public:
     Q_INVOKABLE int LanguageIndex() const;
     Q_INVOKABLE void setLanguageIndex(int languageIndex);
 
-
-
-
-
 signals:
 
     void BaudRateChanged();

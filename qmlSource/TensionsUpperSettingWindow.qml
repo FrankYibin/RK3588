@@ -11,6 +11,7 @@ import HB.Enums 1.0
 import ProfileGlobalDefine 1.0
 import DepthGlobalDefine 1.0
 import TensionsGlobalDefine 1.0
+
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
     readonly property int textWidthColumn1: 100
@@ -191,6 +192,8 @@ Item{
                         mainWindow.showPrimaryNumpad(qsTr("请输入仪器串重量值"), " ", 3, 0, 99999, textSensorWeightValue.text,textSensorWeightValue,function(val) {
                             TensionSafety.WeightInstrumentString = val;
                             ModbusClient.writeRegister(HQmlEnum.WEIGHT_INSTRUMENT_STRING, val)
+                            var logText = `仪器串重量值被修改为：${val}`;
+                            HBDatabase.insertOperationLog(logText);
                         })
                     }
                 }
@@ -236,6 +239,8 @@ Item{
                         mainWindow.showPrimaryNumpad(qsTr("请输入电缆拉断力值"), " ", 3, 0, 99999, textHarnessPullingStrength.text,textHarnessPullingStrength,function(val) {
                             TensionSafety.BreakingForceCable = val;
                             ModbusClient.writeRegister(HQmlEnum.BREAKING_FORCE_CABLE, val)
+                            var logText = `电缆拉断力值被修改为：${val}`;
+                            HBDatabase.insertOperationLog(logText);
                         })
                     }
                 }
@@ -282,6 +287,8 @@ Item{
                         mainWindow.showPrimaryNumpad(qsTr("请输入弱点拉断力值"), " ", 3, 0, 99999, textWeaknessPullingStrength.text,textWeaknessPullingStrength,function(val) {
                             TensionSafety.BreakingForceWeakness = val;
                             ModbusClient.writeRegister(HQmlEnum.BREAKING_FORCE_WEAKNESS, val)
+                            var logText = `弱点拉断力值被修改为：${val}`;
+                            HBDatabase.insertOperationLog(logText);
                         })
                     }
                 }
@@ -421,17 +428,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: TensionSafety.TensionCurrentSafety
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入当前安全张力", "s", 3, 0, 99999, textCurrentSafetyTension.text,textCurrentSafetyTension,function(val) {
-                            TensionSafety.TensionCurrentSafety = val;
-                            ModbusClient.writeRegister(HQmlEnum.TENSION_CURRENT_SAFETY_H, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitCurrentSafetyTension
@@ -459,19 +460,18 @@ Item{
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
-                HBComboBox
+                HBTextField
                 {
-                    id: comboCableTensionTrend
-                    model: TensionsGlobalDefine.tensionCableHeadTrendModel
-                    currentIndex: TensionSafety.TensionCableHeadTrend
+                    id: textCableTensionTrend
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: parent.height
-                    fontFamily: "宋体"
-                    fontSize: Math.round(Style.style3 * Style.scaleHint)
-                    onCurrentIndexChanged: {
-                        // TensionSafety.TensionCableHeadTrend = currentIndex
-                        ModbusClient.writeRegister(HQmlEnum.TENSION_CABLE_HEAD_TREND, currentIndex)
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    readOnly: true
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
+                    text: TensionsGlobalDefine.tensionCableHeadTrendModel[TensionSafety.TensionCableHeadTrend]
                 }
             }
 
@@ -496,17 +496,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: TensionSafety.DepthEncoder1
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入编码器1深度", "s", 3, 0, 99999, textCurrentDepth1.text,textCurrentDepth1,function(val) {
-                            TensionSafety.DepthEncoder1 = val;
-                            ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER_1_H, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitCurrentDepth1
@@ -541,17 +535,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: TensionSafety.TensionLimitedSafety
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入最大安全张力", "s", 3, 0, 99999, textMaxSafetyTension.text,textMaxSafetyTension,function(val) {
-                            TensionSafety.TensionLimitedSafety = val;
-                            // ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER_1_H, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitMaxSafetyTension
@@ -586,17 +574,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: TensionSafety.TimeSafetyStop
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入安全停车时间", "s", 3, 0, 99999, textSafetyStopTime.text,textSafetyStopTime,function(val) {
-                            TensionSafety.TensionLimitedSafety = val;
-                            ModbusClient.writeRegister(HQmlEnum.TIME_SAFETY_STOP, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitSafetyStopTime
@@ -631,18 +613,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("8080")
                     text: TensionSafety.DepthEncoder2
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入编码器2深度", "s", 3, 0, 99999, textCurrentDepth2.text,textCurrentDepth2,function(val) {
-                            TensionSafety.DepthEncoder2 = val;
-                            ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER_2_H, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitCurrentDepth2
@@ -677,17 +652,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text: TensionSafety.TensionCableHead
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入当前缆头张力", "s", 3, 0, 99999, textCurrentHarnessTension.text,textCurrentHarnessTension,function(val) {
-                            TensionSafety.TensionCableHead = val;
-                            ModbusClient.writeRegister(HQmlEnum.TENSION_CABLE_HEAD_H, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitCurrentHarnessTension
@@ -722,17 +691,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
                     text:TensionSafety.DepthTolerance
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入深度误差", "s", 3, 0, 99999, textDepthTolerance.text,textDepthTolerance,function(val) {
-                            TensionSafety.DepthTolerance = val;
-                            ModbusClient.writeRegister(HQmlEnum.DEPTH_TOLERANCE_H, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitDepthTolerance
@@ -767,18 +730,11 @@ Item{
                     height: parent.height
                     fontSize: Math.round(Style.style4 * Style.scaleHint)
                     maximumLength: 16
+                    readOnly: true
                     validator: RegularExpressionValidator{
                         regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
                     }
-                    // text: qsTr("8080")
                     text:TensionSafety.DepthEncoder3
-                    onlyForNumpad: true
-                    onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad("请输入编码器3深度", "s", 3, 0, 99999, textCurrentDepth3.text,textCurrentDepth3,function(val) {
-                            TensionSafety.DepthEncoder3 = val;
-                            ModbusClient.writeRegister(HQmlEnum.DEPTH_ENCODER_3_H, val)
-                        })
-                    }
                 }
                 Text {
                     id: unitCurrentDepth3

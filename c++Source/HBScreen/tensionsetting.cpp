@@ -27,6 +27,7 @@ TensionSetting::TensionSetting(QObject *parent)
     // setTensionUnit(LB);
     QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
     m_TensionUnit = settings.value("Unit/TensionUnit", LB).toInt();
+    settings.setValue("Unit/TensionUnit", m_TensionUnit);
 }
 
 int TensionSetting::TensionUnit() const
