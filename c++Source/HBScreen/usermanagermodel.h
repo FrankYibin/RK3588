@@ -42,6 +42,7 @@ public:
     Q_INVOKABLE bool validateUser(const QString username, const QString password);
     Q_INVOKABLE bool getUser(int row);
     Q_INVOKABLE bool resetUser();
+    Q_INVOKABLE bool syncUserList();
     Q_INVOKABLE void loadFromDatabase();
 
     bool validateFaceUser(const QString username);

@@ -184,9 +184,6 @@ int main(int argc, char *argv[])
     // pQmlContext->setContextProperty("communicationInterface", CommunicationInterface::getInstance(&app));
     pQmlContext->setContextProperty("systemInformationModel", SystemInformationInterface::getInstance());
 
-    VideoCapture::GetInstance()->detectFaceImage();
-    // VideoCapture::GetInstance()->generateFaceEigenValue();
-
     if(QFile::exists(logUrl) == true)
         QFile::remove(logUrl);
 #ifdef QT_DEBUG

@@ -8,7 +8,7 @@
 #include <QProcess>
 #include "c++Source/HBScreen/usermanagermodel.h"
 VideoCapture* VideoCapture::_ptrVideoCapture = nullptr;
-bool VideoCapture::ParseLog(const QString &log)
+bool VideoCapture::ParseComparedLog(const QString &log)
 {
     // 打印日志内容，便于调试
     qDebug() << "Log content:" << log;
@@ -84,6 +84,84 @@ bool VideoCapture::ParseLog(const QString &log)
     return true;
 }
 
+bool VideoCapture::ParseUserListLog(const QString &log)
+{
+    // 打印日志内容，便于调试
+    qDebug() << "Log content:" << log;
+
+    // 尝试用正则表达式提取JSON部分
+    QRegularExpression jsonRegex(R"(\{[\s\S]*\})"); // 支持多行JSON
+    QRegularExpressionMatch jsonMatch = jsonRegex.match(log);
+
+    QString jsonString;
+    if (jsonMatch.hasMatch()) {
+        jsonString = jsonMatch.captured(0); // 提取匹配到的 JSON 部分
+    } else {
+        // 如果正则匹配不到，尝试手动提取
+        int startIndex = log.indexOf('{');
+        int endIndex = log.lastIndexOf('}');
+        if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
+            jsonString = log.mid(startIndex, endIndex - startIndex + 1);
+        }
+    }
+
+    // 检查是否成功提取JSON
+    if (jsonString.isEmpty()) {
+        qDebug() << "No JSON found in the log.";
+        return false;
+    }
+
+    // 解析JSON
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8());
+    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+        QJsonObject jsonObj = jsonDoc.object();
+
+        // 提取errno, msg, result_num, face_token
+        int errnoValue = jsonObj["errno"].toInt();
+        QString msg = jsonObj["msg"].toString();
+        QJsonObject data = jsonObj["data"].toObject();
+        QString faceToken = data["face_token"].toString();
+        int resultNum = data["result_num"].toInt();
+        m_ComparedResult.Errno = errnoValue;
+        m_ComparedResult.Msg = msg;
+        m_ComparedResult.FaceToken = faceToken;
+        m_ComparedResult.ComparedUserCount = resultNum;
+
+        // 输出解析结果
+        // qDebug() << QString("Errno: %1, Message: %2, Face Token: %3, Result Number: %4")
+        //                 .arg(errnoValue)
+        //                 .arg(msg)
+        //                 .arg(faceToken)
+        //                 .arg(resultNum);
+
+        // 提取results数组
+        QJsonArray results = data["user_id_list"].toArray();
+        // qDebug() << "Results:";
+        for (const QJsonValue &value : results) {
+            QJsonObject resultObj = value.toObject();
+            QString userId = resultObj["user_id"].toString();
+            m_UserIDList.append(userId);
+        }
+    }
+    else
+    {
+        qDebug() << "Failed to parse JSON.";
+        return false;
+    }
+    return true;
+}
+
+void VideoCapture::RunCommand(const QString cmd, const QStringList arguments)
+{
+    QString str = "CMD: ";
+    str += cmd + " ";
+    for(int i = 0; i < arguments.size(); i++)
+    {
+        str += arguments[i] + " ";
+    }
+    qDebug() << str;
+}
+
 VideoCapture *VideoCapture::GetInstance()
 {
     if(_ptrVideoCapture == nullptr)
@@ -114,7 +192,7 @@ bool VideoCapture::detectFaceImage()
 
     // 输出结果
     if (!output.isEmpty()) {
-        if(ParseLog(output) == true)
+        if(ParseComparedLog(output) == true)
         {
             // 输出解析结果
             qDebug() << QString("Errno: %1, Message: %2, Face Token: %3, User Count: %4, GroupID: %5, UserID: %6, Score: %7")
@@ -136,9 +214,9 @@ bool VideoCapture::detectFaceImage()
         qDebug() << "Command Error:" << error;
         return false;
     }
-    if((m_ComparedResult.Errno == 0) && (m_ComparedResult.Score > 80))
+    if(m_ComparedResult.Errno == 0)
     {
-        QStringList strList = m_ComparedResult.UserID.split("&");
+        QStringList strList = m_ComparedResult.UserID.split("_");
         if(UserManagerModel::GetInstance().validateUser(strList[0], strList[1]) == false)
             return false;
     }
@@ -159,6 +237,7 @@ bool VideoCapture::generateFaceEigenValue(QString username_password)
     arguments.append("HB");
     arguments.append(username_password);
     arguments.append("/opt/MeteringDisplay/bin/image/tmpImage.jpg");
+    RunCommand(program, arguments);
 
     // 启动进程
     process.start(program, arguments);
@@ -172,7 +251,7 @@ bool VideoCapture::generateFaceEigenValue(QString username_password)
 
     // 输出结果
     if (!output.isEmpty()) {
-        if(ParseLog(output) == true)
+        if(ParseComparedLog(output) == true)
         {
             // 输出解析结果
             qDebug() << QString("Errno: %1, Message: %2, Face Token: %3, User Count: %4, GroupID: %5, UserID: %6, Score: %7")
@@ -183,7 +262,6 @@ bool VideoCapture::generateFaceEigenValue(QString username_password)
                             .arg(m_ComparedResult.GroupID)
                             .arg(m_ComparedResult.UserID)
                             .arg(m_ComparedResult.Score);
-
         }
         else
             return false;
@@ -192,6 +270,10 @@ bool VideoCapture::generateFaceEigenValue(QString username_password)
         return false;
     if (!error.isEmpty()) {
         qDebug() << "Command Error:" << error;
+        return false;
+    }
+    if(m_ComparedResult.Errno != 0)
+    {
         return false;
     }
     return true;
@@ -208,6 +290,7 @@ bool VideoCapture::deleteFaceRecord(QString username_password)
     arguments.append("-delete");
     arguments.append("HB");
     arguments.append(username_password);
+    RunCommand(program, arguments);
 
     // 启动进程
     process.start(program, arguments);
@@ -221,7 +304,7 @@ bool VideoCapture::deleteFaceRecord(QString username_password)
 
     // 输出结果
     if (!output.isEmpty()) {
-        if(ParseLog(output) == true)
+        if(ParseComparedLog(output) == true)
         {
             // 输出解析结果
             qDebug() << QString("Errno: %1, Message: %2, Face Token: %3, User Count: %4, GroupID: %5, UserID: %6, Score: %7")
@@ -253,6 +336,8 @@ bool VideoCapture::getUsersList()
     arguments.append("userlist");
     arguments.append("HB");
 
+    RunCommand(program, arguments);
+
     // 启动进程
     process.start(program, arguments);
 
@@ -265,18 +350,19 @@ bool VideoCapture::getUsersList()
 
     // 输出结果
     if (!output.isEmpty()) {
-        if(ParseLog(output) == true)
+        if(ParseUserListLog(output) == true)
         {
             // 输出解析结果
-            qDebug() << QString("Errno: %1, Message: %2, Face Token: %3, User Count: %4, GroupID: %5, UserID: %6, Score: %7")
-                            .arg(m_ComparedResult.Errno)
-                            .arg(m_ComparedResult.Msg)
-                            .arg(m_ComparedResult.FaceToken)
-                            .arg(m_ComparedResult.ComparedUserCount)
-                            .arg(m_ComparedResult.GroupID)
-                            .arg(m_ComparedResult.UserID)
-                            .arg(m_ComparedResult.Score);
-
+            for(int i = 0; i < m_UserIDList.size(); i++)
+            {
+                QString strUserID = m_UserIDList[i];
+                if(strUserID.contains("_") == false)
+                {
+                    qDebug() << "the User iD will be deleted" << m_UserIDList[i];
+                    deleteFaceRecord(strUserID);
+                }
+                qDebug() << i << ": " << m_UserIDList[i];
+            }
         }
     }
     if (!error.isEmpty()) {

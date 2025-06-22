@@ -22,9 +22,12 @@ private:
     };
     QString m_ImagePath;
     COMPARE_RESULT m_ComparedResult;
+    QStringList m_UserIDList;
     static VideoCapture* _ptrVideoCapture;
 
-    bool ParseLog(const QString &log);
+    bool ParseComparedLog(const QString &log);
+    bool ParseUserListLog(const QString &log);
+    void RunCommand(const QString cmd, const QStringList arguments);
 public:
     static VideoCapture* GetInstance();
     Q_INVOKABLE bool    detectFaceImage();
@@ -32,6 +35,7 @@ public:
     Q_INVOKABLE bool    deleteFaceRecord(QString username_password);
     Q_INVOKABLE bool    getUsersList();
     Q_INVOKABLE QString getImageDirectory();
+
 protected:
     explicit VideoCapture(QQuickItem *parent = nullptr);
 signals:

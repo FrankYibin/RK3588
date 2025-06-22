@@ -130,6 +130,11 @@ bool UserManagerModel::resetUser()
     return true;
 }
 
+bool UserManagerModel::syncUserList()
+{
+
+}
+
 bool UserManagerModel::addNewUser(const QString username, const QString password, const int groupindex, const QString nickname)
 {
     if(!HBDatabase::GetInstance().InsertUser(username, password, groupindex, nickname))
