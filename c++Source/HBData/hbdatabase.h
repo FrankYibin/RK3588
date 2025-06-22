@@ -77,10 +77,6 @@ public:
 
     bool deleteScalesByTensiometerId(const QString &tensioNumber);
 
-
-
-
-
     ///加载历史数据
     QList<HistoryData> loadHistoryData();
 

@@ -34,6 +34,12 @@ class Configuration : public QObject
 
     Q_PROPERTY(QString HardwareVersion READ HardwareVersion WRITE setHardwareVersion NOTIFY HardwareVersionChanged)
 
+    //Theme
+    Q_PROPERTY(int ThemeIndex READ ThemeIndex WRITE setThemeIndex NOTIFY ThemeIndexChanged)
+
+    //Language
+    Q_PROPERTY(int LanguageIndex READ LanguageIndex WRITE setLanguageIndex NOTIFY LanguageIndexChanged)
+
 public:
 
     static Configuration* GetInstance();
@@ -75,6 +81,14 @@ public:
     Q_INVOKABLE void setHardwareVersion(const QString version);
 
 
+    Q_INVOKABLE int ThemeIndex() const;
+    Q_INVOKABLE void setThemeIndex(int themeIndex);
+
+    Q_INVOKABLE int LanguageIndex() const;
+    Q_INVOKABLE void setLanguageIndex(int languageIndex);
+
+
+
 
 
 signals:
@@ -92,6 +106,9 @@ signals:
     void DeviceIDChanged();
     void SoftwareVersionChanged();
     void HardwareVersionChanged();
+
+    void ThemeIndexChanged();
+    void LanguageIndexChanged();
 
 private:
     explicit Configuration(QObject *parent = nullptr);
@@ -115,7 +132,12 @@ private:
     QString  m_softwareVersion;
     QString  m_hardwareVersion;
 
+    int  m_themeIndex;
+    int  m_languageIndex;
+
     QSettings m_settings;
+
+
 };
 
 #endif // CONFIGURATION_H

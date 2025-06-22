@@ -1107,17 +1107,13 @@ bool HBDatabase::LoadGraphPoints(const QDateTime start, const QDateTime end,
         date = QDateTime::fromString(str, "yyyy-MM-dd HH:mm:ss");
         timePoints.append(date);
         depth       = query.value("depth").toString();
-        qDebug() << "1111111111111111111111: " << depth;
         velocity    = query.value("velocity").toString();
-        qDebug() << "2222222222222222222222: " << velocity;
         str         = query.value("velocityUnit").toString();
 
         depthPoints.append(depth.toDouble());
         velocityPoints.append(velocity.toDouble());
         tension         = query.value("tensions").toString();
-        qDebug() << "33333333333333333333: " << tension;
         tensionDelta    = query.value("tensionIncrement").toString();
-        qDebug() << "44444444444444444444: " << tensionDelta;
         str             = query.value("tensionUnit").toString();
 
         tensionPoints.append(tension.toDouble());

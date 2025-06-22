@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -21,8 +21,8 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -39,14 +39,14 @@ Item{
         {
             themeModel.clear()
             themeModel.append({"Title":      qsTr("主题1"),
-                               "Source":     "qrc:/images/bg1.png",
-                               "Index":      themeIndex.background1})
+                                  "Source":     "qrc:/images/bg1.png",
+                                  "Index":      themeIndex.background1})
             themeModel.append({"Title":      qsTr("主题2"),
-                               "Source":     "qrc:/images/bg2.png",
-                               "Index":      themeIndex.background2})
+                                  "Source":     "qrc:/images/bg2.png",
+                                  "Index":      themeIndex.background2})
             themeModel.append({"Title":      qsTr("主题3"),
-                               "Source":     "qrc:/images/bg3.png",
-                               "Index":      themeIndex.background3})
+                                  "Source":     "qrc:/images/bg3.png",
+                                  "Index":      themeIndex.background3})
 
         }
     }
@@ -84,9 +84,10 @@ Item{
                         height: Math.round(30 * Style.scaleHint)
                         text: (checked === true) ? qsTr("应用中") : qsTr("应用")
                         fontSize: Math.round(Style.style4 * Style.scaleHint)
-                        checked: (themeLayout.currentIndex === index) ? true : false
+                        checked: (themeLayout.currentIndex === model.Index)
                         onClicked: {
                             themeLayout.currentIndex = index
+                            Configuration.setThemeIndex(model.Index)
                             console.debug("11111111111:", themeLayout.currentIndex)
                             // updateTabBar(model.Index)
                         }
@@ -106,6 +107,7 @@ Item{
         Component.onCompleted:
         {
             themeModel.resetModel()
+            themeLayout.currentIndex = parseInt(Configuration.ThemeIndex)
         }
     }
 }

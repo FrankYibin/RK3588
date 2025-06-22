@@ -1,7 +1,9 @@
-#ifndef HBUTILITYCLASS_H
+﻿#ifndef HBUTILITYCLASS_H
 #define HBUTILITYCLASS_H
 #include <QString>
 #include "c++Source/HBScreen/tensionscalemanager.h"
+#include <QSettings>
+#include <QVariant>
 class HBUtilityClass
 {
 public:
@@ -57,6 +59,8 @@ public:
     void TestFaceDetection();
     bool SetSystemClock(QString strDateTime);
     bool SyncHardwareRTC();
+
+    QSettings& settings();
 
 protected:
     HBUtilityClass();

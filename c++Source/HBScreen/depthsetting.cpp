@@ -1,7 +1,7 @@
 ﻿#include "depthsetting.h"
 #include <QtDebug>
-
-
+#include <QSettings>
+#include "c++Source/HBUtility/hbutilityclass.h"
 DepthSetting* DepthSetting::_ptrDepth = nullptr;
 
 DepthSetting *DepthSetting::GetInstance()
@@ -22,8 +22,10 @@ DepthSetting::DepthSetting(QObject *parent)
     m_DepthEncoder = -1;
     m_velocityUnit = -1;
     int tmpVelocity = M_PER_HOUR;
+    QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
+    m_velocityUnit = settings.value("Unit/VelocityUnit", tmpVelocity).toInt();
     //get tmpVelocity from database
-    setVelocityUnit(tmpVelocity);
+    // setVelocityUnit(tmpVelocity);
     setDepthTargetLayer("99999.99");
     setDepthSurfaceCover("99999.99");
     setDepthEncoder(ENCODER_1);
@@ -129,6 +131,8 @@ void DepthSetting::setVelocityUnit(const int velocityUnit)
         setDistanceUnit(METER);
         break;
     }
+
+    HBUtilityClass::GetInstance()->settings().setValue("Unit/VelocityUnit", m_velocityUnit);
     emit VelocityUnitChanged();
 }
 

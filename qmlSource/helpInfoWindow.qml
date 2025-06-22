@@ -85,14 +85,14 @@ Item{
         anchors.topMargin: Math.round(7 * Style.scaleHint)
         anchors.left: parent.left
         anchors.leftMargin: Math.round(150 * Style.scaleHint)
-        spacing: Math.round(15 * Style.scaleHint)
+        spacing: Math.round(20 * Style.scaleHint)
         z:10
 
         Text {
             id: deviceIDInfo
             text: qsTr("设备ID") + ": " + Configuration.DeviceID
             font.family: "宋体"
-            font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
             verticalAlignment: Text.AlignVCenter
             color: Style.whiteFontColor
         }
@@ -100,7 +100,7 @@ Item{
             id: softwareVersionInfo
             text: qsTr("软件版本") + ": " + Configuration.SoftwareVersion
             font.family: "宋体"
-            font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
             verticalAlignment: Text.AlignVCenter
             color: Style.whiteFontColor
         }
@@ -108,7 +108,7 @@ Item{
             id: hardwareVersionInfo
             text: qsTr("硬件版本") + ": " + Configuration.HardwareVersion
             font.family: "宋体"
-            font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
             verticalAlignment: Text.AlignVCenter
             color: Style.whiteFontColor
         }
