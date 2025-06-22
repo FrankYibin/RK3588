@@ -102,7 +102,7 @@ Item{
             }
         }
         TableViewColumn {
-            role: "NickName";           title: qsTr("昵称");        width: 150
+            role: "NickName";           title: qsTr("工种");        width: 150
             delegate: Rectangle {
                 height: userManagerTable.rowHeight
                 width: styleData.columnWidth

@@ -186,12 +186,16 @@ int main(int argc, char *argv[])
 
     if(QFile::exists(logUrl) == true)
         QFile::remove(logUrl);
-#ifdef QT_DEBUG
-
+#ifdef QT_DEBUG //if need to debug you need to comment out these two lines code
+    // qInstallMessageHandler(messageHandler);
+    // qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss:zzz}|%{type}|%{file}|%{function}|%{line}|%{message}");
 #else
     qInstallMessageHandler(messageHandler);
     qSetMessagePattern("%{time yyyy-MM-dd hh:mm:ss:zzz}|%{type}|%{file}|%{function}|%{line}|%{message}");
 #endif
+
+    if(QFile::exists(logUrl) == true)
+        QFile::remove(logUrl);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if(engine.rootObjects().isEmpty())
         return -1;
