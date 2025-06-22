@@ -77,7 +77,10 @@ Rectangle {
         onClicked:  {
             if(faceDetector.showPreview == false)
             {
-                faceDetector.imageCapture.capture()
+                // 指定保存路径到当前工作目录
+                var filePath = "/opt/MeteringDisplay/bin"+ "/saved_image.jpg"; // 保存到当前目录
+                console.debug("222222222222222222", filePath)
+                faceDetector.imageCapture.capture(filePath)
                 signalButtonFunc(BransonNumpadDefine.EnumKeyboard.Login)
                 faceDetector.showPreview = true // 切换为显示图片
                 loadingVisible.visible = true

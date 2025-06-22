@@ -60,6 +60,7 @@ SOURCES += main.cpp \
     c++Source/HBScreen/wellparameter.cpp \
 #    c++Source/HBVideoCapture/videocaptureitem.cpp \
     c++Source/HBUtility/hbutilityclass.cpp \
+    c++Source/HBVideoCapture/videocapture.cpp \
     c++Source/alarmnotification.cpp \
     c++Source/clientsocket.cpp \
     c++Source/communicationinterface.cpp \
@@ -115,6 +116,7 @@ HEADERS += \
     c++Source/HBScreen/wellparameter.h \
 #    c++Source/HBVideoCapture/videocaptureitem.h \
     c++Source/HBUtility/hbutilityclass.h \
+    c++Source/HBVideoCapture/videocapture.h \
     c++Source/alarmindexdef.h \
     c++Source/alarmnotification.h \
     c++Source/clientsocket.h \

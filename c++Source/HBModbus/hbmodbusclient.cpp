@@ -1795,7 +1795,7 @@ int HBModbusClient::MakeReport(const char* pData, int len, char* pOutbuf)
     {
         crc += pOutbuf[i];
     }
-    printf("crc:0x%x\n", crc);
+    // printf("crc:0x%x\n", crc);
     pOutbuf[index++] = crc;
     return index;
 }

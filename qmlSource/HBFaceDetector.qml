@@ -21,6 +21,7 @@ Item {
     width: 100
     property bool showPreview: false // false = 显示摄像头，true=显示图片
     property alias imageCapture: camera.imageCapture
+
     Camera
     {
         id: camera
@@ -38,6 +39,7 @@ Item {
             onImageCaptured: {
                 photoPreview.source = preview  // Show the preview in an Image
             }
+
         }
 
         Component.onCompleted: {
@@ -59,6 +61,11 @@ Item {
         id: photoPreview
         anchors.fill: parent
         visible: showPreview // 只在需要显示图片时显示图片
+        onSourceChanged: {
+            console.debug("111111111111111", photoPreview.source)
+        //     var storedImage = source
+        //     VideoCapture.saveLoginImage(storedImage)
+        }
     }
 }
 
