@@ -50,17 +50,6 @@ Item{
         sourceSize.height: height
         visible: true
     }
-
-        // HBFaceDetector
-        // {
-        //     id: faceDetector
-        //     anchors.left: iconUser.left
-        //     anchors.top: parent.top
-        //     width: iconUser.width
-        //     height: iconUser.height
-        //     visible: false
-        // }
-
     Column{
         id: newUserSetting
         spacing: Math.round(columnSpacing * Style.scaleHint)

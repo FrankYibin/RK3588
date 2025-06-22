@@ -62,14 +62,12 @@
 #include "c++Source/HBGraph/GraphAxisDefineHB.h"
 #include "c++Source/HBGraph/SensorGraphData.h"
 
+#include "c++Source/HBVideoCapture/videocapture.h"
+
 #include "c++Source/HBVoice/hbvoice.h"
 #include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBUtility/hbutilityclass.h"
 #include "c++Source/usermanual.h"
-
-//#include "c++Source/HBVideoCapture/videocaptureitem.h"
-//#include "opencv2/opencv.hpp"
-
 
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
@@ -170,6 +168,7 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("HistoryDataTable", HistoryDataTable::GetInstance());
     pQmlContext->setContextProperty("Configuration", Configuration::GetInstance());
     pQmlContext->setContextProperty("DateTime", DateTime::GetInstance());
+    pQmlContext->setContextProperty("VideoCapture", VideoCapture::GetInstance());
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);
