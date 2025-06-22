@@ -12,6 +12,7 @@
 #include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/tensionsetting.h"
 #include "c++Source/HBScreen/wellparameter.h"
+#include "c++Source/HBScreen/usermanagermodel.h"
 #include <QVariant>
 #include <QDir>
 #include <QFile>
@@ -177,7 +178,7 @@ bool HBDatabase::insertOperationLog(const QString operateText)
         return false;
     }
 
-    QString username = WellParameter::GetInstance()->UserName();
+    QString username = UserManagerModel::GetInstance().CurrentUser();
     QString datetime = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
 
     QSqlQuery query(m_database);
