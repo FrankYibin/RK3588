@@ -1,7 +1,7 @@
 ﻿#include "usermanagermodel.h"
 #include "c++Source/HBData/hbdatabase.h"
 #include <QDebug>
-
+QString UserManagerModel::UserLevel[4] = {"超级用户", "操作员", "普通用户", "访客"}; //Must align with QML definition
 UserManagerModel::UserManagerModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
@@ -139,8 +139,30 @@ bool UserManagerModel::addNewUser(const QString username, const QString password
 
 bool UserManagerModel::validateUser(const QString username, const QString password)
 {
-    if(HBDatabase::GetInstance().QueryUser(username, password) == true)
+    int groupId = -1;
+    if(HBDatabase::GetInstance().QueryUser(username, password, groupId) == true)
+    {
+        setCurrentUser(username);
+        switch(groupId)
+        {
+        case SUPER_USER:
+            setCurrentGroup(UserLevel[SUPER_USER]);
+            break;
+        case OPERATOR_USER:
+            setCurrentGroup(UserLevel[OPERATOR_USER]);
+            break;
+        case NORMAL_USER:
+            setCurrentGroup(UserLevel[NORMAL_USER]);
+            break;
+        case VISITOR_USER:
+            setCurrentGroup(UserLevel[VISITOR_USER]);
+            break;
+        default:
+            setCurrentGroup(tr("ADMIN"));
+            break;
+        }
         return true;
+    }
     return false;
 }
 
@@ -205,4 +227,27 @@ void UserManagerModel::setPassword(const QString &password)
 QString UserManagerModel::Password() const
 {
     return m_password;
+}
+
+void UserManagerModel::setCurrentUser(const QString &currentUser)
+{
+    if (m_currentUser != currentUser) {
+        m_currentUser = currentUser;
+        emit CurrentUserChanged(currentUser);
+    }
+}
+QString UserManagerModel::CurrentUser() const
+{
+    return m_currentUser;
+}
+void UserManagerModel::setCurrentGroup(const QString &currentGroup)
+{
+    if (m_currentGroup != currentGroup) {
+        m_currentGroup = currentGroup;
+        emit CurrentGroupChanged(currentGroup);
+    }
+}
+QString UserManagerModel::CurrentGroup() const
+{
+    return m_currentGroup;
 }

@@ -14,6 +14,11 @@ class UserManagerModel : public QAbstractTableModel
     Q_PROPERTY(int GroupIndex READ GroupIndex WRITE setGroupIndex NOTIFY GroupIndexChanged FINAL)
     Q_PROPERTY(QString NickName READ NickName WRITE setNickName NOTIFY NickNameChanged FINAL)
     Q_PROPERTY(QString Password READ Password WRITE setPassword NOTIFY PasswordChanged FINAL)
+
+    Q_PROPERTY(QString CurrentUser READ CurrentUser WRITE setCurrentUser NOTIFY CurrentUserChanged FINAL)
+    Q_PROPERTY(QString CurrentGroup READ CurrentGroup WRITE setCurrentGroup NOTIFY CurrentGroupChanged FINAL)
+
+
 public:
     static UserManagerModel &GetInstance();
 
@@ -49,6 +54,12 @@ public:
     QString NickName() const;
     void setPassword(const QString &password);
     QString Password() const;   
+
+    void setCurrentUser(const QString &currentUser);
+    QString CurrentUser() const;
+
+    void setCurrentGroup(const QString &currentGroup);
+    QString CurrentGroup() const;
     
 private:
     explicit UserManagerModel(QObject *parent = nullptr);
@@ -61,13 +72,27 @@ signals:
     void NickNameChanged(const QString &nickName);
     void PasswordChanged(const QString &password);
 
+    void CurrentUserChanged(const QString &currentUser);
+    void CurrentGroupChanged(const QString &currentGroup);
+
 private:
+    enum USER_LEVEL
+    {
+        SUPER_USER = 0,
+        OPERATOR_USER,
+        NORMAL_USER,
+        VISITOR_USER
+    };
     QVector<UserInfo> m_users;
     int m_rowIndex;
     QString m_userName;
     int m_groupIndex;
     QString m_nickName; 
     QString m_password;
+
+    QString m_currentUser;
+    QString m_currentGroup;
+    static QString UserLevel[4];
 };
 
 #endif // USERMANAGERMODEL_H

@@ -1177,11 +1177,11 @@ bool HBDatabase::QueryUser(QString &username, QString &password, int &groupindex
     return bResult;
 }
 
-bool HBDatabase::QueryUser(const QString username, const QString password)
+bool HBDatabase::QueryUser(const QString username, const QString password, int& groupId)
 {
     bool bResult = false;
     QSqlQuery query(m_database);
-    query.prepare("SELECT username, password, createtime FROM userinfo WHERE username = :username AND password = :password");
+    query.prepare("SELECT username, password, groupindex, createtime FROM userinfo WHERE username = :username AND password = :password");
     query.bindValue(":username", username);
     query.bindValue(":password", password);
 
@@ -1193,6 +1193,10 @@ bool HBDatabase::QueryUser(const QString username, const QString password)
     if (!query.next()) {
         qDebug() << "No user data found for username:" << username;
         return false;
+    }
+    else
+    {
+        groupId = query.value(2).toInt();
     }
 
     bResult = true;
