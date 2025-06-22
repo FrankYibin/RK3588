@@ -11,6 +11,7 @@
 #include "c++Source/HBScreen/hbhome.h"
 #include "c++Source/HBScreen/tensionsafety.h"
 #include "c++Source/HBScreen/tensionsetting.h"
+#include "c++Source/HBScreen/wellparameter.h"
 #include <QVariant>
 #include <QDir>
 #include <QFile>
@@ -166,6 +167,37 @@ QList<HistoryOperationModel::Row> HBDatabase::loadAllOperationData()
         list.append(r);
     }
     return list;
+
+}
+
+bool HBDatabase::insertOperationLog(const QString workType, const QString operateText)
+{
+    if (!m_database.isOpen()) {
+        qWarning() << "Database not open";
+        return false;
+    }
+
+    QString wellNumber = WellParameter::GetInstance()->WellNumber();
+    QString username   = WellParameter::GetInstance()->UserName();
+    QString datetime   = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+
+    QSqlQuery query(m_database);
+    query.prepare(R"(
+        INSERT INTO operating_data (well_number, work_type, username, datetime, operate)
+        VALUES (?, ?, ?, ?, ?)
+    )");
+    query.addBindValue(wellNumber);
+    query.addBindValue(workType);
+    query.addBindValue(username);
+    query.addBindValue(datetime);
+    query.addBindValue(operateText);
+
+    if (!query.exec()) {
+        qWarning() << "insertOperationLog insert fail:" << query.lastError().text();
+        return false;
+    }
+
+    return true;
 
 }
 

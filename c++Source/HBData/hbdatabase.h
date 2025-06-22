@@ -91,6 +91,7 @@ public:
     QList<HistoryOperationModel::Row>
     loadOperationData(const QDateTime &start, const QDateTime &end);
     QList<HistoryOperationModel::Row> loadAllOperationData();
+    Q_INVOKABLE bool insertOperationLog(const QString workType, const QString operateText);
 
     bool LoadGraphPoints(const QDateTime start, const QDateTime end, QList<QDateTime> &timePoints, QList<qreal> &depthPoints, QList<qreal> &velocityPoints, QList<qreal> &tensionPoints, QList<qreal> &tensionDeltaPoints);
 

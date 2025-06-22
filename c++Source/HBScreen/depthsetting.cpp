@@ -24,6 +24,7 @@ DepthSetting::DepthSetting(QObject *parent)
     int tmpVelocity = M_PER_HOUR;
     QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
     m_velocityUnit = settings.value("Unit/VelocityUnit", tmpVelocity).toInt();
+    settings.setValue("Unit/VelocityUnit", m_velocityUnit);
     //get tmpVelocity from database
     // setVelocityUnit(tmpVelocity);
     setDepthTargetLayer("99999.99");

@@ -9,14 +9,22 @@ Configuration::Configuration(QObject *parent)
     m_settings.setIniCodec("UTF-8");
 
     m_baudRate = m_settings.value("RS232/BaudRate", "9600").toString();
+    m_settings.setValue("RS232/BaudRate", m_baudRate);
     m_dataBits = m_settings.value("RS232/DataBits", "8").toString();
+    m_settings.setValue("RS232/DataBits", m_dataBits);
     m_parity = m_settings.value("RS232/Parity", "None").toString();
+    m_settings.setValue("RS232/Parity", m_parity);
     m_stopBits = m_settings.value("RS232/StopBits", "1").toString();
+    m_settings.setValue("RS232/StopBits", m_stopBits);
 
     m_localIp = m_settings.value("Network/LocalIP", "192.168.1.1").toString();
+    m_settings.setValue("Network/LocalIP", m_localIp);
     m_localPort = m_settings.value("Network/LocalPort", "8000").toString();
+    m_settings.setValue("Network/LocalPort", m_localPort);
     m_remoteIp = m_settings.value("Network/RemoteIP", "192.168.1.2").toString();
+    m_settings.setValue("Network/RemoteIP", m_remoteIp);
     m_remotePort = m_settings.value("Network/RemotePort", "8001").toString();
+    m_settings.setValue("Network/RemotePort", m_remotePort);
 
     m_deviceID = m_settings.value("Version/DeviceID", "18229001939").toString();
     m_settings.setValue("Version/DeviceID", m_deviceID);
@@ -26,7 +34,9 @@ Configuration::Configuration(QObject *parent)
     m_settings.setValue("Version/HardwareVersion", m_hardwareVersion);
 
     m_themeIndex = m_settings.value("Theme/ThemeIndex", 0).toInt();
+    m_settings.setValue("Theme/ThemeIndex", m_themeIndex);
     m_languageIndex = m_settings.value("Language/LanguageIndex",0).toInt();
+    m_settings.setValue("Language/LanguageIndex", m_languageIndex);
 }
 
 Configuration *Configuration::GetInstance()

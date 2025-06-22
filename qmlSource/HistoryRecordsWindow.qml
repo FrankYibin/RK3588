@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -62,90 +62,6 @@ Item{
         width: parent.width - Math.round(10 * Style.scaleHint)
         height: parent.height / 3 - Math.round(40 * Style.scaleHint)
         backgroundColor: Style.backgroundLightColor
-        //        Item {
-        //            id: argumentLayout
-        //            width: parent.width
-        //            height: parent.height / 2
-        //            anchors.left: parent.left
-        //            anchors.top: parent.top
-        //            Row
-        //            {
-        //                height: Math.round(componentHeight * Style.scaleHint)
-        //                width: parent.width
-        //                anchors.left: parent.left
-        //                anchors.leftMargin: Math.round(20 * Style.scaleHint)
-        //                anchors.top: parent.top
-        //                anchors.topMargin: Math.round(20 * Style.scaleHint)
-        //                spacing: Math.round(30 * Style.scaleHint)
-
-        //                Row{
-        //                    spacing: Math.round(rowSpacing * Style.scaleHint)
-        //                    height: parent.height
-        //                    width: Math.round((textWidth + rowSpacing + editTextWidth) * Style.scaleHint)
-        //                    Text {
-        //                        id: titleFirstNumber
-        //                        width: Math.round(textWidth * Style.scaleHint)
-        //                        height: parent.height
-        //                        text: qsTr("队别") + ":"
-        //                        font.family: "宋体"
-        //                        font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-        //                        verticalAlignment: Text.AlignVCenter
-        //                        color: Style.whiteFontColor
-        //                    }
-        //                    HBLineEdit {
-        //                        id: textFirstNumber
-        //                        width: Math.round(editTextWidth * Style.scaleHint)
-        //                        height: parent.height
-        //                        text: "01"
-        //                    }
-        //                }
-
-        //                Row{
-        //                    spacing: Math.round(rowSpacing * Style.scaleHint)
-        //                    height: parent.height
-        //                    width: Math.round((textWidth + rowSpacing + editTextWidth) * Style.scaleHint)
-        //                    Text {
-        //                        id: titleAreaNumber
-        //                        width: Math.round(textWidth * Style.scaleHint)
-        //                        height: parent.height
-        //                        text: qsTr("区域") + ":"
-        //                        font.family: "宋体"
-        //                        font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-        //                        verticalAlignment: Text.AlignVCenter
-        //                        color: Style.whiteFontColor
-        //                    }
-        //                    HBLineEdit {
-        //                        id: textAreaNumber
-        //                        width: Math.round(editTextWidth * Style.scaleHint)
-        //                        height: parent.height
-        //                        text: "01"
-        //                    }
-        //                }
-
-        //                Row{
-        //                    spacing: Math.round(rowSpacing * Style.scaleHint)
-        //                    height: parent.height
-        //                    width: Math.round((textWidth + rowSpacing + editTextWidth) * Style.scaleHint)
-        //                    Text {
-        //                        id: titleWellNumber
-        //                        width: Math.round(textWidth * Style.scaleHint)
-        //                        height: parent.height
-        //                        text: qsTr("井名") + ":"
-        //                        font.family: "宋体"
-        //                        font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-        //                        verticalAlignment: Text.AlignVCenter
-        //                        color: Style.whiteFontColor
-        //                    }
-        //                    HBLineEdit {
-        //                        id: textWellNumber
-        //                        width: Math.round(editTextWidth * Style.scaleHint)
-        //                        height: parent.height
-        //                        text: "01"
-        //                    }
-        //                }
-        //            }
-
-        //        }
 
         Item{
             id: timeScopeLayout
@@ -282,12 +198,12 @@ Item{
             height: gridParentFrame.rowHeight
         }
 
-        TableViewColumn { role: "Index";                title: qsTr("");            width: 30}
-        TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
-        TableViewColumn { role: "OperateType";          title: qsTr("操作类型");    width: 80}
-        TableViewColumn { role: "Operater";             title: qsTr("操作员");      width: 80}
+        TableViewColumn { role: "Index";                title: qsTr("");            width: 60}
+        // TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
+        // TableViewColumn { role: "OperateType";          title: qsTr("操作类型");    width: 80}
+        TableViewColumn { role: "Operater";             title: qsTr("操作员");      width: 100}
         TableViewColumn { role: "Date";                 title: qsTr("日期");        width: 200}
-        TableViewColumn { role: "Description";          title: qsTr("操作");        width: 600}
+        TableViewColumn { role: "Description";          title: qsTr("操作");        width: 700}
     }
 }
 
