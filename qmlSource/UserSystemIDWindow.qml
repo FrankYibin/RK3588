@@ -49,7 +49,7 @@ Item{
             {
                 if(VideoCapture.generateFaceEigenValue() === true)
                 {
-                    // mainWindow.loginProcess()
+                    mainWindow.showDialogScreen(qsTr("人脸录入成功"), null)
                 }
                 else
                 {
@@ -79,8 +79,7 @@ Item{
                 if(faceDetector.showPreview == false)
                 {
                     // 指定保存路径到当前工作目录
-                    var filePath = VideoCapture.getImageDirectory() + "/tmpImage.jpg";// 保存到当前目录
-                    faceDetector.imageCapture.captureToLocation(filePath)
+                    faceDetector.captureFrame()
                     faceDetector.showPreview = true // 切换为显示图片
                     loadingVisible.visible = true
                 }

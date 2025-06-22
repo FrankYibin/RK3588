@@ -131,8 +131,6 @@ int main(int argc, char *argv[])
                                           "HQmlEnum is an enum container and cannot be created in QML");
 
 
-//    qmlRegisterType<VideoCaptureItem>("HB.VideoCapture", 1, 0, "CV");
-
 
     UserLevelEnum::registerQMLType();
     UIScreenEnum::registerQMLType();
@@ -186,10 +184,8 @@ int main(int argc, char *argv[])
     // pQmlContext->setContextProperty("communicationInterface", CommunicationInterface::getInstance(&app));
     pQmlContext->setContextProperty("systemInformationModel", SystemInformationInterface::getInstance());
 
-
-//    qDebug() << "OPENCV Version: " << CV_VERSION;
-//    std::cout << "Video I/O support: " << cv::getBuildInformation() << std::endl;
-    HBUtilityClass::GetInstance()->TestFaceDetection();
+    VideoCapture::GetInstance()->detectFaceImage();
+    // VideoCapture::GetInstance()->generateFaceEigenValue();
 
     if(QFile::exists(logUrl) == true)
         QFile::remove(logUrl);
