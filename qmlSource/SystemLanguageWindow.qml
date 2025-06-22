@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.15
@@ -107,6 +107,7 @@ Item{
                     checked: (index == 0) ? true : false
                     onClicked:
                     {
+                         Configuration.setLanguageIndex(model.itemIndex)
                         console.debug("current Language: ", model.itemIndex)
                     }
                 }

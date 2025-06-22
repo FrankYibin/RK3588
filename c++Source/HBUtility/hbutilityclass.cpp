@@ -1,6 +1,7 @@
-#include "hbutilityclass.h"
+﻿#include "hbutilityclass.h"
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QSettings>
 HBUtilityClass* HBUtilityClass::_ptrInstance = nullptr;
 void HBUtilityClass::SetTextData(DATA_FORMAT index, int data, float factor, QString formater)
 {
@@ -286,4 +287,11 @@ bool HBUtilityClass::SyncHardwareRTC()
     }
     return true;
 }
+
+QSettings& HBUtilityClass::settings()
+{
+    static QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
+    return settings;
+}
+
 

@@ -211,7 +211,6 @@ void WellParameter::setUserName(const QString &value)
 {
     if (m_UserName != value) {
         m_UserName = value;
-        m_settings.setValue("wellParameter/userName", value);
         emit UserNameChanged();
     }
 
@@ -226,7 +225,6 @@ void WellParameter::setOperatorType(const QString &value)
 {
     if (m_OperatorType != value) {
         m_OperatorType = value;
-        m_settings.setValue("wellParameter/operatorType", value);
         emit OperatorTypeChanged();
     }
 }

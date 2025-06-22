@@ -24,6 +24,9 @@ Configuration::Configuration(QObject *parent)
     m_settings.setValue("Version/SoftwareVersion", m_softwareVersion);
     m_hardwareVersion = m_settings.value("Version/HardwareVersion", "20250318").toString();
     m_settings.setValue("Version/HardwareVersion", m_hardwareVersion);
+
+    m_themeIndex = m_settings.value("Theme/ThemeIndex", 0).toInt();
+    m_languageIndex = m_settings.value("Language/LanguageIndex",0).toInt();
 }
 
 Configuration *Configuration::GetInstance()
@@ -173,6 +176,34 @@ void Configuration::setHardwareVersion(const QString version) {
         m_hardwareVersion = version;
         m_settings.setValue("Version/HardwareVersion", version);
         emit HardwareVersionChanged();
+    }
+}
+
+int Configuration::ThemeIndex() const
+{
+    return m_themeIndex;
+}
+
+void Configuration::setThemeIndex(int themeIndex)
+{
+    if (themeIndex != m_themeIndex) {
+        m_themeIndex = themeIndex;
+        m_settings.setValue("Theme/ThemeIndex", themeIndex);
+        emit ThemeIndexChanged();
+    }
+}
+
+int Configuration::LanguageIndex() const
+{
+    return m_languageIndex;
+}
+
+void Configuration::setLanguageIndex(int languageIndex)
+{
+    if (languageIndex != m_languageIndex) {
+        m_languageIndex = languageIndex;
+        m_settings.setValue("Language/LanguageIndex", languageIndex);
+        emit LanguageIndexChanged();
     }
 }
 
