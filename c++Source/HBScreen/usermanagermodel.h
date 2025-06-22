@@ -44,6 +44,8 @@ public:
     Q_INVOKABLE bool resetUser();
     Q_INVOKABLE void loadFromDatabase();
 
+    bool validateFaceUser(const QString username);
+
     void setRowIndex(int rowIndex);
     int RowIndex() const;
     void setUserName(const QString &userName);

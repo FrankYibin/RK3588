@@ -28,7 +28,9 @@ private:
 public:
     static VideoCapture* GetInstance();
     Q_INVOKABLE bool    detectFaceImage();
-    Q_INVOKABLE bool    generateFaceEigenValue();
+    Q_INVOKABLE bool    generateFaceEigenValue(QString username_password);
+    Q_INVOKABLE bool    deleteFaceRecord(QString username_password);
+    Q_INVOKABLE bool    getUsersList();
     Q_INVOKABLE QString getImageDirectory();
 protected:
     explicit VideoCapture(QQuickItem *parent = nullptr);

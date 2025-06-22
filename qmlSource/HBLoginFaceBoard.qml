@@ -66,7 +66,6 @@ Rectangle {
                 }
                 else
                 {
-                    console.debug("111111111111111111111111")
                     faceDetector.showPreview = false
                     loadingVisible.visible = false
                     mainWindow.showDialogScreen(qsTr("请重新人脸登录"), null)

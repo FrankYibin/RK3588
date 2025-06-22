@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QProcess>
+#include "c++Source/HBScreen/usermanagermodel.h"
 VideoCapture* VideoCapture::_ptrVideoCapture = nullptr;
 bool VideoCapture::ParseLog(const QString &log)
 {
@@ -124,16 +125,29 @@ bool VideoCapture::detectFaceImage()
                             .arg(m_ComparedResult.GroupID)
                             .arg(m_ComparedResult.UserID)
                             .arg(m_ComparedResult.Score);
-
         }
+        else
+            return false;
+
     }
+    else
+        return false;
     if (!error.isEmpty()) {
         qDebug() << "Command Error:" << error;
+        return false;
     }
-    return false;
+    if((m_ComparedResult.Errno == 0) && (m_ComparedResult.Score > 80))
+    {
+        QStringList strList = m_ComparedResult.UserID.split("&");
+        if(UserManagerModel::GetInstance().validateUser(strList[0], strList[1]) == false)
+            return false;
+    }
+    else
+        return false;
+    return true;
 }
 
-bool VideoCapture::generateFaceEigenValue()
+bool VideoCapture::generateFaceEigenValue(QString username_password)
 {
     // 创建 QProcess 对象
     QProcess process;
@@ -143,8 +157,101 @@ bool VideoCapture::generateFaceEigenValue()
     QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
     arguments.append("-record");
     arguments.append("HB");
-    arguments.append("JerryW");
+    arguments.append(username_password);
     arguments.append("/opt/MeteringDisplay/bin/image/tmpImage.jpg");
+
+    // 启动进程
+    process.start(program, arguments);
+
+    // 等待进程结束
+    process.waitForFinished();
+
+    // 获取命令输出
+    QString output = process.readAllStandardOutput();
+    QString error = process.readAllStandardError();
+
+    // 输出结果
+    if (!output.isEmpty()) {
+        if(ParseLog(output) == true)
+        {
+            // 输出解析结果
+            qDebug() << QString("Errno: %1, Message: %2, Face Token: %3, User Count: %4, GroupID: %5, UserID: %6, Score: %7")
+                            .arg(m_ComparedResult.Errno)
+                            .arg(m_ComparedResult.Msg)
+                            .arg(m_ComparedResult.FaceToken)
+                            .arg(m_ComparedResult.ComparedUserCount)
+                            .arg(m_ComparedResult.GroupID)
+                            .arg(m_ComparedResult.UserID)
+                            .arg(m_ComparedResult.Score);
+
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+    if (!error.isEmpty()) {
+        qDebug() << "Command Error:" << error;
+        return false;
+    }
+    return true;
+}
+
+bool VideoCapture::deleteFaceRecord(QString username_password)
+{
+    // 创建 QProcess 对象
+    QProcess process;
+
+    // 设置要执行的命令
+    QString program = "./faceTest.sh"; // 你可以替换为其他 Linux 命令
+    QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
+    arguments.append("-delete");
+    arguments.append("HB");
+    arguments.append(username_password);
+
+    // 启动进程
+    process.start(program, arguments);
+
+    // 等待进程结束
+    process.waitForFinished();
+
+    // 获取命令输出
+    QString output = process.readAllStandardOutput();
+    QString error = process.readAllStandardError();
+
+    // 输出结果
+    if (!output.isEmpty()) {
+        if(ParseLog(output) == true)
+        {
+            // 输出解析结果
+            qDebug() << QString("Errno: %1, Message: %2, Face Token: %3, User Count: %4, GroupID: %5, UserID: %6, Score: %7")
+                            .arg(m_ComparedResult.Errno)
+                            .arg(m_ComparedResult.Msg)
+                            .arg(m_ComparedResult.FaceToken)
+                            .arg(m_ComparedResult.ComparedUserCount)
+                            .arg(m_ComparedResult.GroupID)
+                            .arg(m_ComparedResult.UserID)
+                            .arg(m_ComparedResult.Score);
+
+        }
+    }
+    if (!error.isEmpty()) {
+        qDebug() << "Command Error:" << error;
+    }
+    return false;
+}
+
+bool VideoCapture::getUsersList()
+{
+    // 创建 QProcess 对象
+    QProcess process;
+
+    // 设置要执行的命令
+    QString program = "./faceTest.sh"; // 你可以替换为其他 Linux 命令
+    QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
+    arguments.append("-get");
+    arguments.append("userlist");
+    arguments.append("HB");
 
     // 启动进程
     process.start(program, arguments);
@@ -202,4 +309,5 @@ VideoCapture::VideoCapture(QQuickItem *parent)
     else
         qDebug() << "image folde is exist in current path";
     m_ImagePath = str + "/image";
+    getUsersList();
 }
