@@ -104,10 +104,10 @@ Item{
                     width: Math.round(buttonWidth * Style.scaleHint)
                     labelText:  model.itemName
                     exclusiveGroup: languageOptionGroup
-                    checked: (index == 0) ? true : false
+                    checked: model.itemIndex === Configuration.LanguageIndex
                     onClicked:
                     {
-                         Configuration.setLanguageIndex(model.itemIndex)
+                        Configuration.setLanguageIndex(model.itemIndex)
                         console.debug("current Language: ", model.itemIndex)
                     }
                 }

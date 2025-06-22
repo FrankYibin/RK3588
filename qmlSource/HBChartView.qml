@@ -100,13 +100,9 @@ Item {
         for(var i = 0; i < timePoints.length; i++)
         {
             depthLeftAxisPlot.append(timePoints[i], depthPoints[i])
-            console.debug("111111111: ", depthPoints[i])
             velocityLeftAxisPlot.append(timePoints[i], velocityPoints[i])
-            console.debug("222222222: ", velocityPoints[i])
             tensionsLeftAxisPlot.append(timePoints[i], tensionPoints[i])
-            console.debug("333333333: ", tensionPoints[i])
             tensionIncrementLeftAxisPlot.append(timePoints[i], tensionDeltaPoints[i])
-            console.debug("444444444: ", tensionDeltaPoints[i])
         }
     }
 

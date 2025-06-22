@@ -176,6 +176,7 @@ Item{
                     width: Math.round(buttonWidth * Style.scaleHint)
                     height: Math.round(componentHeight * Style.scaleHint)
                     text: qsTr("导出")
+                    visible: false
                     onClicked:
                     {
                         SensorGraphData.exportData()
