@@ -499,7 +499,6 @@ Item{
             {
                 // controlLimitNumpad.visible = false
                 ProfileGlobalDefine.saveWellParameter(textWellNumber.text,textAreaBlock.text,textUserName.text,textUserLevel.text)
-                console.log("ttttttttttttttttttttttt")
                 // HBDatabase.updateWellParameterFromInstance()
                 profileLayout.visible = false
                 mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)

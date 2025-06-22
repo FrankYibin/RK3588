@@ -16,37 +16,43 @@ import QtQuick.Layouts 1.12
 import QtMultimedia 5.15
 
 import Style 1.0
-import HBCamera 1.0
 Item {
     height: 100
     width: 100
     property bool showPreview: false // false = 显示摄像头，true=显示图片
-    Component.onCompleted: {
-        console.debug("Device: ", camera.deviceId)
-        console.debug("DisplayName: ", camera.displayName)
-    }
-    // HBCamera{
-    //     id: camera
-        // onIsImageReady:
-        // {
-        //     photoPreview.source = image
-        // }
-    // }
-    Connections{
-        target: HBCamera
-        function onIsImageReady(image)
-        {
-            photoPreview.source = image
+    property alias imageCapture: camera.imageCapture
+    Camera
+    {
+        id: camera
+        deviceId: "/dev/video1"
+        imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
+
+        exposure {
+            exposureCompensation: -1.0
+            exposureMode: Camera.ExposurePortrait
+        }
+
+        flash.mode: Camera.FlashRedEyeReduction
+
+        imageCapture {
+            onImageCaptured: {
+                photoPreview.source = preview  // Show the preview in an Image
+            }
+        }
+
+        Component.onCompleted: {
+            console.debug("Device: ", camera.deviceId)
+            console.debug("DisplayName: ", camera.displayName)
         }
     }
 
 
     VideoOutput {
-        source: HBCamera
+        source: camera
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit
         focus : visible // to receive focus and capture key events when visible
-        visible: ! showPreview // 只在未显示图片时显示摄像头
+        visible: !showPreview // 只在未显示图片时显示摄像头
     }
 
     Image {

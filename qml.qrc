@@ -131,6 +131,5 @@
         <file>qmlSource/HBDialog.qml</file>
         <file>qmlSource/LoginTextField.qml</file>
         <file>qmlSource/UserGlobalDefine.qml</file>
-        <file>qmlSource/HBCamera.qml</file>
     </qresource>
 </RCC>

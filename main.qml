@@ -39,8 +39,8 @@ Window{
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
-    property int showWidth: 800
-    property int showHeight: 480
+    property int showWidth: 1280
+    property int showHeight: 800
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -131,21 +131,19 @@ Window{
 
     function showFaceLogin()
     {
-        // inputPanel.active = false
-        loginLayout.visible = false
-        faceRecognition.visible = true
+        login.source = ""
+        login.source = "qrc:/qmlSource/LoginFaceRecognition.qml"
     }
 
     function showPasswordLogin()
     {
-        faceRecognition.visible = false
-        // inputPanel.active = true
-        loginLayout.visible = true
+        login.source = ""
+        login.source = "qrc:/qmlSource/Login.qml"
     }
 
     function loginProcess()
     {
-        loginLayout.visible = false
+        login.source = ""
         mainWindow.hideMainWindowOpacity()
         profileLayout.visible = true
     }
@@ -614,23 +612,32 @@ Window{
     //     height: mainWindow.showHeight
     // }
 
-    Login
-    {
-        id: loginLayout
+    Loader{
+        id: login
         visible: true
         anchors.centerIn: parent
         width: mainWindow.showWidth
         height: mainWindow.showHeight
+        source:  "qrc:/qmlSource/Login.qml"
     }
 
-    LoginFaceRecognition
-    {
-        id: faceRecognition
-        visible: false
-        anchors.centerIn: parent
-        width: mainWindow.showWidth
-        height: mainWindow.showHeight
-    }
+    // Login
+    // {
+    //     id: loginLayout
+    //     visible: true
+    //     anchors.centerIn: parent
+    //     width: mainWindow.showWidth
+    //     height: mainWindow.showHeight
+    // }
+
+    // LoginFaceRecognition
+    // {
+    //     id: faceRecognition
+    //     visible: false
+    //     anchors.centerIn: parent
+    //     width: mainWindow.showWidth
+    //     height: mainWindow.showHeight
+    // }
 
     ProfileWindow
     {
