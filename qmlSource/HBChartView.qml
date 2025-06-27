@@ -97,13 +97,17 @@ Item {
         velocityLeftAxis.max            = roundAxisValues(velocityLeftAxis.max,         velocityLeftAxis.min);
         tensionsLeftAxis.max            = roundAxisValues(tensionsLeftAxis.max,         tensionsLeftAxis.min);
         tensionIncrementLeftAxis.max    = roundAxisValues(tensionIncrementLeftAxis.max, tensionIncrementLeftAxis.min);
-        for(var i = 0; i < timePoints.length; i++)
-        {
-            depthLeftAxisPlot.append(timePoints[i], depthPoints[i])
-            velocityLeftAxisPlot.append(timePoints[i], velocityPoints[i])
-            tensionsLeftAxisPlot.append(timePoints[i], tensionPoints[i])
-            tensionIncrementLeftAxisPlot.append(timePoints[i], tensionDeltaPoints[i])
-        }
+        // for(var i = 0; i < timePoints.length; i++)
+        // {
+        //     depthLeftAxisPlot.append(timePoints[i], depthPoints[i])
+        //     velocityLeftAxisPlot.append(timePoints[i], velocityPoints[i])
+        //     tensionsLeftAxisPlot.append(timePoints[i], tensionPoints[i])
+        //     tensionIncrementLeftAxisPlot.append(timePoints[i], tensionDeltaPoints[i])
+        // }
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.DEPTH_IDX,              graphChartView.series(depthLeftPlotName))
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.VELOCITY_IDX,           graphChartView.series(velocityLeftPlotName))
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.TENSIONS_IDX,           graphChartView.series(tensionsLeftPlotName))
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.TENSION_INCREMENT_IDX,  graphChartView.series(tensionIncrementPlotName))
     }
 
     function clearGraph()
@@ -249,7 +253,7 @@ Item {
                 color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.DEPTH_IDX)
                 visible: isDepthLeftAxisVisible
                 useOpenGL: true
-                pointsVisible: true
+                pointsVisible: false
             }
 
             LineSeries{
@@ -260,7 +264,7 @@ Item {
                 axisX: timeAxis
                 axisY: velocityLeftAxis
                 visible: isVelocityLeftAxisVisible
-                pointsVisible: true
+                pointsVisible: false
                 useOpenGL: true
             }
 
@@ -272,7 +276,7 @@ Item {
                 axisX: timeAxis
                 axisY: tensionsLeftAxis
                 visible: isTensionsLeftAxisVisible
-                pointsVisible: true
+                pointsVisible: false
                 useOpenGL: true
             }
 
@@ -284,7 +288,7 @@ Item {
                 axisY: tensionIncrementLeftAxis
                 color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
                 visible: isTensionIncrementLeftAxisVisible
-                pointsVisible: true
+                pointsVisible: false
                 useOpenGL: true
             }
         }

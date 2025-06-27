@@ -4,6 +4,7 @@
 #include "c++Source/HBGraph/GraphAxisDefineHB.h"
 #include "c++Source/HBUtility/hbutilityclass.h"
 #include <QList>
+#include <QDateTime>
 
 
 SensorGraphData* SensorGraphData::m_objInstance = nullptr;
@@ -39,7 +40,6 @@ void SensorGraphData::loadSensorGraphPoint(const QDateTime &start, const QDateTi
 
     QList<qreal> axisMinValues;
     QList<qreal> axisMaxValues;
-
     if(db.LoadGraphPoints(start, end, m_TimeRealPoints, m_DepthRealPoints,
                            m_VelocityRealPoints, m_TensionRealPoints, m_TensionDeltaRealPoints) == true)
     {
@@ -157,4 +157,63 @@ void SensorGraphData::clearGraph()
 
 }
 
-
+void SensorGraphData::replaceSeriesPoints(const int index, QLineSeries* series)
+{
+    QVector<QPointF> points;
+    int n = m_TimeRealPoints.size();
+    points.reserve(n);
+    switch(index)
+    {
+    case HBGraphAxisEnum::DEPTH_IDX:
+        for (int i = 0; i < n; ++i)
+        {
+            // xList[i] 是 JS 的毫秒时间戳
+            QDateTime dt = m_TimeRealPoints[i];
+            qreal x = dt.toMSecsSinceEpoch(); // 转为毫秒时间戳
+            qreal y = m_DepthRealPoints[i];
+            points.append(QPointF(x, y));
+        }
+        break;
+    case HBGraphAxisEnum::VELOCITY_IDX:
+        for (int i = 0; i < n; ++i)
+        {
+            // xList[i] 是 JS 的毫秒时间戳
+            QDateTime dt = m_TimeRealPoints[i];
+            qreal x = dt.toMSecsSinceEpoch(); // 转为毫秒时间戳
+            qreal y = m_VelocityRealPoints[i];
+            points.append(QPointF(x, y));
+        }
+        break;
+    case HBGraphAxisEnum::TENSIONS_IDX:
+        for (int i = 0; i < n; ++i)
+        {
+            // xList[i] 是 JS 的毫秒时间戳
+            QDateTime dt = m_TimeRealPoints[i];
+            qreal x = dt.toMSecsSinceEpoch(); // 转为毫秒时间戳
+            qreal y = m_TensionRealPoints[i];
+            points.append(QPointF(x, y));
+        }
+        break;
+    case HBGraphAxisEnum::TENSION_INCREMENT_IDX:
+        for (int i = 0; i < n; ++i)
+        {
+            // xList[i] 是 JS 的毫秒时间戳
+            QDateTime dt = m_TimeRealPoints[i];
+            qreal x = dt.toMSecsSinceEpoch(); // 转为毫秒时间戳
+            qreal y = m_TensionDeltaRealPoints[i];
+            points.append(QPointF(x, y));
+        }
+        break;
+    default:
+        for (int i = 0; i < n; ++i)
+        {
+            // xList[i] 是 JS 的毫秒时间戳
+            QDateTime dt = m_TimeRealPoints[i];
+            qreal x = dt.toMSecsSinceEpoch(); // 转为毫秒时间戳
+            qreal y = m_DepthRealPoints[i];
+            points.append(QPointF(x, y));
+        }
+        break;
+    }
+    series->replace(points);
+}
