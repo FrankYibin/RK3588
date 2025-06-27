@@ -26,7 +26,7 @@ Item{
     {
         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
         var endStamp = comboBoxFinishTimeStamp.text + "T23:59:59"
-        // SensorGraphData.loadSensorGraphPoint(startStamp, endStamp)
+        SensorGraphData.loadSensorGraphPoint(startStamp, endStamp)
     }
 
     HBCalendar{
