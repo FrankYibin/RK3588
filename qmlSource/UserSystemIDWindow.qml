@@ -47,7 +47,7 @@ Item{
             anchors.fill: parent
             onImageIsReady:
             {
-                var userID = UserModel.UserName + "_" + UserModel.Password;
+                var userID = UserModel.UserName;
                 VideoCapture.deleteFaceRecord(userID)
                 if(VideoCapture.generateFaceEigenValue(userID) === true)
                 {

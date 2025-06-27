@@ -104,7 +104,7 @@ Item{
                     anchors.verticalCenter: parent.verticalCenter
                     color: Style.whiteFontColor
                     font.family: "宋体"
-                    text: "昵称："
+                    text: "工种："
                     font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 }
             }

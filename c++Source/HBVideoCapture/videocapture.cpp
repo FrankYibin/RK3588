@@ -227,7 +227,7 @@ bool VideoCapture::detectFaceImage()
     return true;
 }
 
-bool VideoCapture::generateFaceEigenValue(QString username_password)
+bool VideoCapture::generateFaceEigenValue(QString userId)
 {
     // 创建 QProcess 对象
     QProcess process;
@@ -237,7 +237,7 @@ bool VideoCapture::generateFaceEigenValue(QString username_password)
     QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
     arguments.append("-record");
     arguments.append("HB");
-    arguments.append(username_password);
+    arguments.append(userId);
     arguments.append("/opt/MeteringDisplay/bin/image/tmpImage.jpg");
     RunCommand(program, arguments);
 
@@ -281,7 +281,7 @@ bool VideoCapture::generateFaceEigenValue(QString username_password)
     return true;
 }
 
-bool VideoCapture::deleteFaceRecord(QString username_password)
+bool VideoCapture::deleteFaceRecord(QString userId)
 {
     // 创建 QProcess 对象
     QProcess process;
@@ -291,7 +291,7 @@ bool VideoCapture::deleteFaceRecord(QString username_password)
     QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
     arguments.append("-delete");
     arguments.append("HB");
-    arguments.append(username_password);
+    arguments.append(userId);
     RunCommand(program, arguments);
 
     // 启动进程
@@ -366,7 +366,7 @@ bool VideoCapture::getUsersList()
             for(int i = 0; i < m_UserIDList.size(); i++)
             {
                 QString strUserID = m_UserIDList[i];
-                if(strUserID.contains("_") == false)
+                if(strUserID.contains("_") == true)
                 {
                     qDebug() << "the User iD will be deleted" << m_UserIDList[i];
                     deleteFaceRecord(strUserID);
