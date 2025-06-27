@@ -189,8 +189,8 @@ Item{
             headerModel.clear()
             headerModel.append({"role": "Index",                "title": qsTr("序号"),      "headerWidth": 50})
             headerModel.append({"role": "WellNumber",           "title": qsTr("井号"),      "headerWidth": 100})
-            headerModel.append({"role": "Date",                 "title": qsTr("日期"),      "headerWidth": 300})
-            headerModel.append({"role": "OperateType",          "title": qsTr("操作类型"),  "headerWidth": 100})
+            headerModel.append({"role": "Date",                 "title": qsTr("时间"),      "headerWidth": 300})
+            headerModel.append({"role": "OperateType",          "title": qsTr("工种"),  "headerWidth": 100})
             headerModel.append({"role": "Operater",             "title": qsTr("操作员"),    "headerWidth": 100})
             headerModel.append({"role": "Depth",                "title": qsTr("深度"),      "headerWidth": 100})
             headerModel.append({"role": "Velocity",             "title": qsTr("速度"),      "headerWidth": 100})
@@ -239,8 +239,8 @@ Item{
 
         TableViewColumn { role: "Index";                title: qsTr("");            width: 30}
         TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
-        TableViewColumn { role: "Date";                 title: qsTr("日期");        width: 200}
-        TableViewColumn { role: "OperateType";          title: qsTr("操作类型");    width: 80}
+        TableViewColumn { role: "Date";                 title: qsTr("时间");        width: 200}
+        TableViewColumn { role: "OperateType";          title: qsTr("工种");    width: 80}
         TableViewColumn { role: "Operater";             title: qsTr("操作员");      width: 80}
         TableViewColumn { role: "Depth";                title: qsTr("深度");        width: 80}
         TableViewColumn { role: "Velocity";             title: qsTr("速度");        width: 80}

@@ -107,9 +107,9 @@ void HistoryDataTable:: exportData()
 {
 #ifdef RK3588
     QList<QStringList> rows;
-    QStringList headers = {"wellNumber", "date", "operateType", "operater", "depth", "velocity","velocityUnit","tensions","tensionIncrement","tensionUnit","maxTension",
-                           "harnessTension", "safetyTension",
-                           "exception"   };
+    QStringList headers = {"井号", "时间", "工种", "操作员", "深度", "速度","速度单位","张力","张力增量","张力单位","最大张力",
+                           "缆头张力", "安全张力",
+                           "异常数据标识"   };
 
     // 导出到CSV文件
     QString filePath = "/run/media/sdb1/output.csv";
