@@ -15,6 +15,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.12
 import QtMultimedia 5.15
 import Style 1.0
+import QtQml 2.15
 Rectangle {
     property int minWidthNumpad: Math.round(50 * Style.scaleHint)
     property int minHeightNumpad: Math.round(290 * Style.scaleHint)
@@ -23,12 +24,18 @@ Rectangle {
     readonly property string buttonLoginColor: "#6699CC"
     readonly property string buttonLoginTextColor: "#ffffff"
     property int buttonLoginSize: Math.round(50* Style.scaleHint)
+    property int triedCount: 0
 
     readonly property string buttonLogin:             "#000000"
     property string buttonLoginTextLogin:             qsTr("人脸登录")
 
     property int buttonLoginFontSize: Math.round(Style.style5  * Style.scaleHint)
     signal signalButtonFunc(int funcBtn)
+
+    Component.onCompleted:
+    {
+        timer.start();
+    }
 
     Item{
         id: loadingVisible
@@ -68,9 +75,23 @@ Rectangle {
                 {
                     faceDetector.showPreview = false
                     loadingVisible.visible = false
-                    mainWindow.showDialogScreen(qsTr("请重新人脸登录"), null)
+                    triedCount++;
+                    if(triedCount % 10 == 0)
+                        mainWindow.showDialogScreen(qsTr("请重新人脸登录"), null)
                 }
             }
+        }
+    }
+
+    Timer
+    {
+        id: timer
+        interval: 2000  // 设置间隔为 1000 毫秒 (1 秒)
+        repeat: true    // 设置为重复计时器
+
+        onTriggered:
+        {
+            faceDetector.captureFrame()
         }
     }
 

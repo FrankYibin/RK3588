@@ -216,7 +216,7 @@ bool VideoCapture::detectFaceImage()
         qDebug() << "Command Error:" << error;
         return false;
     }
-    if(m_ComparedResult.Errno == 0)
+    if((m_ComparedResult.Errno == 0) && (m_ComparedResult.Score > 80))
     {
         QStringList strList = m_ComparedResult.UserID.split("_");
         if(UserManagerModel::GetInstance().validateUser(strList[0], strList[1]) == false)
