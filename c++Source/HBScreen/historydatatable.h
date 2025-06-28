@@ -43,7 +43,7 @@ public:
 
     Q_INVOKABLE void loadFromDatabase(const QDateTime& start, const QDateTime& end);
 
-    Q_INVOKABLE void exportData();
+    Q_INVOKABLE bool exportData();
 public slots:
 
 protected:
@@ -55,7 +55,7 @@ private:
     QDateTime           m_end;
     static HistoryDataTable* _ptrHistoryDataTable;
 private:
-    void ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data);
+    bool ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data);
 };
 
 #endif // HISTORYDATATABLE_H

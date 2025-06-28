@@ -95,7 +95,7 @@ Item
                     ctx.stroke()
                     if(i % 10 === 0)
                     {
-                        ctx.font = Math.round(Style.style1 * Style.scaleHint) + "px Arial";
+                        ctx.font = Math.round(Style.style1 * Style.scaleHint) + "px sans-serif";
                         ctx.fillStyle = "white"
                         ctx.textAlign = "center"
                         ctx.textBaseline = "middle"

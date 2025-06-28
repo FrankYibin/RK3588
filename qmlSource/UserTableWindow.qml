@@ -192,7 +192,10 @@ Item{
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: userManagerTable.fontSize
                         onClicked: {
-                           UserModel.removeUser(styleData.row)
+                            UserModel.getUser(styleData.row)
+                            UserModel.removeUser(styleData.row)
+                            var userID = UserModel.UserName;
+                            VideoCapture.deleteFaceRecord(userID)
                         }
                     }
                 }

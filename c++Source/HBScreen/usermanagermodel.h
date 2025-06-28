@@ -44,6 +44,8 @@ public:
     Q_INVOKABLE bool resetUser();
     Q_INVOKABLE bool syncUserList();
     Q_INVOKABLE void loadFromDatabase();
+    Q_INVOKABLE int  getOperateType() const;
+    bool ValidateUser(const QString userId);
 
     bool validateFaceUser(const QString username);
 
@@ -86,6 +88,12 @@ private:
         NORMAL_USER,
         VISITOR_USER
     };
+    enum OPERATE_TYPE
+    {
+        CREATE_NEW = 0,
+        EDIT_EXIST
+    };
+
     QVector<UserInfo> m_users;
     int m_rowIndex;
     QString m_userName;
@@ -96,6 +104,7 @@ private:
     QString m_currentUser;
     QString m_currentGroup;
     static QString UserLevel[4];
+    OPERATE_TYPE m_OperateType;
 };
 
 #endif // USERMANAGERMODEL_H

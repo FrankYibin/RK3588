@@ -173,8 +173,10 @@ Item{
                     text: qsTr("导出")
                     onClicked:
                     {
-                        HistoryDataTable.exportData()
-                        mainWindow.showDialogScreen(qsTr("导出数据已完成"), null)
+                        if(HistoryDataTable.exportData() === true)
+                            mainWindow.showDialogScreen(qsTr("导出数据已完成"), null)
+                        else
+                            mainWindow.showDialogScreen(qsTr("没有找到可以使用的U盘或尝试再次导出"), null)
                     }
                 }
             }

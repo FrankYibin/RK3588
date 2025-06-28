@@ -1232,6 +1232,31 @@ bool HBDatabase::QueryUser(const QString username, const QString password, int& 
     return bResult;
 }
 
+bool HBDatabase::QueryUser(const QString username, int &groupId)
+{
+    bool bResult = false;
+    QSqlQuery query(m_database);
+    query.prepare("SELECT username, password, groupindex, createtime FROM userinfo WHERE username = :username");
+    query.bindValue(":username", username);
+
+    if (!query.exec()) {
+        qDebug() << "Query user data failed:" << query.lastError();
+        return false;
+    }
+
+    if (!query.next()) {
+        qDebug() << "No user data found for username:" << username;
+        return false;
+    }
+    else
+    {
+        groupId = query.value(2).toInt();
+    }
+
+    bResult = true;
+    return bResult;
+}
+
 bool HBDatabase::InsertUser(const QString username, const QString password, const int groupindex, const QString nickname)
 {
     QSqlQuery query;

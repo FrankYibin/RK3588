@@ -12,6 +12,8 @@ UserManagerModel::UserManagerModel(QObject *parent)
     m_nickName = "";
     m_password = "";
 
+    m_OperateType = CREATE_NEW;
+
     loadFromDatabase();
 }
 
@@ -116,6 +118,7 @@ bool UserManagerModel::getUser(int row)
         setGroupIndex(groupindex);
         setNickName(nickname);
         setRowIndex(row);
+        m_OperateType = EDIT_EXIST;
     }
     return true;
 }
@@ -127,6 +130,7 @@ bool UserManagerModel::resetUser()
     setPassword("");
     setGroupIndex(3);
     setNickName("");
+    m_OperateType = CREATE_NEW;
     return true;
 }
 
@@ -176,6 +180,40 @@ void UserManagerModel::loadFromDatabase()
     beginResetModel();
     m_users = HBDatabase::GetInstance().LoadAllUsers();
     endResetModel();
+}
+
+int UserManagerModel::getOperateType() const
+{
+    return m_OperateType;
+}
+
+bool UserManagerModel::ValidateUser(const QString userId)
+{
+    int groupId = -1;
+    if(HBDatabase::GetInstance().QueryUser(userId, groupId) == true)
+    {
+        setCurrentUser(userId);
+        switch(groupId)
+        {
+        case SUPER_USER:
+            setCurrentGroup(UserLevel[SUPER_USER]);
+            break;
+        case OPERATOR_USER:
+            setCurrentGroup(UserLevel[OPERATOR_USER]);
+            break;
+        case NORMAL_USER:
+            setCurrentGroup(UserLevel[NORMAL_USER]);
+            break;
+        case VISITOR_USER:
+            setCurrentGroup(UserLevel[VISITOR_USER]);
+            break;
+        default:
+            setCurrentGroup(tr("ADMIN"));
+            break;
+        }
+        return true;
+    }
+    return false;
 }
 
 void UserManagerModel::setRowIndex(int rowIndex)

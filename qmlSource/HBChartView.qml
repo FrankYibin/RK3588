@@ -157,7 +157,7 @@ Item {
                 format: "yyyy-MM-dd hh:mm:ss"
                 max: new Date()
                 min: new Date()
-                tickCount: 5
+                tickCount: 4
             }
 
             ValueAxis {

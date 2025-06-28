@@ -87,6 +87,7 @@ Item{
                         iconUser.visible = false
                     }
                 }
+                enabled: (UserModel.getOperateType() === 0) ? true : false
             }
         }
 
@@ -120,6 +121,7 @@ Item{
                         iconUser.visible = false
                     }
                 }
+                enabled: (UserModel.getOperateType() === 0) ? true : false
             }
         }
 
@@ -152,6 +154,7 @@ Item{
                 onCurrentIndexChanged: {
 
                 }
+                enabled: (UserModel.getOperateType() === 0) ? true : false
             }
         }
 
@@ -186,6 +189,7 @@ Item{
                         iconUser.visible = false
                     }
                 }
+                enabled: (UserModel.getOperateType() === 0) ? true : false
             }
         }
     }
