@@ -7,6 +7,7 @@ import DepthGlobalDefine 1.0
 import TensionsGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DASHBOARD
+    readonly property int textFieldWidth: 110
     Rectangle{
         id: background
         anchors.fill: parent
@@ -73,7 +74,7 @@ Item{
                 anchors.top: pandelDepth.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: pandelDepth.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
@@ -116,7 +117,7 @@ Item{
                 anchors.top: pandelVelocity.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: pandelVelocity.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
@@ -158,7 +159,7 @@ Item{
                 anchors.top: parent.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
@@ -200,7 +201,7 @@ Item{
                 anchors.top: parent.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
