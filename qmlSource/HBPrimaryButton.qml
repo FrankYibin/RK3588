@@ -28,6 +28,7 @@ Button {
     property color buttonColor: Style.hbButtonBackgroundColor
     property color textColor : Style.whiteFontColor
     property color shadowColor: "#80000000"
+    property color pressedColor: "#A0CF67"
     property int fontSize: Math.round(Style.style6 * Style.scaleHint)
     contentItem: Text {
         text: qsTr(primaryButton.text)
@@ -46,16 +47,19 @@ Button {
         id: buttonRect
         implicitWidth: parent.width < minWidth ? minWidth : parent.width
         implicitHeight: parent.height > maxHeight ? maxHeight : parent.height
-        color: (checked === true) ? Style.frameBorderColor : buttonColor
+        color:primaryButton.pressed ? pressedColor : (primaryButton.checked === true ? Style.frameBorderColor : buttonColor)
         radius: radiusWidth
-        layer.enabled: primaryButton.pressed ? false : true
+        scale:  1.0
+        smooth: true
+        layer.enabled: true
         layer.effect: DropShadow {
-            horizontalOffset: primaryButton.pressed ? 0 : 3
-            verticalOffset: primaryButton.pressed ? 0 : 3
+            horizontalOffset: primaryButton.pressed ? 0 : 10
+            verticalOffset: primaryButton.pressed ? 0 : 10
             color:  shadowColor
-            opacity: 0.2
+            opacity: 0.4
             samples: 10
         }
+
     }
 }
 
