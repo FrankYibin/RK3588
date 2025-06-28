@@ -145,8 +145,7 @@ private:
     WellParameter& operator=(const WellParameter&) = delete;   // 禁止赋值
     static WellParameter* _ptrWellParameter;
 
-
-
+    void ensureWellSettingsFileExists();
 
 private:
     QString m_WellNumber;

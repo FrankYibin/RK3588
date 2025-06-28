@@ -1,11 +1,16 @@
 ﻿#include "configuration.h"
 #include <QCoreApplication>
+#include "c++Source/HBScreen/depthsetting.h"
+#include "c++Source/HBScreen/tensionsetting.h"
+#include <QDir>
+#include <QDebug>
 
 Configuration* Configuration::_ptrConfiguration = nullptr;
 
 Configuration::Configuration(QObject *parent)
-    : QObject(parent), m_settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat)
+    : QObject(parent),m_settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat)
 {
+    ensureConfigSettingsFileExists();
     m_settings.setIniCodec("UTF-8");
 
     m_baudRate = m_settings.value("RS232/BaudRate", "9600").toString();
@@ -37,6 +42,27 @@ Configuration::Configuration(QObject *parent)
     m_settings.setValue("Theme/ThemeIndex", m_themeIndex);
     m_languageIndex = m_settings.value("Language/LanguageIndex",0).toInt();
     m_settings.setValue("Language/LanguageIndex", m_languageIndex);
+
+    InitUnits();
+
+    connect(DepthSetting::GetInstance(), &DepthSetting::VelocityUnitChanged,
+            this, &Configuration::onDepthVelocityUnitChanged);
+
+    connect(TensionSetting::GetInstance(), &TensionSetting::TensionUnitChanged,
+            this, &Configuration::onTensionUnitChanged);
+}
+
+void Configuration::InitUnits()
+{
+    int defaultVelocityUnit = DepthSetting::GetInstance()->VELOCITY_UNIT::M_PER_HOUR;
+    int velocityUnit = m_settings.value("Unit/VelocityUnit", defaultVelocityUnit).toInt();
+    m_velocityUnit = velocityUnit;
+    DepthSetting::GetInstance()->setVelocityUnit(velocityUnit);
+
+    int defaultTensionUnit = TensionSetting::GetInstance()->FORCE_UNIT::LB;
+    int tensionUnit = m_settings.value("Unit/TensionUnit", defaultTensionUnit).toInt();
+    m_tensionUnit = tensionUnit;
+    TensionSetting::GetInstance()->setTensionUnit(tensionUnit);
 }
 
 Configuration *Configuration::GetInstance()
@@ -217,3 +243,33 @@ void Configuration::setLanguageIndex(int languageIndex)
     }
 }
 
+void Configuration::onDepthVelocityUnitChanged(int unit)
+{
+    if (unit != m_velocityUnit) {
+        m_velocityUnit = unit;
+        m_settings.setValue("Unit/VelocityUnit", unit);
+        emit VelocityUnitChanged();
+    }
+}
+
+void Configuration::onTensionUnitChanged(int unit)
+{
+    if (unit != m_tensionUnit) {
+        m_tensionUnit = unit;
+        m_settings.setValue("Unit/TensionUnit", unit);
+        emit TensionUnitChanged();
+    }
+}
+
+void Configuration::ensureConfigSettingsFileExists()
+{
+    QString configPath = QCoreApplication::applicationDirPath() + "/config.ini";
+
+    if (!QFile::exists(configPath)) {
+        if (!QFile::copy(":/misc/config.ini", configPath)) {
+            qDebug() << "Failed to copy config.ini from resources!";
+        } else {
+            qDebug() << "config.ini copied from resources to " << configPath;
+        }
+    }
+}

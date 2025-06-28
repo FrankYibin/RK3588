@@ -35,16 +35,11 @@ void HBDatabase::init()
     QString dbPath = execDir.filePath("DVTT.db");
 
     if (!QFile::exists(dbPath)) {
-        QString srcPath = execDir.absoluteFilePath("../DVTT.db");
-        if (QFile::exists(srcPath)) {
-            qDebug() << "Copying DVTT.db from" << srcPath << "to" << dbPath;
-            if (!QFile::copy(srcPath, dbPath)) {
-                qWarning() << "Failed to copy database file from" << srcPath << "to" << dbPath;
-                return;
-            }
-        } else {
-            qWarning() << "Source database file not found at" << srcPath;
+        if (!QFile::copy(":/misc/DVTT.db", dbPath)) {
+            qWarning() << "Failed to copy DVTT.db from resources to" << dbPath;
             return;
+        } else {
+            qDebug() << "DVTT.db copied from resources to" << dbPath;
         }
     }
 

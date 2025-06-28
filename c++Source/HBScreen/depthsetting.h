@@ -97,7 +97,7 @@ signals:
     void DepthCurrentChanged();
     void PulseCountChanged();
     void VelocityLimitedChanged();
-    void VelocityUnitChanged();
+    void VelocityUnitChanged(int unit);
     void DistanceUnitChanged();
     void TimeUnitChanged();
 private:

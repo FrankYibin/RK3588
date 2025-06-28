@@ -13,8 +13,8 @@ Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_VELOCITY
     Component.onCompleted: {
         modelDirectionMode.resetModel()
-        AutoTestSpeed.VelocityStatus = 0;
-        AutoTestSpeed.VelocitySetting = "0.00"
+        AutoTestSpeed.VelocityStatus = 1;
+        AutoTestSpeed.VelocitySetting = "200.00"
     }
 
     Rectangle
@@ -106,7 +106,7 @@ Item{
                             if(index === 0)
                                 AutoTestSpeed.VelocityStatus = 1
                             else if (index === 1)
-                                AutoTestSpeed.VelocitySetting = 2
+                                AutoTestSpeed.VelocityStatus = 2
                             else
                                 AutoTestSpeed.VelocitySetting = 3
                         }
@@ -188,7 +188,7 @@ Item{
             width: Math.round(125 * Style.scaleHint)
             height: Math.round(40 * Style.scaleHint)
             text: qsTr("启动")
-            buttonColor: (AutoTestSpeed.EnableVelocityControl === 0) ? Style. backgroundLightColor : Style.hbButtonBackgroundColor
+            buttonColor: (AutoTestSpeed.EnableVelocityControl === 0) ? Style. hbButtonBackgroundColor : Style.hbButtonCVBackgroundColor
             onClicked:
             {
                 var status = AutoTestSpeed.VelocityStatus
@@ -202,7 +202,7 @@ Item{
             id: buttonSave
             width: Math.round(125 * Style.scaleHint)
             height: Math.round(40 * Style.scaleHint)
-            text: qsTr("已停止")
+            text: qsTr("停止")
             onClicked:
             {
                 ModbusClient.writeRegister(HQmlEnum.VELOCITY_STATUS, 0)

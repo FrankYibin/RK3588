@@ -10,6 +10,8 @@ WellParameter* WellParameter::_ptrWellParameter = nullptr;
 WellParameter::WellParameter(QObject *parent)
     : QObject(parent),m_settings(QCoreApplication::applicationDirPath() + "/wellsettings.ini", QSettings::IniFormat)
 {
+    ensureWellSettingsFileExists();
+
     m_settings.setIniCodec("UTF-8");
     m_WellNumber = "";
     m_AreaBlock = "";
@@ -271,4 +273,18 @@ QString WellParameter::findWellSettingsPath()
         }
     }
     return QString();
+}
+
+
+void WellParameter::ensureWellSettingsFileExists()
+{
+    QString configPath = QCoreApplication::applicationDirPath() + "/wellsettings.ini";
+
+    if (!QFile::exists(configPath)) {
+        if (!QFile::copy(":/misc/wellsettings.ini", configPath)) {
+            qDebug() << "Failed to copy wellsettings.ini from resources!";
+        } else {
+            qDebug() << "wellsettings.ini copied from resources to " << configPath;
+        }
+    }
 }

@@ -1,7 +1,5 @@
 ﻿#include "tensionsetting.h"
 #include <QDebug>
-#include <QSettings>
-#include "c++Source/HBUtility/hbutilityclass.h"
 
 TensionSetting* TensionSetting::_ptrTensionSetting = nullptr;
 TensionSetting *TensionSetting::GetInstance()
@@ -23,11 +21,8 @@ TensionSetting::~TensionSetting()
 TensionSetting::TensionSetting(QObject *parent)
     : QObject{parent}
 {
-    // m_TensionUnit = -1;
-    // setTensionUnit(LB);
-    QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
-    m_TensionUnit = settings.value("Unit/TensionUnit", LB).toInt();
-    settings.setValue("Unit/TensionUnit", m_TensionUnit);
+//     m_TensionUnit = -1;
+//     setTensionUnit(LB);
 }
 
 int TensionSetting::TensionUnit() const
@@ -40,9 +35,7 @@ void TensionSetting::setTensionUnit(const int unit)
     if (m_TensionUnit != unit)
     {
         m_TensionUnit = unit;
-        HBUtilityClass::GetInstance()->settings().setValue("Unit/TensionUnit", m_TensionUnit);
-        qDebug() << "C++ emit tensionUnitChanged, new value:" << m_TensionUnit;
-        emit TensionUnitChanged();
+        emit TensionUnitChanged(unit);
     }
 }
 QString TensionSetting::KValue() const
