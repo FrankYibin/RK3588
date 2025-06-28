@@ -21,8 +21,18 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+        }
+    }
+    Component.onCompleted:
+    {
+        var strNumber = HBHome.TensiometerNumber;
+        var rowIndex = TensiometerManager.checkTensiometerNumber(strNumber);
+        if (rowIndex !== -1)
+        {
+            tensionMeterTable.currentRow = rowIndex;
+            TensiometerManager.resetModel();
         }
     }
 
@@ -45,14 +55,13 @@ Item{
         isMouseMoving: false
         rowDelegate: Rectangle{
             height: tensionMeterTable.rowHeight
-            color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
-
+            color: (styleData.row === tensionMeterTable.currentRow ? Style.backgroundDeepColor : Style.backgroundLightColor)
         }
+
 
         TableViewColumn {
             role: "Index";              title: qsTr("");                width: 30;
             delegate: Rectangle {
-
                 height: tensionMeterTable.rowHeight
                 width: styleData.columnWidth
                 color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
@@ -78,6 +87,7 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
+                    //                    text: styleData.value
                     text: styleData.value
                     font.family: Style.regular.name
                     font.pixelSize: tensionMeterTable.fontSize
@@ -221,7 +231,6 @@ Item{
                 }
             }
         }
-
     }
 
     Item{

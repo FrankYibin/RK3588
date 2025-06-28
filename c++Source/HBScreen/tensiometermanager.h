@@ -31,6 +31,8 @@ public:
     Q_INVOKABLE void syncTensiometer(const int index);
 
     Q_INVOKABLE void setTensionmeterNumber(int index);
+    Q_INVOKABLE int  checkTensiometerNumber(QString TensiometerNumber);
+    Q_INVOKABLE void resetModel();
 
 
 protected:

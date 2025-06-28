@@ -1,5 +1,6 @@
 ﻿#include "hbhome.h"
 #include "tensiometer.h"
+#include <QDebug>
 HBHome* HBHome::_ptrHome = nullptr;
 
 HBHome::HBHome(QObject *parent)
@@ -202,7 +203,7 @@ void HBHome::setTensiometerNumber(const QString value)
     if(m_TensiometerNumber == value)
         return;
     m_TensiometerNumber = value;
-    emit TensiometerNumberChanged();
+    emit tensiometerNumberChanged();
 }
 QString HBHome::TensionEncoder() const
 {

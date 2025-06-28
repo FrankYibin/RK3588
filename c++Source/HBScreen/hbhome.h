@@ -46,7 +46,7 @@ class HBHome : public QObject
     //NetworkStatus   网络状态
     Q_PROPERTY(int StatusNetwork READ StatusNetwork WRITE setStatusNetwork NOTIFY StatusNetworkChanged)
 
-    Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY TensiometerNumberChanged)
+    Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY tensiometerNumberChanged)
     Q_PROPERTY(QString TensionEncoder READ TensionEncoder WRITE setTensionEncoder NOTIFY TensionEncoderChanged)
     Q_PROPERTY(QString StatusTensiometerOnline READ StatusTensiometerOnline WRITE setStatusTensiometerOnline NOTIFY StatusTensiometerOnlineChanged)
 
@@ -134,7 +134,7 @@ signals:
 
     void StatusNetworkChanged();
 
-    void TensiometerNumberChanged();
+    void tensiometerNumberChanged();
     void TensionEncoderChanged();
     void StatusTensiometerOnlineChanged();
 

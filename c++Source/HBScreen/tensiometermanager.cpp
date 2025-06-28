@@ -8,15 +8,16 @@ QList<Tensiometer::TENSIONMETER> TensiometerManager::m_TensiometerList;
 TensiometerManager* TensiometerManager::_ptrTensiometerManager = nullptr;
 TensiometerManager::TensiometerManager(QObject *parent)
     : QAbstractListModel(parent),
-    m_db(&HBDatabase::GetInstance())
+      m_db(&HBDatabase::GetInstance())
 {
-    beginResetModel();
-    m_TensiometerList.clear();
-    if(m_db->LoadTensiometerTable(m_TensiometerList) == false)
-    {
-        qDebug() << "Failed to load tensiometer data from database.";
-    }
-    endResetModel();
+//    beginResetModel();
+//    m_TensiometerList.clear();
+//    if(m_db->LoadTensiometerTable(m_TensiometerList) == false)
+//    {
+//        qDebug() << "Failed to load tensiometer data from database.";
+//    }
+//    endResetModel();
+    resetModel();
 }
 
 
@@ -195,6 +196,37 @@ void TensiometerManager::setTensionmeterNumber(int index)
         meterNumber = m_TensiometerList[index].Number;
         TensionScaleManager::GetInstance()->setTensiometerNumber(QString::number(meterNumber));
     }
+}
+
+int TensiometerManager::checkTensiometerNumber(QString TensiometerNumber)
+{
+    bool ok = false;
+    int number = TensiometerNumber.toInt(&ok);
+    if (!ok)
+        return -1;
+
+    for (int index = 0; index < m_TensiometerList.size(); ++index)
+    {
+        if (m_TensiometerList[index].Number == number)
+            return index;
+    }
+    return -1;
+}
+
+void TensiometerManager::resetModel()
+{
+    beginResetModel();
+    m_TensiometerList.clear();
+    if (m_db->LoadTensiometerTable(m_TensiometerList) == false)
+    {
+        qDebug() << "Failed to reload tensiometer data from database.";
+    }
+    else
+    {
+        qDebug() << "Tensiometer data reloaded successfully.";
+    }
+    endResetModel();
+
 }
 
 // const QList<TensiometerData>& TensiometerManager::items() const
