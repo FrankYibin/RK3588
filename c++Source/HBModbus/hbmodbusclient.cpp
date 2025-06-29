@@ -1666,7 +1666,7 @@ void HBModbusClient::handleAlarm()
         bool isWellSurface = m_IO_Value2.bits_Value2.m_AlarmVelocity;
         if (isWellSurface) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::WELL_HEAD_EXCEPTION);
-            HBHome::GetInstance()->setAlarmMessage("上提至距井口 " + HBHome::GetInstance()->DepthCurrent() +" 米");
+            HBHome::GetInstance()->setAlarmMessage("上提至距井口 " + HBHome::GetInstance()->DepthCurrent() + " " + DepthSetting::GetInstance()->VelocityUnit());
         }
         HBHome::GetInstance()->setAlarmEnabled(isWellSurface);
     }
@@ -1676,29 +1676,58 @@ void HBModbusClient::handleAlarm()
         bool isTargetLayer = m_IO_Value2.bits_Value2.m_AlarmVelocity;
         if (isTargetLayer) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::TARGET_CLOSE_EXCEPTION);
-            HBHome::GetInstance()->setAlarmMessage("上提至距表套" + DepthSetting::GetInstance()->DepthSurfaceCover() +" 米");
+            HBHome::GetInstance()->setAlarmMessage("距井底 " + HBHome::GetInstance()->DepthCurrent() + " " + DepthSetting::GetInstance()->VelocityUnit());
         }
         HBHome::GetInstance()->setAlarmEnabled(isTargetLayer);
 
     }
 
-    if(m_IO_Value2.bits_Value2.m_AlarmSurfaceCover && m_IO_Value2.bits_Value2.m_AlarmSurfaceCover != m_LastIO_Value2.bits_Value2.m_AlarmSurfaceCover)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::SURFACE_CLOSE_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmSurfaceCover != m_LastIO_Value2.bits_Value2.m_AlarmSurfaceCover){
+        bool isSurfaceCover= m_IO_Value2.bits_Value2.m_AlarmTension;
+        if (isSurfaceCover) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::SURFACE_CLOSE_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("上提至距表套" + DepthSetting::GetInstance()->DepthSurfaceCover() + " " + DepthSetting::GetInstance()->VelocityUnit());
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isSurfaceCover);
+    }
 
-    if(m_IO_Value2.bits_Value2.m_AlarmTension && m_IO_Value2.bits_Value2.m_AlarmTension != m_LastIO_Value2.bits_Value2.m_AlarmTension)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::TENSION_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmTension != m_LastIO_Value2.bits_Value2.m_AlarmTension){
+        bool isTension = m_IO_Value2.bits_Value2.m_AlarmTension;
+        if (isTension) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::TENSION_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("张力超值 " + HBHome::GetInstance()->TensionCurrent() + " " + TensionSetting::GetInstance()->TensionUnit());
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isTension);
+    }
 
-    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow && m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaSlow)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::LOCKED_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaSlow){
+        bool isTensionDeltaSlow = m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow;
+        if (isTensionDeltaSlow) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::LOCKED_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("请注意遇阻");
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isTensionDeltaSlow);
+    }
 
-    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop && m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaStop)
-        HBVoice::GetInstance()->PlayVoice(HBVoice:: BLOCKED_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaStop){
+        bool isTensionDeltaStop = m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop;
+        if (isTensionDeltaStop) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::BLOCKED_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("请注意遇卡");
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isTensionDeltaStop);
+    }
+
 
     if(m_IO_Value3.bits_Value3.m_AlarmEncoder1 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder1)
     {
-
+        bool isEncoder1 = m_IO_Value3.bits_Value3.m_AlarmEncoder1;
+        if (isEncoder1) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_1_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("请检查编码器1");
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isEncoder1);
     }
-        HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_1_EXCEPTION);
 
     if(m_IO_Value3.bits_Value3.m_AlarmEncoder2 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder2){
         bool isEncoder2 = m_IO_Value3.bits_Value3.m_AlarmEncoder2;
