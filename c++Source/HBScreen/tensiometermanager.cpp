@@ -99,6 +99,7 @@ void TensiometerManager::addTensiometer()
     {
         qDebug() << "Failed to insert tensiometer data.";
     }
+    emit countChanged();
 }
 
 void TensiometerManager::removeTensiometer(const int index)
@@ -119,6 +120,7 @@ void TensiometerManager::removeTensiometer(const int index)
         qDebug() << "Failed to delete tensiometer data with Number:" << number;
     }
     endResetModel();
+    emit countChanged();
 }
 
 void TensiometerManager::syncTensiometer(const int index)

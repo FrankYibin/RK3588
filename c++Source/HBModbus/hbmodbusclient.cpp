@@ -1655,7 +1655,7 @@ void HBModbusClient::handleAlarm()
         bool isVelocity = m_IO_Value2.bits_Value2.m_AlarmVelocity;
         if (isVelocity) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::EXCEED_VELOCITY_EXCEPTION);
-            HBHome::GetInstance()->setAlarmMessage("超速 " + HBHome::GetInstance()->VelocityCurrent() + " " + DepthSetting::GetInstance()->VelocityUnit());
+            HBHome::GetInstance()->setAlarmMessage("超速 " + HBHome::GetInstance()->VelocityCurrent() + " " + getVelocityUnitString());
         }
         HBHome::GetInstance()->setAlarmEnabled(isVelocity);
     }
@@ -1663,7 +1663,7 @@ void HBModbusClient::handleAlarm()
 
     if(m_IO_Value2.bits_Value2.m_AlarmWellSurface != m_LastIO_Value2.bits_Value2.m_AlarmWellSurface)
     {
-        bool isWellSurface = m_IO_Value2.bits_Value2.m_AlarmVelocity;
+        bool isWellSurface = m_IO_Value2.bits_Value2.m_AlarmWellSurface;
         if (isWellSurface) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::WELL_HEAD_EXCEPTION);
             HBHome::GetInstance()->setAlarmMessage("上提至距井口 " + HBHome::GetInstance()->DepthCurrent() + " 米");
@@ -1673,7 +1673,7 @@ void HBModbusClient::handleAlarm()
 
     if(m_IO_Value2.bits_Value2.m_AlarmTargetLayer != m_LastIO_Value2.bits_Value2.m_AlarmTargetLayer)
     {
-        bool isTargetLayer = m_IO_Value2.bits_Value2.m_AlarmVelocity;
+        bool isTargetLayer = m_IO_Value2.bits_Value2.m_AlarmTargetLayer;
         if (isTargetLayer) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::TARGET_CLOSE_EXCEPTION);
             HBHome::GetInstance()->setAlarmMessage("距井底 " + HBHome::GetInstance()->DepthCurrent() + " 米");
@@ -1683,7 +1683,7 @@ void HBModbusClient::handleAlarm()
     }
 
     if(m_IO_Value2.bits_Value2.m_AlarmSurfaceCover != m_LastIO_Value2.bits_Value2.m_AlarmSurfaceCover){
-        bool isSurfaceCover= m_IO_Value2.bits_Value2.m_AlarmTension;
+        bool isSurfaceCover= m_IO_Value2.bits_Value2.m_AlarmSurfaceCover;
         if (isSurfaceCover) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::SURFACE_CLOSE_EXCEPTION);
             HBHome::GetInstance()->setAlarmMessage("上提至距表套" + DepthSetting::GetInstance()->DepthSurfaceCover() + " 米");
@@ -1695,7 +1695,7 @@ void HBModbusClient::handleAlarm()
         bool isTension = m_IO_Value2.bits_Value2.m_AlarmTension;
         if (isTension) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::TENSION_EXCEPTION);
-            HBHome::GetInstance()->setAlarmMessage("张力超值 " + HBHome::GetInstance()->TensionCurrent() + " " + TensionSetting::GetInstance()->TensionUnit());
+            HBHome::GetInstance()->setAlarmMessage("张力超值 " + HBHome::GetInstance()->TensionCurrent() + " " + getTensionUnitString());
         }
         HBHome::GetInstance()->setAlarmEnabled(isTension);
     }
@@ -1760,6 +1760,26 @@ void HBModbusClient::handleAlarm()
     m_LastIO_Value2.bits_Value2 = m_IO_Value2.bits_Value2;
     m_LastIO_Value3.bits_Value3 = m_IO_Value3.bits_Value3;
 
+}
+QString HBModbusClient::getVelocityUnitString()
+{
+    switch (DepthSetting::GetInstance()->VelocityUnit()) {
+    case DepthSetting::FT_PER_HOUR: return "ft/h";
+    case DepthSetting::FT_PER_MIN: return "ft/min";
+    case DepthSetting::M_PER_HOUR: return "m/h";
+    case DepthSetting::M_PER_MIN: return "m/min";
+    default: return "m/h";
+    }
+}
+
+QString HBModbusClient::getTensionUnitString()
+{
+    switch (TensionSetting::GetInstance()->TensionUnit()) {
+    case TensionSetting::KG: return "kg";
+    case TensionSetting::KN: return "kn";
+    case TensionSetting::LB: return "lb";
+    default: return "lb";
+    }
 }
 
 void HBModbusClient::handleCANbus()
