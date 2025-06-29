@@ -100,7 +100,7 @@ Item{
                     property int previousY: 0
                     onClicked: {
 
-                        mainWindow.showDialogScreen(qsTr("使用当前张力计： " + styleData.value), function(){
+                        mainWindow.showDialogScreen(qsTr("使用当前张力计： " + styleData.value), Dialog.Ok | Dialog.Cancel, function(){
                             tensionMeterTable.currentRow = styleData.row // Update the current row
                             TensiometerManager.syncTensiometer(styleData.row)
                             console.debug("Selected Row: ", tensionMeterTable.currentRow)
@@ -279,7 +279,7 @@ Item{
         }
 
         Text {
-            anchors.left: tensionMeterTable.left
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             color: Style.whiteFontColor
             text: qsTr("当前张力计编号: ") + HBHome.TensiometerNumber
