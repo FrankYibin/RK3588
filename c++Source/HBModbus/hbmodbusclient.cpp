@@ -1650,14 +1650,37 @@ void HBModbusClient::handleParseCoils(const QModbusDataUnit &result)
 
 void HBModbusClient::handleAlarm()
 {
-    if(m_IO_Value2.bits_Value2.m_AlarmVelocity && m_IO_Value2.bits_Value2.m_AlarmVelocity != m_LastIO_Value2.bits_Value2.m_AlarmVelocity)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::EXCEED_VELOCITY_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmVelocity != m_LastIO_Value2.bits_Value2.m_AlarmVelocity)
+    {
+        bool isVelocity = m_IO_Value2.bits_Value2.m_AlarmVelocity;
+        if (isVelocity) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::EXCEED_VELOCITY_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("超速 " + HBHome::GetInstance()->VelocityCurrent() + " " + DepthSetting::GetInstance()->VelocityUnit());
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isVelocity);
+    }
 
-    if(m_IO_Value2.bits_Value2.m_AlarmWellSurface && m_IO_Value2.bits_Value2.m_AlarmWellSurface != m_LastIO_Value2.bits_Value2.m_AlarmWellSurface)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::WELL_HEAD_EXCEPTION);
 
-    if(m_IO_Value2.bits_Value2.m_AlarmTargetLayer && m_IO_Value2.bits_Value2.m_AlarmTargetLayer != m_LastIO_Value2.bits_Value2.m_AlarmTargetLayer)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::TARGET_CLOSE_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmWellSurface != m_LastIO_Value2.bits_Value2.m_AlarmWellSurface)
+    {
+        bool isWellSurface = m_IO_Value2.bits_Value2.m_AlarmVelocity;
+        if (isWellSurface) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::WELL_HEAD_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("上提至距井口 " + HBHome::GetInstance()->DepthCurrent() +" 米");
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isWellSurface);
+    }
+
+    if(m_IO_Value2.bits_Value2.m_AlarmTargetLayer != m_LastIO_Value2.bits_Value2.m_AlarmTargetLayer)
+    {
+        bool isTargetLayer = m_IO_Value2.bits_Value2.m_AlarmVelocity;
+        if (isTargetLayer) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::TARGET_CLOSE_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("上提至距表套" + DepthSetting::GetInstance()->DepthSurfaceCover() +" 米");
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isTargetLayer);
+
+    }
 
     if(m_IO_Value2.bits_Value2.m_AlarmSurfaceCover && m_IO_Value2.bits_Value2.m_AlarmSurfaceCover != m_LastIO_Value2.bits_Value2.m_AlarmSurfaceCover)
         HBVoice::GetInstance()->PlayVoice(HBVoice::SURFACE_CLOSE_EXCEPTION);
@@ -1671,14 +1694,30 @@ void HBModbusClient::handleAlarm()
     if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop && m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaStop)
         HBVoice::GetInstance()->PlayVoice(HBVoice:: BLOCKED_EXCEPTION);
 
-    if(m_IO_Value3.bits_Value3.m_AlarmEncoder1 && m_IO_Value3.bits_Value3.m_AlarmEncoder1 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder1)
+    if(m_IO_Value3.bits_Value3.m_AlarmEncoder1 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder1)
+    {
+
+    }
         HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_1_EXCEPTION);
 
-    if(m_IO_Value3.bits_Value3.m_AlarmEncoder2 && m_IO_Value3.bits_Value3.m_AlarmEncoder2 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder2)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_2_EXCEPTION);
+    if(m_IO_Value3.bits_Value3.m_AlarmEncoder2 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder2){
+        bool isEncoder2 = m_IO_Value3.bits_Value3.m_AlarmEncoder2;
+        if (isEncoder2) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_2_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("请检查编码器2");
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isEncoder2);
+    }
 
-    if(m_IO_Value3.bits_Value3.m_AlarmEncoder3 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder3)
-        HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_3_EXCEPTION);
+
+    if(m_IO_Value3.bits_Value3.m_AlarmEncoder3 != m_LastIO_Value3.bits_Value3.m_AlarmEncoder3){
+        bool isEncoder3 = m_IO_Value3.bits_Value3.m_AlarmEncoder3;
+        if (isEncoder3) {
+            HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_3_EXCEPTION);
+            HBHome::GetInstance()->setAlarmMessage("请检查编码器3");
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isEncoder3);
+    }
 
     if (m_IO_Value3.bits_Value3.m_AlarmDrowsy != m_LastIO_Value3.bits_Value3.m_AlarmDrowsy) {
         bool isDrowsy = m_IO_Value3.bits_Value3.m_AlarmDrowsy;
@@ -1689,8 +1728,8 @@ void HBModbusClient::handleAlarm()
         HBHome::GetInstance()->setAlarmEnabled(isDrowsy);
     }
 
-    m_LastIO_Value2 = m_IO_Value2;
-    m_LastIO_Value3 = m_IO_Value3;
+    m_LastIO_Value2.bits_Value2 = m_IO_Value2.bits_Value2;
+    m_LastIO_Value3.bits_Value3 = m_IO_Value3.bits_Value3;
 
 }
 
