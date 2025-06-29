@@ -28,7 +28,7 @@ Button {
     property color buttonColor: Style.hbButtonBackgroundColor
     property color textColor : Style.whiteFontColor
     property color shadowColor: "#80000000"
-    property color pressedColor: "#A0CF67"
+    property color pressedColor: "#AFC3D8"
     property int fontSize: Math.round(Style.style6 * Style.scaleHint)
     contentItem: Text {
         text: qsTr(primaryButton.text)
@@ -53,8 +53,8 @@ Button {
         smooth: true
         layer.enabled: true
         layer.effect: DropShadow {
-            horizontalOffset: primaryButton.pressed ? 0 : 10
-            verticalOffset: primaryButton.pressed ? 0 : 10
+            horizontalOffset: primaryButton.pressed ? 0 : 3
+            verticalOffset: primaryButton.pressed ? 0 : 3
             color:  shadowColor
             opacity: 0.4
             samples: 10
