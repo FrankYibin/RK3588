@@ -54,8 +54,11 @@ Item{
         spacing: Math.round(20 * Style.scaleHint)
         anchors.bottom: pandelSection.bottom
 
-        function valueToAngel(value)
+        function valueToAngel(negative, value)
         {
+            if(negative === true)
+                value += 600
+
             if(value < 0)
                 value = 0
             if(value > 1200)
@@ -66,7 +69,7 @@ Item{
         HBPandel
         {
             id: pandelDepth
-            angle: pandel.valueToAngel(Number(txtDepth.text))
+            angle: pandel.valueToAngel(false, Number(txtDepth.text))
 
             HBTextField
             {
@@ -109,7 +112,7 @@ Item{
         HBPandel
         {
             id: pandelVelocity
-            angle: pandel.valueToAngel(Number(txtVelocity.text))
+            angle: pandel.valueToAngel(false, Number(txtVelocity.text))
 
             HBTextField
             {
@@ -151,7 +154,7 @@ Item{
         HBPandel
         {
             id: pandelTension
-            angle: pandel.valueToAngel(Number(txtTension.text))
+            angle: (HBHome.isTensiometerOnline() === false) ? pandel.valueToAngel(false, 0) : pandel.valueToAngel(false, Number(txtTension.text))
 
             HBTextField
             {
@@ -164,8 +167,9 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: HBHome.TensionCurrent
+                text: (HBHome.isTensiometerOnline() === false) ? "-------" : HBHome.TensionCurrent
                 enabled: false
+                textColor: (HBHome.isTensiometerOnline() === false) ? Style.redFontColor : Style.whiteFontColor
 
             }
             Text
@@ -190,10 +194,12 @@ Item{
                 color: Style.whiteFontColor
             }
         }
+
         HBPandel
         {
             id: pandelTensionIncrement
-            angle: pandel.valueToAngel(Number(txtTensionIncrement.text))
+            negative: true
+            angle: (HBHome.isTensiometerOnline() === false) ? pandel.valueToAngel(true, 0) : pandel.valueToAngel(true, Number(txtTensionIncrement.text))
 
             HBTextField
             {
@@ -206,8 +212,9 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: HBHome.TensionCurrentDelta
+                text: (HBHome.isTensiometerOnline() === false)? "-------" : HBHome.TensionCurrentDelta
                 enabled: false
+                textColor: (HBHome.isTensiometerOnline() === false) ? Style.redFontColor : Style.whiteFontColor
 
             }
             Text
