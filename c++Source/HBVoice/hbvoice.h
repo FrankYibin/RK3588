@@ -23,12 +23,19 @@ public:
         TENSION_EXCEPTION,
         SURFACE_CLOSE_EXCEPTION,
         ENCODER_1_EXCEPTION,
-        ENCODER_2_EXCEPTION
+        ENCODER_2_EXCEPTION,
+        ENCODER_3_EXCEPTION,
+        DROWSY_DRIVING
     };
 public:
+//    explicit HBVoice(QObject *parent = nullptr);
+//    virtual ~HBVoice();
+    static HBVoice* GetInstance();
+    static bool PlayVoice(VOICE_EXCEPTION_INDEX index);
+
+private:
     explicit HBVoice(QObject *parent = nullptr);
     virtual ~HBVoice();
-    static bool PlayVoice(VOICE_EXCEPTION_INDEX index);
 
 signals:
 };

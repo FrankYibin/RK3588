@@ -99,9 +99,13 @@ Item{
                     property int previousX: 0
                     property int previousY: 0
                     onClicked: {
-                        tensionMeterTable.currentRow = styleData.row // Update the current row
-                        TensiometerManager.syncTensiometer(styleData.row)
-                        console.debug("Selected Row: ", tensionMeterTable.currentRow)
+
+                        mainWindow.showDialogScreen(qsTr("使用当前张力计： " + styleData.value), function(){
+                            tensionMeterTable.currentRow = styleData.row // Update the current row
+                            TensiometerManager.syncTensiometer(styleData.row)
+                            console.debug("Selected Row: ", tensionMeterTable.currentRow)
+                        })
+
                     }
 
                     onPressed: {
