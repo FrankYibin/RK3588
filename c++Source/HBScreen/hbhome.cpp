@@ -271,6 +271,34 @@ void HBHome::setStatusTensiometerOnline(const int status)
 }
 
 
+void HBHome::setAlarmEnabled(bool enabled)
+{
+    if (m_alarmEnabled == enabled)
+        return;
+
+    m_alarmEnabled = enabled;
+    emit alarmEnabledChanged();
+}
+
+bool HBHome::AlarmEnabled() const
+{
+    return m_alarmEnabled;
+}
+
+QString HBHome::alarmMessage() const
+{
+    return m_alarmMessage;
+}
+void HBHome::setAlarmMessage(const QString msg)
+{
+    if (m_alarmMessage != msg) {
+        m_alarmMessage = msg;
+        emit alarmMessageChanged();
+    }
+}
+
+
+
 
 
 

@@ -251,9 +251,6 @@ private:
     //historydata
     void InsertDataToDatabase();
 
-
-
-
     //Dashboard
     QString updateDepthInterface    (const int hexData, const int hexAddress);
     QString updateVelocityInterface (const int hexData, const int hexAddress);
@@ -300,6 +297,9 @@ private:
     DepthSetting::DISTANCE_UNIT m_DistanceUnit;
     DepthSetting::TIME_UNIT     m_TimeUnit;
     TensionSetting::FORCE_UNIT  m_ForceUnit;
+
+    MODBUS_IO_VALUE2 m_LastIO_Value2{};
+    MODBUS_IO_VALUE3 m_LastIO_Value3{};
 };
 
 #endif // HBMODBUSCLIENT_H
