@@ -1666,7 +1666,7 @@ void HBModbusClient::handleAlarm()
         bool isWellSurface = m_IO_Value2.bits_Value2.m_AlarmVelocity;
         if (isWellSurface) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::WELL_HEAD_EXCEPTION);
-            HBHome::GetInstance()->setAlarmMessage("上提至距井口 " + HBHome::GetInstance()->DepthCurrent() + " " + DepthSetting::GetInstance()->VelocityUnit());
+            HBHome::GetInstance()->setAlarmMessage("上提至距井口 " + HBHome::GetInstance()->DepthCurrent() + " 米");
         }
         HBHome::GetInstance()->setAlarmEnabled(isWellSurface);
     }
@@ -1676,7 +1676,7 @@ void HBModbusClient::handleAlarm()
         bool isTargetLayer = m_IO_Value2.bits_Value2.m_AlarmVelocity;
         if (isTargetLayer) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::TARGET_CLOSE_EXCEPTION);
-            HBHome::GetInstance()->setAlarmMessage("距井底 " + HBHome::GetInstance()->DepthCurrent() + " " + DepthSetting::GetInstance()->VelocityUnit());
+            HBHome::GetInstance()->setAlarmMessage("距井底 " + HBHome::GetInstance()->DepthCurrent() + " 米");
         }
         HBHome::GetInstance()->setAlarmEnabled(isTargetLayer);
 
@@ -1686,7 +1686,7 @@ void HBModbusClient::handleAlarm()
         bool isSurfaceCover= m_IO_Value2.bits_Value2.m_AlarmTension;
         if (isSurfaceCover) {
             HBVoice::GetInstance()->PlayVoice(HBVoice::SURFACE_CLOSE_EXCEPTION);
-            HBHome::GetInstance()->setAlarmMessage("上提至距表套" + DepthSetting::GetInstance()->DepthSurfaceCover() + " " + DepthSetting::GetInstance()->VelocityUnit());
+            HBHome::GetInstance()->setAlarmMessage("上提至距表套" + DepthSetting::GetInstance()->DepthSurfaceCover() + " 米");
         }
         HBHome::GetInstance()->setAlarmEnabled(isSurfaceCover);
     }
