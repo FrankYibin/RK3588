@@ -273,6 +273,15 @@ Item{
                 }
             }
         }
+
+        Text {
+            anchors.left: tensionMeterTable.left
+            anchors.verticalCenter: parent.verticalCenter
+            color: Style.whiteFontColor
+            text: qsTr("当前张力计编号: ") + HBHome.TensiometerNumber
+            font.family: Style.regular.name
+            font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+        }
     }
 }
 
