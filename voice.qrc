@@ -9,5 +9,7 @@
         <file>voice/06Surface.mp3</file>
         <file>voice/07Encoder1.mp3</file>
         <file>voice/08Encoder2.mp3</file>
+        <file>voice/09Encoder3.mp3</file>
+        <file>voice/10Drowsy.mp3</file>
     </qresource>
 </RCC>
