@@ -89,6 +89,7 @@ void messageHandler(QtMsgType type,
 int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+    qputenv("QT_VIRTUALKEYBOARD_LAYOUT", "pinyin");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
     //       db.testUpdate();
     // ModbusUtils modbusUtils;
     // modbusUtils.setModbusClient(&modbusClient);
-    HBVoice VoicePlayer;
+//    HBVoice VoicePlayer;
     HBUtilityClass::GetInstance();
 
     QString strOSIndicator = "None";

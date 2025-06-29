@@ -26,8 +26,8 @@ Item{
         anchors.left: parent.left
         height: parent.height / 2
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -293,7 +293,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.PulseCount
                     enabled: false
                 }
@@ -393,7 +393,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.TensiometerNumber
                     enabled: false
                 }
@@ -533,7 +533,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.TensionEncoder
                     enabled: false
                 }
@@ -668,13 +668,34 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.StatusTensiometerOnline
                     enabled: false
                 }
             }
-
         }
+    }
+    Text {
+        id: alarmText
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        padding: 8
+        visible: false
+        color: "red"
+        font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+        text: qsTr("注意请勿疲劳作业")
+
+        Timer {
+            id: hideTimer
+            interval: 4000
+            repeat: false
+            onTriggered: alarmText.visible = false
+        }
+    }
+    function showAlarm(msg) {
+        alarmText.text = msg
+        alarmText.visible = true
+        hideTimer.restart()
     }
 }
 

@@ -162,7 +162,7 @@ private:
             unsigned char m_AlarmEncoder1 : 1;
             unsigned char m_AlarmEncoder2 : 1;
             unsigned char m_AlarmEncoder3 : 1;
-            unsigned char m_ReservedValue3 : 4;
+            unsigned char m_AlarmDrowsy : 4;
         }bits_Value3;
     };
 

@@ -13,6 +13,7 @@
 #include "c++Source/HBScreen/autotestspeed.h"
 #include "c++Source/HBUtility/hbutilityclass.h"
 #include "c++Source/HBScreen/depthsiman.h"
+#include "c++Source/HBVoice/hbvoice.h"
 #include <QtConcurrent>
 #include <QHash>
 #include <cstring>
@@ -902,10 +903,10 @@ void HBModbusClient::handleRawData()
             // Tensiometer::GetInstance()->setTensiometerEncoder(iData);
             HBHome::GetInstance()->setTensionEncoder(iData);
             break;
-        // case HQmlEnum::TENSIOMETER_ANALOG:
-        //         iData = updateTensiometerAnalog(m_RecvReg.m_TensiometerAnalog.Data, m_RecvReg.m_TensiometerAnalog.Address);
-        //         Tensiometer::GetInstance()->setTensiometerAnalog(iData);
-        //     break;
+            // case HQmlEnum::TENSIOMETER_ANALOG:
+            //         iData = updateTensiometerAnalog(m_RecvReg.m_TensiometerAnalog.Data, m_RecvReg.m_TensiometerAnalog.Address);
+            //         Tensiometer::GetInstance()->setTensiometerAnalog(iData);
+            //     break;
         case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_H:
             strData = updateTwoDecimal(m_RecvReg.m_DistanceUpperWellSetting.Data, m_RecvReg.m_DistanceUpperWellSetting.Address);
             DepthSiMan::GetInstance()->setDistanceUpperWellSetting(strData);
@@ -1193,7 +1194,7 @@ QString HBModbusClient::updateTwoDecimal(const int hexData, const int hexAddress
     QString strData = "";
 #ifndef RK3588
     qDebug() << "Two Decimal Address: " << hexAddress << "----- Updated Two Decimal: " << hexData;
- #endif
+#endif
     strData = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2DECIMAL, hexData);
     return strData;
 }
@@ -1597,6 +1598,8 @@ void HBModbusClient::handleParseCoils(const QModbusDataUnit &result)
         case HQmlEnum::ALARM_ENCODER3:
             m_IO_Value3.bits_Value3.m_AlarmEncoder3 = val ? 1 : 0;
             break;
+        case HQmlEnum::ALARM_COILS_END:
+            m_IO_Value3.bits_Value3.m_AlarmDrowsy = val ? 1 : 0;
         case HQmlEnum::ENABLE_SIMAN_CONTROL:
             m_IO_Value4.bits_Value4.m_EnableSimanControl = val ? 1 : 0;
             break;
@@ -1652,6 +1655,28 @@ void HBModbusClient::handleAlarm()
 
 void HBModbusClient::handleCANbus()
 {
+    if(m_IO_Value2.bits_Value2.m_AlarmVelocity)
+         HBVoice::GetInstance()->PlayVoice(HBVoice::EXCEED_VELOCITY_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmWellSurface)
+         HBVoice::GetInstance()->PlayVoice(HBVoice::WELL_HEAD_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmTargetLayer)
+         HBVoice::GetInstance()->PlayVoice(HBVoice::TARGET_CLOSE_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmSurfaceCover)
+         HBVoice::GetInstance()->PlayVoice(HBVoice::SURFACE_CLOSE_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmTension)
+         HBVoice::GetInstance()->PlayVoice(HBVoice::TENSION_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow)
+         HBVoice::GetInstance()->PlayVoice(HBVoice::LOCKED_EXCEPTION);
+    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop)
+         HBVoice::GetInstance()->PlayVoice(HBVoice:: BLOCKED_EXCEPTION);
+    if(m_IO_Value3.bits_Value3.m_AlarmEncoder1)
+        HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_1_EXCEPTION);
+    if(m_IO_Value3.bits_Value3.m_AlarmEncoder2)
+        HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_2_EXCEPTION);
+    if(m_IO_Value3.bits_Value3.m_AlarmEncoder3)
+        HBVoice::GetInstance()->PlayVoice(HBVoice::ENCODER_3_EXCEPTION);
+    if (m_IO_Value3.bits_Value3.m_AlarmDrowsy)
+        HBVoice::GetInstance()->PlayVoice(HBVoice::DROWSY_DRIVING);
 
 }
 
