@@ -278,13 +278,13 @@ QString WellParameter::findWellSettingsPath()
 
 void WellParameter::ensureWellSettingsFileExists()
 {
-    QString configPath = QCoreApplication::applicationDirPath() + "/wellsettings.ini";
+    QString wellsettingPath = QCoreApplication::applicationDirPath() + "/wellsettings.ini";
 
-    if (!QFile::exists(configPath)) {
-        if (!QFile::copy(":/misc/wellsettings.ini", configPath)) {
+    if (!QFile::exists(wellsettingPath)) {
+        if (!QFile::copy(":/misc/wellsettings.ini", wellsettingPath)) {
             qDebug() << "Failed to copy wellsettings.ini from resources!";
         } else {
-            qDebug() << "wellsettings.ini copied from resources to " << configPath;
+            qDebug() << "wellsettings.ini copied from resources to " << wellsettingPath;
         }
     }
 }
