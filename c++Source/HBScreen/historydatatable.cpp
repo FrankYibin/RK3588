@@ -104,9 +104,10 @@ void HistoryDataTable::loadFromDatabase(const QDateTime &start, const QDateTime 
     endResetModel();
 }
 
-bool HistoryDataTable:: exportData()
+bool HistoryDataTable::isAvailaleDiskUSB()
 {
     bool bResult = false;
+    m_USBDirectory.clear();
 #ifdef RK3588
     // 导出到CSV文件
     QString filePath = "";
@@ -127,11 +128,27 @@ bool HistoryDataTable:: exportData()
             if(strPath.contains("/run/media/"))
             {
                 if(strPath.contains("/run/media/mmcblk") == false)
-                    filePath = strPath + "/output.csv";
+                {
+                    m_USBDirectory = strPath + "/output.csv";
+                    bResult = true;
+                    break;
+                }
+                else
+                    m_USBDirectory.clear();
             }
+            else
+                m_USBDirectory.clear();
         }
     }
-    if(filePath.isEmpty() == true)
+#endif
+    return bResult;
+}
+
+bool HistoryDataTable:: exportData()
+{
+    bool bResult = false;
+
+    if(m_USBDirectory.isEmpty() == true)
         return false;
     QList<QStringList> rows;
     QStringList headers = {"井号", "时间", "工种", "操作员", "深度", "速度","速度单位","张力","张力增量","张力单位","最大张力",
@@ -158,8 +175,7 @@ bool HistoryDataTable:: exportData()
         };
         rows.append(value);
     }
-    bResult = ExportToCSV(filePath, headers, rows);
-#endif
+    bResult = ExportToCSV(m_USBDirectory, headers, rows);
     return bResult;
 }
 

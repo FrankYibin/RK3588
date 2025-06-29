@@ -101,6 +101,7 @@ public:
     void setTensionEncoder(const int value);
 
     Q_INVOKABLE QString StatusTensiometerOnline() const;
+    Q_INVOKABLE bool isTensiometerOnline() const;
     Q_INVOKABLE void setStatusTensiometerOnline(const QString status);
     void setStatusTensiometerOnline(const int status);
 
@@ -163,6 +164,7 @@ private:
     QString m_TensiometerNumber;
     QString m_TensionEncoder;
     QString m_StatusTensiometerOnline;
+    bool    m_isTensiometerOnline;
 
 };
 

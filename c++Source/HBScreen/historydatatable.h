@@ -43,6 +43,7 @@ public:
 
     Q_INVOKABLE void loadFromDatabase(const QDateTime& start, const QDateTime& end);
 
+    Q_INVOKABLE bool isAvailaleDiskUSB();
     Q_INVOKABLE bool exportData();
 public slots:
 
@@ -53,6 +54,7 @@ private:
     QList<HistoryData>  m_dataList;
     QDateTime           m_start;
     QDateTime           m_end;
+    QString             m_USBDirectory;
     static HistoryDataTable* _ptrHistoryDataTable;
 private:
     bool ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data);
