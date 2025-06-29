@@ -1,6 +1,7 @@
 ﻿import QtQuick 2.0
 import QtGraphicalEffects 1.15
 import Style 1.0
+import QtQuick.Controls 2.15
 import Com.Branson.UIScreenEnum 1.0
 import UserGlobalDefine 1.0
 import HB.Database 1.0
@@ -215,7 +216,7 @@ Item{
 
             if (username === "" || password === "") {
                 console.log("用户名和密码不能为空")
-                mainWindow.showDialogScreen(qsTr("用户名和密码不能为空"), null)
+                mainWindow.showDialogScreen(qsTr("用户名和密码不能为空"), Dialog.Ok, null)
                 return
             }
 
@@ -239,7 +240,7 @@ Item{
             else
             {
                 console.log("添加失败")
-                mainWindow.showDialogScreen(qsTr("用户名已存在"), null)
+                mainWindow.showDialogScreen(qsTr("用户名已存在"), Dialog.Ok, null)
             }
         }
     }

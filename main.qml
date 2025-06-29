@@ -317,9 +317,10 @@ Window{
         primaryNumpad.visible = true
     }
 
-    function showDialogScreen(strText, onConfirmCallback)
+    function showDialogScreen(strText, standardButtons, onConfirmCallback)
     {
         infoDialog.contentText = strText
+        infoDialog.standardButtons = standardButtons
         infoDialog.confirmCallback = onConfirmCallback
         infoDialog.open()
     }

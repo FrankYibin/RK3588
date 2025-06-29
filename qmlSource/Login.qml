@@ -155,17 +155,17 @@ Rectangle{
                 //     mainWindow.loginProcess()
                 if(userInput.text === "")
                 {
-                    mainWindow.showDialogScreen(qsTr("用户名不能为空"), null)
+                    mainWindow.showDialogScreen(qsTr("用户名不能为空"), Dialog.Ok, null)
                 }
                 else if(passwordInput.text === "")
                 {
-                    mainWindow.showDialogScreen(qsTr("密码不能为空"), null)
+                    mainWindow.showDialogScreen(qsTr("密码不能为空"), Dialog.Ok, null)
                 }
                 else if(UserModel.validateUser(userInput.text, passwordInput.text) === true)
                     mainWindow.loginProcess()
                 else
                 {
-                    mainWindow.showDialogScreen(qsTr("此用户不存在或密码错误"), null)
+                    mainWindow.showDialogScreen(qsTr("此用户不存在或密码错误"), Dialog.Ok, null)
                 }
             }
         }

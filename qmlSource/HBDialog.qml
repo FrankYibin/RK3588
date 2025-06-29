@@ -8,7 +8,7 @@ Dialog {
     visible: true
     title: "Blue sky dialog"
     modal: true
-    standardButtons: Dialog.Ok
+    standardButtons: Dialog.Ok | Dialog.Cancel
     contentItem: Rectangle {
         color: Style.hbButtonBackgroundColor
         anchors.fill: parent
@@ -36,16 +36,33 @@ Dialog {
         width: parent.width
         height: Math.round(40 * Style.scaleHint)
         color: Style.hbButtonBackgroundColor
-        HBPrimaryButton
-        {
-            width: Math.round(100 * Style.scaleHint)
+        Row{
+            width: (myDialog.standardButtons === Dialog.Ok) ? Math.round(100 * Style.scaleHint) : Math.round( 210 * Style.scaleHint)
             height: Math.round(30 * Style.scaleHint)
-            buttonColor: Style.backgroundLightColor
             anchors.centerIn: parent
-            text: qsTr("确认")
-            onClicked:
+            spacing: Math.round(10 * Style.scaleHint)
+            HBPrimaryButton
             {
-                myDialog.accept()
+                width: Math.round(100 * Style.scaleHint)
+                height: Math.round(30 * Style.scaleHint)
+                buttonColor: Style.backgroundLightColor
+                text: qsTr("取消")
+                visible: (myDialog.standardButtons === Dialog.Ok) ? false : true
+                onClicked:
+                {
+                    myDialog.reject()
+                }
+            }
+            HBPrimaryButton
+            {
+                width: Math.round(100 * Style.scaleHint)
+                height: Math.round(30 * Style.scaleHint)
+                buttonColor: Style.backgroundLightColor
+                text: qsTr("确认")
+                onClicked:
+                {
+                    myDialog.accept()
+                }
             }
         }
     }
