@@ -20,7 +20,7 @@ import Style 1.0
 TextField {
     id: hbTextField
     property alias text: hbTextField.text
-    property bool onlyForNumpad: false
+    property bool onlyForNumpad: true
     property bool isSelectedAll: false
     property int fontSize: Math.round(Style.style5 * Style.scaleHint)
     property string backgroundColor: Style.hbFrameBackgroundColor

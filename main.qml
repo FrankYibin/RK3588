@@ -315,6 +315,7 @@ Window{
         primaryNumpad.targetTextField = targetObj
         primaryNumpad.confirmCallback = onConfirmCallback
         primaryNumpad.visible = true
+        primaryNumpad.selectAll()
     }
 
     function showDialogScreen(strText, standardButtons, onConfirmCallback)
