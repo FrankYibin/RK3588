@@ -290,6 +290,9 @@ private:
     int     MakeReportData(char* pBuffer, int deep, int speed, int tension, int tension_delta, short pulse, short kValue, char* wellNum);
     int     MakeReport(const char* pData, int len, char* pOutbuf);
 
+    QString getVelocityUnitString();
+    QString getTensionUnitString();
+
 signals:
 
 private:

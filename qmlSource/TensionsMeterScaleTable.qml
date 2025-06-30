@@ -223,11 +223,13 @@ Item{
                         width: Math.round(80 * Style.scaleHint)
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: tensionMeterTable.fontSize
+                        visible: TensiometerManager.count > 1
                         onClicked: {
                             var index = styleData.row;
                             if (index >= 0 && index < TensiometerManager.rowCount())
                             {
                                 TensiometerManager.removeTensiometer(index);
+                                console.log("当前行数：" ,TensiometerManager.rowCount())
                                 tensionMeterTable.currentRow = -1;
                             }
                         }

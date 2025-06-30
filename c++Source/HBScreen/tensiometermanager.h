@@ -10,7 +10,7 @@
 class TensiometerManager : public QAbstractListModel {
     Q_OBJECT
 
-    // Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
+     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 public:
     enum TensiometerRoles {
         NumberRole = Qt::UserRole + 1,
@@ -38,6 +38,7 @@ public:
 protected:
     explicit TensiometerManager(QObject *parent = nullptr);
 signals:
+     void countChanged();
 
 public slots:
     void UpdateTensiometer(const int index, const QString scale);
