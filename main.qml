@@ -679,10 +679,10 @@ Window{
                 }
             }
 
-//         Component.onCompleted: {
-// //            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
-//             VirtualKeyboardSettings.locale = "en_US"
-//         }
+         Component.onCompleted: {
+ //            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
+             VirtualKeyboardSettings.locale = "zh_CN"
+         }
     }
 
     HBDepthCountDown {
