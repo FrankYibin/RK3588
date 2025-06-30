@@ -112,7 +112,10 @@ Item {
         else
         {
             var strInputText = text_input.text
-            strInputText += data
+            if(text_input.isSelectedAll === true)
+                strInputText = data
+            else
+                strInputText += data
             if(BransonNumpadDefine.isValidData(strInputText, suffix) === true)
             {
                 text_input.text = strInputText

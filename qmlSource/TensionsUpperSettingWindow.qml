@@ -14,14 +14,14 @@ import TensionsGlobalDefine 1.0
 
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_TENSIONS_SETTING
-    readonly property int textWidthColumn1: 100
-    readonly property int textWidthColumn2: 130
+    readonly property int textWidthColumn1: 90
+    readonly property int textWidthColumn2: 120
     readonly property int textWidthColumn3: 80
     readonly property int textWidthUnit: 20
-    readonly property int componentWidth: 60
+    readonly property int componentWidth: 85
     readonly property int comboxWidth: 60 + 20 + 10 + 20
     readonly property int rowSpacing: 10
-    readonly property int columnSpacing: 10
+    readonly property int columnSpacing: 12
     readonly property int optionHeight: 30
     Rectangle
     {
@@ -54,7 +54,7 @@ Item{
             columns: 3
             rows: 3
             rowSpacing: Math.round(20 * Style.scaleHint)
-            columnSpacing: Math.round(30 * Style.scaleHint)
+            columnSpacing: Math.round(5 * Style.scaleHint)
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
@@ -66,7 +66,7 @@ Item{
                     height: parent.height
                     text: qsTr("油气井类型") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -96,7 +96,7 @@ Item{
                     height: parent.height
                     text: qsTr("电缆每千米重量") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -142,7 +142,7 @@ Item{
                     height: parent.height
                     text: qsTr("作业类型") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -172,7 +172,7 @@ Item{
                     height: parent.height
                     text: qsTr("仪器串重量") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -219,7 +219,7 @@ Item{
                     height: parent.height
                     text: qsTr("电缆拉断力") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -266,7 +266,7 @@ Item{
                     height: parent.height
                     text: qsTr("弱点拉断力") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -314,7 +314,7 @@ Item{
                     height: parent.height
                     text: qsTr("极限张力") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -360,7 +360,7 @@ Item{
                     height: parent.height
                     text: qsTr("安全张力系数") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -405,7 +405,7 @@ Item{
             columns: 3
             rows: 3
             rowSpacing: Math.round(20 * Style.scaleHint)
-            columnSpacing: Math.round(30 * Style.scaleHint)
+            columnSpacing: Math.round(5 * Style.scaleHint)
 
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
@@ -417,7 +417,7 @@ Item{
                     height: parent.height
                     text: qsTr("当前安全张力") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -456,7 +456,7 @@ Item{
                     height: parent.height
                     text: qsTr("缆头张力变化趋势") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -485,7 +485,7 @@ Item{
                     height: parent.height
                     text: qsTr("编码器1深度") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -524,7 +524,7 @@ Item{
                     height: parent.height
                     text: qsTr("最大安全张力") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -563,7 +563,7 @@ Item{
                     height: parent.height
                     text: qsTr("安全停车时间") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -602,7 +602,7 @@ Item{
                     height: parent.height
                     text: qsTr("编码器2深度") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -641,7 +641,7 @@ Item{
                     height: parent.height
                     text: qsTr("当前缆头张力") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -680,7 +680,7 @@ Item{
                     height: parent.height
                     text: qsTr("深度误差") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }
@@ -719,7 +719,7 @@ Item{
                     height: parent.height
                     text: qsTr("编码器3深度") + ":"
                     font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+                    font.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
                 }

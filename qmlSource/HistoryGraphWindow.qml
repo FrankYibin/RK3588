@@ -180,7 +180,7 @@ Item{
                     onClicked:
                     {
                         SensorGraphData.exportData()
-                        mainWindow.showDialogScreen(qsTr("导出数据已完成"),function(val){
+                        mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, function(val){
                             console.debug("Dialog Function Callback")
                         })
                     }

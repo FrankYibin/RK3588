@@ -33,6 +33,12 @@ Item {
     signal valueUpdated(string newValue)
     property var confirmCallback
 
+    function selectAll()
+    {
+        input.selectAll();
+        input.isSelectedAll = true
+    }
+
     function slotDigitalKeyPressed(data)
     {
         BransonNumpadDefine.handleWithDigitalKeyInput(data, input, suffix)
@@ -127,7 +133,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.round(260 * Style.scaleHint)
                 height: Math.round(30 * Style.scaleHint)
-                focus: false
+                focus: true
                 onlyForNumpad: true
                 onTextChanged:
                 {

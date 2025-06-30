@@ -6,6 +6,7 @@ Item
     width: 240
     height: 240
     property real angle: 0.0
+    property bool negative: false
 
 
     onAngleChanged:
@@ -95,11 +96,14 @@ Item
                     ctx.stroke()
                     if(i % 10 === 0)
                     {
-                        ctx.font = Math.round(Style.style1 * Style.scaleHint) + "px Arial";
+                        ctx.font = Math.round(Style.style1 * Style.scaleHint) + "px sans-serif";
                         ctx.fillStyle = "white"
                         ctx.textAlign = "center"
                         ctx.textBaseline = "middle"
-                        ctx.fillText(i / 10, center + (radius + 15) * Math.cos(rad), center + (radius + 15) * Math.sin(rad))
+                        if(negative == false)
+                            ctx.fillText(i / 10, center + (radius + 15) * Math.cos(rad), center + (radius + 15) * Math.sin(rad))
+                        else
+                            ctx.fillText((i - config.count / 2) / 10, center + (radius + 15) * Math.cos(rad), center + (radius + 15) * Math.sin(rad))
                     }
                 }
 

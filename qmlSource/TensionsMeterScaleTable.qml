@@ -21,8 +21,18 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+        }
+    }
+    Component.onCompleted:
+    {
+        var strNumber = HBHome.TensiometerNumber;
+        var rowIndex = TensiometerManager.checkTensiometerNumber(strNumber);
+        if (rowIndex !== -1)
+        {
+            tensionMeterTable.currentRow = rowIndex;
+            TensiometerManager.resetModel();
         }
     }
 
@@ -45,14 +55,13 @@ Item{
         isMouseMoving: false
         rowDelegate: Rectangle{
             height: tensionMeterTable.rowHeight
-            color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
-
+            color: (styleData.row === tensionMeterTable.currentRow ? Style.backgroundDeepColor : Style.backgroundLightColor)
         }
+
 
         TableViewColumn {
             role: "Index";              title: qsTr("");                width: 30;
             delegate: Rectangle {
-
                 height: tensionMeterTable.rowHeight
                 width: styleData.columnWidth
                 color: (styleData.row === tensionMeterTable.currentRow) ? Style.backgroundDeepColor : Style.backgroundLightColor
@@ -78,6 +87,7 @@ Item{
                 Text {
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
+                    //                    text: styleData.value
                     text: styleData.value
                     font.family: Style.regular.name
                     font.pixelSize: tensionMeterTable.fontSize
@@ -89,9 +99,13 @@ Item{
                     property int previousX: 0
                     property int previousY: 0
                     onClicked: {
-                        tensionMeterTable.currentRow = styleData.row // Update the current row
-                        TensiometerManager.syncTensiometer(styleData.row)
-                        console.debug("Selected Row: ", tensionMeterTable.currentRow)
+
+                        mainWindow.showDialogScreen(qsTr("使用当前张力计： " + styleData.value), Dialog.Ok | Dialog.Cancel, function(){
+                            tensionMeterTable.currentRow = styleData.row // Update the current row
+                            TensiometerManager.syncTensiometer(styleData.row)
+                            console.debug("Selected Row: ", tensionMeterTable.currentRow)
+                        })
+
                     }
 
                     onPressed: {
@@ -209,11 +223,13 @@ Item{
                         width: Math.round(80 * Style.scaleHint)
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: tensionMeterTable.fontSize
+                        visible: TensiometerManager.count > 1
                         onClicked: {
                             var index = styleData.row;
                             if (index >= 0 && index < TensiometerManager.rowCount())
                             {
                                 TensiometerManager.removeTensiometer(index);
+                                console.log("当前行数：" ,TensiometerManager.rowCount())
                                 tensionMeterTable.currentRow = -1;
                             }
                         }
@@ -221,7 +237,6 @@ Item{
                 }
             }
         }
-
     }
 
     Item{
@@ -263,6 +278,15 @@ Item{
                     }
                 }
             }
+        }
+
+        Text {
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            color: Style.whiteFontColor
+            text: qsTr("当前张力计编号: ") + HBHome.TensiometerNumber
+            font.family: Style.regular.name
+            font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
         }
     }
 }

@@ -47,7 +47,7 @@ private:
     explicit TensionSetting(QObject *parent = nullptr);
 
 signals:
-    void TensionUnitChanged();
+    void TensionUnitChanged(int Unit);
     void KValueChanged();
     void TensionLimitedChanged();
     void TensionLimitedDeltaChanged();

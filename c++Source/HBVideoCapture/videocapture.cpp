@@ -171,6 +171,7 @@ VideoCapture *VideoCapture::GetInstance()
 
 bool VideoCapture::detectFaceImage()
 {
+#ifdef RK3588
     // 创建 QProcess 对象
     QProcess process;
 
@@ -218,17 +219,19 @@ bool VideoCapture::detectFaceImage()
     }
     if((m_ComparedResult.Errno == 0) && (m_ComparedResult.Score > 80))
     {
-        QStringList strList = m_ComparedResult.UserID.split("_");
-        if(UserManagerModel::GetInstance().validateUser(strList[0], strList[1]) == false)
+        QString userId = m_ComparedResult.UserID;
+        if(UserManagerModel::GetInstance().ValidateUser(userId) == false)
             return false;
     }
     else
         return false;
+#endif
     return true;
 }
 
 bool VideoCapture::generateFaceEigenValue(QString userId)
 {
+#ifdef RK3588
     // 创建 QProcess 对象
     QProcess process;
 
@@ -278,11 +281,13 @@ bool VideoCapture::generateFaceEigenValue(QString userId)
     {
         return false;
     }
+#endif
     return true;
 }
 
 bool VideoCapture::deleteFaceRecord(QString userId)
 {
+#ifdef RK3588
     // 创建 QProcess 对象
     QProcess process;
 
@@ -323,25 +328,14 @@ bool VideoCapture::deleteFaceRecord(QString userId)
     if (!error.isEmpty()) {
         qDebug() << "Command Error:" << error;
     }
+#endif
     return false;
 }
 
 bool VideoCapture::getUsersList()
 {
-
-    // QString cmd = QString("./factTest.sh -get userlist HB");
+#ifdef RK3588
     QProcess process;
-    // process.setProcessChannelMode(QProcess::MergedChannels);
-    // QStringList cmdlist;
-    // process.start("bash", cmdlist);
-    // if(!process.waitForStarted())
-    // {
-    //     qDebug() << "Failed to start process";
-    //     return false;
-    // }
-
-    // qDebug() << "Cmd: " << cmd;
-
     // 设置要执行的命令
     QString program = "./faceTest.sh"; // 你可以替换为其他 Linux 命令
     QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
@@ -378,6 +372,7 @@ bool VideoCapture::getUsersList()
     if (!error.isEmpty()) {
         qDebug() << "Command Error:" << error;
     }
+#endif
     return false;
 }
 

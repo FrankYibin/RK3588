@@ -88,6 +88,8 @@ Item {
     property color hbPandelCentralBackgroundColor: "#272727"
     property color hbSectionBackGroundColor: "#005d92"
     property color hbRadioButtonBorderColor: "#FFFFFF"
+    property color hbButtonCVBackgroundColor: "#A0CF67"
+
 
     property real scaleHint: 1.0
 }

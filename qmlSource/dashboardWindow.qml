@@ -7,6 +7,7 @@ import DepthGlobalDefine 1.0
 import TensionsGlobalDefine 1.0
 Item{
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DASHBOARD
+    readonly property int textFieldWidth: 110
     Rectangle{
         id: background
         anchors.fill: parent
@@ -25,8 +26,8 @@ Item{
         anchors.left: parent.left
         height: parent.height / 2
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -53,8 +54,11 @@ Item{
         spacing: Math.round(20 * Style.scaleHint)
         anchors.bottom: pandelSection.bottom
 
-        function valueToAngel(value)
+        function valueToAngel(negative, value)
         {
+            if(negative === true)
+                value += 600
+
             if(value < 0)
                 value = 0
             if(value > 1200)
@@ -65,7 +69,7 @@ Item{
         HBPandel
         {
             id: pandelDepth
-            angle: pandel.valueToAngel(Number(txtDepth.text))
+            angle: pandel.valueToAngel(false, Number(txtDepth.text))
 
             HBTextField
             {
@@ -73,7 +77,7 @@ Item{
                 anchors.top: pandelDepth.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: pandelDepth.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
@@ -108,7 +112,7 @@ Item{
         HBPandel
         {
             id: pandelVelocity
-            angle: pandel.valueToAngel(Number(txtVelocity.text))
+            angle: pandel.valueToAngel(false, Number(txtVelocity.text))
 
             HBTextField
             {
@@ -116,7 +120,7 @@ Item{
                 anchors.top: pandelVelocity.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: pandelVelocity.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
@@ -150,7 +154,7 @@ Item{
         HBPandel
         {
             id: pandelTension
-            angle: pandel.valueToAngel(Number(txtTension.text))
+            angle: (HBHome.isTensiometerOnline() === false) ? pandel.valueToAngel(false, 0) : pandel.valueToAngel(false, Number(txtTension.text))
 
             HBTextField
             {
@@ -158,13 +162,14 @@ Item{
                 anchors.top: parent.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: HBHome.TensionCurrent
+                text: (HBHome.isTensiometerOnline() === false) ? "-------" : HBHome.TensionCurrent
                 enabled: false
+                textColor: (HBHome.isTensiometerOnline() === false) ? Style.redFontColor : Style.whiteFontColor
 
             }
             Text
@@ -189,10 +194,12 @@ Item{
                 color: Style.whiteFontColor
             }
         }
+
         HBPandel
         {
             id: pandelTensionIncrement
-            angle: pandel.valueToAngel(Number(txtTensionIncrement.text))
+            negative: true
+            angle: (HBHome.isTensiometerOnline() === false) ? pandel.valueToAngel(true, 0) : pandel.valueToAngel(true, Number(txtTensionIncrement.text))
 
             HBTextField
             {
@@ -200,13 +207,14 @@ Item{
                 anchors.top: parent.bottom
                 anchors.topMargin: Math.round(20 * Style.scaleHint)
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.round(90 * Style.scaleHint)
+                width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: HBHome.TensionCurrentDelta
+                text: (HBHome.isTensiometerOnline() === false)? "-------" : HBHome.TensionCurrentDelta
                 enabled: false
+                textColor: (HBHome.isTensiometerOnline() === false) ? Style.redFontColor : Style.whiteFontColor
 
             }
             Text
@@ -285,7 +293,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.PulseCount
                     enabled: false
                 }
@@ -385,7 +393,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.TensiometerNumber
                     enabled: false
                 }
@@ -525,7 +533,7 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.TensionEncoder
                     enabled: false
                 }
@@ -660,13 +668,22 @@ Item{
                     width: Math.round(sensorInfo.textWidth * Style.scaleHint)
                     height: parent.height
                     font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
-                   // text: "100"
+                    // text: "100"
                     text: HBHome.StatusTensiometerOnline
                     enabled: false
                 }
             }
-
         }
+    }
+    Text {
+        id: alarmText
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        padding: 8
+        visible: HBHome.alarmEnabled
+        color: "red"
+        font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+        text: HBHome.alarmMessage
     }
 }
 

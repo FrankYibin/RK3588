@@ -106,12 +106,22 @@ signals:
     void ThemeIndexChanged();
     void LanguageIndexChanged();
 
+    void VelocityUnitChanged();
+    void TensionUnitChanged();
+
 private:
     explicit Configuration(QObject *parent = nullptr);
 
     Configuration(const Configuration&) = delete;
     Configuration& operator=(const Configuration&) = delete;
     static Configuration* _ptrConfiguration;
+
+    void InitUnits();
+    void ensureConfigSettingsFileExists();
+
+private slots:
+    void onDepthVelocityUnitChanged(int unit);
+    void onTensionUnitChanged(int unit);
 
 private:
     QString  m_baudRate;
@@ -132,6 +142,9 @@ private:
     int  m_languageIndex;
 
     QSettings m_settings;
+
+    int m_velocityUnit;
+    int m_tensionUnit;
 
 
 };

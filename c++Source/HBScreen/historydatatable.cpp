@@ -4,6 +4,7 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QStringList>
+#include <QStorageInfo>
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
@@ -103,16 +104,57 @@ void HistoryDataTable::loadFromDatabase(const QDateTime &start, const QDateTime 
     endResetModel();
 }
 
-void HistoryDataTable:: exportData()
+bool HistoryDataTable::isAvailaleDiskUSB()
 {
+    bool bResult = false;
+    m_USBDirectory.clear();
 #ifdef RK3588
+    // 导出到CSV文件
+    QString filePath = "";
+    QString strPath = "";
+    filePath.clear();
+    strPath.clear();
+    foreach (const QStorageInfo &storage, QStorageInfo::mountedVolumes())
+    {
+        if(storage.isReady())
+        {
+            qDebug() << "Found USB Drive:";
+            strPath = storage.rootPath();
+            qDebug() << "Path:" << storage.rootPath();
+            qDebug() << "File System Type: " << storage.fileSystemType();
+            qDebug() << "Total Size: " << storage.bytesTotal() / (1024 * 1024) << "MB";
+            qDebug() << "Available Size: " << storage.bytesAvailable() / (1024 * 1024) << "MB";
+            qDebug() << "-------------------------";
+            if(strPath.contains("/run/media/"))
+            {
+                if(strPath.contains("/run/media/mmcblk") == false)
+                {
+                    m_USBDirectory = strPath + "/output.csv";
+                    bResult = true;
+                    break;
+                }
+                else
+                    m_USBDirectory.clear();
+            }
+            else
+                m_USBDirectory.clear();
+        }
+    }
+#endif
+    return bResult;
+}
+
+bool HistoryDataTable:: exportData()
+{
+    bool bResult = false;
+
+    if(m_USBDirectory.isEmpty() == true)
+        return false;
     QList<QStringList> rows;
     QStringList headers = {"井号", "时间", "工种", "操作员", "深度", "速度","速度单位","张力","张力增量","张力单位","最大张力",
                            "缆头张力", "安全张力",
                            "异常数据标识"   };
 
-    // 导出到CSV文件
-    QString filePath = "/run/media/sdb1/output.csv";
     for(int i=0;i<m_dataList.count();i++)
     {
         QStringList value= {
@@ -133,17 +175,17 @@ void HistoryDataTable:: exportData()
         };
         rows.append(value);
     }
-    ExportToCSV(filePath, headers, rows);
-#endif
+    bResult = ExportToCSV(m_USBDirectory, headers, rows);
+    return bResult;
 }
 
 
-void HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data)
+bool HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "无法打开文件：" << filePath;
-        return;
+        return false;
     }
 
     QTextStream out(&file);
@@ -158,4 +200,5 @@ void HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& 
 
     file.close();
     qDebug() << "数据已成功导出到：" << filePath;
+    return true;
 }

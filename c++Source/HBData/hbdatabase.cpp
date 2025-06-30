@@ -31,20 +31,13 @@ HBDatabase::~HBDatabase()
 
 void HBDatabase::init()
 {
-    QDir execDir(QCoreApplication::applicationDirPath());
-    QString dbPath = execDir.filePath("DVTT.db");
-
+    QString dbPath = QCoreApplication::applicationDirPath() + "/DVTT.db";
     if (!QFile::exists(dbPath)) {
-        QString srcPath = execDir.absoluteFilePath("../DVTT.db");
-        if (QFile::exists(srcPath)) {
-            qDebug() << "Copying DVTT.db from" << srcPath << "to" << dbPath;
-            if (!QFile::copy(srcPath, dbPath)) {
-                qWarning() << "Failed to copy database file from" << srcPath << "to" << dbPath;
-                return;
-            }
-        } else {
-            qWarning() << "Source database file not found at" << srcPath;
+        if (!QFile::copy(":/misc/DVTT.db", dbPath)) {
+            qWarning() << "Failed to copy DVTT.db from resources to" << dbPath;
             return;
+        } else {
+            qDebug() << "DVTT.db copied from resources to" << dbPath;
         }
     }
 
@@ -1213,6 +1206,31 @@ bool HBDatabase::QueryUser(const QString username, const QString password, int& 
     query.prepare("SELECT username, password, groupindex, createtime FROM userinfo WHERE username = :username AND password = :password");
     query.bindValue(":username", username);
     query.bindValue(":password", password);
+
+    if (!query.exec()) {
+        qDebug() << "Query user data failed:" << query.lastError();
+        return false;
+    }
+
+    if (!query.next()) {
+        qDebug() << "No user data found for username:" << username;
+        return false;
+    }
+    else
+    {
+        groupId = query.value(2).toInt();
+    }
+
+    bResult = true;
+    return bResult;
+}
+
+bool HBDatabase::QueryUser(const QString username, int &groupId)
+{
+    bool bResult = false;
+    QSqlQuery query(m_database);
+    query.prepare("SELECT username, password, groupindex, createtime FROM userinfo WHERE username = :username");
+    query.bindValue(":username", username);
 
     if (!query.exec()) {
         qDebug() << "Query user data failed:" << query.lastError();

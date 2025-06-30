@@ -46,9 +46,14 @@ class HBHome : public QObject
     //NetworkStatus   网络状态
     Q_PROPERTY(int StatusNetwork READ StatusNetwork WRITE setStatusNetwork NOTIFY StatusNetworkChanged)
 
-    Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY TensiometerNumberChanged)
+    Q_PROPERTY(QString TensiometerNumber READ TensiometerNumber WRITE setTensiometerNumber NOTIFY tensiometerNumberChanged)
     Q_PROPERTY(QString TensionEncoder READ TensionEncoder WRITE setTensionEncoder NOTIFY TensionEncoderChanged)
     Q_PROPERTY(QString StatusTensiometerOnline READ StatusTensiometerOnline WRITE setStatusTensiometerOnline NOTIFY StatusTensiometerOnlineChanged)
+
+    Q_PROPERTY(bool alarmEnabled READ AlarmEnabled WRITE setAlarmEnabled NOTIFY alarmEnabledChanged)
+
+    Q_PROPERTY(QString alarmMessage READ alarmMessage WRITE setAlarmMessage NOTIFY alarmMessageChanged)
+
 
 public:
 
@@ -101,10 +106,16 @@ public:
     void setTensionEncoder(const int value);
 
     Q_INVOKABLE QString StatusTensiometerOnline() const;
+    Q_INVOKABLE bool isTensiometerOnline() const;
     Q_INVOKABLE void setStatusTensiometerOnline(const QString status);
     void setStatusTensiometerOnline(const int status);
 
 
+    bool AlarmEnabled() const;
+    void setAlarmEnabled(bool enabled);
+
+    QString alarmMessage() const;
+    void setAlarmMessage(const QString msg);
 
 signals:
 
@@ -134,9 +145,11 @@ signals:
 
     void StatusNetworkChanged();
 
-    void TensiometerNumberChanged();
+    void tensiometerNumberChanged();
     void TensionEncoderChanged();
     void StatusTensiometerOnlineChanged();
+    void alarmEnabledChanged();
+    void alarmMessageChanged();
 
 private:
     explicit HBHome(QObject *parent = nullptr);
@@ -163,6 +176,9 @@ private:
     QString m_TensiometerNumber;
     QString m_TensionEncoder;
     QString m_StatusTensiometerOnline;
+    bool    m_isTensiometerOnline;
+    bool    m_alarmEnabled;
+    QString m_alarmMessage;
 
 };
 

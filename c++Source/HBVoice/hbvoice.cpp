@@ -18,6 +18,8 @@ HBVoice::HBVoice(QObject *parent)
     m_VoiceList.append(":/voice/06Surface.mp3");
     m_VoiceList.append(":/voice/07Encoder1.mp3");
     m_VoiceList.append(":/voice/08Encoder2.mp3");
+    m_VoiceList.append(":/voice/09Encoder3.mp3");
+    m_VoiceList.append(":/voice/10Drowsy.mp3");
     m_ptrPlayer = new QMediaPlayer;
     m_ptrPlayer->setVolume(100);
     m_objVoice = this;
@@ -26,6 +28,13 @@ HBVoice::HBVoice(QObject *parent)
 HBVoice::~HBVoice()
 {
     m_ptrPlayer->deleteLater();
+}
+
+HBVoice *HBVoice::GetInstance()
+{
+    if (m_objVoice == nullptr)
+        m_objVoice = new HBVoice();
+    return m_objVoice;
 }
 
 bool HBVoice::PlayVoice(HBVoice::VOICE_EXCEPTION_INDEX index)

@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>misc/applicationFilter.sh</file>
         <file>misc/applicationUpgrading.sh</file>
+        <file>misc/config.ini</file>
+        <file>misc/wellsettings.ini</file>
+        <file>misc/DVTT.db</file>
     </qresource>
 </RCC>

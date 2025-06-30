@@ -51,13 +51,13 @@ Item{
                 VideoCapture.deleteFaceRecord(userID)
                 if(VideoCapture.generateFaceEigenValue(userID) === true)
                 {
-                    mainWindow.showDialogScreen(qsTr("人脸录入成功"), null)
+                    mainWindow.showDialogScreen(qsTr("人脸录入成功"), Dialog.Ok, null)
                 }
                 else
                 {
                     faceDetector.showPreview = false
                     loadingVisible.visible = false
-                    mainWindow.showDialogScreen(qsTr("请重新人脸录入"), null)
+                    mainWindow.showDialogScreen(qsTr("请重新人脸录入"), Dialog.Ok, null)
                 }
             }
         }

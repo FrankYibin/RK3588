@@ -16,6 +16,7 @@ import QtQuick.Layouts 1.12
 import QtMultimedia 5.15
 import Style 1.0
 import QtQml 2.15
+import QtQuick.Controls 2.15
 Rectangle {
     property int minWidthNumpad: Math.round(50 * Style.scaleHint)
     property int minHeightNumpad: Math.round(290 * Style.scaleHint)
@@ -77,7 +78,7 @@ Rectangle {
                     loadingVisible.visible = false
                     triedCount++;
                     if(triedCount % 10 == 0)
-                        mainWindow.showDialogScreen(qsTr("请重新人脸登录"), null)
+                        mainWindow.showDialogScreen(qsTr("请重新人脸登录"), Dialog.Ok, null)
                 }
             }
         }

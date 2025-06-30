@@ -13,6 +13,7 @@ Item{
     readonly property int buttonWidth: 100
     readonly property int rowSpacing: 20
     readonly property int componentHeight: 30
+    property bool isUSBAvailable: false
 
     HBCalendar{
         id: calendarDate
@@ -33,6 +34,7 @@ Item{
         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
         HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+        timer.start()
     }
 
     Rectangle
@@ -47,6 +49,18 @@ Item{
             GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
+
+    Timer
+    {
+        id: timer
+        interval: 2000  // 设置间隔为 1000 毫秒 (1 秒)
+        repeat: true    // 设置为重复计时器
+        onTriggered:
+        {
+            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
+        }
+    }
+
     HBGroupBox
     {
         id: info
@@ -171,10 +185,30 @@ Item{
                     width: Math.round(buttonWidth * Style.scaleHint)
                     height: Math.round(componentHeight * Style.scaleHint)
                     text: qsTr("导出")
+                    enabled: isUSBAvailable
                     onClicked:
                     {
-                        HistoryDataTable.exportData()
-                        mainWindow.showDialogScreen(qsTr("导出数据已完成"), null)
+                        if(HistoryDataTable.exportData() === true)
+                            mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
+                        else
+                            mainWindow.showDialogScreen(qsTr("没有找到可以使用的U盘或尝试再次导出"), Dialog.Ok, null)
+                    }
+                }
+
+                Item {
+                    id: txtInfo
+                    width: Math.round(buttonWidth * Style.scaleHint)
+                    height: Math.round(componentHeight * Style.scaleHint)
+                    Text {
+                        id: name
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("U盘未插入")
+                        visible: !isUSBAvailable
+                        color: Style.whiteFontColor
+                        font{
+                            family: "宋体"
+                            pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                        }
                     }
                 }
             }

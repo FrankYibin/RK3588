@@ -162,7 +162,7 @@ private:
             unsigned char m_AlarmEncoder1 : 1;
             unsigned char m_AlarmEncoder2 : 1;
             unsigned char m_AlarmEncoder3 : 1;
-            unsigned char m_ReservedValue3 : 4;
+            unsigned char m_AlarmDrowsy : 4;
         }bits_Value3;
     };
 
@@ -251,9 +251,6 @@ private:
     //historydata
     void InsertDataToDatabase();
 
-
-
-
     //Dashboard
     QString updateDepthInterface    (const int hexData, const int hexAddress);
     QString updateVelocityInterface (const int hexData, const int hexAddress);
@@ -293,6 +290,9 @@ private:
     int     MakeReportData(char* pBuffer, int deep, int speed, int tension, int tension_delta, short pulse, short kValue, char* wellNum);
     int     MakeReport(const char* pData, int len, char* pOutbuf);
 
+    QString getVelocityUnitString();
+    QString getTensionUnitString();
+
 signals:
 
 private:
@@ -300,6 +300,9 @@ private:
     DepthSetting::DISTANCE_UNIT m_DistanceUnit;
     DepthSetting::TIME_UNIT     m_TimeUnit;
     TensionSetting::FORCE_UNIT  m_ForceUnit;
+
+    MODBUS_IO_VALUE2 m_LastIO_Value2{};
+    MODBUS_IO_VALUE3 m_LastIO_Value3{};
 };
 
 #endif // HBMODBUSCLIENT_H

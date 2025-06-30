@@ -18,7 +18,8 @@ import QtQuick 2.10
 import QtQuick.Window 2.10
 import QtQuick.Controls 2.3
 import QtQuick 2.15
-import QtQuick.VirtualKeyboard 2.15
+import QtQuick.VirtualKeyboard 1.2
+// import QtQuick.VirtualKeyboard 2.15
 import QtQuick.VirtualKeyboard.Settings 2.15
 import "./qmlSource"
 import Style 1.0
@@ -314,11 +315,13 @@ Window{
         primaryNumpad.targetTextField = targetObj
         primaryNumpad.confirmCallback = onConfirmCallback
         primaryNumpad.visible = true
+        primaryNumpad.selectAll()
     }
 
-    function showDialogScreen(strText, onConfirmCallback)
+    function showDialogScreen(strText, standardButtons, onConfirmCallback)
     {
         infoDialog.contentText = strText
+        infoDialog.standardButtons = standardButtons
         infoDialog.confirmCallback = onConfirmCallback
         infoDialog.open()
     }
@@ -679,10 +682,10 @@ Window{
                 }
             }
 
-         Component.onCompleted: {
- //            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
-             VirtualKeyboardSettings.locale = "zh_CN"
-         }
+        Component.onCompleted: {
+//            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
+            VirtualKeyboardSettings.locale = "zh_CN"
+        }
     }
 
     HBDepthCountDown {

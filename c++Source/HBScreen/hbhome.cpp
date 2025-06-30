@@ -1,5 +1,6 @@
 ﻿#include "hbhome.h"
 #include "tensiometer.h"
+#include <QDebug>
 HBHome* HBHome::_ptrHome = nullptr;
 
 HBHome::HBHome(QObject *parent)
@@ -202,7 +203,7 @@ void HBHome::setTensiometerNumber(const QString value)
     if(m_TensiometerNumber == value)
         return;
     m_TensiometerNumber = value;
-    emit TensiometerNumberChanged();
+    emit tensiometerNumberChanged();
 }
 QString HBHome::TensionEncoder() const
 {
@@ -242,6 +243,11 @@ QString HBHome::StatusTensiometerOnline() const
 {
     return m_StatusTensiometerOnline;
 }
+
+bool HBHome::isTensiometerOnline() const
+{
+    return m_isTensiometerOnline;
+}
 void HBHome::setStatusTensiometerOnline(const QString status)
 {
     if(m_StatusTensiometerOnline == status)
@@ -253,10 +259,44 @@ void HBHome::setStatusTensiometerOnline(const QString status)
 void HBHome::setStatusTensiometerOnline(const int status)
 {
     if(status == 0)
+    {
         setStatusTensiometerOnline(tr("离线"));
+        m_isTensiometerOnline = false;
+    }
     else
+    {
         setStatusTensiometerOnline(tr("在线"));
+        m_isTensiometerOnline = true;
+    }
 }
+
+
+void HBHome::setAlarmEnabled(bool enabled)
+{
+    if (m_alarmEnabled == enabled)
+        return;
+
+    m_alarmEnabled = enabled;
+    emit alarmEnabledChanged();
+}
+
+bool HBHome::AlarmEnabled() const
+{
+    return m_alarmEnabled;
+}
+
+QString HBHome::alarmMessage() const
+{
+    return m_alarmMessage;
+}
+void HBHome::setAlarmMessage(const QString msg)
+{
+    if (m_alarmMessage != msg) {
+        m_alarmMessage = msg;
+        emit alarmMessageChanged();
+    }
+}
+
 
 
 
