@@ -154,7 +154,7 @@ Item{
         HBPandel
         {
             id: pandelTension
-            angle: (HBHome.isTensiometerOnline() === false) ? pandel.valueToAngel(false, 0) : pandel.valueToAngel(false, Number(txtTension.text))
+            angle: (HBHome.IsTensiometerOnline === false) ? pandel.valueToAngel(false, 0) : pandel.valueToAngel(false, Number(txtTension.text))
 
             HBTextField
             {
@@ -167,9 +167,9 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: (HBHome.isTensiometerOnline() === false) ? "-------" : HBHome.TensionCurrent
+                text: (HBHome.IsTensiometerOnline === false) ? "-------" : HBHome.TensionCurrent
                 enabled: false
-                textColor: (HBHome.isTensiometerOnline() === false) ? Style.redFontColor : Style.whiteFontColor
+                textColor: (HBHome.IsTensiometerOnline === false) ? Style.redFontColor : Style.whiteFontColor
 
             }
             Text
@@ -199,7 +199,7 @@ Item{
         {
             id: pandelTensionIncrement
             negative: true
-            angle: (HBHome.isTensiometerOnline() === false) ? pandel.valueToAngel(true, 0) : pandel.valueToAngel(true, Number(txtTensionIncrement.text))
+            angle: (HBHome.IsTensiometerOnline === false) ? pandel.valueToAngel(true, 0) : pandel.valueToAngel(true, Number(txtTensionIncrement.text))
 
             HBTextField
             {
@@ -212,9 +212,9 @@ Item{
                 onlyForNumpad: true
                 font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-                text: (HBHome.isTensiometerOnline() === false)? "-------" : HBHome.TensionCurrentDelta
+                text: (HBHome.IsTensiometerOnline === false)? "-------" : HBHome.TensionCurrentDelta
                 enabled: false
-                textColor: (HBHome.isTensiometerOnline() === false) ? Style.redFontColor : Style.whiteFontColor
+                textColor: (HBHome.IsTensiometerOnline === false) ? Style.redFontColor : Style.whiteFontColor
 
             }
             Text

@@ -54,6 +54,8 @@ class HBHome : public QObject
 
     Q_PROPERTY(QString alarmMessage READ alarmMessage WRITE setAlarmMessage NOTIFY alarmMessageChanged)
 
+    Q_PROPERTY(bool IsTensiometerOnline READ IsTensiometerOnline WRITE setIsTensiometerOnline NOTIFY IsTensiometerOnlineChanged FINAL)
+
 
 public:
 
@@ -106,9 +108,12 @@ public:
     void setTensionEncoder(const int value);
 
     Q_INVOKABLE QString StatusTensiometerOnline() const;
-    Q_INVOKABLE bool isTensiometerOnline() const;
+
     Q_INVOKABLE void setStatusTensiometerOnline(const QString status);
     void setStatusTensiometerOnline(const int status);
+
+    bool IsTensiometerOnline() const;
+    void setIsTensiometerOnline(const bool status);
 
 
     bool AlarmEnabled() const;
@@ -150,6 +155,8 @@ signals:
     void StatusTensiometerOnlineChanged();
     void alarmEnabledChanged();
     void alarmMessageChanged();
+
+    void IsTensiometerOnlineChanged();
 
 private:
     explicit HBHome(QObject *parent = nullptr);

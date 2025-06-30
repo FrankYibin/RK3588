@@ -244,9 +244,17 @@ QString HBHome::StatusTensiometerOnline() const
     return m_StatusTensiometerOnline;
 }
 
-bool HBHome::isTensiometerOnline() const
+bool HBHome::IsTensiometerOnline() const
 {
     return m_isTensiometerOnline;
+}
+
+void HBHome::setIsTensiometerOnline(const bool status)
+{
+    if(m_isTensiometerOnline == status)
+        return;
+    m_isTensiometerOnline = status;
+    emit IsTensiometerOnlineChanged();
 }
 void HBHome::setStatusTensiometerOnline(const QString status)
 {
@@ -261,12 +269,12 @@ void HBHome::setStatusTensiometerOnline(const int status)
     if(status == 0)
     {
         setStatusTensiometerOnline(tr("离线"));
-        m_isTensiometerOnline = false;
+        setIsTensiometerOnline(false);
     }
     else
     {
         setStatusTensiometerOnline(tr("在线"));
-        m_isTensiometerOnline = true;
+        setIsTensiometerOnline(true);
     }
 }
 
