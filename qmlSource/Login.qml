@@ -109,6 +109,11 @@ Rectangle{
         placeholderText: qsTr("用户名")
         text: "管理员"
         font.family: "宋体"
+        onActiveFocusChanged:
+        {
+            if(activeFocus)
+                mainWindow.showFullKeyboard(userInput)
+        }
     }
 
     LoginTextField{
@@ -123,6 +128,11 @@ Rectangle{
         font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
         placeholderText: qsTr("密码")
         text: "Default"
+        onActiveFocusChanged:
+        {
+            if(activeFocus)
+                mainWindow.showFullKeyboard(passwordInput)
+        }
     }
 
     Row{

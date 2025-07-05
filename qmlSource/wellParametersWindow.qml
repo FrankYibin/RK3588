@@ -67,6 +67,11 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.WellNumber
+                    onActiveFocusChanged:
+                    {
+                        if(activeFocus)
+                            mainWindow.showFullKeyboard(textWellNumber)
+                    }
                 }
             }
 
@@ -91,6 +96,11 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.AreaBlock
+                    onActiveFocusChanged:
+                    {
+                        if(activeFocus)
+                            mainWindow.showFullKeyboard(textAreaBlock)
+                    }
                 }
             }
 
@@ -488,6 +498,8 @@ Item{
         onClicked:
         {
             // controlLimitNumpad.visible = false
+            WellParameter.WellNumber = textWellNumber.text
+            WellParameter.AreaBlock = textAreaBlock.text
             ProfileGlobalDefine.saveWellParameter(textWellNumber.text,textAreaBlock.text,textUserName.text,textUserLevel.text)
             profileLayout.visible = false
             mainWindow.menuParentOptionSelect(UIScreenEnum.HB_DASHBOARD)

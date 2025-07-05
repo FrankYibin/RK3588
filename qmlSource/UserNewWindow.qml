@@ -81,11 +81,13 @@ Item{
                 width: Math.round(componentWidth * Style.scaleHint)
                 height: Math.round(componentHeight * Style.scaleHint)
                 text: UserModel.UserName
-                onFocusChanged: {
-                    if(focus === true)
+                onActiveFocusChanged:
+                {
+                    if(activeFocus)
                     {
                         newUserSetting.anchors.top = newUser.top
                         iconUser.visible = false
+                        mainWindow.showFullKeyboard(textuserName)
                     }
                 }
                 enabled: (UserModel.getOperateType() === 0) ? true : false
@@ -115,11 +117,13 @@ Item{
                 width: Math.round(componentWidth * Style.scaleHint)
                 height: Math.round(componentHeight * Style.scaleHint)
                 text: UserModel.NickName
-                onFocusChanged: {
-                    if(focus === true)
+                onActiveFocusChanged:
+                {
+                    if(activeFocus)
                     {
                         newUserSetting.anchors.top = newUser.top
                         iconUser.visible = false
+                        mainWindow.showFullKeyboard(textNickName)
                     }
                 }
                 enabled: (UserModel.getOperateType() === 0) ? true : false
@@ -183,11 +187,13 @@ Item{
                 height: Math.round(componentHeight * Style.scaleHint)
                 text: UserModel.Password
                 echoMode: TextInput.Password
-                onFocusChanged: {
-                    if(focus === true)
+                onActiveFocusChanged:
+                {
+                    if(activeFocus)
                     {
                         newUserSetting.anchors.top = newUser.top
                         iconUser.visible = false
+                        mainWindow.showFullKeyboard(textPassWord)
                     }
                 }
                 enabled: (UserModel.getOperateType() === 0) ? true : false

@@ -18,9 +18,6 @@ import QtQuick 2.10
 import QtQuick.Window 2.10
 import QtQuick.Controls 2.3
 import QtQuick 2.15
-import QtQuick.VirtualKeyboard 1.2
-// import QtQuick.VirtualKeyboard 2.15
-import QtQuick.VirtualKeyboard.Settings 2.15
 import "./qmlSource"
 import Style 1.0
 import AxisDefine 1.0
@@ -40,8 +37,8 @@ Window{
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
-    property int showWidth: 800
-    property int showHeight: 480
+    property int showWidth: 1280
+    property int showHeight: 800
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -51,6 +48,7 @@ Window{
     property string qmltextCollapseDistanceMode:    qsTr("Collapse Distance")
     property var qmlTextArray: [qmltextTimeMode, qmltextEnergyMode, qmltextPeakPowerMode,
                                 qmltextGroundDetectMode, qmltextAbsoluteDistanceMode, qmltextCollapseDistanceMode]
+    property var currentField: null
 
     signal signalCurrentLanguageChanged()
     signal signalCurrentScreenChanged(int index)
@@ -316,6 +314,13 @@ Window{
         primaryNumpad.confirmCallback = onConfirmCallback
         primaryNumpad.visible = true
         primaryNumpad.selectAll()
+    }
+
+    function showFullKeyboard(textField)
+    {
+        currentField = textField
+        inputPanel.active = true;
+        inputPanel.pinyinBuffer = ""
     }
 
     function showDialogScreen(strText, standardButtons, onConfirmCallback)
@@ -651,13 +656,12 @@ Window{
         height: mainWindow.showHeight
     }
 
-    InputPanel {
+    HBKeyboard {
         id: inputPanel
         z: 99
         y: windowArea.y + windowArea.height
         anchors.left: windowArea.left
         anchors.right: windowArea.right
-        // active: false
         states: State {
             name: "visible"
             when: inputPanel.active
@@ -682,10 +686,19 @@ Window{
                 }
             }
 
-        Component.onCompleted: {
-//            VirtualKeyboardSettings.locale = sysconfig.getLanguageCode()
-            VirtualKeyboardSettings.locale = "zh_CN"
+        onKeyPressed: if(currentField) currentField.insert(currentField.cursorPosition, key)
+        onBackspace: {
+            if (currentField) {
+                if (currentField.cursorPosition > 0) {
+                    var pos = currentField.cursorPosition
+                    currentField.text = currentField.text.slice(0, pos - 1) + currentField.text.slice(pos)
+                    currentField.cursorPosition = pos - 1
+                }
+            }
         }
+        onEnter: inputPanel.active = false
+        onSpace: if (currentField) currentField.insert(currentField.cursorPosition, " ")
+
     }
 
     HBDepthCountDown {

@@ -38,6 +38,7 @@ static {
 SOURCES += main.cpp \
     c++Source/HBData/hbdatabase.cpp \
     c++Source/HBGraph/SensorGraphData.cpp \
+    c++Source/HBKeyboard/PinyinDict.cpp \
     c++Source/HBModbus/hbmodbusclient.cpp \
     c++Source/HBModbus/modbusutils.cpp \
     c++Source/HBScreen/autotestspeed.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     c++Source/HBDefine.h \
     c++Source/HBGraph/GraphAxisDefineHB.h \
     c++Source/HBGraph/SensorGraphData.h \
+    c++Source/HBKeyboard/PinyinDict.h \
     c++Source/HBModbus/hbmodbusclient.h \
     c++Source/HBModbus/modbusutils.h \
     c++Source/HBQmlEnum.h \
@@ -158,6 +160,7 @@ HEADERS += \
 RESOURCES += images.qrc \
             data/VirtualKeyboard.qrc \
             fonts.qrc \
+            hanzilib.qrc \
             jsonfile.qrc \
             misc.qrc \
             qml.qrc \

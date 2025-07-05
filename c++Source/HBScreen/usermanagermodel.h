@@ -90,10 +90,10 @@ private:
     };
     enum OPERATE_TYPE
     {
-        CREATE_NEW = 0,
-        EDIT_EXIST
+        OPERATE_CREATE_NEW = 0,
+        OPERATE_EDIT_EXIST
     };
-
+    
     QVector<UserInfo> m_users;
     int m_rowIndex;
     QString m_userName;

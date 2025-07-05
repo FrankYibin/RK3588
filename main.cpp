@@ -68,6 +68,7 @@
 #include "c++Source/HBQmlEnum.h"
 #include "c++Source/HBUtility/hbutilityclass.h"
 #include "c++Source/usermanual.h"
+#include "c++Source/HBKeyboard/PinyinDict.h"
 
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
@@ -88,8 +89,6 @@ void messageHandler(QtMsgType type,
 
 int main(int argc, char *argv[])
 {
-    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-    qputenv("QT_VIRTUALKEYBOARD_LAYOUT", "pinyin");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
@@ -146,8 +145,7 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-    // engine.addImportPath(":/VirtualKeyboardStyles");
-    // qputenv("QT_VIRTUALKEYBOARD_STYLE", "styleVirtualKeyboard");
+
     QQmlContext *pQmlContext = engine.rootContext();
     // pQmlContext->setContextProperty("ModbusUtils", &modbusUtils);
     pQmlContext->setContextProperty("HBHome", HBHome::GetInstance());
@@ -168,6 +166,8 @@ int main(int argc, char *argv[])
     pQmlContext->setContextProperty("Configuration", Configuration::GetInstance());
     pQmlContext->setContextProperty("DateTime", DateTime::GetInstance());
     pQmlContext->setContextProperty("VideoCapture", VideoCapture::GetInstance());
+    PinyinDict pinyinDict;
+    pQmlContext->setContextProperty("PinyinDict", &pinyinDict);
 
 #ifdef QT_DEBUG
     pQmlContext->setContextProperty("debug", true);

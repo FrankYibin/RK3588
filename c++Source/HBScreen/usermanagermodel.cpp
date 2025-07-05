@@ -12,7 +12,7 @@ UserManagerModel::UserManagerModel(QObject *parent)
     m_nickName = "";
     m_password = "";
 
-    m_OperateType = CREATE_NEW;
+    m_OperateType = OPERATE_CREATE_NEW;
 
     loadFromDatabase();
 }
@@ -118,7 +118,7 @@ bool UserManagerModel::getUser(int row)
         setGroupIndex(groupindex);
         setNickName(nickname);
         setRowIndex(row);
-        m_OperateType = EDIT_EXIST;
+        m_OperateType = OPERATE_EDIT_EXIST;
     }
     return true;
 }
@@ -130,7 +130,7 @@ bool UserManagerModel::resetUser()
     setPassword("");
     setGroupIndex(3);
     setNickName("");
-    m_OperateType = CREATE_NEW;
+    m_OperateType = OPERATE_CREATE_NEW;
     return true;
 }
 
