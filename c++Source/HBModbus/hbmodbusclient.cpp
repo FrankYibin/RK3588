@@ -56,7 +56,7 @@ HBModbusClient::HBModbusClient(QObject *parent)
     m_ForceUnit     = TensionSetting::LB;
     memset(&m_PrevRecvReg, 0xff, sizeof(MODBUS_REGISTER));
 
-    _ptrSocketObj = new clientSocket(QHostAddress("47.93.187.236"), 123456);
+    _ptrSocketObj = new clientSocket(QHostAddress("47.93.187.236"), 12345);
     // _ptrSocketObj = new clientSocket(QHostAddress("192.168.1.38"), 4200);
 }
 
@@ -1957,8 +1957,16 @@ void HBModbusClient::Insert4GData()
     int tension = m_RecvReg.m_TensionCurrent.Data;
     int tension_delta = m_RecvReg.m_TensionCurrentDelta.Data;
     short pulse = m_RecvReg.m_PulseCount.Data;
-    short kValue = m_RecvReg.m_K_Value.Data;
+    short kValue = m_RecvReg.m_K_Value.Data / 100;
+    QString strWellNumber = WellParameter::GetInstance()->WellNumber();
+    QTextCodec *codec = QTextCodec::codecForName("GB2312");
+    QByteArray byteArray = codec->fromUnicode(strWellNumber);
     char WellNum[16] = "555555555555555";
+    memset(WellNum, 0, 16);
+    if(byteArray.size() >= 16)
+        strncpy(WellNum, byteArray.constData(), 16);
+    else
+        strncpy(WellNum, byteArray.constData(), byteArray.size());
     char Value[40];
     char Buffer[100];
     int len = MakeReportData(Value, deep, speed, tension, tension_delta, pulse, kValue, WellNum);
@@ -2008,7 +2016,7 @@ int HBModbusClient::MakeReportData(char* pBuffer, int deep, int speed, int tensi
 int HBModbusClient::MakeReport(const char* pData, int len, char* pOutbuf)
 {
     int retLen = 0;
-    char g_devId[11] = {} ;
+    char g_devId[12] = "18229001939" ;
     if (!pData)
         return retLen;
     int index = 0;

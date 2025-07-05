@@ -511,7 +511,6 @@ Item{
                 // controlLimitNumpad.visible = false
                 WellParameter.WellNumber = textWellNumber.text
                 WellParameter.AreaBlock = textAreaBlock.text
-                console.debug("111111111111111", WellParameter.WellNumber)
                 ProfileGlobalDefine.saveWellParameter(textWellNumber.text,textAreaBlock.text,textUserName.text,textUserLevel.text)
                 // HBDatabase.updateWellParameterFromInstance()
                 profileLayout.visible = false

@@ -6,7 +6,7 @@ HBHome* HBHome::_ptrHome = nullptr;
 HBHome::HBHome(QObject *parent)
     : QObject{parent}
 {
-    setStatusNetwork(1);
+    setStatusNetwork(0);
 }
 
 HBHome *HBHome::GetInstance()

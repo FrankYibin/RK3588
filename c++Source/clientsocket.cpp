@@ -17,6 +17,7 @@
 
 #include <QSslConfiguration>
 #include <QSslError>
+#include "c++Source/HBScreen/hbhome.h"
 QMutex clientSocket::mutex;
 HeartbeatFormat clientSocket::m_HeartbeatValue;
 /**************************************************************************//**
@@ -376,6 +377,7 @@ void clientSocket::slotSocketStateChange(QAbstractSocket::SocketState socketStat
     {
     case QAbstractSocket::UnconnectedState:
         setSocketErrorCode(clientSocket::ConnectErr);
+        HBHome::GetInstance()->setStatusNetwork(0);
         // qDebug()<<"Socket status：UnconnectedState";
         break;
     case QAbstractSocket::HostLookupState:
@@ -387,12 +389,14 @@ void clientSocket::slotSocketStateChange(QAbstractSocket::SocketState socketStat
     case QAbstractSocket::ConnectedState:
         setSocketErrorCode(clientSocket::NoErr);
         qDebug()<<"Socket status：ConnectedState";
+        HBHome::GetInstance()->setStatusNetwork(1);
         break;
     case QAbstractSocket::BoundState:
         // qDebug()<<"Socket status：BoundState";
         break;
     case QAbstractSocket::ClosingState:
         // qDebug()<<"Socket status：ClosingState";
+        HBHome::GetInstance()->setStatusNetwork(0);
         break;
     case QAbstractSocket::ListeningState:
         // qDebug()<<"Socket status：ListeningState";

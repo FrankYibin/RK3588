@@ -21,9 +21,18 @@ Item{
         MediaPlayer {
             id: mediaPlayer
             autoPlay: true
-            source: "gst-pipeline: v4l2src device=/dev/video0 ! video/x-raw,format=BGR,framerate=60/1 ! videoconvert ! video/x-raw ! qtvideosink"
+
+
+            source: "gst-pipeline: v4l2src device=/dev/video0 !  videoconvert ! video/x-raw ! qtvideosink"
+
             onError: {
                 console.error("MediaPlayer error:", errorString)
+
+
+            }
+            onPlaying:{
+                console.log("MediaPlayer playing")
+
             }
         }
 
@@ -39,6 +48,7 @@ Item{
                 fillMode: VideoOutput.Stretch
             }
         }
+
     }
 
     Column {
@@ -51,14 +61,7 @@ Item{
                 font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
                 color: Style.whiteFontColor
 
-                Timer {
-                    interval: 1000
-                    running: true
-                    repeat: true
-                    onTriggered: {
-                        textCurrentTime.text = "时间：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
-                    }
-                }
+
             }
 
         Text {
@@ -85,7 +88,20 @@ Item{
             color: Style.whiteFontColor
         }
     }
+    Timer {
+        //id:myTimer
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: {
+            textCurrentTime.text = "时间：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
+
+        }
+    }
+
+
 
 }
+
 
 
