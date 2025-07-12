@@ -749,7 +749,7 @@ void HBModbusClient::handleRawData()
             strData = updateDepthInterface(m_RecvReg.m_DepthCurrent.Data, m_RecvReg.m_DepthCurrent.Address);
             HBHome::GetInstance()->setDepthCurrent(strData);
             DepthSetting::GetInstance()->setDepthCurrent(strData);
-            AutoTestSpeed::GetInstance()->setDepthCurrent(strData);
+            AutoTestSpeed::GetInstance()->setDepthCurrent(m_RecvReg.m_DepthCurrent.Data);
             break;
         case HQmlEnum::VELOCITY_CURRENT_H:
             strData = updateVelocityInterface(m_RecvReg.m_VelocityCurrent.Data, m_RecvReg.m_VelocityCurrent.Address);
@@ -790,7 +790,7 @@ void HBModbusClient::handleRawData()
             TensionSetting::GetInstance()->setTensionLimitedDelta(strData);
             break;
         case HQmlEnum::VELOCITY_SIMAN_H:
-            strData = updateTwoDecimal(m_RecvReg.m_VelocitySiman.Data, m_RecvReg.m_VelocitySiman.Address);
+            strData = updateVelocityInterface(m_RecvReg.m_VelocitySiman.Data, m_RecvReg.m_VelocitySiman.Address);
             DepthSiMan::GetInstance()->setVelocitySiman(strData);
             break;
         case HQmlEnum::SCALE_CURRENT_H:
@@ -908,19 +908,19 @@ void HBModbusClient::handleRawData()
             //         Tensiometer::GetInstance()->setTensiometerAnalog(iData);
             //     break;
         case HQmlEnum::DISTANCE_UPPER_WELL_SETTING_H:
-            strData = updateTwoDecimal(m_RecvReg.m_DistanceUpperWellSetting.Data, m_RecvReg.m_DistanceUpperWellSetting.Address);
+            strData = updateDepthInterface(m_RecvReg.m_DistanceUpperWellSetting.Data, m_RecvReg.m_DistanceUpperWellSetting.Address);
             DepthSiMan::GetInstance()->setDistanceUpperWellSetting(strData);
             break;
         case HQmlEnum::DISTANCE_LOWER_WELL_SETTING_H:
-            strData = updateTwoDecimal(m_RecvReg.m_DistanceLowerWellSetting.Data, m_RecvReg.m_DistanceLowerWellSetting.Address);
+            strData = updateDepthInterface(m_RecvReg.m_DistanceLowerWellSetting.Data, m_RecvReg.m_DistanceLowerWellSetting.Address);
             DepthSiMan::GetInstance()->setDistanceLowerWellSetting(strData);
             break;
         case HQmlEnum::DEPTH_START_SETTING_H:
-            strData = updateTwoDecimal(m_RecvReg.m_DepthStartSetting.Data, m_RecvReg.m_DepthStartSetting.Address);
+            strData = updateDepthInterface(m_RecvReg.m_DepthStartSetting.Data, m_RecvReg.m_DepthStartSetting.Address);
             DepthSiMan::GetInstance()->setDepthStartSetting(strData);
             break;
         case HQmlEnum::DEPTH_FINISH_SETTING_H:
-            strData = updateTwoDecimal(m_RecvReg.m_DepthFinishSetting.Data, m_RecvReg.m_DepthFinishSetting.Address);
+            strData = updateDepthInterface(m_RecvReg.m_DepthFinishSetting.Data, m_RecvReg.m_DepthFinishSetting.Address);
             DepthSiMan::GetInstance()->setDepthFinishSetting(strData);
             break;
         default:

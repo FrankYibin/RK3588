@@ -21,7 +21,7 @@ class AutoTestSpeed : public QObject
     Q_PROPERTY(QString DepthDeviationCurrent READ DepthDeviationCurrent WRITE setDepthDeviationCurrent NOTIFY DepthDeviationChanged)
 
     //深度倒计当前值
-    Q_PROPERTY(QString DepthCurrent READ DepthCurrent WRITE setDepthCurrent NOTIFY DepthCurrentChanged)
+    Q_PROPERTY(int DepthCurrent READ DepthCurrent WRITE setDepthCurrent NOTIFY DepthCurrentChanged)
 
     Q_PROPERTY(bool IsDownCountStart READ IsDownCountStart WRITE setIsDownCountStart NOTIFY IsDownCountStartChanged)
 public:
@@ -40,8 +40,8 @@ public:
     Q_INVOKABLE QString DepthDeviationSetting() const;
     Q_INVOKABLE void setDepthDeviationSetting(const QString deviation);
 
-    Q_INVOKABLE QString DepthCurrent() const;
-    Q_INVOKABLE void setDepthCurrent(const QString depth);
+    Q_INVOKABLE int DepthCurrent() const;
+    Q_INVOKABLE void setDepthCurrent(const int depth);
 
     Q_INVOKABLE QString DepthDeviationCurrent() const;
     Q_INVOKABLE void setDepthDeviationCurrent(const QString current);
@@ -71,6 +71,8 @@ signals:
 
     void DepthCurrentChanged();
     void IsDownCountStartChanged();
+private slots:
+    void onDistanceUnitChanged();
 
 private:
 
@@ -80,10 +82,11 @@ private:
     QString m_VelocitySetting;
 
     QString m_DepthDeviationSetting;
+    int     m_RawDeviationSetting;
     QString m_DepthDeviationCurrent;
 
-    QString m_DepthCurrent;
-    QString m_DepthBase;
+    int     m_RawDepthCurrent;
+    int     m_RawDepthBase;
     bool    m_isDownCountStart;
 };
 

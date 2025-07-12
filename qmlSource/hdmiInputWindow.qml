@@ -56,34 +56,32 @@ Item{
         anchors.top: parent.top
         anchors.right: parent.right
         Text {
-                id: textCurrentTime
-                text: "时间：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
-                font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
-                color: Style.whiteFontColor
-
-
-            }
-
-        Text {
-            text: "深度：" + HBHome.DepthCurrent + " " + DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
+            id: textCurrentTime
+            text: qsTr("时间") + "：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
             font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
             color: Style.whiteFontColor
         }
 
         Text {
-            text: "速度：" + HBHome.VelocityCurrent + " " + DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
+            text: qsTr("深度") + "：" + HBHome.DepthCurrent + " " + DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
             font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
             color: Style.whiteFontColor
         }
 
         Text {
-            text: "张力：" + HBHome.TensionCurrent + " " + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
+            text: qsTr("速度") + "：" + HBHome.VelocityCurrent + " " + DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
             font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
             color: Style.whiteFontColor
         }
 
         Text {
-            text: "张力增量：" + HBHome.TensionCurrentDelta + " " + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + "/s"
+            text: qsTr("张力") + "：" + HBHome.TensionCurrent + " " + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit]
+            font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+            color: Style.whiteFontColor
+        }
+
+        Text {
+            text: qsTr("张力增量") + "：" + HBHome.TensionCurrentDelta + " " + TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + "/s"
             font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
             color: Style.whiteFontColor
         }
@@ -94,8 +92,7 @@ Item{
         running: true
         repeat: true
         onTriggered: {
-            textCurrentTime.text = "时间：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
-
+            textCurrentTime.text = qsTr("时间") + "：" + Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
         }
     }
 

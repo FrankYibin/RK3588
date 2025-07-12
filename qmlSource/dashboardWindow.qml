@@ -675,15 +675,36 @@ Item{
             }
         }
     }
+
     Text {
         id: alarmText
         anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        padding: 8
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(10 * Style.scaleHint)
         visible: HBHome.alarmEnabled
-        color: "red"
-        font.pixelSize: Math.round(sensorInfo.txtFontFieldSize * Style.scaleHint)
+        color: Style.redFontColor
+        font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
         text: HBHome.alarmMessage
+    }
+
+
+    Text {
+        id: textCurrentTime
+        anchors.bottom:  parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(10 * Style.scaleHint)
+        text: Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
+        font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+        color: Style.whiteFontColor
+
+        Timer {
+            interval: 1000
+            running: true
+            repeat: true
+            onTriggered: {
+                textCurrentTime.text = Qt.formatDateTime(new Date(), "yyyy-MM-dd HH:mm:ss")
+            }
+        }
     }
 }
 

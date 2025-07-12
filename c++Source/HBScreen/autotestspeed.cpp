@@ -1,4 +1,6 @@
 ﻿#include "autotestspeed.h"
+#include "depthsetting.h"
+#include "../HBUtility/hbutilityclass.h"
 #include <QDebug>
 
 AutoTestSpeed* AutoTestSpeed::_ptrAutoTestSpeed = nullptr;
@@ -8,6 +10,27 @@ AutoTestSpeed::AutoTestSpeed(QObject *parent)
     : QObject{parent}
 {
     m_isDownCountStart = false;
+    m_RawDeviationSetting = 0;
+    connect(DepthSetting::GetInstance(), &DepthSetting::DistanceUnitChanged,
+            this, &AutoTestSpeed::onDistanceUnitChanged);
+}
+
+void AutoTestSpeed::onDistanceUnitChanged()
+{
+    QString strDeviation = "";
+    switch (DepthSetting::GetInstance()->DistanceUnit())
+    {
+    case DepthSetting::FEET:
+        strDeviation = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET, m_RawDeviationSetting);
+        break;
+    case DepthSetting::METER:
+        strDeviation = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER, m_RawDeviationSetting);
+        break;
+    default:
+        strDeviation = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET, m_RawDeviationSetting);
+        break;
+    }
+    setDepthDeviationSetting(strDeviation);
 }
 
 AutoTestSpeed *AutoTestSpeed::GetInstance()
@@ -64,6 +87,18 @@ void AutoTestSpeed::setDepthDeviationSetting(const QString deviation)
     if (m_DepthDeviationSetting == deviation)
         return;
     m_DepthDeviationSetting = deviation;
+    switch (DepthSetting::GetInstance()->DistanceUnit())
+    {
+    case DepthSetting::FEET:
+        m_RawDeviationSetting = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2FEET, deviation);
+        break;
+    case DepthSetting::METER:
+        m_RawDeviationSetting = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2METER, deviation);
+        break;
+    default:
+        m_RawDeviationSetting = HBUtilityClass::GetInstance()->StringToFormatedData(HBUtilityClass::HEX2FEET, deviation);
+        break;
+    }
     m_isDownCountStart = false;
     emit DepthDeviationSettingChanged();
 }
@@ -81,28 +116,35 @@ void AutoTestSpeed::setDepthDeviationCurrent(const QString current)
 
 void AutoTestSpeed::startDepthDownCount()
 {
-    double tmp = m_DepthCurrent.toDouble() + m_DepthDeviationSetting.toDouble();
-    m_DepthBase = QString::number(tmp, 'f', 2);
+    int tmp = m_RawDepthCurrent + m_RawDeviationSetting;
+    m_RawDepthBase = tmp;
     m_isDownCountStart = true;
 }
 
-QString AutoTestSpeed::DepthCurrent() const
+int AutoTestSpeed::DepthCurrent() const
 {
-    return m_DepthCurrent;
+    return m_RawDepthCurrent;
 }
 
-void AutoTestSpeed::setDepthCurrent(QString depth)
+void AutoTestSpeed::setDepthCurrent(int depth)
 {
-    QString str;
-    m_DepthCurrent = depth;
+    m_RawDepthCurrent = depth;
+    QString str = "";
+    int delta = 0;
     if(m_isDownCountStart == true)
+        delta = m_RawDepthBase - m_RawDepthCurrent;
+
+    switch (DepthSetting::GetInstance()->DistanceUnit())
     {
-        double delta = m_DepthBase.toDouble() - m_DepthCurrent.toDouble();
-        str = QString::number(delta, 'f', 2); // 'f' for fixed-point, 2 decimal places
-    }
-    else
-    {
-        str = "0.00";
+    case DepthSetting::FEET:
+        str = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET, delta);
+        break;
+    case DepthSetting::METER:
+        str = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2METER, delta);
+        break;
+    default:
+        str = HBUtilityClass::GetInstance()->FormatedDataToString(HBUtilityClass::HEX2FEET, delta);
+        break;
     }
     setDepthDeviationCurrent(str);
 }
