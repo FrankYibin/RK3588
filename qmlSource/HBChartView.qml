@@ -36,6 +36,10 @@ Item {
     property bool isTensionsLeftAxisVisible:           false
     property bool isTensionIncrementLeftAxisVisible:   false
 
+    property int currentStartIndex: 0
+    property int pointsPerPage: 1000
+    property int actualPoints: 1000
+    property int cursorIndex: 0 // 游标初始在显示区间中间
 
     /**
     *@breif: Rounding of axis values for proper representation
@@ -68,46 +72,40 @@ Item {
     function plotGraph()
     {
         clearGraph()
-        var timePoints, depthPoints, velocityPoints, tensionPoints, tensionDeltaPoints;
-        timePoints = SensorGraphData.getDateTimes();
-        depthPoints = SensorGraphData.getDepths();
-        velocityPoints = SensorGraphData.getVelocitys();
-        tensionPoints = SensorGraphData.getTensions();
-        tensionDeltaPoints = SensorGraphData.getTensionDeltas();
-
-
-        /* Update the Min and Max values */
+        var timePoints = SensorGraphData.getDateTimes();
+        var depthPoints = SensorGraphData.getDepths();
+        var velocityPoints = SensorGraphData.getVelocitys();
+        var tensionPoints = SensorGraphData.getTensions();
+        var tensionDeltaPoints = SensorGraphData.getTensionDeltas();
         var axisMinValues = SensorGraphData.getAxisMinParameters();
         var axisMaxValues = SensorGraphData.getAxisMaxParameters();
-
-        timeAxis.min = timePoints[0]
-        depthLeftAxis.min               = axisMinValues[0];
-        velocityLeftAxis.min            = axisMinValues[1]
-        tensionsLeftAxis.min            = axisMinValues[2]
-        tensionIncrementLeftAxis.min    = axisMinValues[3]
-
-        timeAxis.max = timePoints[timePoints.length - 1]
-        depthLeftAxis.max               = axisMaxValues[0];
-        velocityLeftAxis.max            = axisMaxValues[1];
-        tensionsLeftAxis.max            = axisMaxValues[2];
-        tensionIncrementLeftAxis.max    = axisMaxValues[3];
-
-        /* Rounding of axis values for proper representation */
-        depthLeftAxis.max               = roundAxisValues(depthLeftAxis.max,            depthLeftAxis.min);
-        velocityLeftAxis.max            = roundAxisValues(velocityLeftAxis.max,         velocityLeftAxis.min);
-        tensionsLeftAxis.max            = roundAxisValues(tensionsLeftAxis.max,         tensionsLeftAxis.min);
-        tensionIncrementLeftAxis.max    = roundAxisValues(tensionIncrementLeftAxis.max, tensionIncrementLeftAxis.min);
-        // for(var i = 0; i < timePoints.length; i++)
-        // {
-        //     depthLeftAxisPlot.append(timePoints[i], depthPoints[i])
-        //     velocityLeftAxisPlot.append(timePoints[i], velocityPoints[i])
-        //     tensionsLeftAxisPlot.append(timePoints[i], tensionPoints[i])
-        //     tensionIncrementLeftAxisPlot.append(timePoints[i], tensionDeltaPoints[i])
-        // }
-        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.DEPTH_IDX,              graphChartView.series(depthLeftPlotName))
-        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.VELOCITY_IDX,           graphChartView.series(velocityLeftPlotName))
-        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.TENSIONS_IDX,           graphChartView.series(tensionsLeftPlotName))
-        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.TENSION_INCREMENT_IDX,  graphChartView.series(tensionIncrementPlotName))
+        // 只显示 currentStartIndex 到 currentStartIndex+pointsPerPage 的数据
+        var start = currentStartIndex;
+        var end = Math.min(timePoints.length, currentStartIndex + pointsPerPage);
+        actualPoints = end - start
+        var timeSlice = timePoints.slice(start, end);
+        var depthSlice = depthPoints.slice(start, end);
+        var velocitySlice = velocityPoints.slice(start, end);
+        var tensionSlice = tensionPoints.slice(start, end);
+        var tensionDeltaSlice = tensionDeltaPoints.slice(start, end);
+        // 更新X轴范围
+        timeAxis.min = timeSlice[0];
+        timeAxis.max = timeSlice[timeSlice.length - 1];
+        depthLeftAxis.min = axisMinValues[0];
+        velocityLeftAxis.min = axisMinValues[1];
+        tensionsLeftAxis.min = axisMinValues[2];
+        tensionIncrementLeftAxis.min = axisMinValues[3];
+        depthLeftAxis.max = roundAxisValues(axisMaxValues[0], axisMinValues[0]);
+        velocityLeftAxis.max = roundAxisValues(axisMaxValues[1], axisMinValues[1]);
+        tensionsLeftAxis.max = roundAxisValues(axisMaxValues[2], axisMinValues[2]);
+        tensionIncrementLeftAxis.max = roundAxisValues(axisMaxValues[3], axisMinValues[3]);
+        // 清空并添加新数据
+        for(var i = 0; i < timeSlice.length; i++) {
+            depthLeftAxisPlot.append(timeSlice[i], depthSlice[i]);
+            velocityLeftAxisPlot.append(timeSlice[i], velocitySlice[i]);
+            tensionsLeftAxisPlot.append(timeSlice[i], tensionSlice[i]);
+            tensionIncrementLeftAxisPlot.append(timeSlice[i], tensionDeltaSlice[i]);
+        }
     }
 
     function clearGraph()
@@ -121,11 +119,11 @@ Item {
         tensionIncrementLeftAxisPlot.clear()
     }
 
-    Rectangle
-    {
+    Rectangle {
         anchors.fill: parent
         color: "transparent"
         border.color: Style.backgroundMiddleColor
+
         ChartView {
             id: graphChartView
             legend.visible: true
@@ -290,6 +288,154 @@ Item {
                 visible: isTensionIncrementLeftAxisVisible
                 pointsVisible: false
                 useOpenGL: true
+            }
+        }
+
+        // 游标竖线和圆球
+        Item {
+            id: cursorItem
+            anchors.fill: parent
+            property real cursorX:
+            {
+                if (depthLeftAxisPlot && depthLeftAxisPlot.count > 0)
+                {
+                    var point = depthLeftAxisPlot.at(cursorIndex);
+                    var mappedPosition = graphChartView.mapToPosition(point, depthLeftAxisPlot);
+                    return mappedPosition.x;
+                }
+                else
+                {
+                    return graphChartView.plotArea.x;
+                }
+            }
+            Rectangle {
+                x: cursorItem.cursorX - 1
+                width: 2
+                y: graphChartView.plotArea.y
+                height: graphChartView.plotArea.height
+                color: Style.hbButtonBackgroundColor
+            }
+            Rectangle {
+                id: cursorBall
+                x: cursorItem.cursorX - Math.round(8 * Style.scaleHint)
+                y: graphChartView.plotArea.y - Math.round(16 * Style.scaleHint)
+                width: Math.round(16 * Style.scaleHint)
+                height: Math.round(16 * Style.scaleHint)
+                color: Style.hbButtonBackgroundColor
+                border.color: "white"
+                border.width: 2
+                radius: Math.round(8 * Style.scaleHint)
+                visible: true
+                MouseArea {
+                    anchors.fill: parent
+                    property real dragStartX: 0
+                    onPressed: {
+                        dragStartX = mouse.x
+                        pointValue.visible = true
+                    }
+                    onReleased: pointValue.visible = false
+                    onPositionChanged: {
+                        var plotWidth = graphChartView.plotArea.width;
+                        var relX = parent.x + mouse.x - graphChartView.plotArea.x;
+                        var newIndex = 0
+                        if(actualPoints < pointsPerPage)
+                        {
+                            newIndex = Math.round(relX / plotWidth * (actualPoints - 1));
+                            cursorIndex = Math.max(0, Math.min(actualPoints - 1, newIndex));
+
+                        }
+                        else
+                        {
+                            newIndex = Math.round(relX / plotWidth * (pointsPerPage - 1));
+                            cursorIndex = Math.max(0, Math.min(pointsPerPage - 1, newIndex));
+                        }
+                    }
+                }
+            }
+            Item
+            {
+                id: pointValue
+                width: 150
+                height: 100
+                x: cursorItem.cursorX
+                y: graphChartView.plotArea.y
+                visible: false
+                Column {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    spacing: 5
+
+                    Text {
+                        text: qsTr("深度") + ":" + depthLeftAxisPlot.at(cursorIndex).y;
+                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                        font.family: "宋体"
+                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.DEPTH_IDX)
+                    }
+                    Text {
+                        text: qsTr("速度") + ":" + velocityLeftAxisPlot.at(cursorIndex).y
+                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                        font.family: "宋体"
+                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.VELOCITY_IDX)
+                    }
+                    Text {
+                        text: qsTr("张力") + ":" + tensionsLeftAxisPlot.at(cursorIndex).y
+                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                        font.family: "宋体"
+                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSIONS_IDX)
+                    }
+                    Text {
+                        text: qsTr("张力增量") + ":" + tensionIncrementLeftAxisPlot.at(cursorIndex).y
+                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                        font.family: "宋体"
+                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
+                    }
+                    Text {
+                        text: "X Axis: " + cursorItem.cursorX
+                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
+                    }
+                    Text {
+                        text: "cursorIndex: " + cursorIndex
+                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
+                    }
+                }
+            }
+        }
+
+        MouseArea {
+            x: graphChartView.plotArea.x
+            y: graphChartView.plotArea.y
+            width: graphChartView.plotArea.width
+            height: graphChartView.plotArea.height
+            property int dragStartX: 0
+            property bool dragging: false
+            onPressed: {
+                dragStartX = mouse.x
+                dragging = true
+            }
+            onReleased: {
+                if (!dragging) return;
+                var delta = mouse.x - dragStartX;
+                var chartWidth = graphChartView.plotArea.width;
+                var newIndex = 0;
+                if (Math.abs(delta) > 10) {
+                    var totalPoints = SensorGraphData.getDateTimes().length;
+                    var moveRatio = delta / chartWidth;
+                    var movePoints = Math.round(moveRatio * pointsPerPage);
+                    if(movePoints > 0) {
+                        newIndex = currentStartIndex - movePoints;
+                        currentStartIndex = Math.max(0, newIndex);
+                    } else {
+                        newIndex = currentStartIndex + Math.abs(movePoints)
+                        var maxDelta = totalPoints - pointsPerPage
+                        if(maxDelta < 0) maxDelta = 0
+                        currentStartIndex = Math.min(maxDelta, newIndex)
+                    }
+                    console.debug("1111111111111111111")
+                    plotGraph();
+                }
+                dragging = false;
             }
         }
     }
