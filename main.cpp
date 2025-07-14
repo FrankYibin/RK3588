@@ -113,15 +113,16 @@ int main(int argc, char *argv[])
 #endif
     LanguageConfig::getInstance()->checkLanguageFiles();
 
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonStyle.qml"), "Style", 1, 0, "Style");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonNumpadDefine.qml"), "NumpadDefine", 1, 0, "NumpadDefine");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonChartViewAxisDefine.qml"), "AxisDefine", 1, 0, "AxisDefine");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HBChartViewAxisDefine.qml"), "HBAxisDefine", 1, 0, "HBAxisDefine");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/AlarmMessageDefine.qml"), "AlarmDefine", 1, 0, "AlarmDefine");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/DepthGlobalDefine.qml"), "DepthGlobalDefine", 1, 0, "DepthGlobalDefine");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/ProfileGlobalDefine.qml"), "ProfileGlobalDefine", 1, 0, "ProfileGlobalDefine");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/TensionsGlobalDefine.qml"), "TensionsGlobalDefine", 1, 0, "TensionsGlobalDefine");
-    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/UserGlobalDefine.qml"), "UserGlobalDefine", 1, 0, "UserGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonStyle.qml"),               "Style",                1, 0, "Style");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonNumpadDefine.qml"),        "NumpadDefine",         1, 0, "NumpadDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/BransonChartViewAxisDefine.qml"), "AxisDefine",           1, 0, "AxisDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HBChartViewAxisDefine.qml"),      "HBAxisDefine",         1, 0, "HBAxisDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/AlarmMessageDefine.qml"),         "AlarmDefine",          1, 0, "AlarmDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/DepthGlobalDefine.qml"),          "DepthGlobalDefine",    1, 0, "DepthGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/ProfileGlobalDefine.qml"),        "ProfileGlobalDefine",  1, 0, "ProfileGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/TensionsGlobalDefine.qml"),       "TensionsGlobalDefine", 1, 0, "TensionsGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/UserGlobalDefine.qml"),           "UserGlobalDefine",     1, 0, "UserGlobalDefine");
+    qmlRegisterSingletonType(QUrl("qrc:/qmlSource/HistoryGlobalDefine.qml"),         "HistoryGlobalDefine",  1, 0, "HistoryGlobalDefine");
 
     //HB
     qmlRegisterSingletonInstance<HBModbusClient>("HB.Modbus", 1, 0, "ModbusClient", HBModbusClient::GetInstance());

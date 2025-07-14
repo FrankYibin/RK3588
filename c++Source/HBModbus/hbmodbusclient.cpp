@@ -1985,9 +1985,9 @@ void HBModbusClient::InsertSerialData()
         return;
     QByteArray array;
     int deep    = m_RecvReg.m_DepthCurrent.Data;
-    int speed   = m_RecvReg.m_VelocityCurrent.Data;
-    int tension = m_RecvReg.m_TensionCurrent.Data;
-    int tension_delta = m_RecvReg.m_TensionCurrentDelta.Data;
+    int speed   = m_RecvReg.m_VelocityCurrent.Data/10;
+    int tension = m_RecvReg.m_TensionCurrent.Data/10;
+    int tension_delta = m_RecvReg.m_TensionCurrentDelta.Data/10;
     array.append(0xbb);
     array.append(0x55);
     array.append(0x12);

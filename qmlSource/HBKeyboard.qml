@@ -4,14 +4,15 @@ import Style 1.0
 Rectangle {
     id: keyboard
     width: Math.round(800 * Style.scaleHint)
-    height: Math.round(280 * Style.scaleHint)
+    // height: Math.round(280 * Style.scaleHint)
+    height: Math.round(240 * Style.scaleHint)
     color: "#1E1E1E"
 
     // property color skinColor: skinIndex === 0 ? "#1E1E1E" : (skinIndex === 1 ? "#D8D8D8" : "#190724")
     // property int skinIndex: 0
     property bool active: false
     property bool upperCase: false
-    property bool isChinese: true
+    property bool isChinese: false
     property bool isAlphabet: true
 
     readonly property int heightSize:           Math.round(50 * Style.scaleHint)
@@ -33,6 +34,13 @@ Rectangle {
         var start = candidatePage * candidatesPerPage;
         var end = start + candidatesPerPage;
         return candidateList.slice(start, end);
+    }
+
+    onIsChineseChanged:{
+        if(isChinese === true)
+            keyboard.height = Math.round(280 * Style.scaleHint)
+        else
+            keyboard.height = Math.round(240 * Style.scaleHint)
     }
 
     // 主键盘区
@@ -257,6 +265,7 @@ Rectangle {
         anchors.bottom: keyboardLayout.top
 //        anchors.bottomMargin: Math.round(5 * Style.scaleHint)
         anchors.left: keyboardLayout.left
+        visible: isChinese
         Row {
             anchors.fill: parent
             spacing: Math.round(5 * Style.scaleHint)

@@ -14,6 +14,7 @@ class UserManagerModel : public QAbstractTableModel
     Q_PROPERTY(int GroupIndex READ GroupIndex WRITE setGroupIndex NOTIFY GroupIndexChanged FINAL)
     Q_PROPERTY(QString NickName READ NickName WRITE setNickName NOTIFY NickNameChanged FINAL)
     Q_PROPERTY(QString Password READ Password WRITE setPassword NOTIFY PasswordChanged FINAL)
+    Q_PROPERTY(QString CreateTime READ CreateTime WRITE setCreateTime NOTIFY CreateTimeChanged FINAL)
 
     Q_PROPERTY(QString CurrentUser READ CurrentUser WRITE setCurrentUser NOTIFY CurrentUserChanged FINAL)
     Q_PROPERTY(QString CurrentGroup READ CurrentGroup WRITE setCurrentGroup NOTIFY CurrentGroupChanged FINAL)
@@ -59,6 +60,8 @@ public:
     QString NickName() const;
     void setPassword(const QString &password);
     QString Password() const;   
+    void setCreateTime(const QString &createTime);
+    QString CreateTime() const;
 
     void setCurrentUser(const QString &currentUser);
     QString CurrentUser() const;
@@ -76,6 +79,7 @@ signals:
     void GroupIndexChanged(const int &groupIndex);
     void NickNameChanged(const QString &nickName);
     void PasswordChanged(const QString &password);
+    void CreateTimeChanged(const QString &createTime);
 
     void CurrentUserChanged(const QString &currentUser);
     void CurrentGroupChanged(const QString &currentGroup);
@@ -100,6 +104,7 @@ private:
     int m_groupIndex;
     QString m_nickName; 
     QString m_password;
+    QString m_createTime;
 
     QString m_currentUser;
     QString m_currentGroup;

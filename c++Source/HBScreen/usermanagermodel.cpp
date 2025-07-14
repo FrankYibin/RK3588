@@ -11,6 +11,7 @@ UserManagerModel::UserManagerModel(QObject *parent)
     m_groupIndex = 5;
     m_nickName = "";
     m_password = "";
+    m_createTime = "";
 
     m_OperateType = OPERATE_CREATE_NEW;
 
@@ -149,9 +150,14 @@ bool UserManagerModel::addNewUser(const QString username, const QString password
 bool UserManagerModel::validateUser(const QString username, const QString password)
 {
     int groupId = -1;
-    if(HBDatabase::GetInstance().QueryUser(username, password, groupId) == true)
+    QString nickname = "";
+    QString createtime = "";
+    if(HBDatabase::GetInstance().QueryUser(username, password, groupId, nickname, createtime) == true)
     {
         setCurrentUser(username);
+        setGroupIndex(groupId);
+        setNickName(nickname);
+        setCreateTime(createtime);
         switch(groupId)
         {
         case SUPER_USER:
@@ -178,6 +184,28 @@ bool UserManagerModel::validateUser(const QString username, const QString passwo
 void UserManagerModel::loadFromDatabase()
 {
     beginResetModel();
+    int groupId = GroupIndex();
+    UserInfo tmpUser;
+    switch(groupId)
+    {
+    case SUPER_USER:
+        m_users = HBDatabase::GetInstance().LoadAllUsers();
+        break;
+    case OPERATOR_USER:
+    case NORMAL_USER:
+    case VISITOR_USER:
+        m_users.clear();
+        tmpUser.userName = CurrentUser();
+        tmpUser.nickName = NickName();
+        tmpUser.createTime = CreateTime();
+        tmpUser.groupIndex = groupId;
+        tmpUser.userHandleVisible = true;
+        m_users.append(tmpUser);
+        break;
+    default:
+        m_users = HBDatabase::GetInstance().LoadAllUsers();
+        break;
+    }
     m_users = HBDatabase::GetInstance().LoadAllUsers();
     endResetModel();
 }
@@ -190,9 +218,14 @@ int UserManagerModel::getOperateType() const
 bool UserManagerModel::ValidateUser(const QString userId)
 {
     int groupId = -1;
-    if(HBDatabase::GetInstance().QueryUser(userId, groupId) == true)
+    QString nickname = "";
+    QString createtime = "";
+    if(HBDatabase::GetInstance().QueryUser(userId, groupId, nickname, createtime) == true)
     {
         setCurrentUser(userId);
+        setGroupIndex(groupId);
+        setNickName(nickname);
+        setCreateTime(createtime);
         switch(groupId)
         {
         case SUPER_USER:
@@ -270,6 +303,18 @@ void UserManagerModel::setPassword(const QString &password)
 QString UserManagerModel::Password() const
 {
     return m_password;
+}
+
+void UserManagerModel::setCreateTime(const QString &createTime)
+{
+    if (m_createTime != createTime) {
+        m_createTime = createTime;
+        emit CreateTimeChanged(createTime);
+    }
+}
+QString UserManagerModel::CreateTime() const
+{
+    return m_createTime;
 }
 
 void UserManagerModel::setCurrentUser(const QString &currentUser)

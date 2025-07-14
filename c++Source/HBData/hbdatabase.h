@@ -101,8 +101,8 @@ public:
 
     QVector<UserInfo> LoadAllUsers();
     bool QueryUser(QString& username, QString& password, int &groupindex, QString& nickname);
-    bool QueryUser(const QString username, const QString password, int &groupId);
-    bool QueryUser(const QString username, int &groupId);
+    bool QueryUser(const QString username, const QString password, int &groupId, QString &nickname, QString &createtime);
+    bool QueryUser(const QString username, int &groupId, QString &nickname, QString &createtime);
     bool InsertUser(const QString username, const QString password, const int groupindex, const QString nickname);
     bool UpdateUser(const QString oldUserName, const QString newUserName, const QString password, const int groupindex, const QString nickname);
 

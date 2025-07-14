@@ -6,12 +6,13 @@ import QtQml.Models 2.15
 import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HB.Database 1.0
+import HistoryGlobalDefine 1.0
 
 Item{
-    readonly property int textWidth: 100
+    readonly property int textWidth: 80
     readonly property int comboBoxWidth: 150
     readonly property int buttonWidth: 100
-    readonly property int rowSpacing: 20
+    readonly property int rowSpacing: 10
     readonly property int componentHeight: 30
     property bool isUSBAvailable: false
 
@@ -77,7 +78,7 @@ Item{
             id: argumentLayout
             columns: 2
             rows: 2
-            columnSpacing: Math.round(80 * Style.scaleHint)
+            columnSpacing: Math.round(50 * Style.scaleHint)
             rowSpacing: Math.round(10 * Style.scaleHint)
             width: Math.round((textWidth + rowSpacing + comboBoxWidth) * 2 * Style.scaleHint) + argumentLayout.columnSpacing
             height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
@@ -163,7 +164,25 @@ Item{
             Row{
                 spacing: Math.round(rowSpacing * Style.scaleHint)
                 height: Math.round(componentHeight * Style.scaleHint)
-                width: Math.round((buttonWidth + rowSpacing + buttonWidth) * Style.scaleHint)
+                width: Math.round((textWidth + rowSpacing + 2 * buttonWidth) * Style.scaleHint)
+                Text {
+                    id: inquireCondition
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("查询条件") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBComboBox
+                {
+                    id: alarmType
+                    width: Math.round(buttonWidth * Style.scaleHint)
+                    height: Math.round(componentHeight * Style.scaleHint)
+                    currentIndex: 0
+                    model: HistoryGlobalDefine.exceptionType
+                }
                 HBPrimaryButton
                 {
                     id: buttonInquire
@@ -178,6 +197,30 @@ Item{
                         console.log("startStamp: ", startStamp,"endStamp: ", endStamp)
                     }
                 }
+            }
+
+            Row{
+                spacing: Math.round(rowSpacing * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                width: Math.round((textWidth + rowSpacing + 2 * buttonWidth) * Style.scaleHint)
+                Text {
+                    id: fileTitle
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("文件格式") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBComboBox
+                {
+                    id: fileFormat
+                    width: Math.round(buttonWidth * Style.scaleHint)
+                    height: Math.round(componentHeight * Style.scaleHint)
+                    currentIndex: 0
+                    model: HistoryGlobalDefine.fileType
+                }
 
                 HBPrimaryButton
                 {
@@ -186,29 +229,13 @@ Item{
                     height: Math.round(componentHeight * Style.scaleHint)
                     text: qsTr("导出")
                     enabled: isUSBAvailable
+                    visible: (UserModel.GroupIndex > 0) ? false : true
                     onClicked:
                     {
                         if(HistoryDataTable.exportData() === true)
                             mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
                         else
                             mainWindow.showDialogScreen(qsTr("没有找到可以使用的U盘或尝试再次导出"), Dialog.Ok, null)
-                    }
-                }
-
-                Item {
-                    id: txtInfo
-                    width: Math.round(buttonWidth * Style.scaleHint)
-                    height: Math.round(componentHeight * Style.scaleHint)
-                    Text {
-                        id: name
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("U盘未插入")
-                        visible: !isUSBAvailable
-                        color: Style.whiteFontColor
-                        font{
-                            family: "宋体"
-                            pixelSize: Math.round(Style.style5 * Style.scaleHint)
-                        }
                     }
                 }
             }
@@ -286,6 +313,26 @@ Item{
         TableViewColumn { role: "HarnessTension";       title: qsTr("缆头张力");    width: 80}
         TableViewColumn { role: "SafetyTension";        title: qsTr("安全张力");    width: 80}
         TableViewColumn { role: "Exception";            title: qsTr("异常数据标识");  width: 100}
+    }
+
+    Item {
+        id: txtInfo
+        width: Math.round(buttonWidth * Style.scaleHint)
+        height: Math.round(componentHeight * Style.scaleHint)
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(10 * Style.scaleHint)
+        Text {
+            id: name
+            anchors.verticalCenter: parent.verticalCenter
+            text: qsTr("U盘未插入")
+            visible: !isUSBAvailable
+            color: Style.whiteFontColor
+            font{
+                family: "宋体"
+                pixelSize: Math.round(Style.style5 * Style.scaleHint)
+            }
+        }
     }
 }
 

@@ -142,6 +142,7 @@ Window{
 
     function loginProcess()
     {
+        inputPanel.active = false
         login.source = ""
         mainWindow.hideMainWindowOpacity()
         profileLayout.visible = true
@@ -345,6 +346,11 @@ Window{
     function showDepthCountDown()
     {
         depthCountDown.visible = true
+    }
+
+    function showTensionPanel()
+    {
+        tensionPanel.visible = true
     }
 
     Connections {
@@ -716,5 +722,14 @@ Window{
         height: showHeight / 2
         anchors.centerIn: parent
         visible: false
+    }
+
+    HBTensionPanel {
+        id: tensionPanel
+        width: showWidth / 2
+        height: showHeight / 2
+        visible: true
+        x: parent.width / 2
+        y: parent.height / 2
     }
 }

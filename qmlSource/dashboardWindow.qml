@@ -6,17 +6,9 @@ import Com.Branson.UIScreenEnum 1.0
 import DepthGlobalDefine 1.0
 import TensionsGlobalDefine 1.0
 Item{
+    id: dashboard
     readonly property int qmlscreenIndicator:  UIScreenEnum.HB_DASHBOARD
     readonly property int textFieldWidth: 110
-    Rectangle{
-        id: background
-        anchors.fill: parent
-        Image {
-            source: "qrc:/images/bg1.png"
-            anchors.fill: parent
-            smooth: true
-        }
-    }
 
     Rectangle
     {
@@ -28,6 +20,16 @@ Item{
         gradient: Gradient {
             GradientStop { position: 0.0; color: Style.backgroundLightColor }
             GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+        }
+    }
+
+    MouseArea{
+        anchors.top: parent.top
+        anchors.right: parent.right
+        height: parent.height / 2
+        width:  parent.width / 2
+        onPressed: {
+            mainWindow.showTensionPanel()
         }
     }
 
@@ -49,8 +51,7 @@ Item{
         anchors.leftMargin: Math.round(10 * Style.scaleHint)
         anchors.top: pandelSection.top
         anchors.topMargin: Math.round(10 * Style.scaleHint)
-        anchors.right: pandelSection.right
-        anchors.rightMargin: Math.round(10 * Style.scaleHint)
+        width: parent.width
         spacing: Math.round(20 * Style.scaleHint)
         anchors.bottom: pandelSection.bottom
 
@@ -240,7 +241,6 @@ Item{
             }
         }
     }
-
 
     Row
     {

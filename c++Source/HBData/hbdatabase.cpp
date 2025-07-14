@@ -1199,11 +1199,11 @@ bool HBDatabase::QueryUser(QString &username, QString &password, int &groupindex
     return bResult;
 }
 
-bool HBDatabase::QueryUser(const QString username, const QString password, int& groupId)
+bool HBDatabase::QueryUser(const QString username, const QString password, int& groupId, QString& nickname, QString& createtime)
 {
     bool bResult = false;
     QSqlQuery query(m_database);
-    query.prepare("SELECT username, password, groupindex, createtime FROM userinfo WHERE username = :username AND password = :password");
+    query.prepare("SELECT username, password, groupindex, createtime, nickname FROM userinfo WHERE username = :username AND password = :password");
     query.bindValue(":username", username);
     query.bindValue(":password", password);
 
@@ -1219,17 +1219,19 @@ bool HBDatabase::QueryUser(const QString username, const QString password, int& 
     else
     {
         groupId = query.value(2).toInt();
+        createtime = query.value(3).toString();
+        nickname = query.value(4).toString();
     }
 
     bResult = true;
     return bResult;
 }
 
-bool HBDatabase::QueryUser(const QString username, int &groupId)
+bool HBDatabase::QueryUser(const QString username, int &groupId, QString &nickname, QString &createtime)
 {
     bool bResult = false;
     QSqlQuery query(m_database);
-    query.prepare("SELECT username, password, groupindex, createtime FROM userinfo WHERE username = :username");
+    query.prepare("SELECT username, password, groupindex, createtime, nickname FROM userinfo WHERE username = :username");
     query.bindValue(":username", username);
 
     if (!query.exec()) {
@@ -1244,6 +1246,8 @@ bool HBDatabase::QueryUser(const QString username, int &groupId)
     else
     {
         groupId = query.value(2).toInt();
+        createtime = query.value(3).toString();
+        nickname = query.value(4).toString();
     }
 
     bResult = true;

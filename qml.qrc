@@ -133,5 +133,7 @@
         <file>qmlSource/UserGlobalDefine.qml</file>
         <file>qmlSource/HBKeyboard.qml</file>
         <file>qmlSource/HBKeyButton.qml</file>
+        <file>qmlSource/HistoryGlobalDefine.qml</file>
+        <file>qmlSource/HBTensionPanel.qml</file>
     </qresource>
 </RCC>
