@@ -977,6 +977,79 @@ QList<HistoryData> HBDatabase::loadHistoryData(const QDateTime &start, const QDa
 
 }
 
+QList<HistoryData> HBDatabase::loadHistoryData(const QDateTime start, const QDateTime end, const QString currentUser, bool includeExceptionsOnly)
+{
+    QList<HistoryData> dataList;
+
+    if (!m_database.isOpen()) {
+        qWarning() << "HBDatabase::loadHistoryData - database not open";
+        return dataList;
+    }
+
+
+    QString sql =
+        "SELECT wellNumber, date, operateType, operater, depth, velocity, "
+        "velocityUnit, tensions, tensionIncrement, tensionUnit, maxTension, "
+        "harnessTension, safetyTension, exception "
+        "FROM history_table "
+        "WHERE datetime(date) BETWEEN datetime(:start) AND datetime(:end) ";
+
+
+    if (!currentUser.isEmpty()) {
+        sql += "AND operater = :operater ";
+    }
+
+
+    if (includeExceptionsOnly) {
+        sql += "AND exception != 'none' ";
+    }
+
+
+    sql += "ORDER BY datetime(date) ASC";
+
+    QSqlQuery query(m_database);
+
+    if (!query.prepare(sql)) {
+        qWarning() << "HBDatabase::loadHistoryData - prepare failed:" << query.lastError();
+        return dataList;
+    }
+
+    query.bindValue(":start", start.toString("yyyy-MM-dd HH:mm:ss"));
+    query.bindValue(":end",   end.toString("yyyy-MM-dd HH:mm:ss"));
+
+    if (!currentUser.isEmpty()) {
+        query.bindValue(":operater", currentUser);
+    }
+
+    if (!query.exec()) {
+        qWarning() << "HBDatabase::loadHistoryData - exec failed:" << query.lastError();
+        return dataList;
+    }
+
+    while (query.next()) {
+        HistoryData item;
+        item.wellNumber         = query.value("wellNumber").toString();
+        item.date               = query.value("date").toString();
+        item.operateType        = query.value("operateType").toString();
+        item.operater           = query.value("operater").toString();
+        item.depth              = query.value("depth").toString();
+        item.velocity           = query.value("velocity").toString();
+        item.velocityUnit       = query.value("velocityUnit").toString();
+        item.tensions           = query.value("tensions").toString();
+        item.tensionIncrement   = query.value("tensionIncrement").toString();
+        item.tensionUnit        = query.value("tensionUnit").toString();
+        item.maxTension         = query.value("maxTension").toString();
+        item.harnessTension     = query.value("harnessTension").toString();
+        item.safetyTension      = query.value("safetyTension").toString();
+        item.exception          = query.value("exception").toString();
+
+        dataList.push_front(item);
+    }
+
+    return dataList;
+}
+
+
 bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
 {
     if (!m_database.isOpen()) {
@@ -1034,7 +1107,7 @@ bool HBDatabase::insertHistoryData(const ModbusData& modbusData)
     query.bindValue(":maxTension", modbusData.maxTension);
     query.bindValue(":harnessTension", modbusData.harnessTension);
     query.bindValue(":safetyTension", modbusData.safetyTension);
-    query.bindValue(":exception", "无");
+    query.bindValue(":exception", modbusData.exception);
 
     // 执行插入
     if (!query.exec()) {

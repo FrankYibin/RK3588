@@ -1942,7 +1942,34 @@ void HBModbusClient::InsertDataToDatabase()
     modData.harnessTension = TensionSafety::GetInstance()->TensionCableHead();
     modData.maxTension = HBHome::GetInstance()->TensionLimited();
     modData.safetyTension = TensionSafety::GetInstance()->TensionCurrentSafety();
-    modData.exception = "none";
+
+    QString exceptionMessage = "none";
+
+    if (m_IO_Value2.bits_Value2.m_AlarmVelocity) {
+        exceptionMessage = "超速";
+    } else if (m_IO_Value2.bits_Value2.m_AlarmWellSurface) {
+        exceptionMessage = "井口异常";
+    } else if (m_IO_Value2.bits_Value2.m_AlarmTargetLayer) {
+        exceptionMessage = "目标层异常";
+    } else if (m_IO_Value2.bits_Value2.m_AlarmSurfaceCover) {
+        exceptionMessage = "表套异常";
+    } else if (m_IO_Value2.bits_Value2.m_AlarmTension) {
+        exceptionMessage = "张力超限";
+    } else if (m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow) {
+        exceptionMessage = "张力遇卡";
+    } else if (m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop) {
+        exceptionMessage = "张力遇阻";
+    } else if (m_IO_Value3.bits_Value3.m_AlarmEncoder1) {
+        exceptionMessage = "编码器1异常";
+    } else if (m_IO_Value3.bits_Value3.m_AlarmEncoder2) {
+        exceptionMessage = "编码器2异常";
+    } else if (m_IO_Value3.bits_Value3.m_AlarmEncoder3) {
+        exceptionMessage = "编码器3异常";
+    } else if (m_IO_Value3.bits_Value3.m_AlarmDrowsy) {
+        exceptionMessage = "疲劳作业";
+    }
+
+    modData.exception = exceptionMessage;
 
     // HBDatabase::GetInstance().insertHistoryData(modData);
     QtConcurrent::run([modData]() {
