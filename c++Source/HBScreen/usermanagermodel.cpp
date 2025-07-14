@@ -201,12 +201,12 @@ void UserManagerModel::loadFromDatabase()
         tmpUser.groupIndex = groupId;
         tmpUser.userHandleVisible = true;
         m_users.append(tmpUser);
+        qDebug()<<"222222222222222222222222";
         break;
     default:
         m_users = HBDatabase::GetInstance().LoadAllUsers();
         break;
     }
-    m_users = HBDatabase::GetInstance().LoadAllUsers();
     endResetModel();
 }
 

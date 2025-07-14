@@ -212,6 +212,7 @@ Item{
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter
                     color: Style.whiteFontColor
+                    visible: (UserModel.GroupIndex > 0) ? false : true
                 }
                 HBComboBox
                 {
@@ -220,6 +221,7 @@ Item{
                     height: Math.round(componentHeight * Style.scaleHint)
                     currentIndex: 0
                     model: HistoryGlobalDefine.fileType
+                    visible: (UserModel.GroupIndex > 0) ? false : true
                 }
 
                 HBPrimaryButton

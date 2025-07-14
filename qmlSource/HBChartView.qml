@@ -37,8 +37,8 @@ Item {
     property bool isTensionIncrementLeftAxisVisible:   false
 
     property int currentStartIndex: 0
-    property int pointsPerPage: 1000
-    property int actualPoints: 1000
+    property int pointsPerPage: 500
+    property int actualPoints: 500
     property int cursorIndex: 0 // 游标初始在显示区间中间
 
     /**
@@ -122,7 +122,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: "transparent"
-        border.color: Style.backgroundMiddleColor
+        // border.color: Style.backgroundMiddleColor
 
         ChartView {
             id: graphChartView
@@ -152,7 +152,8 @@ Item {
                 titleFont.family: "宋体"
                 titleFont.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                 titleVisible: false
-                format: "yyyy-MM-dd hh:mm:ss"
+                // format: "yyyy-MM-dd hh:mm:ss"
+                format: "hh:mm:ss"
                 max: new Date()
                 min: new Date()
                 tickCount: 4
@@ -327,7 +328,11 @@ Item {
                 radius: Math.round(8 * Style.scaleHint)
                 visible: true
                 MouseArea {
-                    anchors.fill: parent
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.margins: Math.round(-50 * Style.scaleHint)
                     property real dragStartX: 0
                     onPressed: {
                         dragStartX = mouse.x
@@ -389,16 +394,16 @@ Item {
                         font.family: "宋体"
                         color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
                     }
-                    Text {
-                        text: "X Axis: " + cursorItem.cursorX
-                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
-                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
-                    }
-                    Text {
-                        text: "cursorIndex: " + cursorIndex
-                        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
-                        color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
-                    }
+                    // Text {
+                    //     text: "X Axis: " + cursorItem.cursorX
+                    //     font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                    //     color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
+                    // }
+                    // Text {
+                    //     text: "cursorIndex: " + cursorIndex
+                    //     font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+                    //     color: HBAxisDefine.getAxisColor(HBGraphAxisEnum.TENSION_INCREMENT_IDX)
+                    // }
                 }
             }
         }
@@ -432,7 +437,6 @@ Item {
                         if(maxDelta < 0) maxDelta = 0
                         currentStartIndex = Math.min(maxDelta, newIndex)
                     }
-                    console.debug("1111111111111111111")
                     plotGraph();
                 }
                 dragging = false;

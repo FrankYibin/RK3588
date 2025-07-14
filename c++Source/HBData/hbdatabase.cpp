@@ -1219,7 +1219,7 @@ bool HBDatabase::QueryUser(const QString username, const QString password, int& 
     else
     {
         groupId = query.value(2).toInt();
-        createtime = query.value(3).toString();
+        createtime = query.value(3).toString().left(10);
         nickname = query.value(4).toString();
     }
 
@@ -1246,7 +1246,7 @@ bool HBDatabase::QueryUser(const QString username, int &groupId, QString &nickna
     else
     {
         groupId = query.value(2).toInt();
-        createtime = query.value(3).toString();
+        createtime = query.value(3).toString().left(10);
         nickname = query.value(4).toString();
     }
 
