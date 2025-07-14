@@ -2,25 +2,56 @@
 #include <QCoreApplication>
 #include "c++Source/HBScreen/depthsetting.h"
 #include "c++Source/HBScreen/tensionsetting.h"
+#include "../serial.h"
 #include <QDir>
 #include <QDebug>
 
 Configuration* Configuration::_ptrConfiguration = nullptr;
 
 Configuration::Configuration(QObject *parent)
-    : QObject(parent),m_settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat)
+    : QObject(parent)
 {
+    m_settings.setPath(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::applicationDirPath() + "/config.ini");
     ensureConfigSettingsFileExists();
     m_settings.setIniCodec("UTF-8");
 
     m_baudRate = m_settings.value("RS232/BaudRate", "9600").toString();
     m_settings.setValue("RS232/BaudRate", m_baudRate);
+    Serial::GetInstance()->SetBandrate(m_baudRate.toInt());
     m_dataBits = m_settings.value("RS232/DataBits", "8").toString();
     m_settings.setValue("RS232/DataBits", m_dataBits);
+    if(m_dataBits == "6")
+        Serial::GetInstance()->SetDataBits(Serial::Data6);
+    else if(m_dataBits == "7")
+        Serial::GetInstance()->SetDataBits(Serial::Data7);
+    else if(m_dataBits == "8")
+        Serial::GetInstance()->SetDataBits(Serial::Data8);
+    else
+        Serial::GetInstance()->SetDataBits(Serial::Data8);
+
     m_parity = m_settings.value("RS232/Parity", "None").toString();
     m_settings.setValue("RS232/Parity", m_parity);
+    if(m_parity == "None")
+        Serial::GetInstance()->SetParity(Serial::NoParity);
+    else if(m_parity == "Odd")
+        Serial::GetInstance()->SetParity(Serial::OddParity);
+    else if(m_parity == "Even")
+        Serial::GetInstance()->SetParity(Serial::EvenParity);
+    else
+        Serial::GetInstance()->SetParity(Serial::NoParity);
+
     m_stopBits = m_settings.value("RS232/StopBits", "1").toString();
     m_settings.setValue("RS232/StopBits", m_stopBits);
+    if(m_stopBits == "1")
+        Serial::GetInstance()->SetStopBits(Serial::OneStop);
+    else if(m_stopBits == "1.5")
+        Serial::GetInstance()->SetStopBits(Serial::OneAndHalfStop);
+    else if(m_stopBits == "2")
+        Serial::GetInstance()->SetStopBits(Serial::TwoStop);
+    else
+        Serial::GetInstance()->SetStopBits(Serial::OneStop);
+
+    Serial::GetInstance()->Open_Serial_Port();
 
     m_localIp = m_settings.value("Network/LocalIP", "192.168.1.1").toString();
     m_settings.setValue("Network/LocalIP", m_localIp);
@@ -54,12 +85,12 @@ Configuration::Configuration(QObject *parent)
 
 void Configuration::InitUnits()
 {
-    int defaultVelocityUnit = DepthSetting::GetInstance()->VELOCITY_UNIT::M_PER_HOUR;
+    int defaultVelocityUnit = DepthSetting::M_PER_HOUR;
     int velocityUnit = m_settings.value("Unit/VelocityUnit", defaultVelocityUnit).toInt();
     m_velocityUnit = velocityUnit;
     DepthSetting::GetInstance()->setVelocityUnit(velocityUnit);
 
-    int defaultTensionUnit = TensionSetting::GetInstance()->FORCE_UNIT::LB;
+    int defaultTensionUnit = TensionSetting::LB;
     int tensionUnit = m_settings.value("Unit/TensionUnit", defaultTensionUnit).toInt();
     m_tensionUnit = tensionUnit;
     TensionSetting::GetInstance()->setTensionUnit(tensionUnit);
@@ -82,6 +113,9 @@ void Configuration::setBaudRate(const QString baudRate) {
     if (baudRate != m_baudRate) {
         m_baudRate = baudRate;
         m_settings.setValue("RS232/BaudRate", baudRate);
+        Serial::GetInstance()->Close_Serial_Port();
+        Serial::GetInstance()->SetBandrate(m_baudRate.toInt());
+        Serial::GetInstance()->Open_Serial_Port();
         emit BaudRateChanged();
     }
 }
@@ -94,6 +128,18 @@ void Configuration::setDataBits(const QString dataBits) {
     if (dataBits != m_dataBits) {
         m_dataBits = dataBits;
         m_settings.setValue("RS232/DataBits", dataBits);
+        Serial::GetInstance()->Close_Serial_Port();
+
+        if(m_dataBits == "6")
+            Serial::GetInstance()->SetDataBits(Serial::Data6);
+        else if(m_dataBits == "7")
+            Serial::GetInstance()->SetDataBits(Serial::Data7);
+        else if(m_dataBits == "8")
+            Serial::GetInstance()->SetDataBits(Serial::Data8);
+        else
+            Serial::GetInstance()->SetDataBits(Serial::Data8);
+
+        Serial::GetInstance()->Open_Serial_Port();
         emit DataBitsChanged();
     }
 }
@@ -107,6 +153,18 @@ void Configuration::setParity(const QString parity) {
     if (parity != m_parity) {
         m_parity = parity;
         m_settings.setValue("RS232/Parity", parity);
+        Serial::GetInstance()->Close_Serial_Port();
+
+        if(m_parity == "None")
+            Serial::GetInstance()->SetParity(Serial::NoParity);
+        else if(m_parity == "Odd")
+            Serial::GetInstance()->SetParity(Serial::OddParity);
+        else if(m_parity == "Even")
+            Serial::GetInstance()->SetParity(Serial::EvenParity);
+        else
+            Serial::GetInstance()->SetParity(Serial::NoParity);
+
+        Serial::GetInstance()->Open_Serial_Port();
         emit ParityChanged();
     }
 }
@@ -119,6 +177,18 @@ void Configuration::setStopBits(const QString stopBits) {
     if (stopBits != m_stopBits) {
         m_stopBits = stopBits;
         m_settings.setValue("RS232/StopBits", stopBits);
+        Serial::GetInstance()->Close_Serial_Port();
+
+        if(m_stopBits == "1")
+            Serial::GetInstance()->SetStopBits(Serial::OneStop);
+        else if(m_stopBits == "1.5")
+            Serial::GetInstance()->SetStopBits(Serial::OneAndHalfStop);
+        else if(m_stopBits == "2")
+            Serial::GetInstance()->SetStopBits(Serial::TwoStop);
+        else
+            Serial::GetInstance()->SetStopBits(Serial::OneStop);
+
+        Serial::GetInstance()->Open_Serial_Port();
         emit StopBitsChanged();
     }
 }
@@ -261,8 +331,9 @@ void Configuration::onTensionUnitChanged(int unit)
     }
 }
 
-void Configuration::ensureConfigSettingsFileExists()
+bool Configuration::ensureConfigSettingsFileExists()
 {
+    bool bResult = false;
     QString configPath = QCoreApplication::applicationDirPath() + "/config.ini";
 
     if (!QFile::exists(configPath)) {
@@ -270,6 +341,8 @@ void Configuration::ensureConfigSettingsFileExists()
             qDebug() << "Failed to copy config.ini from resources!";
         } else {
             qDebug() << "config.ini copied from resources to " << configPath;
+            bResult = true;
         }
     }
+    return bResult;
 }

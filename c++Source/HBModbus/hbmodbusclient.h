@@ -247,6 +247,7 @@ private:
     void handleCANbus();
 
     void Insert4GData();
+    void InsertSerialData();
 
     //historydata
     void InsertDataToDatabase();

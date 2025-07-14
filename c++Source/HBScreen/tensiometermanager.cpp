@@ -57,10 +57,15 @@ QVariant TensiometerManager::data(const QModelIndex &index, int role) const
     case SignalRole:
         return item.Analog;
     case ScaledRole:
-        if(item.Scale.isEmpty() == true)
+        if(index.row() == 0)
             return true;
         else
-            return false;
+        {
+            if(item.Scale.isEmpty() == true)
+                return true;
+            else
+                return false;
+        }
     default:
         return QVariant();
     }

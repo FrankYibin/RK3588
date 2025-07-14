@@ -117,7 +117,7 @@ private:
     static Configuration* _ptrConfiguration;
 
     void InitUnits();
-    void ensureConfigSettingsFileExists();
+    bool ensureConfigSettingsFileExists();
 
 private slots:
     void onDepthVelocityUnitChanged(int unit);

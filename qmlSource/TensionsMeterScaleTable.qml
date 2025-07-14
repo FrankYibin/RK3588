@@ -88,8 +88,13 @@ Item{
                     anchors.centerIn: parent
                     color: Style.whiteFontColor
                     //                    text: styleData.value
-                    text: styleData.value
-                    font.family: Style.regular.name
+                    text: {
+                        if(styleData.row === 0)
+                            return qsTr("默认张力计")
+                        else
+                            return styleData.value
+                    }
+                    font.family: "宋体"
                     font.pixelSize: tensionMeterTable.fontSize
                     Component.onCompleted: console.log("SensorNumber cell:", styleData.value)
 
@@ -223,13 +228,12 @@ Item{
                         width: Math.round(80 * Style.scaleHint)
                         height: Math.round(25 * Style.scaleHint)
                         fontSize: tensionMeterTable.fontSize
-                        visible: TensiometerManager.count > 1
+                        visible: (styleData.row === 0) ? false : true
                         onClicked: {
                             var index = styleData.row;
                             if (index >= 0 && index < TensiometerManager.rowCount())
                             {
                                 TensiometerManager.removeTensiometer(index);
-                                console.log("当前行数：" ,TensiometerManager.rowCount())
                                 tensionMeterTable.currentRow = -1;
                             }
                         }
@@ -272,6 +276,7 @@ Item{
                     height: Math.round(30 * Style.scaleHint)
                     text: qsTr("默认刻度")
                     fontSize: Math.round(Style.style5 * Style.scaleHint)
+                    visible: false
                     onClicked:
                     {
                         // controlLimitNumpad.visible = false
@@ -285,7 +290,7 @@ Item{
             anchors.verticalCenter: parent.verticalCenter
             color: Style.whiteFontColor
             text: qsTr("当前张力计编号: ") + HBHome.TensiometerNumber
-            font.family: Style.regular.name
+            font.family: "宋体"
             font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
         }
     }

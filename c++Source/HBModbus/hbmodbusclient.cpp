@@ -14,6 +14,7 @@
 #include "c++Source/HBUtility/hbutilityclass.h"
 #include "c++Source/HBScreen/depthsiman.h"
 #include "c++Source/HBVoice/hbvoice.h"
+#include "../serial.h"
 #include <QtConcurrent>
 #include <QHash>
 #include <cstring>
@@ -87,6 +88,7 @@ void HBModbusClient::timerEvent(QTimerEvent *event)
             readRegisters   (0, HQmlEnum::MAX_REGISTR);
             readCoils       (0, HQmlEnum::MAX_COIL);
             Insert4GData    ();
+            InsertSerialData();
             InsertDataToDatabase();
         }
         else
@@ -1973,6 +1975,58 @@ void HBModbusClient::Insert4GData()
     len = MakeReport(Value, len, Buffer);
     array.append(Buffer, len);
     _ptrSocketObj->insertMessageToMap(0, array);
+#endif
+}
+
+void HBModbusClient::InsertSerialData()
+{
+#ifdef RK3588
+    if(Serial::GetInstance()->GetStatus() == false)
+        return;
+    QByteArray array;
+    int deep    = m_RecvReg.m_DepthCurrent.Data;
+    int speed   = m_RecvReg.m_VelocityCurrent.Data;
+    int tension = m_RecvReg.m_TensionCurrent.Data;
+    int tension_delta = m_RecvReg.m_TensionCurrentDelta.Data;
+    array.append(0xbb);
+    array.append(0x55);
+    array.append(0x12);
+    array.append(static_cast<char>(0x00));
+    char value[4] = {0};
+    memcpy(value, &deep, sizeof(int));
+    array.append(value, sizeof(int));
+    memcpy(value, &speed, sizeof(int));
+    array.append(value, sizeof(int));
+    memcpy(value, &tension, sizeof(int));
+    array.append(value, sizeof(int));
+    memcpy(value, &tension_delta, sizeof(int));
+    array.append(value, sizeof(int));
+
+    unsigned char alarmByte = 00;
+    if(m_IO_Value2.bits_Value2.m_AlarmVelocity == 1)
+        alarmByte |= 0x01;
+    else
+        alarmByte &= ~0x01;
+    if(m_IO_Value2.bits_Value2.m_AlarmTension == 1)
+        alarmByte |= 0x02;
+    else
+        alarmByte &= ~0x02;
+    if(m_IO_Value0.bits_Value0.m_StatusTensiometerOnline == 0)
+        alarmByte |= 0x04;
+    else
+        alarmByte &= ~0x04;
+
+    alarmByte |= 0x80; //m/h LB
+    array.append(alarmByte);
+
+    unsigned char checkSum = 0x00;
+    const char* _ptr = array.constData();
+    for(int i = 2; i < array.count(); i++)
+    {
+        checkSum +=  *(_ptr + i);
+    }
+    array.append(checkSum);
+    Serial::GetInstance()->Write_Serial_Port(array);
 #endif
 }
 
