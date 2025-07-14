@@ -79,6 +79,7 @@ SOURCES += main.cpp \
     c++Source/quickcrc32algorithm.cpp \
     c++Source/recipegeneral.cpp \
     c++Source/recipemodel.cpp \
+    c++Source/serial.cpp \
     c++Source/serversocket.cpp \
     c++Source/systemInformationInterface.cpp \
     c++Source/upgradesoftware.cpp \
@@ -142,6 +143,7 @@ HEADERS += \
     c++Source/recipedef.h \
     c++Source/recipegeneral.h \
     c++Source/recipemodel.h \
+    c++Source/serial.h \
     c++Source/shareDefine.h \
     c++Source/systemInformationInterface.h \
     c++Source/systemTypeDef.h \
