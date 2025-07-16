@@ -34,7 +34,8 @@ Item{
 
         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+//        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+        HistoryDataTable.setRange(startStamp,endStamp)
         timer.start()
     }
 
@@ -193,7 +194,8 @@ Item{
                     {
                         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
                         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-                        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+                        var UserCurrentUserName = UserModel.CurrentUser
+                        HistoryDataTable.loadFromDatabase(startStamp,endStamp,UserCurrentUserName,alarmType.currentIndex)
                         console.log("startStamp: ", startStamp,"endStamp: ", endStamp)
                     }
                 }

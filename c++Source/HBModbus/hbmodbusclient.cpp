@@ -1943,7 +1943,7 @@ void HBModbusClient::InsertDataToDatabase()
     modData.maxTension = HBHome::GetInstance()->TensionLimited();
     modData.safetyTension = TensionSafety::GetInstance()->TensionCurrentSafety();
 
-    QString exceptionMessage = "none";
+    QString exceptionMessage = "无";
 
     if (m_IO_Value2.bits_Value2.m_AlarmVelocity) {
         exceptionMessage = "超速";
