@@ -326,6 +326,8 @@ Item{
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: Math.round(10 * Style.scaleHint)
+        anchors.bottomMargin: Math.round(-20 * Style.scaleHint)
+        anchors.top: gridParentFrame.bottom
         Text {
             id: name
             anchors.verticalCenter: parent.verticalCenter
@@ -334,7 +336,7 @@ Item{
             color: Style.whiteFontColor
             font{
                 family: "宋体"
-                pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                pixelSize: Math.round(Style.style4 * Style.scaleHint)
             }
         }
     }
