@@ -39,7 +39,6 @@ public:
 
 //    Q_INVOKABLE void resetModel();
 
-    Q_INVOKABLE void loadFromDatabase(const QDateTime& start, const QDateTime& end);
     Q_INVOKABLE void loadFromDatabase(const QDateTime start, const QDateTime end,const QString currentUser, bool includeExceptionsOnly);
 
     Q_INVOKABLE bool isAvailaleDiskUSB();

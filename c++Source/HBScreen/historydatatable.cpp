@@ -95,7 +95,7 @@ void HistoryDataTable::setRange(const QString &startIso, const QString &endIso)
     m_start = s;
     m_end   = e;
 
-    loadFromDatabase(m_start, m_end);
+    loadFromDatabase(m_start, m_end,UserManagerModel::GetInstance().CurrentUser(),false);
 
 }
 

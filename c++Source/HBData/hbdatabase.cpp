@@ -1001,7 +1001,7 @@ QList<HistoryData> HBDatabase::loadHistoryData(const QDateTime start, const QDat
 
 
     if (includeExceptionsOnly) {
-        sql += "AND exception != 'none' ";
+        sql += "AND exception != '无' ";
     }
 
 

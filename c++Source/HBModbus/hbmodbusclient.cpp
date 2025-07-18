@@ -1943,16 +1943,16 @@ void HBModbusClient::InsertDataToDatabase()
     modData.maxTension = HBHome::GetInstance()->TensionLimited();
     modData.safetyTension = TensionSafety::GetInstance()->TensionCurrentSafety();
 
-    QString exceptionMessage = "none";
+    QString exceptionMessage = "无";
 
     if (m_IO_Value2.bits_Value2.m_AlarmVelocity) {
-        exceptionMessage = "超速";
+        exceptionMessage = "超速报警";
     } else if (m_IO_Value2.bits_Value2.m_AlarmWellSurface) {
-        exceptionMessage = "井口异常";
+        exceptionMessage = "井口报警";
     } else if (m_IO_Value2.bits_Value2.m_AlarmTargetLayer) {
-        exceptionMessage = "目标层异常";
+        exceptionMessage = "目标层报警";
     } else if (m_IO_Value2.bits_Value2.m_AlarmSurfaceCover) {
-        exceptionMessage = "表套异常";
+        exceptionMessage = "表套深度报警";
     } else if (m_IO_Value2.bits_Value2.m_AlarmTension) {
         exceptionMessage = "张力超限";
     } else if (m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow) {

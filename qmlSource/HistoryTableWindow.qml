@@ -34,7 +34,8 @@ Item{
 
         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+//        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+        HistoryDataTable.setRange(startStamp,endStamp)
         timer.start()
     }
 
@@ -193,10 +194,9 @@ Item{
                     {
                         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
                         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-                        // var selectedValue = alarmType.model[alarmType.currentIndex];
-                        var selectedValue =alarmType.currentIndex;
-                        var currentUserName = UserModel.UserName
-                        HistoryDataTable.loadFromDatabase(startStamp, endStamp,currentUserName)
+
+                        var UserCurrentUserName = UserModel.CurrentUser
+                        HistoryDataTable.loadFromDatabase(startStamp, endStamp,UserCurrentUserName, alarmType.currentIndex)
                         console.log("startStamp: ", startStamp,"endStamp: ", endStamp)
                         console.log("selectedValue111111111111111111111111",selectedValue)
 
@@ -329,6 +329,8 @@ Item{
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: Math.round(10 * Style.scaleHint)
+        anchors.bottomMargin: Math.round(-20 * Style.scaleHint)
+        anchors.top: gridParentFrame.bottom
         Text {
             id: name
             anchors.verticalCenter: parent.verticalCenter
@@ -337,7 +339,7 @@ Item{
             color: Style.whiteFontColor
             font{
                 family: "宋体"
-                pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                pixelSize: Math.round(Style.style4 * Style.scaleHint)
             }
         }
     }
