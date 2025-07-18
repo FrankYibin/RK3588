@@ -193,8 +193,13 @@ Item{
                     {
                         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
                         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-                        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+                        // var selectedValue = alarmType.model[alarmType.currentIndex];
+                        var selectedValue =alarmType.currentIndex;
+                        var currentUserName = UserModel.UserName
+                        HistoryDataTable.loadFromDatabase(startStamp, endStamp,currentUserName)
                         console.log("startStamp: ", startStamp,"endStamp: ", endStamp)
+                        console.log("selectedValue111111111111111111111111",selectedValue)
+
                     }
                 }
             }
