@@ -83,6 +83,8 @@ public:
     QList<HistoryData> loadHistoryData(const QDateTime& start,
                                        const QDateTime& end);
 
+    Q_INVOKABLE QList<HistoryData> loadHistoryData(const QDateTime start, const QDateTime end, const QString currentUser, bool includeExceptionsOnly);
+
     bool insertHistoryData(const ModbusData& modbusData);
 
     void closeTransaction();

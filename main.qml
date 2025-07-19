@@ -31,14 +31,14 @@ Window{
     width: Screen.width
     height: Screen.height
     title: qsTr("UIController")
-//    flags: Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Window
+    //    flags: Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Window
     flags: Qt.FramelessWindowHint | Qt.Window
-     visibility: Window.FullScreen
+    visibility: Window.FullScreen
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
-    property int showWidth: 1280
-    property int showHeight: 800
+    property int showWidth: 800
+    property int showHeight: 480
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -47,7 +47,7 @@ Window{
     property string qmltextAbsoluteDistanceMode:    qsTr("Absolute Distance")
     property string qmltextCollapseDistanceMode:    qsTr("Collapse Distance")
     property var qmlTextArray: [qmltextTimeMode, qmltextEnergyMode, qmltextPeakPowerMode,
-                                qmltextGroundDetectMode, qmltextAbsoluteDistanceMode, qmltextCollapseDistanceMode]
+        qmltextGroundDetectMode, qmltextAbsoluteDistanceMode, qmltextCollapseDistanceMode]
     property var currentField: null
 
     signal signalCurrentLanguageChanged()
@@ -173,25 +173,25 @@ Window{
         clearStackView()
         switch(menuIndex)
         {
-        // case UIScreenEnum.RECIPES:
-        //     stackMainView.push("qrc:/qmlSource/recipeWindow.qml", {}, StackView.Immediate)
-        //     break;
-        // case UIScreenEnum.PRODUCTION:
-        //     stackMainView.push("qrc:/qmlSource/productionWindow.qml", {}, StackView.Immediate)
-        //     break;
-        // case UIScreenEnum.ANALYTICS:
-        //     stackMainView.push("qrc:/qmlSource/analyticsWindow.qml", {}, StackView.Immediate)
-        //     break;
-        // case UIScreenEnum.SYSTEM:
-        //     stackMainView.push("qrc:/qmlSource/systemWindow.qml", {}, StackView.Immediate)
-        //     break;
-        // case UIScreenEnum.ACTUATORSETUP:
-        //     stackMainView.push("qrc:/qmlSource/BransonHornDown.qml",{}, StackView.Immediate)
-        //     break;
-        // case UIScreenEnum.DIAGNOSTICS:
-        //     break;
-        // case UIScreenEnum.IMPORTEXPORT:
-        //     break;
+            // case UIScreenEnum.RECIPES:
+            //     stackMainView.push("qrc:/qmlSource/recipeWindow.qml", {}, StackView.Immediate)
+            //     break;
+            // case UIScreenEnum.PRODUCTION:
+            //     stackMainView.push("qrc:/qmlSource/productionWindow.qml", {}, StackView.Immediate)
+            //     break;
+            // case UIScreenEnum.ANALYTICS:
+            //     stackMainView.push("qrc:/qmlSource/analyticsWindow.qml", {}, StackView.Immediate)
+            //     break;
+            // case UIScreenEnum.SYSTEM:
+            //     stackMainView.push("qrc:/qmlSource/systemWindow.qml", {}, StackView.Immediate)
+            //     break;
+            // case UIScreenEnum.ACTUATORSETUP:
+            //     stackMainView.push("qrc:/qmlSource/BransonHornDown.qml",{}, StackView.Immediate)
+            //     break;
+            // case UIScreenEnum.DIAGNOSTICS:
+            //     break;
+            // case UIScreenEnum.IMPORTEXPORT:
+            //     break;
         case UIScreenEnum.HB_PROFILE:
             stackMainView.push("qrc:/qmlSource/unitProfileWindow.qml", {}, StackView.Immediate)
             break;
@@ -680,17 +680,17 @@ Window{
 
         transitions:
             Transition {
-                from: ""
-                to: "visible"
-                reversible: true
-                ParallelAnimation {
-                    NumberAnimation {
-                        properties: "y"
-                        duration: 250
-                        easing.type: Easing.OutQuart
-                    }
+            from: ""
+            to: "visible"
+            reversible: true
+            ParallelAnimation {
+                NumberAnimation {
+                    properties: "y"
+                    duration: 250
+                    easing.type: Easing.OutQuart
                 }
             }
+        }
 
         onKeyPressed: if(currentField) currentField.insert(currentField.cursorPosition, key)
         onBackspace: {
@@ -727,9 +727,11 @@ Window{
     HBTensionPanel {
         id: tensionPanel
         width: showWidth / 2
-        height: showHeight / 2
-        visible: true
+        height: showHeight * 0.52
+        visible: false
+        scale: 1.7
         x: parent.width / 2
         y: parent.height / 2
     }
+
 }

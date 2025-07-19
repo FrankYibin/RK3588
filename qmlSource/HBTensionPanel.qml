@@ -35,10 +35,10 @@ Item{
         anchors.left: parent.left
         anchors.leftMargin: Math.round(10 * Style.scaleHint)
         anchors.top: parent.top
-        anchors.topMargin: Math.round(20 * Style.scaleHint)
+        anchors.topMargin: Math.round(5 * Style.scaleHint)
         width: parent.width
         anchors.bottom: parent.bottom
-        spacing: Math.round(5 * Style.sclaeHint)
+        spacing: Math.round(30 * Style.scaleHint)
 
         function valueToAngel(negative, value)
         {
@@ -61,7 +61,7 @@ Item{
             {
                 id: txtTension
                 anchors.top: parent.bottom
-                anchors.topMargin: Math.round(10 * Style.scaleHint)
+                anchors.topMargin: Math.round(5 * Style.scaleHint)
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.round(textFieldWidth * Style.scaleHint)
                 height: Math.round(25 * Style.scaleHint)
@@ -95,55 +95,49 @@ Item{
             }
         }
 
-        Rectangle
+        HBPandel
         {
-            width: 240
-            height: 240
+            id: pandelTensionDelta
+            negative: true
+            angle: (HBHome.IsTensiometerOnline === false) ?
+                       panel.valueToAngel(true, 0) : panel.valueToAngel(true, Number(txtTensionIncrement.text))
+            HBTextField
+            {
+                id: txtTensionIncrement
+                anchors.top: parent.bottom
+                anchors.topMargin: Math.round(5 * Style.scaleHint)
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.round(textFieldWidth * Style.scaleHint)
+                height: Math.round(25 * Style.scaleHint)
+                onlyForNumpad: true
+                font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
+                text: (HBHome.IsTensiometerOnline === false)? "-------" : HBHome.TensionCurrentDelta
+                enabled: false
+                textColor: (HBHome.IsTensiometerOnline === false) ? Style.redFontColor : Style.whiteFontColor
+            }
+            Text
+            {
+                id: unittxtTensionIncrement
+                text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + "/s" //qsTr("kg/s")
+                anchors.left: txtTensionIncrement.right
+                anchors.leftMargin: Math.round(5 * Style.scaleHint)
+                anchors.verticalCenter: txtTensionIncrement.verticalCenter
+                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                font.family: Style.regular.name
+                color: Style.whiteFontColor
+            }
+            Text
+            {
+                anchors.top: txtTensionIncrement.bottom
+                anchors.topMargin: Math.round(5 * Style.scaleHint)
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("张力增量")
+                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                font.family: "宋体"
+                color: Style.whiteFontColor
+            }
         }
-
-        // HBPandel
-        // {
-        //     id: pandelTensionDelta
-            // negative: true
-        //     angle: (HBHome.IsTensiometerOnline === false) ?
-        //                panel.valueToAngel(true, 0) : panel.valueToAngel(true, Number(txtTensionIncrement.text))
-        //     HBTextField
-        //     {
-        //         id: txtTensionIncrement
-        //         anchors.top: parent.bottom
-        //         anchors.topMargin: Math.round(10 * Style.scaleHint)
-        //         anchors.horizontalCenter: parent.horizontalCenter
-        //         width: Math.round(textFieldWidth * Style.scaleHint)
-        //         height: Math.round(25 * Style.scaleHint)
-        //         onlyForNumpad: true
-        //         font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
-        //         validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
-        //         text: (HBHome.IsTensiometerOnline === false)? "-------" : HBHome.TensionCurrentDelta
-        //         enabled: false
-        //         textColor: (HBHome.IsTensiometerOnline === false) ? Style.redFontColor : Style.whiteFontColor
-        //     }
-        //     Text
-        //     {
-        //         id: unittxtTensionIncrement
-        //         text: TensionsGlobalDefine.tensionUnitModel[TensionSetting.TensionUnit] + "/s" //qsTr("kg/s")
-        //         anchors.left: txtTensionIncrement.right
-        //         anchors.leftMargin: Math.round(5 * Style.scaleHint)
-        //         anchors.verticalCenter: txtTensionIncrement.verticalCenter
-        //         font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-        //         font.family: Style.regular.name
-        //         color: Style.whiteFontColor
-        //     }
-        //     Text
-        //     {
-        //         anchors.top: txtTensionIncrement.bottom
-        //         anchors.topMargin: Math.round(5 * Style.scaleHint)
-        //         anchors.horizontalCenter: parent.horizontalCenter
-        //         text: qsTr("张力增量")
-        //         font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-        //         font.family: "宋体"
-        //         color: Style.whiteFontColor
-        //     }
-        // }
     }
 
 

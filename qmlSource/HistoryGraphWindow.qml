@@ -8,10 +8,10 @@ import Style 1.0
 import Com.Branson.UIScreenEnum 1.0
 import HBAxisDefine 1.0
 Item{
-    readonly property int textWidth: 100
+    readonly property int textWidth: 80
     readonly property int comboBoxWidth: 150
     readonly property int buttonWidth: 100
-    readonly property int rowSpacing: 20
+    readonly property int rowSpacing: 10
     readonly property int componentHeight: 30
 
     Connections{
@@ -62,19 +62,19 @@ Item{
         anchors.left: parent.left
         anchors.leftMargin: Math.round(5 * Style.scaleHint)
         width: parent.width - Math.round(10 * Style.scaleHint)
-        height: parent.height / 3 - Math.round(40 * Style.scaleHint)
+        height: Math.round(50 * Style.scaleHint)
         backgroundColor: Style.backgroundLightColor
         Grid
         {
             id: argumentLayout
-            columns: 2
-            rows: 2
-            columnSpacing: Math.round(80 * Style.scaleHint)
+            columns: 3
+            rows: 1
+            columnSpacing: Math.round(30 * Style.scaleHint)
             rowSpacing: Math.round(10 * Style.scaleHint)
             width: Math.round((textWidth + rowSpacing + comboBoxWidth) * 2 * Style.scaleHint) + argumentLayout.columnSpacing
-            height: Math.round((componentHeight * 2) * Style.scaleHint) + argumentLayout.rowSpacing
+            height: Math.round(componentHeight * Style.scaleHint)
             anchors.left: parent.left
-            anchors.leftMargin: Math.round(20 * Style.scaleHint)
+            anchors.leftMargin: Math.round(10 * Style.scaleHint)
             anchors.verticalCenter: parent.verticalCenter
 
             Row{
@@ -191,10 +191,12 @@ Item{
 
     Item{
         anchors.top: info.bottom
-        // anchors.topMargin: Math.round(Style.scaleHint * -10)
+        anchors.topMargin: Math.round(Style.scaleHint * -20)
         anchors.bottom: parent.bottom
-        anchors.right: info.right
-        anchors.left: info.left
+        anchors.right: parent.right
+        anchors.rightMargin: Math.round(Style.scaleHint * -20)
+        anchors.left: parent.left
+        anchors.leftMargin: Math.round(Style.scaleHint * -15)
         HBChartView {
             id: depthChart
             anchors.fill: parent

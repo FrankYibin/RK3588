@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QStorageInfo>
 #include <qcoreapplication.h>
+#include "c++Source/HBScreen/usermanagermodel.h"
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
@@ -119,17 +120,19 @@ void HistoryDataTable::setRange(const QString &startIso, const QString &endIso)
 
     m_start = s;
     m_end   = e;
-    loadFromDatabase(m_start, m_end);
+
+    loadFromDatabase(m_start, m_end,UserManagerModel::GetInstance().CurrentUser(),false);
 
 }
 
 
-void HistoryDataTable::loadFromDatabase(const QDateTime &start, const QDateTime &end)
+void HistoryDataTable::loadFromDatabase(const QDateTime start, const QDateTime end,const QString currentUser, bool includeExceptionsOnly)
 {
     beginResetModel();
-    m_dataList = HBDatabase::GetInstance().loadHistoryData(start, end);
+    m_dataList = HBDatabase::GetInstance().loadHistoryData(start, end,currentUser,includeExceptionsOnly);
     endResetModel();
 }
+
 
 bool HistoryDataTable::isAvailaleDiskUSB()
 {
