@@ -5,5 +5,7 @@
         <file>misc/config.ini</file>
         <file>misc/wellsettings.ini</file>
         <file>misc/DVTT.db</file>
+        <file>misc/ConvertExcel.py</file>
+        <file>misc/ConvertPDF.py</file>
     </qresource>
 </RCC>

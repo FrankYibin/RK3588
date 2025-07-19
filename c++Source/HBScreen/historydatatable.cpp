@@ -5,10 +5,37 @@
 #include <QDebug>
 #include <QStringList>
 #include <QStorageInfo>
+#include <qcoreapplication.h>
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
 {
+    QString ConvertExcelPath    = QCoreApplication::applicationDirPath() + "/ConvertExcel.py";
+    QString ConvertPDFPath      = QCoreApplication::applicationDirPath() + "/ConvertPDF.py";
+    QString SimsunPath          = QCoreApplication::applicationDirPath() + "/simsun.ttc";
+    if(!QFile::exists(ConvertExcelPath))
+    {
+        if(!QFile::copy(":/misc/ConvertExcel.py", ConvertExcelPath))
+        {
+            qWarning() << "Failed to copy ConvertExcel.py from resources to" << ConvertExcelPath;
+            return;
+        }
+    }
+    if(!QFile::exists(ConvertPDFPath))
+    {
+        if(!QFile::copy(":/misc/ConvertPDF.py", ConvertPDFPath))
+        {
+            qWarning() << "Failed to copy ConvertPDF.py from resource to" << ConvertPDFPath;
+        }
+    }
+    if(!QFile::exists(SimsunPath))
+    {
+        if(!QFile::copy(":/misc/simsun.ttc", SimsunPath))
+        {
+            qWarning() << "Failed to copy simsun.ttc from resource to" << SimsunPath;
+        }
+    }
+
 
 }
 
