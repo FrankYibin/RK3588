@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QStorageInfo>
 #include <qcoreapplication.h>
+#include <QProcess>
 #include "c++Source/HBScreen/usermanagermodel.h"
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
@@ -29,15 +30,6 @@ HistoryDataTable::HistoryDataTable(QObject *parent)
             qWarning() << "Failed to copy ConvertPDF.py from resource to" << ConvertPDFPath;
         }
     }
-    if(!QFile::exists(SimsunPath))
-    {
-        if(!QFile::copy(":/misc/simsun.ttc", SimsunPath))
-        {
-            qWarning() << "Failed to copy simsun.ttc from resource to" << SimsunPath;
-        }
-    }
-
-
 }
 
 HistoryDataTable *HistoryDataTable::GetInstance()
@@ -159,7 +151,7 @@ bool HistoryDataTable::isAvailaleDiskUSB()
             {
                 if(strPath.contains("/run/media/mmcblk") == false)
                 {
-                    m_USBDirectory = strPath + "/output.csv";
+                    m_USBDirectory = strPath;
                     bResult = true;
                     break;
                 }
@@ -174,7 +166,7 @@ bool HistoryDataTable::isAvailaleDiskUSB()
     return bResult;
 }
 
-bool HistoryDataTable:: exportData()
+bool HistoryDataTable:: exportData(int fileType)
 {
     bool bResult = false;
 
@@ -205,7 +197,61 @@ bool HistoryDataTable:: exportData()
         };
         rows.append(value);
     }
-    bResult = ExportToCSV(m_USBDirectory, headers, rows);
+    QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+    switch(fileType)
+    {
+    case CSV_FILE:
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+        break;
+    case TXT_FILE:
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.txt";
+        break;
+    case PDF_FILE:
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+        break;
+    case XLSX_FILE:
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+        break;
+    default:
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+        break;
+    }
+
+    bResult = ExportToCSV(localAppDirectory, headers, rows);
+    if(bResult == false)
+        return bResult;
+    bResult = QFile::exists(localAppDirectory);
+    if(bResult == false)
+        return bResult;
+
+
+    switch(fileType)
+    {
+    case CSV_FILE:
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+        break;
+    case TXT_FILE:
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.txt";
+        break;
+    case PDF_FILE:
+        ExportToPDF();
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.pdf";
+        break;
+    case XLSX_FILE:
+        ExportToXLSX();
+        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.xlsx";
+        break;
+    default:
+        break;
+    }
+    bResult = QFile::exists(localAppDirectory);
+    if(bResult == false)
+        return bResult;
+    if(!QFile::copy(localAppDirectory, m_USBDirectory))
+    {
+        qWarning() << "Failed to copy " << localAppDirectory << " to " << m_USBDirectory;
+        bResult = false;
+    }
     return bResult;
 }
 
@@ -231,4 +277,36 @@ bool HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& 
     file.close();
     qDebug() << "数据已成功导出到：" << filePath;
     return true;
+}
+
+bool HistoryDataTable::ExportToPDF()
+{
+    bool bResult = false;
+    // 创建 QProcess 对象
+    QProcess process;
+
+    // 设置要执行的命令
+    QString program = "python"; // 你可以替换为其他 Linux 命令
+    QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
+    arguments.append("ConvertPDF.py");
+
+    // 启动进程
+    process.start(program, arguments);
+
+    // 等待进程结束
+    process.waitForFinished();
+
+    // 获取命令输出
+    QString output = process.readAllStandardOutput();
+    QString error = process.readAllStandardError();
+
+    // 输出结果
+    if (!output.isEmpty())
+        bResult = true;
+    return bResult;
+}
+
+bool HistoryDataTable::ExportToXLSX()
+{
+
 }

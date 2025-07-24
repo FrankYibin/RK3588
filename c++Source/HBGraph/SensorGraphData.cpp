@@ -157,15 +157,20 @@ void SensorGraphData::clearGraph()
 
 }
 
-void SensorGraphData::replaceSeriesPoints(const int index, QLineSeries* series)
+void SensorGraphData::replaceSeriesPoints(const int index, QLineSeries* series,
+                                          int start, int end)
 {
     QVector<QPointF> points;
     int n = m_TimeRealPoints.size();
+    if(start > n)
+        start = n;
+    if(end > n)
+        end = n;
     points.reserve(n);
     switch(index)
     {
     case HBGraphAxisEnum::DEPTH_IDX:
-        for (int i = 0; i < n; ++i)
+        for (int i = start; i < end; ++i)
         {
             // xList[i] 是 JS 的毫秒时间戳
             QDateTime dt = m_TimeRealPoints[i];
@@ -175,7 +180,7 @@ void SensorGraphData::replaceSeriesPoints(const int index, QLineSeries* series)
         }
         break;
     case HBGraphAxisEnum::VELOCITY_IDX:
-        for (int i = 0; i < n; ++i)
+        for (int i = start; i < end; ++i)
         {
             // xList[i] 是 JS 的毫秒时间戳
             QDateTime dt = m_TimeRealPoints[i];
@@ -185,7 +190,7 @@ void SensorGraphData::replaceSeriesPoints(const int index, QLineSeries* series)
         }
         break;
     case HBGraphAxisEnum::TENSIONS_IDX:
-        for (int i = 0; i < n; ++i)
+        for (int i = start; i < end; ++i)
         {
             // xList[i] 是 JS 的毫秒时间戳
             QDateTime dt = m_TimeRealPoints[i];
@@ -195,7 +200,7 @@ void SensorGraphData::replaceSeriesPoints(const int index, QLineSeries* series)
         }
         break;
     case HBGraphAxisEnum::TENSION_INCREMENT_IDX:
-        for (int i = 0; i < n; ++i)
+        for (int i = start; i < end; ++i)
         {
             // xList[i] 是 JS 的毫秒时间戳
             QDateTime dt = m_TimeRealPoints[i];
@@ -205,7 +210,7 @@ void SensorGraphData::replaceSeriesPoints(const int index, QLineSeries* series)
         }
         break;
     default:
-        for (int i = 0; i < n; ++i)
+        for (int i = start; i < end; ++i)
         {
             // xList[i] 是 JS 的毫秒时间戳
             QDateTime dt = m_TimeRealPoints[i];

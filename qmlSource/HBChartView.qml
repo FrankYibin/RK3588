@@ -100,12 +100,16 @@ Item {
         tensionsLeftAxis.max = roundAxisValues(axisMaxValues[2], axisMinValues[2]);
         tensionIncrementLeftAxis.max = roundAxisValues(axisMaxValues[3], axisMinValues[3]);
         // 清空并添加新数据
-        for(var i = 0; i < timeSlice.length; i++) {
-            depthLeftAxisPlot.append(timeSlice[i], depthSlice[i]);
-            velocityLeftAxisPlot.append(timeSlice[i], velocitySlice[i]);
-            tensionsLeftAxisPlot.append(timeSlice[i], tensionSlice[i]);
-            tensionIncrementLeftAxisPlot.append(timeSlice[i], tensionDeltaSlice[i]);
-        }
+        // for(var i = 0; i < timeSlice.length; i++) {
+        //     depthLeftAxisPlot.append(timeSlice[i], depthSlice[i]);
+        //     velocityLeftAxisPlot.append(timeSlice[i], velocitySlice[i]);
+        //     tensionsLeftAxisPlot.append(timeSlice[i], tensionSlice[i]);
+        //     tensionIncrementLeftAxisPlot.append(timeSlice[i], tensionDeltaSlice[i]);
+        // }
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.DEPTH_IDX, depthLeftAxisPlot, start, end)
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.VELOCITY_IDX, velocityLeftAxisPlot, start, end)
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.TENSIONS_IDX, tensionsLeftAxisPlot, start, end)
+        SensorGraphData.replaceSeriesPoints(HBGraphAxisEnum.TENSION_INCREMENT_IDX, tensionIncrementLeftAxisPlot, start, end)
     }
 
     function clearGraph()
@@ -296,19 +300,19 @@ Item {
         Item {
             id: cursorItem
             anchors.fill: parent
-            property real cursorX:
+            property int cursorIndex: weldGraph.cursorIndex
+            property real cursorX: graphChartView.plotArea.x
+            onCursorIndexChanged:
             {
-                if (depthLeftAxisPlot && depthLeftAxisPlot.count > 0)
-                {
+                if (depthLeftAxisPlot && depthLeftAxisPlot.count > 0 && cursorIndex < depthLeftAxisPlot.count) {
                     var point = depthLeftAxisPlot.at(cursorIndex);
                     var mappedPosition = graphChartView.mapToPosition(point, depthLeftAxisPlot);
-                    return mappedPosition.x;
-                }
-                else
-                {
-                    return graphChartView.plotArea.x;
+                    cursorX = mappedPosition.x;
+                } else {
+                    cursorX = graphChartView.plotArea.x;
                 }
             }
+
             Rectangle {
                 x: cursorItem.cursorX - 1
                 width: 2

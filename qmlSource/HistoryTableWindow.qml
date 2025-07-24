@@ -196,8 +196,8 @@ Item{
                         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
 
                         var UserCurrentUserName = UserModel.CurrentUser
-                        HistoryDataTable.loadFromDatabase(startStamp, endStamp,UserCurrentUserName, alarmType.currentIndex)
-                        console.log("startStamp: ", startStamp,"endStamp: ", endStamp)
+                        HistoryDataTable.loadFromDatabase(startStamp, endStamp, UserCurrentUserName, alarmType.currentIndex)
+                        console.log("startStamp: ", startStamp, "endStamp: ", endStamp)
                         console.log("selectedValue111111111111111111111111",selectedValue)
 
                     }
@@ -239,7 +239,7 @@ Item{
                     visible: (UserModel.GroupIndex > 0) ? false : true
                     onClicked:
                     {
-                        if(HistoryDataTable.exportData() === true)
+                        if(HistoryDataTable.exportData(fileFormat.currentIndex) === true)
                             mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
                         else
                             mainWindow.showDialogScreen(qsTr("没有找到可以使用的U盘或尝试再次导出"), Dialog.Ok, null)

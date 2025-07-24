@@ -28,6 +28,14 @@ public:
         ExceptionRole
     };
 
+    enum FILE_TYPE
+    {
+        CSV_FILE = 0,
+        TXT_FILE,
+        PDF_FILE,
+        XLSX_FILE
+    };
+
     static HistoryDataTable* GetInstance();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -42,7 +50,7 @@ public:
     Q_INVOKABLE void loadFromDatabase(const QDateTime start, const QDateTime end,const QString currentUser, bool includeExceptionsOnly);
 
     Q_INVOKABLE bool isAvailaleDiskUSB();
-    Q_INVOKABLE bool exportData();
+    Q_INVOKABLE bool exportData(int fileType);
 public slots:
 
 protected:
@@ -56,6 +64,8 @@ private:
     static HistoryDataTable* _ptrHistoryDataTable;
 private:
     bool ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data);
+    bool ExportToPDF();
+    bool ExportToXLSX();
 };
 
 #endif // HISTORYDATATABLE_H

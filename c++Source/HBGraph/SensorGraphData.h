@@ -31,7 +31,8 @@ public:
     Q_INVOKABLE QVariantList getVelocitys() const;
     Q_INVOKABLE QVariantList getTensions() const;
     Q_INVOKABLE QVariantList getTensionDeltas() const;
-    Q_INVOKABLE void replaceSeriesPoints(const int index, QLineSeries* series);
+    Q_INVOKABLE void replaceSeriesPoints(const int index, QLineSeries* series,
+                                         int start, int end);
 
 
 protected:
