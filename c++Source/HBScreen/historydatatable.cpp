@@ -7,6 +7,7 @@
 #include <QStorageInfo>
 #include <qcoreapplication.h>
 #include <QProcess>
+#include <QThread>
 #include "c++Source/HBScreen/usermanagermodel.h"
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
@@ -14,7 +15,6 @@ HistoryDataTable::HistoryDataTable(QObject *parent)
 {
     QString ConvertExcelPath    = QCoreApplication::applicationDirPath() + "/ConvertExcel.py";
     QString ConvertPDFPath      = QCoreApplication::applicationDirPath() + "/ConvertPDF.py";
-    QString SimsunPath          = QCoreApplication::applicationDirPath() + "/simsun.ttc";
     if(!QFile::exists(ConvertExcelPath))
     {
         if(!QFile::copy(":/misc/ConvertExcel.py", ConvertExcelPath))
@@ -140,13 +140,13 @@ bool HistoryDataTable::isAvailaleDiskUSB()
     {
         if(storage.isReady())
         {
-            qDebug() << "Found USB Drive:";
+            // qDebug() << "Found USB Drive:";
             strPath = storage.rootPath();
-            qDebug() << "Path:" << storage.rootPath();
-            qDebug() << "File System Type: " << storage.fileSystemType();
-            qDebug() << "Total Size: " << storage.bytesTotal() / (1024 * 1024) << "MB";
-            qDebug() << "Available Size: " << storage.bytesAvailable() / (1024 * 1024) << "MB";
-            qDebug() << "-------------------------";
+            // qDebug() << "Path:" << storage.rootPath();
+            // qDebug() << "File System Type: " << storage.fileSystemType();
+            // qDebug() << "Total Size: " << storage.bytesTotal() / (1024 * 1024) << "MB";
+            // qDebug() << "Available Size: " << storage.bytesAvailable() / (1024 * 1024) << "MB";
+            // qDebug() << "-------------------------";
             if(strPath.contains("/run/media/"))
             {
                 if(strPath.contains("/run/media/mmcblk") == false)
@@ -198,6 +198,7 @@ bool HistoryDataTable:: exportData(int fileType)
         rows.append(value);
     }
     QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+    QString targetDirectory = "/output.csv";
     switch(fileType)
     {
     case CSV_FILE:
@@ -224,22 +225,27 @@ bool HistoryDataTable:: exportData(int fileType)
     if(bResult == false)
         return bResult;
 
-
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    QString formattedDateTime = currentDateTime.toString("yyyyMMddHHmmss");
     switch(fileType)
     {
     case CSV_FILE:
         localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
+        targetDirectory = "/output" + formattedDateTime + ".csv";
         break;
     case TXT_FILE:
         localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.txt";
+        targetDirectory = "/output" + formattedDateTime + ".txt";
         break;
     case PDF_FILE:
         ExportToPDF();
         localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.pdf";
+        targetDirectory = "/output" + formattedDateTime + ".pdf";
         break;
     case XLSX_FILE:
         ExportToXLSX();
         localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.xlsx";
+        targetDirectory = "/output" + formattedDateTime + ".xlsx";
         break;
     default:
         break;
@@ -247,11 +253,15 @@ bool HistoryDataTable:: exportData(int fileType)
     bResult = QFile::exists(localAppDirectory);
     if(bResult == false)
         return bResult;
-    if(!QFile::copy(localAppDirectory, m_USBDirectory))
+    if(!QFile::copy(localAppDirectory, m_USBDirectory + targetDirectory))
     {
-        qWarning() << "Failed to copy " << localAppDirectory << " to " << m_USBDirectory;
+        qWarning() << "Failed to copy " << localAppDirectory << " to " << m_USBDirectory + targetDirectory;
         bResult = false;
     }
+    // while(!QFile::exists(m_USBDirectory + targetDirectory))
+    // {
+    //     QThread::sleep(1);
+    // }
     return bResult;
 }
 
@@ -294,11 +304,13 @@ bool HistoryDataTable::ExportToPDF()
     process.start(program, arguments);
 
     // 等待进程结束
-    process.waitForFinished();
+    process.waitForFinished(100000);
 
     // 获取命令输出
     QString output = process.readAllStandardOutput();
+    qDebug() << output;
     QString error = process.readAllStandardError();
+    qDebug() << error;
 
     // 输出结果
     if (!output.isEmpty())
@@ -308,5 +320,29 @@ bool HistoryDataTable::ExportToPDF()
 
 bool HistoryDataTable::ExportToXLSX()
 {
+    bool bResult = false;
+    // 创建 QProcess 对象
+    QProcess process;
 
+    // 设置要执行的命令
+    QString program = "python"; // 你可以替换为其他 Linux 命令
+    QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
+    arguments.append("ConvertExcel.py");
+
+    // 启动进程
+    process.start(program, arguments);
+
+    // 等待进程结束
+    process.waitForFinished(30000);
+
+    // 获取命令输出
+    QString output = process.readAllStandardOutput();
+    qDebug() << output;
+    QString error = process.readAllStandardError();
+    qDebug() << error;
+
+    // 输出结果
+    if (!output.isEmpty())
+        bResult = true;
+    return bResult;
 }

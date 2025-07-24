@@ -240,7 +240,9 @@ Item{
                     onClicked:
                     {
                         if(HistoryDataTable.exportData(fileFormat.currentIndex) === true)
+                        {
                             mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
+                        }
                         else
                             mainWindow.showDialogScreen(qsTr("没有找到可以使用的U盘或尝试再次导出"), Dialog.Ok, null)
                     }
