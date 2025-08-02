@@ -22,9 +22,11 @@ Item {
 //    width: Math.round(800 * Style.scaleHint) //while using as element that value will over write this values
 //    height: Math.round(480 * Style.scaleHint)
 
+    id: leftActionCenterItem
+
     property string qmltextMenu: qsTr("MENU")
 
-    readonly property int arcWidth: Math.round((732-359) * Style.scaleHint)
+    property int arcWidth: Math.round((732-359) * Style.scaleHint)
     readonly property int arcRadius: Math.round(732 / 2 * Style.scaleHint)
     readonly property int centerX: Math.round(arcWidth - arcRadius)
     readonly property int centerY: Math.round(height / 2)
@@ -45,7 +47,7 @@ Item {
     property var menuName: qmltextProduction
 
 
-    id: leftActionCenterItem
+
 
     function updateLanguage()
     {

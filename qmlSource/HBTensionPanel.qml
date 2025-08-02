@@ -149,6 +149,18 @@ Item{
         drag.target: tensionPanelPopUp
         drag.axis: Drag.XAndYAxis
     }
+//    Text {
+//        id: positionDisplay
+//        anchors.top: parent.top
+//        anchors.right: parent.right
+//        anchors.topMargin: 10
+//        anchors.rightMargin: 10
+//        text: "x: " + tensionPanelPopUp.x.toFixed(0) + ", y: " + tensionPanelPopUp.y.toFixed(0)
+//        color: "white"
+//        font.pixelSize: 14
+//        visible: true
+//        z: 999
+//    }
 
     HBPrimaryButton
     {

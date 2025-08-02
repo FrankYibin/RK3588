@@ -350,7 +350,17 @@ Window{
 
     function showTensionPanel()
     {
+        tensionPanel.x = 704
+        tensionPanel.y = 242
         tensionPanel.visible = true
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        visible: tensionPanel.visible
+        enabled: tensionPanel.visible
+        z: 2
+        onClicked: tensionPanel.visible = false
     }
 
     Connections {
