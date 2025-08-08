@@ -51,6 +51,8 @@ Item{
 
                 HBPrimaryButton {
                     text: qsTr("确定")
+                    width: Math.round(buttonWidth * Style.scaleHint)
+                    height: Math.round(componentHeight * Style.scaleHint)
                     onClicked: {
                         currentComboBox.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         calendarContainer.visible = false
@@ -59,6 +61,8 @@ Item{
 
                 HBPrimaryButton {
                     text: qsTr("取消")
+                    width: Math.round(buttonWidth * Style.scaleHint)
+                    height: Math.round(componentHeight * Style.scaleHint)
                     onClicked: {
                         calendarContainer.visible = false
                     }
