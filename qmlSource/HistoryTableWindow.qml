@@ -28,17 +28,46 @@ Item{
         }
     }
 
-    HBCalendar{
-        id: calendarDate
+    Column {
+        id: calendarContainer
         anchors.centerIn: parent
-        width: Math.round(400 * Style.scaleHint)
-        height: Math.round(250 * Style.scaleHint)
+        spacing: Math.round(10 * Style.scaleHint)
         z: 5
         visible: false
-        onSelectedDateChanged: {
-            console.debug("selected Date: ", selectedDate)
+
+        HBCalendar {
+            id: calendarDate
+            width: Math.round(400 * Style.scaleHint)
+            height: Math.round(250 * Style.scaleHint)
+            onSelectedDateChanged: {
+                console.debug("selected Date: ", selectedDate)
+            }
         }
-	}
+
+        Row {
+            spacing: Math.round(20 * Style.scaleHint)
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            HBPrimaryButton {
+                text: qsTr("确定")
+                width: Math.round(buttonWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                onClicked: {
+                    currentComboBox.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                    calendarContainer.visible = false
+                }
+            }
+
+            HBPrimaryButton {
+                text: qsTr("取消")
+                width: Math.round(buttonWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                onClicked: {
+                    calendarContainer.visible = false
+                }
+            }
+        }
+    }
 
     Component.onCompleted:
     {
