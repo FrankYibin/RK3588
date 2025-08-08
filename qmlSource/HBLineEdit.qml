@@ -48,14 +48,4 @@ TextField {
             border.width: 2
         }
     }
-
-
-
-
-    // Keys.onReturnPressed: {
-    //     event.accepted = true
-    //     accepted()
-    // }
-
-//    onFocusChanged: if (!focus) accepted()
 }
