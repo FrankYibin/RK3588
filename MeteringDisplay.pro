@@ -43,20 +43,25 @@ SOURCES += main.cpp \
     c++Source/HBModbus/modbusutils.cpp \
     c++Source/HBScreen/autotestspeed.cpp \
     c++Source/HBScreen/configuration.cpp \
+    c++Source/HBScreen/csvexportworker.cpp \
     c++Source/HBScreen/datetime.cpp \
     c++Source/HBScreen/depthmeter.cpp \
     c++Source/HBScreen/depthsetting.cpp \
     c++Source/HBScreen/depthsiman.cpp \
+    c++Source/HBScreen/excelexportworker.cpp \
+    c++Source/HBScreen/exportworker.cpp \
     c++Source/HBScreen/hbhome.cpp \
     c++Source/HBScreen/history.cpp \
     c++Source/HBScreen/historydatatable.cpp \
     c++Source/HBScreen/historyoperationmodel.cpp \
+    c++Source/HBScreen/pdfexportworker.cpp \
     c++Source/HBScreen/tensiometer.cpp \
     c++Source/HBScreen/tensiometermanager.cpp \
 #    c++Source/HBScreen/tensionscale.cpp \
     c++Source/HBScreen/tensionsafety.cpp \
     c++Source/HBScreen/tensionscalemanager.cpp \
     c++Source/HBScreen/tensionsetting.cpp \
+    c++Source/HBScreen/textexportworker.cpp \
     c++Source/HBScreen/usermanagermodel.cpp \
     c++Source/HBScreen/wellparameter.cpp \
 #    c++Source/HBVideoCapture/videocaptureitem.cpp \
@@ -101,20 +106,25 @@ HEADERS += \
     c++Source/HBQmlEnum.h \
     c++Source/HBScreen/autotestspeed.h \
     c++Source/HBScreen/configuration.h \
+    c++Source/HBScreen/csvexportworker.h \
     c++Source/HBScreen/datetime.h \
     c++Source/HBScreen/depthmeter.h \
     c++Source/HBScreen/depthsetting.h \
     c++Source/HBScreen/depthsiman.h \
+    c++Source/HBScreen/excelexportworker.h \
+    c++Source/HBScreen/exportworker.h \
     c++Source/HBScreen/hbhome.h \
     c++Source/HBScreen/history.h \
     c++Source/HBScreen/historydatatable.h \
     c++Source/HBScreen/historyoperationmodel.h \
+    c++Source/HBScreen/pdfexportworker.h \
     c++Source/HBScreen/tensiometer.h \
     c++Source/HBScreen/tensiometermanager.h \
 #    c++Source/HBScreen/tensionscale.h \
     c++Source/HBScreen/tensionsafety.h \
     c++Source/HBScreen/tensionscalemanager.h \
     c++Source/HBScreen/tensionsetting.h \
+    c++Source/HBScreen/textexportworker.h \
     c++Source/HBScreen/usermanagermodel.h \
     c++Source/HBScreen/wellparameter.h \
 #    c++Source/HBVideoCapture/videocaptureitem.h \
