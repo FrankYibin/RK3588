@@ -59,7 +59,7 @@ Item{
         repeat: true    // 设置为重复计时器
         onTriggered:
         {
-            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
+//            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
         }
     }
 
@@ -198,7 +198,6 @@ Item{
                         var UserCurrentUserName = UserModel.CurrentUser
                         HistoryDataTable.loadFromDatabase(startStamp, endStamp, UserCurrentUserName, alarmType.currentIndex)
                         console.log("startStamp: ", startStamp, "endStamp: ", endStamp)
-                        console.log("selectedValue111111111111111111111111",selectedValue)
 
                     }
                 }
@@ -268,10 +267,9 @@ Item{
             headerModel.append({"role": "Tensions",             "title": qsTr("张力"),      "headerWidth": 100})
             headerModel.append({"role": "TensionIncreament",    "title": qsTr("张力增量"),  "headerWidth": 100})
             headerModel.append({"role": "TensionUnit",          "title": qsTr("张力单位"),  "headerWidth": 100})
-            headerModel.append({"role": "MaxTension",           "title": qsTr("最大张力"),  "headerWidth": 100})
+            headerModel.append({"role": "MaxTension",           "title": qsTr("极限张力"),  "headerWidth": 100})
             headerModel.append({"role": "HarnessTension",       "title": qsTr("缆头张力"),  "headerWidth": 100})
             headerModel.append({"role": "SafetyTension",        "title": qsTr("安全张力"),  "headerWidth": 100})
-
 
         }
 
@@ -336,8 +334,8 @@ Item{
         Text {
             id: name
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("U盘未插入")
-            visible: !isUSBAvailable
+            text: isUSBAvailable ? qsTr("U盘已插入") : qsTr("U盘未插入")
+//            visible: !isUSBAvailable
             color: Style.whiteFontColor
             font{
                 family: "宋体"
