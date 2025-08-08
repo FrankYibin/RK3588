@@ -1659,6 +1659,8 @@ void HBModbusClient::handleAlarm()
     bool m_AlarmTensionPlayed = false;
     bool m_AlarmTensionDeltaSlowPlayed = false;
     bool m_AlarmTensionDeltaStopPlayed = false;
+    bool m_AlarmTensionCableHeadSlowPlayed = false;
+    bool m_AlarmTensionCableHeadStopPlayed = false;
     bool m_AlarmEncoder1Played = false;
     bool m_AlarmEncoder2Played = false;
     bool m_AlarmEncoder3Played = false;
@@ -1777,22 +1779,24 @@ void HBModbusClient::handleAlarm()
     if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaSlow){
 
         bool isTensionDeltaSlow = m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow;
-        if (isTensionDeltaSlow) {
 
-            HBVoice::GetInstance()->PlayVoice(HBVoice::LOCKED_EXCEPTION);
+        if (isTensionDeltaSlow) {
+//            HBVoice::GetInstance()->PlayVoice(HBVoice::TENSION_EXCEPTION);
 
             m_AlarmTensionDeltaSlowPlayed = true;
 
         }else if(!isTensionDeltaSlow){
 
             m_AlarmTensionDeltaSlowPlayed = false;
+
         }
+
         HBHome::GetInstance()->setAlarmEnabled(isTensionDeltaSlow);
     }
 
-    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow)
-    {
-        HBHome::GetInstance()->setAlarmMessage("请注意遇阻");
+    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow){
+
+        HBHome::GetInstance()->setAlarmMessage("张力增量超值 " + HBHome::GetInstance()->TensionCurrentDelta()+ " " + getTensionUnitString());
     }
 
     if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaStop){
@@ -1800,19 +1804,64 @@ void HBModbusClient::handleAlarm()
         bool isTensionDeltaStop = m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop;
 
         if (isTensionDeltaStop) {
+//            HBVoice::GetInstance()->PlayVoice(HBVoice::TENSION_EXCEPTION);
 
-            HBVoice::GetInstance()->PlayVoice(HBVoice::BLOCKED_EXCEPTION);
-
-            m_AlarmTensionDeltaStopPlayed =true;
+            m_AlarmTensionDeltaStopPlayed = true;
 
         }else if(!isTensionDeltaStop){
 
             m_AlarmTensionDeltaStopPlayed = false;
+
         }
+
         HBHome::GetInstance()->setAlarmEnabled(isTensionDeltaStop);
     }
 
     if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop){
+
+        HBHome::GetInstance()->setAlarmMessage("张力增量超值 " + HBHome::GetInstance()->TensionCurrentDelta()+ " " + getTensionUnitString());
+    }
+
+
+    if(m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow != m_LastIO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow){
+
+        bool isTensionCableHeadSlow = m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow;
+        if (isTensionCableHeadSlow) {
+
+            HBVoice::GetInstance()->PlayVoice(HBVoice::LOCKED_EXCEPTION);
+
+            m_AlarmTensionCableHeadSlowPlayed = true;
+
+        }else if(!isTensionCableHeadSlow){
+
+            m_AlarmTensionCableHeadSlowPlayed = false;
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isTensionCableHeadSlow);
+    }
+
+    if(m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow)
+    {
+        HBHome::GetInstance()->setAlarmMessage("请注意遇阻");
+    }
+
+    if(m_IO_Value3.bits_Value3.m_AlarmTensionCableHeadStop != m_LastIO_Value3.bits_Value3.m_AlarmTensionCableHeadStop){
+
+        bool isTensionCableHeadStop = m_IO_Value3.bits_Value3.m_AlarmTensionCableHeadStop;
+
+        if (isTensionCableHeadStop) {
+
+            HBVoice::GetInstance()->PlayVoice(HBVoice::BLOCKED_EXCEPTION);
+
+            m_AlarmTensionCableHeadStopPlayed =true;
+
+        }else if(!isTensionCableHeadStop){
+
+            m_AlarmTensionCableHeadStopPlayed = false;
+        }
+        HBHome::GetInstance()->setAlarmEnabled(isTensionCableHeadStop);
+    }
+
+    if(m_IO_Value3.bits_Value3.m_AlarmTensionCableHeadStop){
 
         HBHome::GetInstance()->setAlarmMessage("请注意遇卡");
     }
