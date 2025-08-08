@@ -8,7 +8,7 @@ DateTime *DateTime::GetInstance()
     return _ptrDateTime;
 }
 
-bool  DateTime::setSystemDateTime(QString datetime) const
+bool DateTime::setSystemDateTime(QString datetime) const
 {
 #if RK3588
     if(HBUtilityClass::GetInstance()->SetSystemClock(datetime) == true)
