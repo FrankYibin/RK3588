@@ -63,11 +63,11 @@ TextField {
         {
             if(parent.onlyForNumpad === true)
             {
-                parent.selectAll()
+//                parent.selectAll()
                 isSelectedAll = true
             }
             signalClickedEvent()
-            parent.focus = false
+            parent.focus = true
             Qt.inputMethod.hide()
         }
         onDoubleClicked:
@@ -75,11 +75,12 @@ TextField {
             if(parent.onlyForNumpad === true)
             {
                 parent.deselect()
-                input.focus = true
+                parent.focus = true
                 Qt.inputMethod.hide()
                 isSelectedAll = false
             }
             signalClickedEvent()
         }
     }
+
 }

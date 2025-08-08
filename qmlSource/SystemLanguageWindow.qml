@@ -33,8 +33,8 @@ Item{
         width: parent.width
         height: parent.height
         gradient: Gradient {
-        GradientStop { position: 0.0; color: Style.backgroundLightColor }
-        GradientStop { position: 1.0; color: Style.backgroundDeepColor }
+            GradientStop { position: 0.0; color: Style.backgroundLightColor }
+            GradientStop { position: 1.0; color: Style.backgroundDeepColor }
         }
     }
 
@@ -72,7 +72,12 @@ Item{
             {
                 var strDateTime = dateTimeSetting.getDateTimeString()
                 console.debug("Time Setting： ", strDateTime)
-                DateTime.setSystemDateTime(strDateTime)
+                var success = DateTime.setSystemDateTime(strDateTime)
+                if (success) {
+                    mainWindow.showDialogScreen(qsTr("时间修改成功，已生效!"), Dialog.Ok, null)
+                } else {
+                    mainWindow.showDialogScreen(qsTr("时间修改失败"), Dialog.Ok, null)
+                }
             }
         }
 
