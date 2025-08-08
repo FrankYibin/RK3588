@@ -123,7 +123,7 @@ Item{
             anchors.left: parent.left
             anchors.leftMargin: Math.round(100 * Style.scaleHint)
             anchors.verticalCenter: parent.verticalCenter
-            spacing: rowSpacing
+            spacing: rowSpacing / 2
             Text {
                 id: titleCurrentDepth
                 width: Math.round(textWidthColumn1 * Style.scaleHint)
@@ -138,7 +138,7 @@ Item{
             HBTextField
             {
                 id: textCurrentDepth
-                width: Math.round((actualTextWidth) * Style.scaleHint)
+                width: Math.round((actualTextWidth + 30) * Style.scaleHint)
                 height: parent.height
                 fontSize: Math.round(Style.style8 * Style.scaleHint)
                 maximumLength: 16
