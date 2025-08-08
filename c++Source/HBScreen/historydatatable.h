@@ -5,6 +5,11 @@
 #include <QString>
 #include <QVector>
 #include "c++Source/HBDefine.h"
+#include "exportworker.h"
+// #include "csvexportworker.h"
+// #include "textexportworker.h"
+// #include "pdfexportworker.h"
+// #include "excelexportworker.h"
 
 class HistoryDataTable : public QAbstractTableModel
 {
@@ -61,11 +66,24 @@ private:
     QDateTime           m_start;
     QDateTime           m_end;
     QString             m_USBDirectory;
+    static constexpr int MAX_RECORDS_IN_ONE_FILE = 1000;
     static HistoryDataTable* _ptrHistoryDataTable;
 private:
     bool ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data);
-    bool ExportToPDF();
-    bool ExportToXLSX();
+private slots:
+    void ExportToCSVAsync(QStringList &localfiles);
+    void ExportToTextAsync(QStringList &localfiles);
+    void ExportToPDFAsync(QStringList &localfiles);
+    void ExportToExcelAsync(QStringList &localfiles);
+private slots:
+    void onExportFinished(bool success, const QString &message);
+signals:
+    void signalExportCompleted(bool success, const QString &message);
+    void signalExportPrograss(int current, int total);
+private:
+    QThread *m_exportThread = nullptr;
+    ExportWorker *m_exportWorker = nullptr;
+
 };
 
 #endif // HISTORYDATATABLE_H

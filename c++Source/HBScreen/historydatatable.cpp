@@ -8,7 +8,12 @@
 #include <qcoreapplication.h>
 #include <QProcess>
 #include <QThread>
+#include <QObject>
 #include "c++Source/HBScreen/usermanagermodel.h"
+#include "csvexportworker.h"
+#include "textexportworker.h"
+#include "pdfexportworker.h"
+#include "excelexportworker.h"
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
@@ -114,9 +119,7 @@ void HistoryDataTable::setRange(const QString &startIso, const QString &endIso)
     m_end   = e;
 
     loadFromDatabase(m_start, m_end,UserManagerModel::GetInstance().CurrentUser(),false);
-
 }
-
 
 void HistoryDataTable::loadFromDatabase(const QDateTime start, const QDateTime end,const QString currentUser, bool includeExceptionsOnly)
 {
@@ -124,7 +127,6 @@ void HistoryDataTable::loadFromDatabase(const QDateTime start, const QDateTime e
     m_dataList = HBDatabase::GetInstance().loadHistoryData(start, end,currentUser,includeExceptionsOnly);
     endResetModel();
 }
-
 
 bool HistoryDataTable::isAvailaleDiskUSB()
 {
@@ -173,13 +175,17 @@ bool HistoryDataTable:: exportData(int fileType)
     if(m_USBDirectory.isEmpty() == true)
         return false;
     QList<QStringList> rows;
-    QStringList headers = {"井号", "时间", "工种", "操作员", "深度", "速度","速度单位","张力","张力增量","张力单位","最大张力",
-                           "缆头张力", "安全张力",
-                           "异常数据标识"   };
-
-    for(int i=0;i<m_dataList.count();i++)
+    QStringList headers =
     {
-        QStringList value= {
+        "井号",    "时间",    "工种",     "操作员",    "深度",
+        "速度",    "速度单位", "张力",     "张力增量",  "张力单位",
+        "最大张力", "缆头张力", "安全张力", "异常数据标识"
+    };
+
+    for(int i=0; i<m_dataList.count(); i++)
+    {
+        QStringList value =
+        {
             m_dataList[i].wellNumber,
             m_dataList[i].date,
             m_dataList[i].operateType,
@@ -197,71 +203,55 @@ bool HistoryDataTable:: exportData(int fileType)
         };
         rows.append(value);
     }
-    QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
-    QString targetDirectory = "/output.csv";
-    switch(fileType)
-    {
-    case CSV_FILE:
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
-        break;
-    case TXT_FILE:
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.txt";
-        break;
-    case PDF_FILE:
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
-        break;
-    case XLSX_FILE:
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
-        break;
-    default:
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
-        break;
-    }
 
-    bResult = ExportToCSV(localAppDirectory, headers, rows);
-    if(bResult == false)
-        return bResult;
-    bResult = QFile::exists(localAppDirectory);
-    if(bResult == false)
-        return bResult;
-
+    if(rows.empty() == true)
+        return false;
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString formattedDateTime = currentDateTime.toString("yyyyMMddHHmmss");
+    "/output" + formattedDateTime + ".csv";
+    QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output" + formattedDateTime + "-";
+    QStringList localFiles;
+    int filesCount = rows.count() / MAX_RECORDS_IN_ONE_FILE;
+    int restRecords = rows.count() % MAX_RECORDS_IN_ONE_FILE;
+
+    if(restRecords > 0) filesCount += 1;
+    for(int i = 0; i < filesCount; i++)
+    {
+        localAppDirectory += QString::number(i+1) + ".csv";
+        localFiles.append(localAppDirectory);
+    }
+
+    QList<QStringList> oneFileRecords;
+    for(int i = 0; i < filesCount; i++)
+    {
+        oneFileRecords.clear();
+        for(int j = 0; j < MAX_RECORDS_IN_ONE_FILE; j++)
+        {
+            if((j + i * MAX_RECORDS_IN_ONE_FILE) < rows.count())
+                oneFileRecords.append(rows.at(j + i * MAX_RECORDS_IN_ONE_FILE));
+            else
+                break;
+        }
+        ExportToCSV(localFiles.at(i), headers, oneFileRecords);
+    }
+
     switch(fileType)
     {
     case CSV_FILE:
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.csv";
-        targetDirectory = "/output" + formattedDateTime + ".csv";
+        ExportToCSVAsync(localFiles);
         break;
     case TXT_FILE:
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.txt";
-        targetDirectory = "/output" + formattedDateTime + ".txt";
+        ExportToTextAsync(localFiles);
         break;
     case PDF_FILE:
-        ExportToPDF();
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.pdf";
-        targetDirectory = "/output" + formattedDateTime + ".pdf";
+        ExportToPDFAsync(localFiles);
         break;
     case XLSX_FILE:
-        ExportToXLSX();
-        localAppDirectory = QCoreApplication::applicationDirPath()+ "/output.xlsx";
-        targetDirectory = "/output" + formattedDateTime + ".xlsx";
+        ExportToExcelAsync(localFiles);
         break;
     default:
         break;
     }
-    bResult = QFile::exists(localAppDirectory);
-    if(bResult == false)
-        return bResult;
-    if(!QFile::copy(localAppDirectory, m_USBDirectory + targetDirectory))
-    {
-        qWarning() << "Failed to copy " << localAppDirectory << " to " << m_USBDirectory + targetDirectory;
-        bResult = false;
-    }
-    // while(!QFile::exists(m_USBDirectory + targetDirectory))
-    // {
-    //     QThread::sleep(1);
-    // }
     return bResult;
 }
 
@@ -289,60 +279,61 @@ bool HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& 
     return true;
 }
 
-bool HistoryDataTable::ExportToPDF()
+void HistoryDataTable::ExportToCSVAsync(QStringList &localfiles)
 {
-    bool bResult = false;
-    // 创建 QProcess 对象
-    QProcess process;
-
-    // 设置要执行的命令
-    QString program = "python"; // 你可以替换为其他 Linux 命令
-    QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
-    arguments.append("ConvertPDF.py");
-
-    // 启动进程
-    process.start(program, arguments);
-
-    // 等待进程结束
-    process.waitForFinished(100000);
-
-    // 获取命令输出
-    QString output = process.readAllStandardOutput();
-    qDebug() << output;
-    QString error = process.readAllStandardError();
-    qDebug() << error;
-
-    // 输出结果
-    if (!output.isEmpty())
-        bResult = true;
-    return bResult;
+    if(!m_exportThread)
+    {
+        m_exportThread = new QThread(this);
+        m_exportWorker = new CSVExportWorker(localfiles, m_USBDirectory);
+        m_exportWorker->moveToThread(m_exportThread);
+        connect(m_exportThread, &QThread::started, static_cast<CSVExportWorker*>(m_exportWorker), &CSVExportWorker::exportToFile);
+        connect(m_exportWorker, &CSVExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
+        connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
 }
 
-bool HistoryDataTable::ExportToXLSX()
+void HistoryDataTable::ExportToTextAsync(QStringList &localfiles)
 {
-    bool bResult = false;
-    // 创建 QProcess 对象
-    QProcess process;
+    if(!m_exportThread)
+    {
+        m_exportThread = new QThread(this);
+        m_exportWorker = new TextExportWorker(localfiles, m_USBDirectory);
+        m_exportWorker->moveToThread(m_exportThread);
+        connect(m_exportThread, &QThread::started, static_cast<TextExportWorker*>(m_exportWorker), &TextExportWorker::exportToFile);
+        connect(m_exportWorker, &TextExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
+        connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
+}
 
-    // 设置要执行的命令
-    QString program = "python"; // 你可以替换为其他 Linux 命令
-    QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
-    arguments.append("ConvertExcel.py");
+void HistoryDataTable::ExportToPDFAsync(QStringList &localfiles)
+{
+    if(!m_exportThread)
+    {
+        m_exportThread = new QThread(this);
+        m_exportWorker = new PDFExportWorker(localfiles, m_USBDirectory);
+        m_exportWorker->moveToThread(m_exportThread);
+        connect(m_exportThread, &QThread::started, static_cast<PDFExportWorker*>(m_exportWorker), &PDFExportWorker::exportToFile);
+        connect(m_exportWorker, &PDFExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
+        connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
+}
 
-    // 启动进程
-    process.start(program, arguments);
+void HistoryDataTable::ExportToExcelAsync(QStringList &localfiles)
+{
+    if(!m_exportThread)
+    {
+        m_exportThread = new QThread(this);
+        m_exportWorker = new ExcelExportWorker(localfiles, m_USBDirectory);
+        m_exportWorker->moveToThread(m_exportThread);
+        connect(m_exportThread, &QThread::started, static_cast<ExcelExportWorker*>(m_exportWorker), &ExcelExportWorker::exportToFile);
+        connect(m_exportWorker, &ExcelExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
+        connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
+}
 
-    // 等待进程结束
-    process.waitForFinished(30000);
-
-    // 获取命令输出
-    QString output = process.readAllStandardOutput();
-    qDebug() << output;
-    QString error = process.readAllStandardError();
-    qDebug() << error;
-
-    // 输出结果
-    if (!output.isEmpty())
-        bResult = true;
-    return bResult;
+void HistoryDataTable::onExportFinished(bool success, const QString &message)
+{
+    m_exportThread->quit();
+    m_exportThread->wait();
+    emit signalExportCompleted(success, message);
 }

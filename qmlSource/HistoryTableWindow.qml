@@ -16,6 +16,17 @@ Item{
     readonly property int componentHeight: 30
     property bool isUSBAvailable: false
 
+    Connections {
+        target: HistoryDataTable
+        function signalExportCompleted(success, message)
+        {
+            if(success === true)
+                mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
+            else
+                mainWindow.showDialogScreen(qsTr("没有找到可以使用的U盘或尝试再次导出"), Dialog.Ok, null)
+        }
+    }
+
     HBCalendar{
         id: calendarDate
         anchors.centerIn: parent
@@ -239,12 +250,8 @@ Item{
                     visible: (UserModel.GroupIndex > 0) ? false : true
                     onClicked:
                     {
-                        if(HistoryDataTable.exportData(fileFormat.currentIndex) === true)
-                        {
-                            mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
-                        }
-                        else
-                            mainWindow.showDialogScreen(qsTr("没有找到可以使用的U盘或尝试再次导出"), Dialog.Ok, null)
+                        mainWindow.showLoading(true)
+                        HistoryDataTable.exportData(fileFormat.currentIndex)
                     }
                 }
             }
