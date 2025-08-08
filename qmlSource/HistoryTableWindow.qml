@@ -15,18 +15,56 @@ Item{
     readonly property int rowSpacing: 10
     readonly property int componentHeight: 30
     property bool isUSBAvailable: false
+    property var currentComboBox: null
 
-    HBCalendar{
-        id: calendarDate
-        anchors.centerIn: parent
-        width: Math.round(400 * Style.scaleHint)
-        height: Math.round(250 * Style.scaleHint)
-        z: 5
-        visible: false
-        onSelectedDateChanged: {
-            console.debug("selected Date: ", selectedDate)
+//    HBCalendar{
+//        id: calendarDate
+//        anchors.centerIn: parent
+//        width: Math.round(400 * Style.scaleHint)
+//        height: Math.round(250 * Style.scaleHint)
+//        z: 5
+//        visible: false
+//        onSelectedDateChanged: {
+//            console.debug("selected Date: ", selectedDate)
+//        }
+//    }
+
+        Column {
+            id: calendarContainer
+            anchors.centerIn: parent
+            spacing: Math.round(10 * Style.scaleHint)
+            z: 5
+            visible: false
+
+            HBCalendar {
+                id: calendarDate
+                width: Math.round(400 * Style.scaleHint)
+                height: Math.round(250 * Style.scaleHint)
+                onSelectedDateChanged: {
+                    console.debug("selected Date: ", selectedDate)
+                }
+            }
+
+            Row {
+                spacing: Math.round(20 * Style.scaleHint)
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                HBPrimaryButton {
+                    text: qsTr("确定")
+                    onClicked: {
+                        currentComboBox.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                        calendarContainer.visible = false
+                    }
+                }
+
+                HBPrimaryButton {
+                    text: qsTr("取消")
+                    onClicked: {
+                        calendarContainer.visible = false
+                    }
+                }
+            }
         }
-    }
 
     Component.onCompleted:
     {
@@ -34,7 +72,7 @@ Item{
 
         var startStamp = comboBoxStartTimeStamp.text + "T00:00:00"
         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
-//        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
+        //        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
         HistoryDataTable.setRange(startStamp,endStamp)
         timer.start()
     }
@@ -59,7 +97,7 @@ Item{
         repeat: true    // 设置为重复计时器
         onTriggered:
         {
-//            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
+            //            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
         }
     }
 
@@ -114,12 +152,14 @@ Item{
 
                     onSignalPopUp:
                     {
-                        if(isShow === true)
-                            calendarDate.visible = true
+                        if(isShow === true){
+                            currentComboBox = comboBoxStartTimeStamp
+                            calendarContainer.visible = true
+                        }
                         else
                         {
-                            calendarDate.visible = false
-                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                            calendarContainer.visible = false
+//                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
                 }
@@ -151,12 +191,14 @@ Item{
                     }
                     onSignalPopUp:
                     {
-                        if(isShow === true)
-                            calendarDate.visible = true
+                        if(isShow === true){
+                            currentComboBox = comboBoxFinishTimeStamp
+                            calendarContainer.visible = true
+                        }
                         else
                         {
-                            calendarDate.visible = false
-                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                            calendarContainer.visible = false
+//                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
                 }
@@ -335,7 +377,7 @@ Item{
             id: name
             anchors.verticalCenter: parent.verticalCenter
             text: isUSBAvailable ? qsTr("U盘已插入") : qsTr("U盘未插入")
-//            visible: !isUSBAvailable
+            //            visible: !isUSBAvailable
             color: Style.whiteFontColor
             font{
                 family: "宋体"
