@@ -8,11 +8,15 @@ DateTime *DateTime::GetInstance()
     return _ptrDateTime;
 }
 
-void DateTime::setSystemDateTime(QString datetime) const
+bool  DateTime::setSystemDateTime(QString datetime) const
 {
 #if RK3588
     if(HBUtilityClass::GetInstance()->SetSystemClock(datetime) == true)
-        HBUtilityClass::GetInstance()->SyncHardwareRTC();
+    { HBUtilityClass::GetInstance()->SyncHardwareRTC();
+        return true;
+    }else{
+        return false;
+    }
 #endif
 }
 

@@ -8,7 +8,7 @@ class DateTime : public QObject
     Q_OBJECT
 public:
     static DateTime* GetInstance();
-    Q_INVOKABLE void setSystemDateTime(QString datetime) const;
+    Q_INVOKABLE bool  setSystemDateTime(QString datetime) const;
 protected:
     explicit DateTime(QObject *parent = nullptr);
 private:
