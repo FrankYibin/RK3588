@@ -30,17 +30,46 @@ Item{
         }
     }
 
-    HBCalendar{
-        id: calendarDate
+    Column {
+        id: calendarContainer
         anchors.centerIn: parent
-        width: Math.round(400 * Style.scaleHint)
-        height: Math.round(250 * Style.scaleHint)
+        spacing: Math.round(10 * Style.scaleHint)
         z: 5
         visible: false
-        onSelectedDateChanged: {
-            console.debug("selected Date: ", selectedDate)
+
+        HBCalendar {
+            id: calendarDate
+            width: Math.round(400 * Style.scaleHint)
+            height: Math.round(250 * Style.scaleHint)
+            onSelectedDateChanged: {
+                console.debug("selected Date: ", selectedDate)
+            }
         }
-	}
+
+        Row {
+            spacing: Math.round(20 * Style.scaleHint)
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            HBPrimaryButton {
+                text: qsTr("确定")
+                width: Math.round(buttonWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                onClicked: {
+                    currentComboBox.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                    calendarContainer.visible = false
+                }
+            }
+
+            HBPrimaryButton {
+                text: qsTr("取消")
+                width: Math.round(buttonWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                onClicked: {
+                    calendarContainer.visible = false
+                }
+            }
+        }
+    }
 
     Component.onCompleted:
     {
@@ -322,7 +351,7 @@ Item{
         TableViewColumn { role: "Index";                title: qsTr("");            width: 30}
         TableViewColumn { role: "WellNumber";           title: qsTr("井号");        width: 100}
         TableViewColumn { role: "Date";                 title: qsTr("时间");        width: 200}
-        TableViewColumn { role: "OperateType";          title: qsTr("工种");    width: 80}
+        TableViewColumn { role: "OperateType";          title: qsTr("工种");         width: 80}
         TableViewColumn { role: "Operater";             title: qsTr("操作员");      width: 80}
         TableViewColumn { role: "Depth";                title: qsTr("深度");        width: 80}
         TableViewColumn { role: "Velocity";             title: qsTr("速度");        width: 80}
@@ -330,7 +359,7 @@ Item{
         TableViewColumn { role: "Tensions";             title: qsTr("张力");        width: 80}
         TableViewColumn { role: "TensionIncreament";    title: qsTr("张力增量");    width: 80}
         TableViewColumn { role: "TensionUnit";          title: qsTr("张力单位");    width: 80}
-        TableViewColumn { role: "MaxTension";           title: qsTr("最大张力");    width: 80}
+        TableViewColumn { role: "MaxTension";           title: qsTr("极限张力");    width: 80}
         TableViewColumn { role: "HarnessTension";       title: qsTr("缆头张力");    width: 80}
         TableViewColumn { role: "SafetyTension";        title: qsTr("安全张力");    width: 80}
         TableViewColumn { role: "Exception";            title: qsTr("异常数据标识");  width: 100}

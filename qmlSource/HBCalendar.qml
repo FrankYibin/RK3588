@@ -136,36 +136,6 @@ Item
             }
         }
     }
-
-    // Rectangle {
-    //     anchors.left: calendar.left
-    //     anchors.top: calendar.bottom
-    //     height: Math.round(50 * Style.scaleHint)
-    //     width: parent.width
-    //     color: Style.backgroundDeepColor
-    //     Row{
-    //         anchors.centerIn: parent
-    //         height: Math.round(30 * Style.scaleHint)
-    //         width: Math.round((105 + 105 + 100) * Style.scaleHint)
-    //         spacing: Math.round(100 * Style.scaleHint)
-    //         HBPrimaryButton
-    //         {
-    //             id: buttonConfirm
-    //             height: parent.height
-    //             width: Math.round(105 * Style.scaleHint)
-    //             text: qsTr("确定")
-    //         }
-    //         HBPrimaryButton
-    //         {
-    //             id: buttonCancle
-    //             height: parent.height
-    //             width: Math.round(105 * Style.scaleHint)
-    //             text: qsTr("取消")
-    //         }
-    //     }
-    // }
-
-
 }
 
 

@@ -350,8 +350,8 @@ Window{
 
     function showTensionPanel()
     {
-        tensionPanel.x = 704
-        tensionPanel.y = 242
+        tensionPanel.x = 702
+        tensionPanel.y = 240
         tensionPanel.visible = true
     }
 
@@ -360,13 +360,13 @@ Window{
         loadingOverlay.visible = isShow;
     }
 
-    MouseArea {
-        anchors.fill: parent
-        visible: tensionPanel.visible
-        enabled: tensionPanel.visible
-        z: 2
-        onClicked: tensionPanel.visible = false
-    }
+//    MouseArea {
+//        anchors.fill: parent
+//        visible: tensionPanel.visible
+//        enabled: tensionPanel.visible
+//        z: 2
+//        onClicked: tensionPanel.visible = false
+//    }
 
     Connections {
         target: languageConfig

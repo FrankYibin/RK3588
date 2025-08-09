@@ -13,7 +13,7 @@ Item{
     readonly property int textWidthColumn3: 80
     readonly property int textWidthUnit: 100
     readonly property int componentWidth: 100
-    readonly property int actualTextWidth: 150
+    readonly property int actualTextWidth: 160
     readonly property int buttonWidth: 100
     readonly property int rowSpacing: 10
     readonly property int columnSpacing: 10
@@ -68,17 +68,17 @@ Item{
     HBTextField
     {
         id: textCurrentDepth
-        width: Math.round(140 * Style.scaleHint)
+        width: Math.round(actualTextWidth * Style.scaleHint)
         height: Math.round(80 * Style.scaleHint)
         anchors.verticalCenter: pandelDepth.verticalCenter
         anchors.left: pandelDepth.right
-        anchors.leftMargin: Math.round(20 * Style.scaleHint)
+        anchors.leftMargin: Math.round(10 * Style.scaleHint)
         fontSize: Math.round(Style.style8 * Style.scaleHint)
         maximumLength: 16
         validator: RegularExpressionValidator{
             regularExpression: /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/
         }
-        // text: "8081"
+//         text: "600.00"
         text: AutoTestSpeed.DepthDeviationCurrent
         onlyForNumpad: true
         enabled: false
@@ -90,7 +90,7 @@ Item{
         height: parent.height
         text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]
         font.family: Style.regular.name
-        font.pixelSize: Math.round(Style.style3 * Style.scaleHint)
+        font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
         verticalAlignment: Text.AlignVCenter
         color: Style.whiteFontColor
         anchors.verticalCenter: textCurrentDepth.verticalCenter

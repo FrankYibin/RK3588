@@ -140,8 +140,6 @@ Item{
         }
     }
 
-
-
     // 拖动区域
     MouseArea {
         id: dragArea
@@ -173,6 +171,7 @@ Item{
         height: Math.round(30 * Style.scaleHint)
         text: qsTr("返回")
         fontSize: Math.round(Style.style5 * Style.scaleHint)
+        scale: 1/1.7
         onClicked:
         {
            tensionPanelPopUp.visible = false
