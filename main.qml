@@ -37,8 +37,8 @@ Window{
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
-    property int showWidth: 1280
-    property int showHeight: 800
+    property int showWidth: 800
+    property int showHeight: 480
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -392,7 +392,9 @@ Window{
         function onSignalExportPrograss(current, total)
         {
             if(loadingOverlay.visible === true)
-                loadingOverlay.progress = current / total
+            {
+                loadingOverlay.progress = (current + 1) / total
+            }
         }
     }
 

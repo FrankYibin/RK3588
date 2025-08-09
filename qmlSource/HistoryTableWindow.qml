@@ -19,8 +19,10 @@ Item{
 
     Connections {
         target: HistoryDataTable
-        function signalExportCompleted(success, message)
+        function onSignalExportCompleted(success, message)
         {
+            console.debug("message", message)
+            mainWindow.showLoading(false)
             if(success === true)
                 mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
             else
@@ -71,7 +73,7 @@ Item{
         repeat: true    // 设置为重复计时器
         onTriggered:
         {
-            //            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
+            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
         }
     }
 

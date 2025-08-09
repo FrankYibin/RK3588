@@ -26,9 +26,9 @@ void CSVExportWorker::exportToFile()
             if(bResult == false)
                 break;
             targetDirectory += ".csv";
-            if(!QFile::copy(m_LocalFiles.at(i), m_USBDirectory + targetDirectory))
+            if(!QFile::copy(localAppDirectory, m_USBDirectory + "/" + targetDirectory))
             {
-                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
+                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
                 bResult = false;
                 break;
             }
@@ -36,7 +36,7 @@ void CSVExportWorker::exportToFile()
         }
     }
     if(bResult == true)
-        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
+        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
     emit exportFinished(bResult, message);
 }
 

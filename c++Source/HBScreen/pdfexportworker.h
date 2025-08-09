@@ -7,7 +7,7 @@ class PDFExportWorker : public ExportWorker
 {
     Q_OBJECT
 private:
-    bool ExportToPDF();
+    bool ExportToPDF(const QString localDirectory, const QString targetDirectory);
 public:
     explicit PDFExportWorker(const QStringList &localfiles, const QString USBDirectory);
 public slots:

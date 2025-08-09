@@ -8,6 +8,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 import os
 import warnings
 from datetime import datetime
+import argparse
+from pathlib import Path
 
 def register_chinese_font():
     """注册中文字体"""
@@ -161,9 +163,26 @@ def csv_to_pdf_reportlab(csv_file, pdf_file):
     print(f"Output: {pdf_file}")
 
 def main():
-    csv_file = "output.csv"
-    pdf_file = "output.pdf"
+    parser = argparse.ArgumentParser(description='Convert CSV to PDF using ReportLab')
+    parser.add_argument('csv_file', nargs='?', default='output.csv', 
+                       help='Input CSV file path (default: output.csv)')
+    parser.add_argument('-o', '--output', 
+                       help='Output PDF file path (optional, auto-generated if not specified)')
     
+    args = parser.parse_args()
+    
+    csv_file = args.csv_file
+    
+ # 确定输出文件名的优先级：命令行第二个参数 > -o选项 > 自动生成
+    if args.pdf_file:
+        pdf_file = args.pdf_file
+    elif args.output:
+        pdf_file = args.output
+    else:
+        # 从CSV文件名生成PDF文件名
+        csv_path = Path(csv_file)
+        pdf_file = csv_path.with_suffix('.pdf').name
+        
     print("ReportLab CSV to PDF Converter")
     print("=" * 50)
     

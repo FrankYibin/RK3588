@@ -217,8 +217,7 @@ bool HistoryDataTable:: exportData(int fileType)
     if(restRecords > 0) filesCount += 1;
     for(int i = 0; i < filesCount; i++)
     {
-        localAppDirectory += QString::number(i+1) + ".csv";
-        localFiles.append(localAppDirectory);
+        localFiles.append(localAppDirectory + QString::number(i+1) + ".csv");
     }
 
     QList<QStringList> oneFileRecords;
@@ -287,8 +286,13 @@ void HistoryDataTable::ExportToCSVAsync(QStringList &localfiles)
         m_exportWorker = new CSVExportWorker(localfiles, m_USBDirectory);
         m_exportWorker->moveToThread(m_exportThread);
         connect(m_exportThread, &QThread::started, static_cast<CSVExportWorker*>(m_exportWorker), &CSVExportWorker::exportToFile);
+        connect(m_exportWorker, &CSVExportWorker::exportPrograss, this, &HistoryDataTable::signalExportPrograss);
         connect(m_exportWorker, &CSVExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
         connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
+    if(!m_exportThread->isRunning())
+    {
+        m_exportThread->start();
     }
 }
 
@@ -300,8 +304,13 @@ void HistoryDataTable::ExportToTextAsync(QStringList &localfiles)
         m_exportWorker = new TextExportWorker(localfiles, m_USBDirectory);
         m_exportWorker->moveToThread(m_exportThread);
         connect(m_exportThread, &QThread::started, static_cast<TextExportWorker*>(m_exportWorker), &TextExportWorker::exportToFile);
+        connect(m_exportWorker, &TextExportWorker::exportPrograss, this, &HistoryDataTable::signalExportPrograss);
         connect(m_exportWorker, &TextExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
         connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
+    if(!m_exportThread->isRunning())
+    {
+        m_exportThread->start();
     }
 }
 
@@ -313,8 +322,13 @@ void HistoryDataTable::ExportToPDFAsync(QStringList &localfiles)
         m_exportWorker = new PDFExportWorker(localfiles, m_USBDirectory);
         m_exportWorker->moveToThread(m_exportThread);
         connect(m_exportThread, &QThread::started, static_cast<PDFExportWorker*>(m_exportWorker), &PDFExportWorker::exportToFile);
+        connect(m_exportWorker, &PDFExportWorker::exportPrograss, this, &HistoryDataTable::signalExportPrograss);
         connect(m_exportWorker, &PDFExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
         connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
+    if(!m_exportThread->isRunning())
+    {
+        m_exportThread->start();
     }
 }
 
@@ -326,8 +340,13 @@ void HistoryDataTable::ExportToExcelAsync(QStringList &localfiles)
         m_exportWorker = new ExcelExportWorker(localfiles, m_USBDirectory);
         m_exportWorker->moveToThread(m_exportThread);
         connect(m_exportThread, &QThread::started, static_cast<ExcelExportWorker*>(m_exportWorker), &ExcelExportWorker::exportToFile);
+        connect(m_exportWorker, &ExcelExportWorker::exportPrograss, this, &HistoryDataTable::signalExportPrograss);
         connect(m_exportWorker, &ExcelExportWorker::exportFinished, this, &HistoryDataTable::onExportFinished);
         connect(m_exportThread, &QThread::finished, m_exportWorker, &QObject::deleteLater);
+    }
+    if(!m_exportThread->isRunning())
+    {
+        m_exportThread->start();
     }
 }
 

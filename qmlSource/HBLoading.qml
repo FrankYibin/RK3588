@@ -43,7 +43,7 @@ Rectangle {
         anchors.top: indicator.bottom
         anchors.topMargin: Math.round(10 * Style.scaleHint)
         anchors.horizontalCenter: parent.horizontalCenter
-        value: 0.5
+        value: 0
 
         style: ProgressBarStyle {
             background: Rectangle {

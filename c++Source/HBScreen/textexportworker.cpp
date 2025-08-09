@@ -10,8 +10,8 @@ TextExportWorker::TextExportWorker(const QStringList &localfiles, const QString 
 void TextExportWorker::exportToFile()
 {
     bool bResult = true;
-    QString localAppDirectory, targetDirectory;
     QString message;
+    QString localAppDirectory, targetDirectory;
     if(m_LocalFiles.size() == 0)
         bResult = false;
     else
@@ -27,9 +27,9 @@ void TextExportWorker::exportToFile()
             if(bResult == false)
                 break;
             targetDirectory += ".txt";
-            if(!QFile::copy(localAppDirectory, m_USBDirectory + targetDirectory))
+            if(!QFile::copy(localAppDirectory, m_USBDirectory + "/" + targetDirectory))
             {
-                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
+                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
                 bResult = false;
                 break;
             }
@@ -37,6 +37,7 @@ void TextExportWorker::exportToFile()
         }
     }
     if(bResult == true)
-        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
+        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
     emit exportFinished(bResult, message);
 }
+

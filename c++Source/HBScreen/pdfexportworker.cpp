@@ -10,8 +10,8 @@ PDFExportWorker::PDFExportWorker(const QStringList &localfiles, const QString US
 void PDFExportWorker::exportToFile()
 {
     bool bResult = true;
-    QString localAppDirectory, targetDirectory;
     QString message;
+    QString localAppDirectory, targetDirectory;
     if(m_LocalFiles.size() == 0)
         bResult = false;
     else
@@ -27,22 +27,22 @@ void PDFExportWorker::exportToFile()
             if(bResult == false)
                 break;
             targetDirectory += ".pdf";
-            ExportToPDF();
-            if(!QFile::copy(localAppDirectory, m_USBDirectory + targetDirectory))
-            {
-                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
-                bResult = false;
-                break;
-            }
+            ExportToPDF(localAppDirectory, m_USBDirectory + "/" + targetDirectory);
+            // if(!QFile::copy(localAppDirectory, m_USBDirectory + "/" + targetDirectory))
+            // {
+            //     message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
+            //     bResult = false;
+            //     break;
+            // }
             emit exportPrograss(i, m_LocalFiles.size());
         }
     }
     if(bResult == true)
-        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
+        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
     emit exportFinished(bResult, message);
 }
 
-bool PDFExportWorker::ExportToPDF()
+bool PDFExportWorker::ExportToPDF(const QString localDirectory, const QString targetDirectory)
 {
     bool bResult = false;
     // 创建 QProcess 对象
@@ -52,6 +52,9 @@ bool PDFExportWorker::ExportToPDF()
     QString program = "python"; // 你可以替换为其他 Linux 命令
     QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
     arguments.append("ConvertPDF.py");
+    arguments.append(localDirectory);
+    arguments.append("-o");
+    arguments.append(targetDirectory);
 
     // 启动进程
     process.start(program, arguments);

@@ -28,9 +28,9 @@ void ExcelExportWorker::exportToFile()
                 break;
             targetDirectory += ".xlsx";
             ExportToXLSX();
-            if(!QFile::copy(localAppDirectory, m_USBDirectory + targetDirectory))
+            if(!QFile::copy(localAppDirectory, m_USBDirectory + "/" + targetDirectory))
             {
-                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
+                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
                 bResult = false;
                 break;
             }
@@ -38,7 +38,7 @@ void ExcelExportWorker::exportToFile()
         }
     }
     if(bResult == true)
-        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + targetDirectory;
+        message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
     emit exportFinished(bResult, message);
 }
 
