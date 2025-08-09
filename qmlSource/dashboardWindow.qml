@@ -85,6 +85,12 @@ Item{
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
                 text: HBHome.DepthCurrent
                 enabled: false
+                textColor: {
+                    if(HBHome.IsDepthAlarm === true)
+                        return Style.redFontColor
+                    else
+                        return Style.whiteFontColor
+                }
 
             }
             Text
@@ -128,6 +134,12 @@ Item{
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,5}(\.\d{1,2})?$/ }
                 text: HBHome.VelocityCurrent
                 enabled: false
+                textColor: {
+                    if(HBHome.IsVelocityAlarm === true)
+                        return Style.redFontColor
+                    else
+                        return Style.whiteFontColor
+                }
             }
             Text
             {
@@ -170,8 +182,12 @@ Item{
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
                 text: (HBHome.IsTensiometerOnline === false) ? "-------" : HBHome.TensionCurrent
                 enabled: false
-                textColor: (HBHome.IsTensiometerOnline === false) ? Style.redFontColor : Style.whiteFontColor
-
+                textColor: {
+                    if((HBHome.IsTensiometerOnline === false) || (HBHome.IsTensionAlarm === true))
+                        return Style.redFontColor
+                    else
+                        return Style.whiteFontColor
+                }
             }
             Text
             {
@@ -215,7 +231,12 @@ Item{
                 validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
                 text: (HBHome.IsTensiometerOnline === false)? "-------" : HBHome.TensionCurrentDelta
                 enabled: false
-                textColor: (HBHome.IsTensiometerOnline === false) ? Style.redFontColor : Style.whiteFontColor
+                textColor: {
+                    if((HBHome.IsTensiometerOnline === false) || (HBHome.IsTensionDeltaAlarm === true))
+                        return Style.redFontColor
+                    else
+                        return Style.whiteFontColor
+                }
 
             }
             Text

@@ -7,6 +7,10 @@ HBHome::HBHome(QObject *parent)
     : QObject{parent}
 {
     setStatusNetwork(0);
+    setIsDepthAlarm(false);
+    setIsVelocityAlarm(false);
+    setIsTensionAlarm(false);
+    setIsTensionDeltaAlarm(false);
 }
 
 HBHome *HBHome::GetInstance()
@@ -305,8 +309,52 @@ void HBHome::setAlarmMessage(const QString msg)
     }
 }
 
+bool HBHome::IsDepthAlarm() const
+{
+    return m_isDepthAlarm;
+}
+void HBHome::setIsDepthAlarm(const bool alarm)
+{
+    if(m_isDepthAlarm == alarm)
+        return;
+    m_isDepthAlarm = alarm;
+    emit IsDepthAlarmChanged();
+}
 
+bool HBHome::IsVelocityAlarm() const
+{
+    return m_isVelocityAlarm;
+}
+void HBHome::setIsVelocityAlarm(const bool alarm)
+{
+    if(m_isVelocityAlarm == alarm)
+        return;
+    m_isVelocityAlarm = alarm;
+    emit IsVelocityAlarmChanged();
+}
 
+bool HBHome::IsTensionAlarm() const
+{
+    return m_isTensionAlarm;
+}
+void HBHome::setIsTensionAlarm(const bool alarm)
+{
+    if(m_isTensionAlarm == alarm)
+        return;
+    m_isTensionAlarm = alarm;
+    emit IsTensionAlarmChanged();
+}
 
+bool HBHome::IsTensionDeltaAlarm() const
+{
+    return m_isTensionDeltaAlarm;
+}
+void HBHome::setIsTensionDeltaAlarm(const bool alarm)
+{
+    if(m_isTensionDeltaAlarm == alarm)
+        return;
+    m_isTensionDeltaAlarm = alarm;
+    emit IsTensionDeltaAlarmChanged();
+}
 
 

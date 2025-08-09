@@ -30,47 +30,6 @@ Item{
         }
     }
 
-    Column {
-        id: calendarContainer
-        anchors.centerIn: parent
-        spacing: Math.round(10 * Style.scaleHint)
-        z: 5
-        visible: false
-
-        HBCalendar {
-            id: calendarDate
-            width: Math.round(400 * Style.scaleHint)
-            height: Math.round(250 * Style.scaleHint)
-            onSelectedDateChanged: {
-                console.debug("selected Date: ", selectedDate)
-            }
-        }
-
-        Row {
-            spacing: Math.round(20 * Style.scaleHint)
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            HBPrimaryButton {
-                text: qsTr("确定")
-                width: Math.round(buttonWidth * Style.scaleHint)
-                height: Math.round(componentHeight * Style.scaleHint)
-                onClicked: {
-                    currentComboBox.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
-                    calendarContainer.visible = false
-                }
-            }
-
-            HBPrimaryButton {
-                text: qsTr("取消")
-                width: Math.round(buttonWidth * Style.scaleHint)
-                height: Math.round(componentHeight * Style.scaleHint)
-                onClicked: {
-                    calendarContainer.visible = false
-                }
-            }
-        }
-    }
-
     Component.onCompleted:
     {
         headerModel.resetModel()
@@ -80,6 +39,25 @@ Item{
         //        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
         HistoryDataTable.setRange(startStamp,endStamp)
         timer.start()
+    }
+
+    HBCalendar{
+        id: calendarDate
+        anchors.centerIn: parent
+        width: Math.round(400 * Style.scaleHint)
+        height: Math.round(250 * Style.scaleHint)
+        z: 5
+        visible: false
+        onSelectedDateChanged: {
+            console.debug("selected Date: ", selectedDate)
+        }
+        onSignalConfirmed: {
+            if(isConfirmed === true)
+            {
+                currentComboBox.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+            }
+            currentComboBox.changeImageDown()
+        }
     }
 
     Rectangle
@@ -157,14 +135,15 @@ Item{
 
                     onSignalPopUp:
                     {
-                        if(isShow === true){
+                        if(isShow === true)
+                        {
                             currentComboBox = comboBoxStartTimeStamp
-                            calendarContainer.visible = true
+                            calendarDate.visible = true
                         }
                         else
                         {
-                            calendarContainer.visible = false
-//                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                            calendarDate.visible = false
+                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
                 }
@@ -196,14 +175,15 @@ Item{
                     }
                     onSignalPopUp:
                     {
-                        if(isShow === true){
+                        if(isShow === true)
+                        {
                             currentComboBox = comboBoxFinishTimeStamp
-                            calendarContainer.visible = true
+                            calendarDate.visible = true
                         }
                         else
                         {
-                            calendarContainer.visible = false
-//                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+                            calendarDate.visible = false
+                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
                 }
@@ -286,7 +266,13 @@ Item{
                     onClicked:
                     {
                         mainWindow.showLoading(true)
-                        HistoryDataTable.exportData(fileFormat.currentIndex)
+                        if(HistoryDataTable.exportData(fileFormat.currentIndex) === false)
+                        {
+                            mainWindow.showLoading(false)
+                        }
+                        else
+                        {
+                        }
                     }
                 }
             }

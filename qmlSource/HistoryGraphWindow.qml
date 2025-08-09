@@ -13,6 +13,7 @@ Item{
     readonly property int buttonWidth: 100
     readonly property int rowSpacing: 10
     readonly property int componentHeight: 30
+    property var currentComboBox: null
 
     Connections{
         target: SensorGraphData
@@ -38,6 +39,13 @@ Item{
         visible: false
         onSelectedDateChanged: {
             console.debug("selected Date: ", selectedDate)
+        }
+        onSignalConfirmed: {
+            if(isConfirmed === true)
+            {
+                currentComboBox.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+            }
+            currentComboBox.changeImageDown()
         }
     }
 
@@ -105,7 +113,10 @@ Item{
                     onSignalPopUp:
                     {
                         if(isShow === true)
+                        {
+                            currentComboBox = comboBoxStartTimeStamp
                             calendarDate.visible = true
+                        }
                         else
                         {
                             calendarDate.visible = false
@@ -142,7 +153,10 @@ Item{
                     onSignalPopUp:
                     {
                         if(isShow === true)
+                        {
                             calendarDate.visible = true
+                            currentComboBox = comboBoxStartTimeStamp
+                        }
                         else
                         {
                             calendarDate.visible = false

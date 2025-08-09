@@ -56,6 +56,10 @@ class HBHome : public QObject
 
     Q_PROPERTY(bool IsTensiometerOnline READ IsTensiometerOnline WRITE setIsTensiometerOnline NOTIFY IsTensiometerOnlineChanged FINAL)
 
+    Q_PROPERTY(bool IsDepthAlarm READ IsDepthAlarm WRITE setIsDepthAlarm NOTIFY IsDepthAlarmChanged FINAL)
+    Q_PROPERTY(bool IsVelocityAlarm READ IsVelocityAlarm WRITE setIsVelocityAlarm NOTIFY IsVelocityAlarmChanged FINAL)
+    Q_PROPERTY(bool IsTensionAlarm READ IsTensionAlarm WRITE setIsTensionAlarm NOTIFY IsTensionAlarmChanged FINAL)
+    Q_PROPERTY(bool IsTensionDeltaAlarm READ IsTensionDeltaAlarm WRITE setIsTensionDeltaAlarm NOTIFY IsTensionDeltaAlarmChanged FINAL)
 
 public:
 
@@ -122,6 +126,15 @@ public:
     QString alarmMessage() const;
     void setAlarmMessage(const QString msg);
 
+    bool IsDepthAlarm() const;
+    void setIsDepthAlarm(const bool alarm);
+    bool IsVelocityAlarm() const;
+    void setIsVelocityAlarm(const bool alarm);
+    bool IsTensionAlarm() const;
+    void setIsTensionAlarm(const bool alarm);
+    bool IsTensionDeltaAlarm() const;
+    void setIsTensionDeltaAlarm(const bool alarm);
+
 signals:
 
     void DepthCurrentChanged();
@@ -158,6 +171,11 @@ signals:
 
     void IsTensiometerOnlineChanged();
 
+    void IsDepthAlarmChanged();
+    void IsVelocityAlarmChanged();
+    void IsTensionAlarmChanged();
+    void IsTensionDeltaAlarmChanged();
+
 private:
     explicit HBHome(QObject *parent = nullptr);
 
@@ -187,6 +205,10 @@ private:
     bool    m_alarmEnabled;
     QString m_alarmMessage;
 
+    bool    m_isDepthAlarm;
+    bool    m_isVelocityAlarm;
+    bool    m_isTensionAlarm;
+    bool    m_isTensionDeltaAlarm;
 };
 
 #endif // HBHOME_H

@@ -54,11 +54,18 @@ public:
     
 
 private:
+    enum VOICE_STATUS
+    {
+        OFF = 0,
+        ON = 1
+    };
     explicit AutoTestSpeed(QObject *parent = nullptr);
 
     AutoTestSpeed(const AutoTestSpeed&) = delete;
     AutoTestSpeed& operator=(const AutoTestSpeed&) = delete;
     static AutoTestSpeed* _ptrAutoTestSpeed;
+    static constexpr int MAX_TIMEOUT = 5;
+    static int timeout;
 
 signals:
 

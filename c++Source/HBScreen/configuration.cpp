@@ -9,9 +9,8 @@
 Configuration* Configuration::_ptrConfiguration = nullptr;
 
 Configuration::Configuration(QObject *parent)
-    : QObject(parent)
+    : QObject(parent), m_settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat)
 {
-    m_settings.setPath(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::applicationDirPath() + "/config.ini");
     ensureConfigSettingsFileExists();
     m_settings.setIniCodec("UTF-8");
 
@@ -79,6 +78,18 @@ Configuration::Configuration(QObject *parent)
     connect(DepthSetting::GetInstance(), &DepthSetting::VelocityUnitChanged,
             this, &Configuration::onDepthVelocityUnitChanged);
 
+    connect(DepthSetting::GetInstance(), &DepthSetting::WheelCircumferenceChanged,
+            this, &Configuration::onWheelCircumferenceChanged);
+
+    connect(DepthSetting::GetInstance(), &DepthSetting::EncoderPulseCountChanged,
+            this, &Configuration::onEncoderPulseCountChanged);
+
+    connect(DepthSetting::GetInstance(), &DepthSetting::MeasuredWellDepthChanged,
+            this, &Configuration::onMeasuredWellDepthChanged);
+
+    connect(DepthSetting::GetInstance(), &DepthSetting::ActualWellDepthChanged,
+            this, &Configuration::onActualWellDepthChanged);
+
     connect(TensionSetting::GetInstance(), &TensionSetting::TensionUnitChanged,
             this, &Configuration::onTensionUnitChanged);
 }
@@ -94,6 +105,26 @@ void Configuration::InitUnits()
     int tensionUnit = m_settings.value("Unit/TensionUnit", defaultTensionUnit).toInt();
     m_tensionUnit = tensionUnit;
     TensionSetting::GetInstance()->setTensionUnit(tensionUnit);
+
+    QString defaultWheelCircumference = "0.75";
+    QString wheelCircumference = m_settings.value("Pulse/WheelCircumference", defaultWheelCircumference).toString();
+    m_wheelCircumference = wheelCircumference;
+    DepthSetting::GetInstance()->setWheelCircumference(wheelCircumference);
+
+    QString defaultEncoderPulseCount = "960";
+    QString encoderPulseCount = m_settings.value("Pulse/EncoderPulseCount", defaultEncoderPulseCount).toString();
+    m_encoderPulseCount = encoderPulseCount;
+    DepthSetting::GetInstance()->setEncoderPulseCount(encoderPulseCount);
+
+    QString defaultMeasuredWellDepth = "0";
+    QString measuredWellDepth = m_settings.value("Pulse/MeasuredWellDepth", defaultMeasuredWellDepth).toString();
+    m_measuredWellDepth = measuredWellDepth;
+    DepthSetting::GetInstance()->setMeasuredWellDepth(measuredWellDepth);
+
+    QString defaultActualWellDepth = "0";
+    QString actualWellDepth = m_settings.value("Pulse/ActualWellDepth", defaultActualWellDepth).toString();
+    m_actualWellDepth = actualWellDepth;
+    DepthSetting::GetInstance()->setActualWellDepth(actualWellDepth);
 }
 
 Configuration *Configuration::GetInstance()
@@ -328,6 +359,38 @@ void Configuration::onTensionUnitChanged(int unit)
         m_tensionUnit = unit;
         m_settings.setValue("Unit/TensionUnit", unit);
         emit TensionUnitChanged();
+    }
+}
+
+void Configuration::onWheelCircumferenceChanged(QString value)
+{
+    if (value != m_wheelCircumference) {
+        m_wheelCircumference = value;
+        m_settings.setValue("Pulse/WheelCircumference", value);
+    }
+}
+
+void Configuration::onEncoderPulseCountChanged(QString value)
+{
+    if (value != m_encoderPulseCount) {
+        m_encoderPulseCount = value;
+        m_settings.setValue("Pulse/EncoderPulseCount", value);
+    }
+}
+
+void Configuration::onMeasuredWellDepthChanged(QString value)
+{
+    if (value != m_measuredWellDepth) {
+        m_measuredWellDepth = value;
+        m_settings.setValue("Pulse/MeasuredWellDepth", value);
+    }
+}
+
+void Configuration::onActualWellDepthChanged(QString value)
+{
+    if (value != m_actualWellDepth) {
+        m_actualWellDepth = value;
+        m_settings.setValue("Pulse/ActualWellDepth", value);
     }
 }
 

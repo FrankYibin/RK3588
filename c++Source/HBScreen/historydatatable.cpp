@@ -14,6 +14,7 @@
 #include "textexportworker.h"
 #include "pdfexportworker.h"
 #include "excelexportworker.h"
+#include "wellparameter.h"
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
@@ -208,8 +209,8 @@ bool HistoryDataTable:: exportData(int fileType)
         return false;
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString formattedDateTime = currentDateTime.toString("yyyyMMddHHmmss");
-    "/output" + formattedDateTime + ".csv";
-    QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output" + formattedDateTime + "-";
+    QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output" +
+            formattedDateTime + WellParameter::GetInstance()->WellNumber() + "-";
     QStringList localFiles;
     int filesCount = rows.count() / MAX_RECORDS_IN_ONE_FILE;
     int restRecords = rows.count() % MAX_RECORDS_IN_ONE_FILE;
@@ -280,10 +281,8 @@ bool HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& 
 
 void HistoryDataTable::ExportToCSVAsync(QStringList &localfiles)
 {
-    qDebug() << "1111111111111111111111111";
     if(!m_exportThread)
     {
-        qDebug() << "222222222222222222222222222";
         m_exportThread = new QThread(this);
         m_exportWorker = new CSVExportWorker(localfiles, m_USBDirectory);
         m_exportWorker->moveToThread(m_exportThread);
@@ -294,7 +293,6 @@ void HistoryDataTable::ExportToCSVAsync(QStringList &localfiles)
     }
     if(!m_exportThread->isRunning())
     {
-        qDebug() << "3333333333333333333333333333";
         m_exportThread->start();
     }
 }

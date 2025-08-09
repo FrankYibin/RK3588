@@ -33,7 +33,9 @@ Item{
     Item
     {
         id: parameterSetting
-        anchors.centerIn: parent
+        anchors.top: parent.top
+        anchors.topMargin: Math.round(15 * Style.scaleHint)
+        anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width - Math.round(20 * Style.scaleHint)
         height: parent.height / 2 - Math.round(15 * Style.scaleHint)
 
@@ -41,8 +43,8 @@ Item{
         {
             anchors.centerIn: parent
             columns: 2
-            rows: 5
-            rowSpacing: Math.round(50 * Style.scaleHint)
+            rows: 4
+            rowSpacing: Math.round(20 * Style.scaleHint)
             columnSpacing: Math.round(50 * Style.scaleHint)
 
             Row{
@@ -166,6 +168,7 @@ Item{
                     color: Style.whiteFontColor
                 }
             }
+
             Row{
                 height: Math.round(optionHeight * Style.scaleHint)
                 width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
@@ -271,42 +274,6 @@ Item{
                 width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
                 spacing: rowSpacing
                 Text {
-                    id: titlePulseCount
-                    width: Math.round(textWidth * Style.scaleHint)
-                    height: parent.height
-                    text: qsTr("脉冲数") + ":"
-                    font.family: "宋体"
-                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
-                    verticalAlignment: Text.AlignVCenter
-                    color: Style.whiteFontColor
-                }
-                HBTextField
-                {
-                    id: textPulseCount
-                    width: Math.round(componentWidth * Style.scaleHint)
-                    height: parent.height
-                    fontSize: Math.round(Style.style4 * Style.scaleHint)
-                    maximumLength: 16
-                    validator: RegularExpressionValidator{
-                        regularExpression: /^[1-9][0-9]{4}$/
-                    }
-                    text: Depth.PulseCount
-                    onlyForNumpad: true
-
-                    onSignalClickedEvent: { 
-                        mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text, textPulseCount, function(val) {
-                            Depth.PulseCount = val
-                            ModbusClient.writeRegister(HQmlEnum.PULSE_COUNT, val)
-                        })
-                    }
-                }
-            }
-
-            Row{
-                height: Math.round(optionHeight * Style.scaleHint)
-                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
-                spacing: rowSpacing
-                Text {
                     id: titleUpperVelocityLimit
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
@@ -341,6 +308,278 @@ Item{
                     width: Math.round(textWidth * Style.scaleHint)
                     height: parent.height
                     text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]
+                    font.family: Style.regular.name
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+            }
+        }
+    }
+
+
+    HBGroupBox
+    {
+        id: parameterCalculatePulse
+        title: qsTr("脉冲计算")
+        anchors.top: parameterSetting.bottom
+        anchors.topMargin: Math.round(15 * Style.scaleHint)
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: parent.height / 2 - Math.round(25 * Style.scaleHint)
+        width: parent.width - Math.round(20 * Style.scaleHint)
+        backgroundColor: Style.backgroundMiddleColor
+        Grid
+        {
+            anchors.centerIn: parent
+            columns: 2
+            rows: 3
+            rowSpacing: Math.round(20 * Style.scaleHint)
+            columnSpacing: Math.round(50 * Style.scaleHint)
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titlePulseCount
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("每米脉冲数") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textPulseCount
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^[1-9][0-9]{4}$/
+                    }
+                    text: Depth.PulsePerMeter
+                    onlyForNumpad: true
+                    enabled: false
+                    // onSignalClickedEvent: {
+                    //     mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text, textPulseCount, function(val) {
+                    //         Depth.PulseCount = val
+                    //         ModbusClient.writeRegister(HQmlEnum.PULSE_COUNT, val)
+                    //     })
+                    // }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleCorrectPulseCount
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("修正脉冲数") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCorrectPulseCount
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^[1-9][0-9]{4}$/
+                    }
+                    text: Depth.CorrectedPulseCount
+                    onlyForNumpad: true
+                    enabled: false
+                    // onSignalClickedEvent: {
+                    //     mainWindow.showPrimaryNumpad(qsTr("请输入脉冲数"), " ", 0, 1, 99999, textPulseCount.text, textPulseCount, function(val) {
+                    //         Depth.PulseCount = val
+                    //         // ModbusClient.writeRegister(HQmlEnum.PULSE_COUNT, val)
+                    //     })
+                    // }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleCircumference
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("计量轮周长") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCircumference
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
+                    }
+                    text: Depth.WheelCircumference
+                    onlyForNumpad: true
+
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入计量轮周长"), " ", 2, 1, 99999, textCircumference.text, textCircumference, function(val) {
+                            Depth.WheelCircumference = val
+                            // ModbusClient.writeRegister(HQmlEnum.PULSE_COUNT, val)
+                        })
+                    }
+                }
+                Text {
+                    id: unitCircumference
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: "m"
+                    font.family: Style.regular.name
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleMeasuredWellDepth
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("实测井深") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textMeasuredWellDepth
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
+                    }
+                    text: Depth.MeasuredWellDepth
+                    onlyForNumpad: true
+
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入实测井深"), " ", 2, 1, 99999, textMeasuredWellDepth.text, textMeasuredWellDepth, function(val) {
+                            if(parseInt(val) > 0)
+                                Depth.MeasuredWellDepth = val
+                            else
+                                textMeasuredWellDepth.text = Depth.MeasuredWellDepth
+                        })
+                    }
+                }
+                Text {
+                    id: unitMeasuredWellDepth
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: "m"
+                    font.family: Style.regular.name
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleEncoderPulseCount
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("编码器脉冲数") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textEncoderPulseCount
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^[1-9][0-9]{4}$/
+                    }
+                    text: Depth.EncoderPulseCount
+                    onlyForNumpad: true
+
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入编码器脉冲数"), " ", 0, 1, 99999, textEncoderPulseCount.text, textEncoderPulseCount, function(val) {
+                            Depth.EncoderPulseCount = val
+                            // ModbusClient.writeRegister(HQmlEnum.PULSE_COUNT, val)
+                        })
+                    }
+                }
+            }
+
+            Row{
+                height: Math.round(optionHeight * Style.scaleHint)
+                width: Math.round((textWidth + componentWidth + rowSpacing) * Style.scaleHint)
+                spacing: rowSpacing
+                Text {
+                    id: titleActualWellDepth
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: qsTr("实际井深") + ":"
+                    font.family: "宋体"
+                    font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                    verticalAlignment: Text.AlignVCenter
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textActualWellDepth
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: parent.height
+                    fontSize: Math.round(Style.style4 * Style.scaleHint)
+                    maximumLength: 16
+                    validator: RegularExpressionValidator{
+                        regularExpression: /^\d{1,5}(\.\d{1,2})?$/
+                    }
+                    text: Depth.ActualWellDepth
+                    onlyForNumpad: true
+
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入实际井深"), " ", 2, 1, 99999, textActualWellDepth.text, textActualWellDepth, function(val) {
+                            if(parseInt(val) > 0)
+                                Depth.ActualWellDepth = val
+                            else
+                                textActualWellDepth.text = Depth.ActualWellDepth
+                            // ModbusClient.writeRegister(HQmlEnum.PULSE_COUNT, val)
+                        })
+                    }
+                }
+                Text {
+                    id: unitActualWellDepth
+                    width: Math.round(textWidth * Style.scaleHint)
+                    height: parent.height
+                    text: "m"
                     font.family: Style.regular.name
                     font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                     verticalAlignment: Text.AlignVCenter

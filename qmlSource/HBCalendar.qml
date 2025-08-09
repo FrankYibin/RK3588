@@ -8,6 +8,9 @@ Item
     property date selectedDate: new Date()
     width: parent.width
     height: parent.height
+    readonly property int buttonWidth: 100
+    readonly property int componentHeight: 30
+    signal signalConfirmed(bool isConfirmed)
     SystemPalette {
         id: systemPalette
     }
@@ -17,8 +20,8 @@ Item
         // Convert the timestamp to QDateTime
         property date todayDate: new Date()
         width: parent.width
-        // height: parent.height - Math.round(50 * Style.scaleHint)
-        height: parent.height
+        height: parent.height - Math.round(50 * Style.scaleHint)
+        // height: parent.height
         frameVisible: false
         // weekNumbersVisible: true
         selectedDate: todayDate
@@ -136,6 +139,40 @@ Item
             }
         }
     }
+
+    Rectangle {
+        color: Style.backgroundDeepColor
+        width: parent.width
+        height: Math.round(50 * Style.scaleHint)
+        anchors.top: calendar.bottom
+        Row {
+            spacing: Math.round(30 * Style.scaleHint)
+            anchors.centerIn: parent
+
+            HBPrimaryButton {
+                text: qsTr("确定")
+                width: Math.round(buttonWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                onClicked: {
+                    hbCalendar.visible = false
+                    signalConfirmed(true)
+                }
+            }
+
+            HBPrimaryButton {
+                text: qsTr("取消")
+                width: Math.round(buttonWidth * Style.scaleHint)
+                height: Math.round(componentHeight * Style.scaleHint)
+                onClicked: {
+                    hbCalendar.visible = false
+                    signalConfirmed(false)
+                }
+            }
+        }
+    }
+
+
+
 }
 
 

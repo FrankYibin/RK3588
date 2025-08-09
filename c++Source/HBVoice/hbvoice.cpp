@@ -20,6 +20,29 @@ HBVoice::HBVoice(QObject *parent)
     m_VoiceList.append(":/voice/08Encoder2.mp3");
     m_VoiceList.append(":/voice/09Encoder3.mp3");
     m_VoiceList.append(":/voice/10Drowsy.mp3");
+    m_VoiceList.append(":/voice/20meter0_0.mp3");
+    m_VoiceList.append(":/voice/11meter0_1.mp3");
+    m_VoiceList.append(":/voice/12meter0_2.mp3");
+    m_VoiceList.append(":/voice/13meter0_3.mp3");
+    m_VoiceList.append(":/voice/14meter0_4.mp3");
+    m_VoiceList.append(":/voice/15meter0_5.mp3");
+    m_VoiceList.append(":/voice/16meter0_6.mp3");
+    m_VoiceList.append(":/voice/17meter0_7.mp3");
+    m_VoiceList.append(":/voice/18meter0_8.mp3");
+    m_VoiceList.append(":/voice/19meter0_9.mp3");
+    m_VoiceList.append(":/voice/30meter1_0.mp3");
+    m_VoiceList.append(":/voice/21meter1_1.mp3");
+    m_VoiceList.append(":/voice/22meter1_2.mp3");
+    m_VoiceList.append(":/voice/23meter1_3.mp3");
+    m_VoiceList.append(":/voice/24meter1_4.mp3");
+    m_VoiceList.append(":/voice/25meter1_5.mp3");
+    m_VoiceList.append(":/voice/26meter1_6.mp3");
+    m_VoiceList.append(":/voice/27meter1_7.mp3");
+    m_VoiceList.append(":/voice/28meter1_8.mp3");
+    m_VoiceList.append(":/voice/29meter1_9.mp3");
+    m_VoiceList.append(":/voice/31meter2_0.mp3");
+
+
     m_ptrPlayer = new QMediaPlayer;
     m_ptrPlayer->setVolume(100);
     m_objVoice = this;

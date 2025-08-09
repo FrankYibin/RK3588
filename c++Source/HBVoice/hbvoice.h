@@ -25,11 +25,30 @@ public:
         ENCODER_1_EXCEPTION,
         ENCODER_2_EXCEPTION,
         ENCODER_3_EXCEPTION,
-        DROWSY_DRIVING
+        DROWSY_DRIVING,
+        METER_0_0,
+        METER_0_1,
+        METER_0_2,
+        METER_0_3,
+        METER_0_4,
+        METER_0_5,
+        METER_0_6,
+        METER_0_7,
+        METER_0_8,
+        METER_0_9,
+        METER_1_0,
+        METER_1_1,
+        METER_1_2,
+        METER_1_3,
+        METER_1_4,
+        METER_1_5,
+        METER_1_6,
+        METER_1_7,
+        METER_1_8,
+        METER_1_9,
+        METER_2_0
     };
 public:
-//    explicit HBVoice(QObject *parent = nullptr);
-//    virtual ~HBVoice();
     static HBVoice* GetInstance();
     static bool PlayVoice(VOICE_EXCEPTION_INDEX index);
 

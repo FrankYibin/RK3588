@@ -1,4 +1,6 @@
 ﻿#include "depthsetting.h"
+#include "../HBModbus/hbmodbusclient.h"
+#include "../HBQmlEnum.h"
 #include <QtDebug>
 DepthSetting* DepthSetting::_ptrDepth = nullptr;
 
@@ -25,6 +27,29 @@ DepthSetting::DepthSetting(QObject *parent)
     setDepthTargetLayer("99999.99");
     setDepthSurfaceCover("99999.99");
     setDepthEncoder(ENCODER_1);
+}
+
+QString DepthSetting::CalculateOriginalPulse(const QString circumference, const QString pulseCount)
+{
+    double f_circumference = circumference.toDouble();
+    int i_count = pulseCount.toInt();
+    int pulse = 0;
+    if(f_circumference > 0)
+        pulse = i_count / f_circumference;
+    QString strPulse = QString::number(pulse);
+    return strPulse;
+}
+
+QString DepthSetting::CalculateNewPulse(const QString measuredDepth, const QString actualDepth)
+{
+    double f_measuredDepth = measuredDepth.toDouble();
+    double f_actualDepth = actualDepth.toDouble();
+    int i_originalPulse = m_PulsePerMeter.toInt();
+    int pulse = 0;
+    if(f_actualDepth > 0)
+        pulse = f_measuredDepth * i_originalPulse / f_actualDepth;
+    QString strPulse = QString::number(pulse);
+    return strPulse;
 }
 
 QString DepthSetting::DepthTargetLayer() const
@@ -183,6 +208,85 @@ void DepthSetting::setVelocityLimited(const QString value)
     emit VelocityLimitedChanged();
 }
 
+QString DepthSetting::WheelCircumference() const
+{
+    return m_WheelCircumference;
+}
+void DepthSetting::setWheelCircumference(const QString value)
+{
+    if (m_WheelCircumference == value)
+        return;
+    m_WheelCircumference = value;
+    emit WheelCircumferenceChanged(value);
+    QString strPulse = CalculateOriginalPulse(m_WheelCircumference, m_EncoderPulseCount);
+    setPulsePerMeter(strPulse);
+}
 
+QString DepthSetting::EncoderPulseCount() const
+{
+    return m_EncoderPulseCount;
+}
+void DepthSetting::setEncoderPulseCount(const QString value)
+{
+    if (m_EncoderPulseCount == value)
+        return;
+    m_EncoderPulseCount = value;
+    emit EncoderPulseCountChanged(value);
+    QString strPulse = CalculateOriginalPulse(m_WheelCircumference, m_EncoderPulseCount);
+    setPulsePerMeter(strPulse);
+}
 
+QString DepthSetting::MeasuredWellDepth() const
+{
+    return m_MeasuredWellDepth;
+}
+void DepthSetting::setMeasuredWellDepth(const QString value)
+{
+    if (m_MeasuredWellDepth == value)
+        return;
+    m_MeasuredWellDepth = value;
+    emit MeasuredWellDepthChanged(value);
+    QString strPulse = CalculateNewPulse(m_MeasuredWellDepth, m_ActualWellDepth);
+    setCorrectedPulseCount(strPulse);
+}
 
+QString DepthSetting::ActualWellDepth() const
+{
+    return m_ActualWellDepth;
+}
+void DepthSetting::setActualWellDepth(const QString value)
+{
+    if (m_ActualWellDepth == value)
+        return;
+    m_ActualWellDepth = value;
+    emit ActualWellDepthChanged(value);
+    QString strPulse = CalculateNewPulse(m_MeasuredWellDepth, m_ActualWellDepth);
+    setCorrectedPulseCount(strPulse);
+}
+
+QString DepthSetting::CorrectedPulseCount() const
+{
+    return m_CorrectedPulseCount;
+}
+void DepthSetting::setCorrectedPulseCount(const QString value)
+{
+    if (m_CorrectedPulseCount == value)
+        return;
+    m_CorrectedPulseCount = value;
+    emit CorrectedPulseCountChanged();
+    HBModbusClient::GetInstance()->writeRegister(HQmlEnum::PULSE_COUNT, m_CorrectedPulseCount);
+}
+
+QString DepthSetting::PulsePerMeter() const
+{
+    return m_PulsePerMeter;
+}
+void DepthSetting::setPulsePerMeter(const QString value)
+{
+    if (m_PulsePerMeter == value)
+        return;
+    m_PulsePerMeter = value;
+    emit PulsePerMeterChanged();
+    QString strPulse = CalculateNewPulse(m_MeasuredWellDepth, m_ActualWellDepth);
+    setCorrectedPulseCount(strPulse);
+}

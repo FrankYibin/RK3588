@@ -123,6 +123,11 @@ private slots:
     void onDepthVelocityUnitChanged(int unit);
     void onTensionUnitChanged(int unit);
 
+    void onWheelCircumferenceChanged(QString value);
+    void onEncoderPulseCountChanged(QString value);
+    void onMeasuredWellDepthChanged(QString value);
+    void onActualWellDepthChanged(QString value);
+
 private:
     QString  m_baudRate;
     QString  m_dataBits;
@@ -146,7 +151,10 @@ private:
     int m_velocityUnit;
     int m_tensionUnit;
 
-
+    QString m_wheelCircumference;
+    QString m_encoderPulseCount;
+    QString m_measuredWellDepth;
+    QString m_actualWellDepth;
 };
 
 #endif // CONFIGURATION_H
