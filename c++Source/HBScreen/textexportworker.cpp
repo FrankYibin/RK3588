@@ -38,6 +38,7 @@ void TextExportWorker::exportToFile()
     }
     if(bResult == true)
         message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
+    DeleteLocalCSVFiles();
     emit exportFinished(bResult, message);
 }
 

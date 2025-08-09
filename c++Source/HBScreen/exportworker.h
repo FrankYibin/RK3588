@@ -12,6 +12,7 @@ protected:
     QStringList m_LocalFiles;
     QString m_USBDirectory;
     bool GetTargetDirectory(const QString localDirectory, QString& targetDirectory);
+    bool DeleteLocalCSVFiles();
 public:
     explicit ExportWorker(QObject *parent = nullptr);
 public slots:

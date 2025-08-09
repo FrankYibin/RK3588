@@ -28,17 +28,12 @@ void PDFExportWorker::exportToFile()
                 break;
             targetDirectory += ".pdf";
             ExportToPDF(localAppDirectory, m_USBDirectory + "/" + targetDirectory);
-            // if(!QFile::copy(localAppDirectory, m_USBDirectory + "/" + targetDirectory))
-            // {
-            //     message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
-            //     bResult = false;
-            //     break;
-            // }
             emit exportPrograss(i, m_LocalFiles.size());
         }
     }
     if(bResult == true)
         message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
+    DeleteLocalCSVFiles();
     emit exportFinished(bResult, message);
 }
 

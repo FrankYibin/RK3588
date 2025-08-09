@@ -357,6 +357,8 @@ Window{
 
     function showLoading(isShow)
     {
+        if(isShow === false)
+            loadingOverlay.progress = 0.0
         loadingOverlay.visible = isShow;
     }
 

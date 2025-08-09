@@ -280,8 +280,10 @@ bool HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& 
 
 void HistoryDataTable::ExportToCSVAsync(QStringList &localfiles)
 {
+    qDebug() << "1111111111111111111111111";
     if(!m_exportThread)
     {
+        qDebug() << "222222222222222222222222222";
         m_exportThread = new QThread(this);
         m_exportWorker = new CSVExportWorker(localfiles, m_USBDirectory);
         m_exportWorker->moveToThread(m_exportThread);
@@ -292,6 +294,7 @@ void HistoryDataTable::ExportToCSVAsync(QStringList &localfiles)
     }
     if(!m_exportThread->isRunning())
     {
+        qDebug() << "3333333333333333333333333333";
         m_exportThread->start();
     }
 }
@@ -354,5 +357,7 @@ void HistoryDataTable::onExportFinished(bool success, const QString &message)
 {
     m_exportThread->quit();
     m_exportThread->wait();
+    m_exportThread->deleteLater();
+    m_exportThread = nullptr;
     emit signalExportCompleted(success, message);
 }

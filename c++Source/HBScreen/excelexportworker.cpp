@@ -27,22 +27,17 @@ void ExcelExportWorker::exportToFile()
             if(bResult == false)
                 break;
             targetDirectory += ".xlsx";
-            ExportToXLSX();
-            if(!QFile::copy(localAppDirectory, m_USBDirectory + "/" + targetDirectory))
-            {
-                message = "Failed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
-                bResult = false;
-                break;
-            }
+            ExportToXLSX(localAppDirectory, m_USBDirectory + "/" + targetDirectory);
             emit exportPrograss(i, m_LocalFiles.size());
         }
     }
     if(bResult == true)
         message = "Successed to copy " + localAppDirectory + " to " + m_USBDirectory + "/" + targetDirectory;
+    DeleteLocalCSVFiles();
     emit exportFinished(bResult, message);
 }
 
-bool ExcelExportWorker::ExportToXLSX()
+bool ExcelExportWorker::ExportToXLSX(const QString localDirectory, const QString targertDirectory)
 {
     bool bResult = false;
     // 创建 QProcess 对象
@@ -52,6 +47,9 @@ bool ExcelExportWorker::ExportToXLSX()
     QString program = "python"; // 你可以替换为其他 Linux 命令
     QStringList arguments; // 这里可以添加命令参数，例如 "-l" 或其他
     arguments.append("ConvertExcel.py");
+    arguments.append(localDirectory);
+    arguments.append("-o");
+    arguments.append(targertDirectory);
 
     // 启动进程
     process.start(program, arguments);

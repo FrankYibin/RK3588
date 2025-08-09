@@ -166,14 +166,16 @@ def main():
     parser = argparse.ArgumentParser(description='Convert CSV to PDF using ReportLab')
     parser.add_argument('csv_file', nargs='?', default='output.csv', 
                        help='Input CSV file path (default: output.csv)')
-    parser.add_argument('-o', '--output', 
+    parser.add_argument('pdf_file', nargs='?', default=None,
                        help='Output PDF file path (optional, auto-generated if not specified)')
+    parser.add_argument('-o', '--output', 
+                       help='Alternative way to specify output PDF file path')
     
     args = parser.parse_args()
     
     csv_file = args.csv_file
     
- # 确定输出文件名的优先级：命令行第二个参数 > -o选项 > 自动生成
+    # 确定输出文件名的优先级：命令行第二个参数 > -o选项 > 自动生成
     if args.pdf_file:
         pdf_file = args.pdf_file
     elif args.output:
@@ -182,7 +184,7 @@ def main():
         # 从CSV文件名生成PDF文件名
         csv_path = Path(csv_file)
         pdf_file = csv_path.with_suffix('.pdf').name
-        
+         
     print("ReportLab CSV to PDF Converter")
     print("=" * 50)
     

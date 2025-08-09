@@ -8,7 +8,7 @@ class ExcelExportWorker : public ExportWorker
 {
     Q_OBJECT
 private:
-    bool ExportToXLSX();
+    bool ExportToXLSX(const QString localDirectory, const QString targertDirectory);
 public:
     explicit ExcelExportWorker(const QStringList &localfiles, const QString USBDirectory);
 public slots:
