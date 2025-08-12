@@ -1584,9 +1584,11 @@ void HBModbusClient::handleParseCoils(const QModbusDataUnit &result)
             break;
         case HQmlEnum::ALARM_TENSION_DELTA_STOP:
             m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop = val ? 1 : 0;
+            qDebug() <<"m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop" << val;
             break;
         case HQmlEnum::ALARM_TENSION_CABLE_HEAD_SLOW:
             m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow = val ? 1 : 0;
+              qDebug() <<"m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow" << val;
             break;
         case HQmlEnum::ALARM_TENSION_CABLE_HEAD_STOP:
             m_IO_Value3.bits_Value3.m_AlarmTensionCableHeadStop = val ? 1 : 0;
@@ -1771,7 +1773,7 @@ void HBModbusClient::handleAlarm()
         HBHome::GetInstance()->setAlarmEnabled(isTensionDeltaSlowAlarm);
     }
     if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow)
-        HBHome::GetInstance()->setAlarmMessage("张力增量超值 " + HBHome::GetInstance()->TensionCurrentDelta()+ " " + getTensionUnitString());
+        HBHome::GetInstance()->setAlarmMessage("张力增量超值 " + HBHome::GetInstance()->TensionCurrentDelta()+ " " + getTensionUnitString() + "/s");
 
     if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaStop)
     {
@@ -1785,12 +1787,15 @@ void HBModbusClient::handleAlarm()
             m_AlarmTensionDeltaStopPlayed = false;
         HBHome::GetInstance()->setAlarmEnabled(isTensionDeltaStopAlarm);
     }
+
     if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop)
-        HBHome::GetInstance()->setAlarmMessage("张力增量超值 " + HBHome::GetInstance()->TensionCurrentDelta()+ " " + getTensionUnitString());
-    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow  == true || m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop == true)
-        HBHome::GetInstance()->setIsTensionDeltaAlarm(true);
-    else
-        HBHome::GetInstance()->setIsTensionDeltaAlarm(false);
+        HBHome::GetInstance()->setAlarmMessage("张力增量超值 " + HBHome::GetInstance()->TensionCurrentDelta()+ " " + getTensionUnitString() + "/s");
+
+
+//    if(m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop  != m_LastIO_Value2.bits_Value2.m_AlarmTensionDeltaStop)
+//        HBHome::GetInstance()->setIsTensionDeltaAlarm(true);
+//    else
+//        HBHome::GetInstance()->setIsTensionDeltaAlarm(false);
 
     if(m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow != m_LastIO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow)
     {
