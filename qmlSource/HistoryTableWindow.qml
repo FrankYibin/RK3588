@@ -143,7 +143,7 @@ Item{
                         else
                         {
                             calendarDate.visible = false
-                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+//                            comboBoxStartTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
                 }
@@ -183,7 +183,7 @@ Item{
                         else
                         {
                             calendarDate.visible = false
-                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
+//                            comboBoxFinishTimeStamp.text = Qt.formatDate(calendarDate.selectedDate, "yyyy-MM-dd")
                         }
                     }
                 }
