@@ -350,8 +350,8 @@ Window{
 
     function showTensionPanel()
     {
-        tensionPanel.x = 702
-        tensionPanel.y = 240
+        tensionPanel.x = 383
+        tensionPanel.y = 178
         tensionPanel.visible = true
     }
 

@@ -171,7 +171,7 @@ bool HistoryDataTable::isAvailaleDiskUSB()
 
 bool HistoryDataTable:: exportData(int fileType)
 {
-    bool bResult = false;
+//    bool bResult = false;
 
     if(m_USBDirectory.isEmpty() == true)
         return false;
@@ -250,9 +250,9 @@ bool HistoryDataTable:: exportData(int fileType)
         ExportToExcelAsync(localFiles);
         break;
     default:
-        break;
+         return false;
     }
-    return bResult;
+    return true ;
 }
 
 
