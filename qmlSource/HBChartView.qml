@@ -156,8 +156,8 @@ Item {
                 titleFont.family: "宋体"
                 titleFont.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                 titleVisible: false
-                // format: "yyyy-MM-dd hh:mm:ss"
-                format: "hh:mm:ss"
+                 format: "yyyy-MM-dd hh:mm:ss"
+//                format: "hh:mm:ss"
                 max: new Date()
                 min: new Date()
                 tickCount: 4
