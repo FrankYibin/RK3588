@@ -214,7 +214,7 @@ Item{
         anchors.rightMargin: Math.round(20 * Style.scaleHint)
         text: qsTr("新增用户")
         fontSize: Math.round(Style.style5 * Style.scaleHint)
-        visible: (UserModel.GroupIndex > 0) ? false : true
+        visible: (UserModel.CurrentGroupIndex > 1) ? false : true
         onClicked:
         {
             UserModel.resetUser()

@@ -18,8 +18,7 @@ class UserManagerModel : public QAbstractTableModel
 
     Q_PROPERTY(QString CurrentUser READ CurrentUser WRITE setCurrentUser NOTIFY CurrentUserChanged FINAL)
     Q_PROPERTY(QString CurrentGroup READ CurrentGroup WRITE setCurrentGroup NOTIFY CurrentGroupChanged FINAL)
-
-
+    Q_PROPERTY(int CurrentGroupIndex READ CurrentGroupIndex WRITE setCurrentGroupIndex NOTIFY CurrentGroupIndexChanged FINAL)
 public:
     static UserManagerModel &GetInstance();
 
@@ -68,7 +67,10 @@ public:
 
     void setCurrentGroup(const QString &currentGroup);
     QString CurrentGroup() const;
-    
+
+    void setCurrentGroupIndex(const int currentGroupIndex);
+    int CurrentGroupIndex() const;
+
 private:
     explicit UserManagerModel(QObject *parent = nullptr);
     UserManagerModel(const UserManagerModel&) = delete;
@@ -84,13 +86,14 @@ signals:
     void CurrentUserChanged(const QString &currentUser);
     void CurrentGroupChanged(const QString &currentGroup);
 
+    void CurrentGroupIndexChanged(int currentGroupIndex);
+
 private:
     enum USER_LEVEL
     {
-        SUPER_USER = 0,
+        SUPER_ADMIN_USER = 0,
+        ADMIN_USER,
         OPERATOR_USER,
-        NORMAL_USER,
-        VISITOR_USER
     };
     enum OPERATE_TYPE
     {
@@ -108,7 +111,8 @@ private:
 
     QString m_currentUser;
     QString m_currentGroup;
-    static QString UserLevel[4];
+    static int m_iCurrentGroup;
+    static QString UserLevel[3];
     OPERATE_TYPE m_OperateType;
 };
 

@@ -1942,30 +1942,30 @@ void HBModbusClient::InsertDataToDatabase()
     modData.safetyTension = TensionSafety::GetInstance()->TensionCurrentSafety();
 
     QString exceptionMessage = "无";
-
-    if (m_IO_Value2.bits_Value2.m_AlarmVelocity) {
+    if (m_IO_Value2.bits_Value2.m_AlarmVelocity)
         exceptionMessage = "超速报警";
-    } else if (m_IO_Value2.bits_Value2.m_AlarmWellSurface) {
-        exceptionMessage = "井口报警";
-    } else if (m_IO_Value2.bits_Value2.m_AlarmTargetLayer) {
-        exceptionMessage = "目标层报警";
-    } else if (m_IO_Value2.bits_Value2.m_AlarmSurfaceCover) {
-        exceptionMessage = "表套深度报警";
-    } else if (m_IO_Value2.bits_Value2.m_AlarmTension) {
+    // else if (m_IO_Value2.bits_Value2.m_AlarmWellSurface)
+    //     exceptionMessage = "井口报警";
+    // else if (m_IO_Value2.bits_Value2.m_AlarmTargetLayer)
+    //     exceptionMessage = "目标层报警";
+    // else if (m_IO_Value2.bits_Value2.m_AlarmSurfaceCover)
+    //     exceptionMessage = "表套深度报警";
+    else if (m_IO_Value2.bits_Value2.m_AlarmTension)
         exceptionMessage = "张力超限";
-    } else if (m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow) {
+    else if (m_IO_Value2.bits_Value2.m_AlarmTensionDeltaSlow)
         exceptionMessage = "张力遇卡";
-    } else if (m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop) {
+    else if (m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop)
         exceptionMessage = "张力遇阻";
-    } else if (m_IO_Value3.bits_Value3.m_AlarmEncoder1) {
-        exceptionMessage = "编码器1异常";
-    } else if (m_IO_Value3.bits_Value3.m_AlarmEncoder2) {
-        exceptionMessage = "编码器2异常";
-    } else if (m_IO_Value3.bits_Value3.m_AlarmEncoder3) {
-        exceptionMessage = "编码器3异常";
-    } else if (m_IO_Value3.bits_Value3.m_AlarmDrowsy) {
-        exceptionMessage = "疲劳作业";
-    }
+    // else if (m_IO_Value3.bits_Value3.m_AlarmEncoder1)
+    //     exceptionMessage = "编码器1异常";
+    // else if (m_IO_Value3.bits_Value3.m_AlarmEncoder2)
+    //     exceptionMessage = "编码器2异常";
+    // else if (m_IO_Value3.bits_Value3.m_AlarmEncoder3)
+    //     exceptionMessage = "编码器3异常";
+    // else if (m_IO_Value3.bits_Value3.m_AlarmDrowsy)
+    //     exceptionMessage = "疲劳作业";
+    else
+        exceptionMessage = "无";
 
     modData.exception = exceptionMessage;
 
@@ -1984,7 +1984,7 @@ void HBModbusClient::Insert4GData()
     int tension = m_RecvReg.m_TensionCurrent.Data;
     int tension_delta = m_RecvReg.m_TensionCurrentDelta.Data;
     short pulse = m_RecvReg.m_PulseCount.Data;
-    short kValue = m_RecvReg.m_K_Value.Data / 100;
+    short kValue = m_RecvReg.m_K_Value.Data;
     QString strWellNumber = WellParameter::GetInstance()->WellNumber();
     QTextCodec *codec = QTextCodec::codecForName("GB2312");
     QByteArray byteArray = codec->fromUnicode(strWellNumber);

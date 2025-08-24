@@ -1,7 +1,8 @@
 ﻿#include "usermanagermodel.h"
 #include "c++Source/HBData/hbdatabase.h"
 #include <QDebug>
-QString UserManagerModel::UserLevel[4] = {"超级用户", "操作员", "普通用户", "访客"}; //Must align with QML definition
+QString UserManagerModel::UserLevel[3] = {"超级管理员", "管理员", "操作员"}; //Must align with QML definition
+int UserManagerModel::m_iCurrentGroup = -1;
 UserManagerModel::UserManagerModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
@@ -137,7 +138,7 @@ bool UserManagerModel::resetUser()
 
 bool UserManagerModel::syncUserList()
 {
-
+    return true;
 }
 
 bool UserManagerModel::addNewUser(const QString username, const QString password, const int groupindex, const QString nickname)
@@ -156,21 +157,19 @@ bool UserManagerModel::validateUser(const QString username, const QString passwo
     {
         setCurrentUser(username);
         setGroupIndex(groupId);
+        setCurrentGroupIndex(groupId);
         setNickName(nickname);
         setCreateTime(createtime);
         switch(groupId)
         {
-        case SUPER_USER:
-            setCurrentGroup(UserLevel[SUPER_USER]);
+        case SUPER_ADMIN_USER:
+            setCurrentGroup(UserLevel[SUPER_ADMIN_USER]);
+            break;
+        case ADMIN_USER:
+            setCurrentGroup(UserLevel[ADMIN_USER]);
             break;
         case OPERATOR_USER:
             setCurrentGroup(UserLevel[OPERATOR_USER]);
-            break;
-        case NORMAL_USER:
-            setCurrentGroup(UserLevel[NORMAL_USER]);
-            break;
-        case VISITOR_USER:
-            setCurrentGroup(UserLevel[VISITOR_USER]);
             break;
         default:
             setCurrentGroup(tr("ADMIN"));
@@ -184,24 +183,21 @@ bool UserManagerModel::validateUser(const QString username, const QString passwo
 void UserManagerModel::loadFromDatabase()
 {
     beginResetModel();
-    int groupId = GroupIndex();
     UserInfo tmpUser;
-    switch(groupId)
+    switch(CurrentGroupIndex())
     {
-    case SUPER_USER:
+    case SUPER_ADMIN_USER:
         m_users = HBDatabase::GetInstance().LoadAllUsers();
         break;
+    case ADMIN_USER:
     case OPERATOR_USER:
-    case NORMAL_USER:
-    case VISITOR_USER:
         m_users.clear();
         tmpUser.userName = CurrentUser();
         tmpUser.nickName = NickName();
         tmpUser.createTime = CreateTime();
-        tmpUser.groupIndex = groupId;
+        tmpUser.groupIndex = CurrentGroupIndex();
         tmpUser.userHandleVisible = true;
         m_users.append(tmpUser);
-        qDebug()<<"222222222222222222222222";
         break;
     default:
         m_users = HBDatabase::GetInstance().LoadAllUsers();
@@ -228,17 +224,14 @@ bool UserManagerModel::ValidateUser(const QString userId)
         setCreateTime(createtime);
         switch(groupId)
         {
-        case SUPER_USER:
-            setCurrentGroup(UserLevel[SUPER_USER]);
+        case SUPER_ADMIN_USER:
+            setCurrentGroup(UserLevel[SUPER_ADMIN_USER]);
+            break;
+        case ADMIN_USER:
+            setCurrentGroup(UserLevel[ADMIN_USER]);
             break;
         case OPERATOR_USER:
             setCurrentGroup(UserLevel[OPERATOR_USER]);
-            break;
-        case NORMAL_USER:
-            setCurrentGroup(UserLevel[NORMAL_USER]);
-            break;
-        case VISITOR_USER:
-            setCurrentGroup(UserLevel[VISITOR_USER]);
             break;
         default:
             setCurrentGroup(tr("ADMIN"));
@@ -338,4 +331,16 @@ void UserManagerModel::setCurrentGroup(const QString &currentGroup)
 QString UserManagerModel::CurrentGroup() const
 {
     return m_currentGroup;
+}
+
+void UserManagerModel::setCurrentGroupIndex(const int currentGroupIndex)
+{
+    if (m_iCurrentGroup != currentGroupIndex) {
+        m_iCurrentGroup = currentGroupIndex;
+        emit CurrentGroupIndexChanged(currentGroupIndex);
+    }
+}
+int UserManagerModel::CurrentGroupIndex() const
+{
+    return m_iCurrentGroup;
 }

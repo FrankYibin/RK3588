@@ -90,10 +90,54 @@ Item{
             }
             Text
             {
+                id: titleTension
                 anchors.top: txtTension.bottom
                 anchors.topMargin: Math.round(5 * Style.scaleHint)
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("张力")
+                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                font.family: "宋体"
+                color: Style.whiteFontColor
+            }
+
+            HBTextField
+            {
+                id: txtDepth
+                anchors.top: titleTension.bottom
+                anchors.topMargin: Math.round(10 * Style.scaleHint)
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.round(textFieldWidth * Style.scaleHint)
+                height: Math.round(25 * Style.scaleHint)
+                onlyForNumpad: true
+                font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                validator: RegularExpressionValidator{ regularExpression: /^\d{1,4}(\.\d{1,2})?$/ }
+                text: HBHome.DepthCurrent
+                enabled: false
+                textColor: {
+                    if(HBHome.IsDepthAlarm === true)
+                        return Style.redFontColor
+                    else
+                        return Style.whiteFontColor
+                }
+
+            }
+            Text
+            {
+                id: unitWellDepth
+                text: DepthGlobalDefine.distanceUnitModel[Depth.DistanceUnit]//qsTr("m")
+                anchors.left: txtDepth.right
+                anchors.leftMargin: Math.round(5 * Style.scaleHint)
+                anchors.verticalCenter: txtDepth.verticalCenter
+                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                font.family: Style.regular.name
+                color: Style.whiteFontColor
+            }
+            Text
+            {
+                anchors.top: txtDepth.bottom
+                anchors.topMargin: Math.round(5 * Style.scaleHint)
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "深度"
                 font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
                 font.family: "宋体"
                 color: Style.whiteFontColor
@@ -139,6 +183,7 @@ Item{
             }
             Text
             {
+                id: titleTensionIncrement
                 anchors.top: txtTensionIncrement.bottom
                 anchors.topMargin: Math.round(5 * Style.scaleHint)
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -147,6 +192,49 @@ Item{
                 font.family: "宋体"
                 color: Style.whiteFontColor
             }
+
+            HBTextField
+            {
+                id: txtVelocity
+                anchors.top: titleTensionIncrement.bottom
+                anchors.topMargin: Math.round(10 * Style.scaleHint)
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.round(textFieldWidth * Style.scaleHint)
+                height: Math.round(25 * Style.scaleHint)
+                onlyForNumpad: true
+                font.pixelSize: Math.round(Style.style5 * Style.scaleHint)
+                validator: RegularExpressionValidator{ regularExpression: /^\d{1,5}(\.\d{1,2})?$/ }
+                text: HBHome.VelocityCurrent
+                enabled: false
+                textColor: {
+                    if(HBHome.IsVelocityAlarm === true)
+                        return Style.redFontColor
+                    else
+                        return Style.whiteFontColor
+                }
+            }
+            Text
+            {
+                id: unitVelocity
+                text: DepthGlobalDefine.velocityUnitModel[Depth.VelocityUnit]//qsTr("m/min")
+                anchors.left: txtVelocity.right
+                anchors.leftMargin: Math.round(5 * Style.scaleHint)
+                anchors.verticalCenter: txtVelocity.verticalCenter
+                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                font.family: Style.regular.name
+                color: Style.whiteFontColor
+            }
+            Text
+            {
+                anchors.top: txtVelocity.bottom
+                anchors.topMargin: Math.round(5 * Style.scaleHint)
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "速度"
+                font.pixelSize: Math.round(Style.style4 * Style.scaleHint)
+                font.family: "宋体"
+                color: Style.whiteFontColor
+            }
+
         }
     }
 

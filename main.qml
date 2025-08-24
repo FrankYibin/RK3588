@@ -37,8 +37,8 @@ Window{
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
-    property int showWidth: 800
-    property int showHeight: 480
+    property int showWidth: 1280
+    property int showHeight: 800
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -171,6 +171,7 @@ Window{
     function menuParentOptionSelect(menuIndex)
     {
         clearStackView()
+        fullScreenLoader.source = ""
         switch(menuIndex)
         {
             // case UIScreenEnum.RECIPES:
@@ -196,6 +197,7 @@ Window{
             stackMainView.push("qrc:/qmlSource/unitProfileWindow.qml", {}, StackView.Immediate)
             break;
         case UIScreenEnum.HB_DASHBOARD:
+            leftNavigateMenu.item.updateModel(0, "")
             stackMainView.push("qrc:/qmlSource/dashboardWindow.qml", {}, StackView.Immediate)
             break;
         case UIScreenEnum.HB_SETTING:
@@ -205,10 +207,12 @@ Window{
             stackMainView.push("qrc:/qmlSource/testVelocityWindow.qml", {}, StackView.Immediate)
             break;
         case UIScreenEnum.HB_HDMI:
-            stackMainView.push("qrc:/qmlSource/hdmiInputWindow.qml", {}, StackView.Immediate)
+            // stackMainView.push("qrc:/qmlSource/hdmiInputWindow.qml", {}, StackView.Immediate)
+            fullScreenLoader.source = "qrc:/qmlSource/hdmiInputWindow.qml"
             break;
         case UIScreenEnum.HB_VIDEO:
-            stackMainView.push("qrc:/qmlSource/hikvisionCameraWindow.qml", {}, StackView.Immediate)
+        //     stackMainView.push("qrc:/qmlSource/hikvisionCameraWindow.qml", {}, StackView.Immediate)
+            fullScreenLoader.source = "qrc:/qmlSource/hikvisionCameraWindow.qml"
             break;
         default:
             break;
@@ -470,31 +474,6 @@ Window{
             anchors.fill: parent
             smooth: true
         }
-        // Loader{
-        //     id: headerLoader
-        //     width: parent.width
-        //     anchors.top: parent.top
-        //     height: Math.round(50 * Style.scaleHint)
-        //     source:  "qrc:/qmlSource/header.qml"
-        // }
-
-        // Loader{
-        //     id: leftMenuLoader
-        //     anchors.left: headerLoader.left
-        //     anchors.top: parent.top
-        //     width: parent.width
-        //     height: parent.height
-        //     z: 2
-        // }
-
-        // Loader{
-        //     id: rightMenuLoader
-        //     anchors.right: headerLoader.right
-        //     anchors.top: parent.top
-        //     width: parent.width
-        //     height: parent.height
-        //     z: 2
-        // }
 
         Loader{
             id: leftNavigateMenu
@@ -572,6 +551,12 @@ Window{
         //     visible: false
 
         // }
+        Loader
+        {
+            id: fullScreenLoader
+            anchors.fill: parent
+            z: 2
+        }
     }
 
     // TranslationView {
@@ -663,24 +648,6 @@ Window{
         source:  "qrc:/qmlSource/Login.qml"
     }
 
-    // Login
-    // {
-    //     id: loginLayout
-    //     visible: true
-    //     anchors.centerIn: parent
-    //     width: mainWindow.showWidth
-    //     height: mainWindow.showHeight
-    // }
-
-    // LoginFaceRecognition
-    // {
-    //     id: faceRecognition
-    //     visible: false
-    //     anchors.centerIn: parent
-    //     width: mainWindow.showWidth
-    //     height: mainWindow.showHeight
-    // }
-
     ProfileWindow
     {
         id: profileLayout
@@ -755,7 +722,7 @@ Window{
     HBTensionPanel {
         id: tensionPanel
         width: showWidth / 2
-        height: showHeight * 0.52
+        height: showHeight * 0.6
         visible: false
         scale: 1.7
         x: parent.width / 2
