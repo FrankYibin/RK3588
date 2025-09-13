@@ -126,7 +126,20 @@ Item {
     function updateProgressSlider() {
         var totalPoints = SensorGraphData.getDateTimes().length
         var visiblePoints = pointsPerPage
+
+        var maxStartIndex = totalPoints - visiblePoints
+
+        if (maxStartIndex <= 0) {
+            progressSlider.value = 0
+            progressLabel.text = "0%"
+            return
+        }
+
         var percent = Math.round(currentStartIndex / (totalPoints - visiblePoints) * 100)
+
+        if (percent < 0) percent = 0
+        if (percent > 100) percent = 100
+
         progressSlider.value = percent
         progressLabel.text =  percent + "%"
     }
