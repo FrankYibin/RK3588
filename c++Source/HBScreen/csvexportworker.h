@@ -6,6 +6,8 @@
 class CSVExportWorker : public ExportWorker
 {
     Q_OBJECT
+private:
+    bool ExportToCSV(const QString localDirectory, const QString targetDirectory);
 public:
     explicit CSVExportWorker(const QStringList& localfiles, const QString USBDirectory);
 public slots:

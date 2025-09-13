@@ -22,6 +22,8 @@ HistoryDataTable::HistoryDataTable(QObject *parent)
 {
     QString ConvertExcelPath    = QCoreApplication::applicationDirPath() + "/ConvertExcel.py";
     QString ConvertPDFPath      = QCoreApplication::applicationDirPath() + "/ConvertPDF.py";
+    QString ConvertCSVPath      = QCoreApplication::applicationDirPath() + "/ConvertCSV.py";
+    QString ConvertTxtPath      = QCoreApplication::applicationDirPath() + "/ConvertTxt.py";
     if(!QFile::exists(ConvertExcelPath))
     {
         if(!QFile::copy(":/misc/ConvertExcel.py", ConvertExcelPath))
@@ -35,6 +37,20 @@ HistoryDataTable::HistoryDataTable(QObject *parent)
         if(!QFile::copy(":/misc/ConvertPDF.py", ConvertPDFPath))
         {
             qWarning() << "Failed to copy ConvertPDF.py from resource to" << ConvertPDFPath;
+        }
+    }
+    if(!QFile::exists(ConvertCSVPath))
+    {
+        if(!QFile::copy(":/misc/ConvertCSV.py", ConvertCSVPath))
+        {
+            qWarning() << "Failed to copy ConvertCSV.py from resource to" << ConvertPDFPath;
+        }
+    }
+    if(!QFile::exists(ConvertTxtPath))
+    {
+        if(!QFile::copy(":/misc/ConvertTxt.py", ConvertTxtPath))
+        {
+            qWarning() << "Failed to copy ConvertTxt.py from resource to" << ConvertPDFPath;
         }
     }
 }

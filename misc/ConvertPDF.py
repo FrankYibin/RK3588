@@ -329,8 +329,18 @@ def csv_to_pdf_reportlab(csv_file, pdf_file):
             adjusted_time = current_time + time_offset
             os.utime(pdf_file, (adjusted_time, adjusted_time))
             print(f"✓ 已更新文件时间戳 (本地时间: {local_time.strftime('%H:%M:%S')})")
+            
+            # 给文件系统更多时间来更新时间戳
+            time.sleep(1.0)
+            sync_filesystem()
+            time.sleep(0.5)
+            
         except Exception as e:
             print(f"✗ 无法更新文件时间戳: {e}")
+    
+    # 最终同步，确保所有更改都写入磁盘
+    time.sleep(0.5)
+    sync_filesystem()
     
     output_end = datetime.now()
     end_time = datetime.now()

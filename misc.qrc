@@ -10,5 +10,7 @@
         <file>misc/OcrAi</file>
         <file>misc/rapid_ocr_table.py</file>
         <file>misc/run_ocr.sh</file>
+        <file>misc/ConvertCSV.py</file>
+        <file>misc/ConvertTxt.py</file>
     </qresource>
 </RCC>

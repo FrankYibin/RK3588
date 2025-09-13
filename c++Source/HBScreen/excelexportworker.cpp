@@ -37,7 +37,7 @@ void ExcelExportWorker::exportToFile()
     emit exportFinished(bResult, message);
 }
 
-bool ExcelExportWorker::ExportToXLSX(const QString localDirectory, const QString targertDirectory)
+bool ExcelExportWorker::ExportToXLSX(const QString localDirectory, const QString targetDirectory)
 {
     bool bResult = false;
     // 创建 QProcess 对象
@@ -49,7 +49,7 @@ bool ExcelExportWorker::ExportToXLSX(const QString localDirectory, const QString
     arguments.append("ConvertExcel.py");
     arguments.append(localDirectory);
     arguments.append("-o");
-    arguments.append(targertDirectory);
+    arguments.append(targetDirectory);
 
     // 启动进程
     process.start(program, arguments);

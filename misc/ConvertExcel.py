@@ -3,6 +3,7 @@ import argparse
 import os
 import time
 from pathlib import Path
+from datetime import datetime
 
 def is_usb_path(file_path):
     """检查文件路径是否在U盘或可移动媒体上"""
@@ -48,6 +49,17 @@ def validate_excel_file(excel_file):
     if file_size == 0:
         print(f"✗ 错误：生成的文件大小为0：{excel_file}")
         return False
+    
+    # 获取文件修改时间
+    import stat
+    file_stat = os.stat(excel_file)
+    mod_time = datetime.fromtimestamp(file_stat.st_mtime)
+    
+    print(f"✓ 成功创建Excel文件：{excel_file} ({file_size/1024:.1f} KB)")
+    print(f"  文件修改时间：{mod_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"  当前系统时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    return True
     
     print(f"✓ 成功创建Excel文件：{excel_file} ({file_size/1024:.1f} KB)")
     return True
@@ -124,8 +136,40 @@ def main():
         
         # U盘需要额外的同步处理
         if is_usb_path(excel_file):
+            print("同步文件系统到U盘...")
+            time.sleep(1.0)  # 给U盘更多时间
+            sync_filesystem()
+            time.sleep(0.5)  # 再等待一下
+            
+            # 尝试手动设置文件时间为当前时间
+            try:
+                current_time = time.time()
+                # 为Windows兼容性，尝试设置本地时间戳
+                local_time = datetime.now()
+                utc_time = datetime.utcnow()
+                time_offset = (local_time - utc_time).total_seconds()
+                
+                print(f"时区信息: 本地时间={local_time.strftime('%H:%M:%S')}, UTC时间={utc_time.strftime('%H:%M:%S')}, 偏移={time_offset}秒")
+                
+                # 调整时间戳以补偿时区差异
+                adjusted_time = current_time + time_offset
+                os.utime(excel_file, (adjusted_time, adjusted_time))
+                print(f"✓ 已更新文件时间戳 (本地时间: {local_time.strftime('%H:%M:%S')})")
+                
+                # 给文件系统更多时间来更新时间戳
+                time.sleep(1.0)
+                sync_filesystem()
+                time.sleep(0.5)
+                
+            except Exception as e:
+                print(f"✗ 无法更新文件时间戳: {e}")
+        else:
             time.sleep(0.5)
             sync_filesystem()
+        
+        # 最终同步，确保所有更改都写入磁盘
+        time.sleep(0.5)
+        sync_filesystem()
         
         # 验证输出文件
         if validate_excel_file(excel_file):

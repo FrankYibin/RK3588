@@ -28,12 +28,19 @@ Rectangle {
             }
 
             Text {
-                text: isImport === true ? qsTr("正在导入...") : qstr("正在导出...")
+                id: statusText
+                text: isImport ? qsTr("正在导入...") : qsTr("正在导出...")
                 font.pixelSize: 16
                 font.family: "宋体"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
         }
+    }
+    
+    // 添加属性变化监听器强制刷新
+    onIsImportChanged: {
+        console.log("isImport changed to:", isImport)
+        statusText.text = isImport ? qsTr("正在导入...") : qsTr("正在导出...")
     }
 
     ProgressBar
