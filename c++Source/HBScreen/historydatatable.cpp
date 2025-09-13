@@ -16,6 +16,7 @@
 #include "excelexportworker.h"
 #include "wellparameter.h"
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
+QString HistoryDataTable::m_USBDirectory = "";
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
 {

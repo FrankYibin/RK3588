@@ -125,7 +125,7 @@ public:
     Q_INVOKABLE void setSlopeAngleWellSetting(const QString angle);
 
     Q_INVOKABLE void importFromIniFile();
-    Q_INVOKABLE bool importDataFromPicture();
+    Q_INVOKABLE bool importDataFromPicture(QString directory, QString localfile);
     Q_INVOKABLE void saveToIniFile();
 
     Q_INVOKABLE QString getWellOfficalType() const;
@@ -178,6 +178,9 @@ signals:
     void notifyHorizontalLengthChanged();
     void notifyVerticalLengthChanged();
     void notifyKickOffPointChanged();
+
+    void signalImportCompleted(bool success, const QString &message);
+    void signalImportPrograss(int current, int total);
 private:
     explicit WellParameter(QObject *parent = nullptr);
 

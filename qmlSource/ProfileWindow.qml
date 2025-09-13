@@ -18,6 +18,22 @@ Item{
         anchors.fill: parent
         // z: -1
     }
+    Connections
+    {
+        target: mainWindow
+        function onNotifyFileSelected(fileName)
+        {
+            console.debug("1111111111111111: ", fileName)
+            mainWindow.showLoading(true, true)
+            if(WellParameter.importDataFromPicture("", fileName) === true)
+            {
+                mainWindow.showLoading(false, true)
+            }
+            else
+            {
+            }
+        }
+    }
 
     Row
     {
@@ -804,17 +820,10 @@ Item{
             width: Math.round(125 * Style.scaleHint)
             height: Math.round(40 * Style.scaleHint)
             text: qsTr("图片导入")
+            // visible: mainWindow.isUSBAvailable
             onClicked:
             {
-                mainWindow.showLoading(true)
-                if(WellParameter.importDataFromPicture() === true)
-                {
-                    mainWindow.showLoading(false)
-                }
-                else
-                {
-                }
-
+                mainWindow.showPictureList(true)
             }
         }
 
