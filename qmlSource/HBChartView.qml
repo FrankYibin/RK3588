@@ -123,6 +123,14 @@ Item {
         tensionIncrementLeftAxisPlot.clear()
     }
 
+    function updateProgressSlider() {
+        var totalPoints = SensorGraphData.getDateTimes().length
+        var visiblePoints = pointsPerPage
+        var percent = Math.round(currentStartIndex / (totalPoints - visiblePoints) * 100)
+        progressSlider.value = percent
+        progressLabel.text =  percent + "%"
+    }
+
     Rectangle {
         anchors.fill: parent
         color: "transparent"
@@ -156,8 +164,8 @@ Item {
                 titleFont.family: "宋体"
                 titleFont.pixelSize: Math.round(Style.style2 * Style.scaleHint)
                 titleVisible: false
-                 format: "yyyy-MM-dd hh:mm:ss"
-//                format: "hh:mm:ss"
+                format: "yyyy-MM-dd hh:mm:ss"
+                //                format: "hh:mm:ss"
                 max: new Date()
                 min: new Date()
                 tickCount: 4
@@ -423,6 +431,7 @@ Item {
                 dragStartX = mouse.x
                 dragging = true
             }
+
             onReleased: {
                 if (!dragging) return;
                 var delta = mouse.x - dragStartX;
@@ -442,9 +451,64 @@ Item {
                         currentStartIndex = Math.min(maxDelta, newIndex)
                     }
                     plotGraph();
+                    updateProgressSlider();
                 }
                 dragging = false;
             }
         }
     }
+
+
+    Row {
+        anchors.top: parent.bottom
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        spacing: 10
+
+        Slider {
+            id: progressSlider
+            width: weldGraph.width - 90
+            from: 0
+            to: 100
+            stepSize: 1
+
+            height: 30
+
+            handle: Rectangle {
+                width: 26
+                height: 26
+                radius: 13
+                color: "#a0cf67"
+                border.color: "#999999"
+                border.width: 1
+
+                x: progressSlider.leftPadding + progressSlider.visualPosition * (progressSlider.availableWidth - width)
+                y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
+            }
+
+            onValueChanged: {
+
+                var totalPoints = SensorGraphData.getDateTimes().length
+                var visiblePoints = pointsPerPage
+                var maxStartIndex = totalPoints - visiblePoints
+                if (maxStartIndex < 0) maxStartIndex = 0
+
+                currentStartIndex = Math.round(value / 100 * maxStartIndex)
+
+                plotGraph()
+                progressLabel.text = value + "%"
+            }
+        }
+
+        Label {
+            id: progressLabel
+            text: "0%"
+            font.family: "宋体"
+            font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+            color: "#ffffff"
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: progressSlider.verticalCenter
+        }
+    }
+
 }
