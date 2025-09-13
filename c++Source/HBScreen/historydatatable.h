@@ -56,6 +56,7 @@ public:
 
     Q_INVOKABLE bool isAvailaleDiskUSB();
     Q_INVOKABLE bool exportData(int fileType);
+    Q_INVOKABLE QString getDiskUSBDirectory();
 public slots:
 
 protected:
@@ -65,7 +66,7 @@ private:
     QList<HistoryData>  m_dataList;
     QDateTime           m_start;
     QDateTime           m_end;
-    QString             m_USBDirectory;
+    static QString      m_USBDirectory;
     static constexpr int MAX_RECORDS_IN_ONE_FILE = 1000;
     static HistoryDataTable* _ptrHistoryDataTable;
 private:

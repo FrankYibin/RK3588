@@ -16,6 +16,7 @@
 #include "excelexportworker.h"
 #include "wellparameter.h"
 HistoryDataTable* HistoryDataTable::_ptrHistoryDataTable = nullptr;
+QString HistoryDataTable::m_USBDirectory = "";
 HistoryDataTable::HistoryDataTable(QObject *parent)
     : QAbstractTableModel(parent)
 {
@@ -209,7 +210,7 @@ bool HistoryDataTable:: exportData(int fileType)
         return false;
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString formattedDateTime = currentDateTime.toString("yyyyMMddHHmmss");
-    QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output" +
+    QString localAppDirectory = QCoreApplication::applicationDirPath() + "/" +
             formattedDateTime + WellParameter::GetInstance()->WellNumber() + "-";
     QStringList localFiles;
     int filesCount = rows.count() / MAX_RECORDS_IN_ONE_FILE;
@@ -253,6 +254,11 @@ bool HistoryDataTable:: exportData(int fileType)
          return false;
     }
     return true ;
+}
+
+QString HistoryDataTable::getDiskUSBDirectory()
+{
+    return m_USBDirectory;
 }
 
 

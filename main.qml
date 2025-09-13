@@ -37,8 +37,8 @@ Window{
 
     /*1366 * 768 = 1280 * 800    1920 * 1080    800 * 480  */
     /* If you run the code on RK3588, the showWidth should be 800, showHeight should be 480 */
-    property int showWidth: 1280
-    property int showHeight: 800
+    property int showWidth: 800
+    property int showHeight: 480
 
     property string qmltextTimeMode:                qsTr("Time")
     property string qmltextEnergyMode:              qsTr("Energy")
@@ -49,9 +49,11 @@ Window{
     property var qmlTextArray: [qmltextTimeMode, qmltextEnergyMode, qmltextPeakPowerMode,
         qmltextGroundDetectMode, qmltextAbsoluteDistanceMode, qmltextCollapseDistanceMode]
     property var currentField: null
+    property bool isUSBAvailable: false
 
     signal signalCurrentLanguageChanged()
     signal signalCurrentScreenChanged(int index)
+    signal notifyFileSelected(string fileName) // <-- 添加信号
 
     function getWeldModeText(modeIdx)
     {
@@ -359,11 +361,18 @@ Window{
         tensionPanel.visible = true
     }
 
-    function showLoading(isShow)
+    function showLoading(isShow, isImport)
     {
+        loadingOverlay.isImport = isImport
         if(isShow === false)
             loadingOverlay.progress = 0.0
         loadingOverlay.visible = isShow;
+    }
+
+    function showPictureList(isShow)
+    {
+        listShowPicture.visible = isShow;
+        listShowPicture.imgDir = HistoryDataTable.getDiskUSBDirectory();
     }
 
 //    MouseArea {
@@ -460,6 +469,7 @@ Window{
             // rightMenuLoader.source = "qrc:/qmlSource/rightActionMenu.qml"
             leftNavigateMenu.source = ""
             leftNavigateMenu.source = "qrc:/qmlSource/leftNavigateMenu.qml"
+            timer.start()
         }
     }
 
@@ -736,5 +746,26 @@ Window{
         anchors.centerIn: parent
         z: 3
         visible: false
+    }
+
+    ShowPicture{
+        id: listShowPicture
+        width: showWidth / 2
+        height: showHeight * 0.8
+        anchors.centerIn: parent
+        z: 3
+        visible: false
+        onFileSelected: notifyFileSelected(fileName)
+    }
+
+    Timer
+    {
+        id: timer
+        interval: 2000  // 设置间隔为 1000 毫秒 (1 秒)
+        repeat: true    // 设置为重复计时器
+        onTriggered:
+        {
+            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
+        }
     }
 }

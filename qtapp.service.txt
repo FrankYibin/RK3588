@@ -1,0 +1,21 @@
+root@RK3588-Tronlong:/etc# cat /etc/systemd/system/qtapp.service
+[Unit]
+Description=Qt App Service
+Requisite=display-manager.service
+After=display-manager.service
+
+[Service]
+EnvironmentFile=-/etc/default/qtapp
+ExecStart=/bin/bash -c '/opt/MeteringDisplay/bin/MeteringDisplay 2>&1 | tee /root/met.log'
+WorkingDirectory=/opt/MeteringDisplay/bin
+User=root
+Group=root
+#Environment="QT_QPA_PLAFORM=eglfs"
+Restart=always
+RestartSec=5
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target
+root@RK3588-Tronlong:/etc#

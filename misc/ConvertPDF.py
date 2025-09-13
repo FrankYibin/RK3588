@@ -7,9 +7,143 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
 import warnings
+import time
 from datetime import datetime
 import argparse
 from pathlib import Path
+
+def is_usb_path(file_path):
+    """检查文件路径是否在U盘或可移动媒体上"""
+    return any(mount_point in file_path for mount_point in ["/run/media/", "/media/", "/mnt/"])
+
+def get_filesystem_info(file_path):
+    """获取文件系统信息"""
+    try:
+        import subprocess
+        result = subprocess.run(['df', '-T', file_path], 
+                              capture_output=True, text=True)
+        if result.returncode == 0:
+            lines = result.stdout.strip().split('\n')
+            if len(lines) >= 2:
+                fs_info = lines[1].split()
+                fs_type = fs_info[1] if len(fs_info) > 1 else "unknown"
+                print(f"文件系统类型: {fs_type}")
+                if fs_type.lower() in ['vfat', 'fat32', 'fat16']:
+                    print("注意: FAT文件系统在Windows上可能显示UTC时间")
+                return fs_type
+    except:
+        pass
+    return None
+
+def write_pdf_with_retry(doc, story, pdf_file, max_retries=3):
+    """尝试写入PDF文件，包含重试机制"""
+    for attempt in range(max_retries):
+        try:
+            print(f"尝试写入PDF文件 (第{attempt + 1}次)...")
+            doc.build(story)
+            print("PDF写入成功")
+            return True
+        except OSError as e:
+            if "Input/output error" in str(e):
+                print(f"I/O错误 (尝试 {attempt + 1}/{max_retries}): {e}")
+                if attempt < max_retries - 1:
+                    print("等待后重试...")
+                    time.sleep(2)  # 等待2秒后重试
+                    # 尝试同步文件系统
+                    sync_filesystem()
+                    time.sleep(1)
+                else:
+                    print("所有重试都失败了")
+                    raise
+            else:
+                raise
+        except Exception as e:
+            print(f"其他错误: {e}")
+            raise
+    
+    return False
+
+def create_temp_pdf_and_copy(doc, story, pdf_file):
+    """先在本地创建PDF，然后复制到U盘"""
+    import tempfile
+    import shutil
+    
+    try:
+        # 创建临时文件
+        with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as temp_file:
+            temp_path = temp_file.name
+        
+        print(f"先在本地创建PDF: {temp_path}")
+        
+        # 使用临时路径创建PDF文档
+        temp_doc = SimpleDocTemplate(
+            temp_path,
+            pagesize=landscape(A3),
+            rightMargin=10*mm,
+            leftMargin=10*mm,
+            topMargin=10*mm,
+            bottomMargin=10*mm
+        )
+        
+        # 构建PDF
+        temp_doc.build(story)
+        print("本地PDF创建成功")
+        
+        # 复制到目标位置
+        print(f"复制PDF到U盘: {pdf_file}")
+        shutil.copy2(temp_path, pdf_file)
+        print("复制完成")
+        
+        # 删除临时文件
+        os.unlink(temp_path)
+        
+        return True
+        
+    except Exception as e:
+        print(f"临时文件方案失败: {e}")
+        # 清理临时文件
+        try:
+            if 'temp_path' in locals():
+                os.unlink(temp_path)
+        except:
+            pass
+        return False
+
+def sync_filesystem():
+    """同步文件系统缓存到磁盘"""
+    try:
+        os.sync()
+        print("Synced filesystem")
+    except:
+        pass
+    """同步文件系统缓存到磁盘"""
+    try:
+        os.sync()
+        print("Synced filesystem")
+    except:
+        pass
+
+def validate_pdf_file(pdf_file):
+    """验证PDF文件是否成功创建"""
+    if not os.path.exists(pdf_file):
+        print(f"✗ 错误：PDF文件未创建：{pdf_file}")
+        return False
+    
+    file_size = os.path.getsize(pdf_file)
+    if file_size == 0:
+        print(f"✗ 错误：生成的PDF文件大小为0：{pdf_file}")
+        return False
+    
+    # 获取文件修改时间
+    import stat
+    file_stat = os.stat(pdf_file)
+    mod_time = datetime.fromtimestamp(file_stat.st_mtime)
+    
+    print(f"✓ 成功创建PDF文件：{pdf_file} ({file_size/1024:.1f} KB)")
+    print(f"  文件修改时间：{mod_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"  当前系统时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    return True
 
 def register_chinese_font():
     """注册中文字体"""
@@ -148,8 +282,55 @@ def csv_to_pdf_reportlab(csv_file, pdf_file):
     print("Building PDF...")
     output_start = datetime.now()
     
+    # 检查是否写入到U盘
+    if is_usb_path(pdf_file):
+        print("检测到U盘路径，使用兼容模式...")
+        get_filesystem_info(pdf_file)
+    
     # 生成PDF
-    doc.build(story)
+    success = False
+    
+    # 首先尝试直接写入
+    try:
+        if not write_pdf_with_retry(doc, story, pdf_file):
+            # 如果直接写入失败，尝试临时文件方案
+            if is_usb_path(pdf_file):
+                print("直接写入失败，尝试临时文件方案...")
+                success = create_temp_pdf_and_copy(doc, story, pdf_file)
+            else:
+                success = False
+        else:
+            success = True
+    except Exception as e:
+        print(f"PDF写入过程中出错: {e}")
+        success = False
+    
+    if not success:
+        raise Exception("PDF文件写入失败，请检查U盘状态或尝试重新插拔U盘")
+    
+    # U盘需要额外的同步处理（无论哪种写入方式）
+    if is_usb_path(pdf_file):
+        print("同步文件系统到U盘...")
+        time.sleep(1.0)  # 给U盘更多时间
+        sync_filesystem()
+        time.sleep(0.5)  # 再等待一下
+        
+        # 尝试手动设置文件时间为当前时间
+        try:
+            current_time = time.time()
+            # 为Windows兼容性，尝试设置本地时间戳
+            local_time = datetime.now()
+            utc_time = datetime.utcnow()
+            time_offset = (local_time - utc_time).total_seconds()
+            
+            print(f"时区信息: 本地时间={local_time.strftime('%H:%M:%S')}, UTC时间={utc_time.strftime('%H:%M:%S')}, 偏移={time_offset}秒")
+            
+            # 调整时间戳以补偿时区差异
+            adjusted_time = current_time + time_offset
+            os.utime(pdf_file, (adjusted_time, adjusted_time))
+            print(f"✓ 已更新文件时间戳 (本地时间: {local_time.strftime('%H:%M:%S')})")
+        except Exception as e:
+            print(f"✗ 无法更新文件时间戳: {e}")
     
     output_end = datetime.now()
     end_time = datetime.now()
@@ -190,7 +371,7 @@ def main():
     
     if not os.path.exists(csv_file):
         print(f"Error: {csv_file} not found!")
-        return
+        return 1
     
     file_size = os.path.getsize(csv_file)
     print(f"File: {csv_file} ({file_size/1024:.1f} KB)")
@@ -198,10 +379,19 @@ def main():
     
     try:
         csv_to_pdf_reportlab(csv_file, pdf_file)
+        
+        # 验证PDF文件
+        if validate_pdf_file(pdf_file):
+            return 0
+        else:
+            return 1
+            
     except Exception as e:
         print(f"Error: {e}")
         import traceback
         traceback.print_exc()
+        return 1
 
 if __name__ == "__main__":
-    main()
+    exit_code = main()
+    exit(exit_code)

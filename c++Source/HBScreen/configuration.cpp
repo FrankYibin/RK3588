@@ -63,7 +63,7 @@ Configuration::Configuration(QObject *parent)
 
     m_deviceID = m_settings.value("Version/DeviceID", "18229001939").toString();
     m_settings.setValue("Version/DeviceID", m_deviceID);
-    m_softwareVersion = m_settings.value("Version/SoftwareVersion", "20250618").toString();
+    m_softwareVersion = m_settings.value("Version/SoftwareVersion", "20250824").toString();
     m_settings.setValue("Version/SoftwareVersion", m_softwareVersion);
     m_hardwareVersion = m_settings.value("Version/HardwareVersion", "20250318").toString();
     m_settings.setValue("Version/HardwareVersion", m_hardwareVersion);

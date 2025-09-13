@@ -49,6 +49,33 @@ WellParameter::WellParameter(QObject *parent)
     setWorkType(PERFORATION);
     setDepthWell("99999.99");
     setSlopeAngleWellSetting("0.00");
+    QString OcrAiPath = QCoreApplication::applicationDirPath() + "/OcrAi";
+    QString RapidOcrTablePath = QCoreApplication::applicationDirPath() + "/rapid_ocr_table.py";
+    QString RunOcrShellPath = QCoreApplication::applicationDirPath() + "/run_ocr.sh";
+    if(!QFile::exists(OcrAiPath))
+    {
+        if(!QFile::copy(":/misc/OcrAi", OcrAiPath))
+        {
+            qWarning() << "Failed to copy OcrAi from resources to" << OcrAiPath;
+            return;
+        }
+    }
+    if(!QFile::exists(RapidOcrTablePath))
+    {
+        if(!QFile::copy(":/misc/rapid_ocr_table.py", RapidOcrTablePath))
+        {
+            qWarning() << "Failed to copy rapid_ocr_table.py from resources to" << RapidOcrTablePath;
+            return;
+        }
+    }
+    if(!QFile::exists(RunOcrShellPath))
+    {
+        if(!QFile::copy(":/misc/run_ocr.sh", RunOcrShellPath))
+        {
+            qWarning() << "Failed to copy :/misc/run_ocr.sh from resources to" << RunOcrShellPath;
+            return;
+        }
+    }
 }
 
 WellParameter *WellParameter::GetInstance()
@@ -266,6 +293,19 @@ void WellParameter::setWellModel(const QString &value)
     }
 }
 
+QString WellParameter::getDesignWellDepth() const
+{
+    return m_DesignWellDepth;
+}
+void WellParameter::setDesignWellDepth(const QString &value)
+{
+    if (m_DesignWellDepth != value) 
+    {
+        m_DesignWellDepth = value;
+        emit notifyDesignWellDepthChanged();
+    }
+}
+
 QString WellParameter::getCompleteWellDepth() const
 {
     return m_CompleteWellDepth;
@@ -356,22 +396,23 @@ void WellParameter::importFromIniFile()
 #endif
 }
 
-bool WellParameter::importDataFromPicture()
+bool WellParameter::importDataFromPicture(QString directory, QString localfile)
 {
     if(!m_ptrImportThread)
     {
-        // m_ptrImportThread = new QThread(this);
-        // m_ptrImportPicture = new ImportPicture(localfiles, m_USBDirectory);
-        // m_ptrImportPicture->moveToThread(m_ptrImportThread);
-        // connect(m_ptrImportThread, &QThread::started, m_ptrImportPicture, &ImportPicture::importToFile);
-        // connect(m_ptrImportPicture, &ImportPicture::exportPrograss, this, &HistoryDataTable::signalExportPrograss);
-        // connect(m_ptrImportPicture, &ImportPicture::exportFinished, this, &HistoryDataTable::onExportFinished);
-        // connect(m_ptrImportThread, &QThread::finished, m_ptrImportPicture, &QObject::deleteLater);
+        m_ptrImportThread = new QThread(this);
+        m_ptrImportPicture = new ImportPicture(localfile, directory);
+        m_ptrImportPicture->moveToThread(m_ptrImportThread);
+        connect(m_ptrImportThread, &QThread::started, m_ptrImportPicture, &ImportPicture::importToFile);
+        connect(m_ptrImportPicture, &ImportPicture::importPrograss, this, &WellParameter::signalImportPrograss);
+        connect(m_ptrImportPicture, &ImportPicture::importFinished, this, &WellParameter::signalImportCompleted);
+        connect(m_ptrImportThread, &QThread::finished, m_ptrImportPicture, &QObject::deleteLater);
     }
     if(!m_ptrImportThread->isRunning())
     {
         m_ptrImportThread->start();
     }
+    return true;
 }
 
 void WellParameter::saveToIniFile()

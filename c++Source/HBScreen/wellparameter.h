@@ -53,6 +53,7 @@ class WellParameter : public QObject
     
     Q_PROPERTY(QString WellOfficalType READ getWellOfficalType WRITE setWellOfficalType NOTIFY notifyWellOfficalTypeChanged) //井别
     Q_PROPERTY(QString WellModel READ getWellModel WRITE setWellModel NOTIFY notifyWellModelChanged) //井型
+    Q_PROPERTY(QString DesignWellDepth READ getDesignWellDepth WRITE setDesignWellDepth NOTIFY notifyDesignWellDepthChanged) //设计井深
     Q_PROPERTY(QString CompleteWellDepth READ getCompleteWellDepth WRITE setCompleteWellDepth NOTIFY notifyCompleteWellDepthChanged) //完井深度
     Q_PROPERTY(QString SurfaceCasingDepth READ getSurfaceCasingDepth WRITE setSurfaceCasingDepth NOTIFY notifySurfaceCasingDepthChanged) //表层套管深度
     Q_PROPERTY(QString ProductionCasingDepth READ getProductionCasingDepth WRITE setProductionCasingDepth NOTIFY notifyProductionCasingDepthChanged) //生产套管深度
@@ -125,13 +126,15 @@ public:
     Q_INVOKABLE void setSlopeAngleWellSetting(const QString angle);
 
     Q_INVOKABLE void importFromIniFile();
-    Q_INVOKABLE bool importDataFromPicture();
+    Q_INVOKABLE bool importDataFromPicture(QString directory, QString localfile);
     Q_INVOKABLE void saveToIniFile();
 
     Q_INVOKABLE QString getWellOfficalType() const;
     Q_INVOKABLE void setWellOfficalType(const QString &value);
     Q_INVOKABLE QString getWellModel() const;
     Q_INVOKABLE void setWellModel(const QString &value);
+    Q_INVOKABLE QString getDesignWellDepth() const;
+    Q_INVOKABLE void setDesignWellDepth(const QString &value);
     Q_INVOKABLE QString getCompleteWellDepth() const;
     Q_INVOKABLE void setCompleteWellDepth(const QString &value);
     Q_INVOKABLE QString getSurfaceCasingDepth() const;
@@ -172,12 +175,16 @@ signals:
     void WeightEachKilometerCableChanged();
     void notifyWellOfficalTypeChanged();
     void notifyWellModelChanged();
+    void notifyDesignWellDepthChanged();
     void notifyCompleteWellDepthChanged();
     void notifySurfaceCasingDepthChanged();
     void notifyProductionCasingDepthChanged();
     void notifyHorizontalLengthChanged();
     void notifyVerticalLengthChanged();
     void notifyKickOffPointChanged();
+
+    void signalImportCompleted(bool success, const QString &message);
+    void signalImportPrograss(int current, int total);
 private:
     explicit WellParameter(QObject *parent = nullptr);
 
@@ -205,6 +212,7 @@ private:
 
     QString m_WellOfficalType;
     QString m_WellModel;
+    QString m_DesignWellDepth;
     QString m_CompleteWellDepth;
     QString m_SurfaceCasingDepth;
     QString m_ProductionCasingDepth;
