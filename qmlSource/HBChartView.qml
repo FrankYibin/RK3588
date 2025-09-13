@@ -135,10 +135,9 @@ Item {
             return
         }
 
-        var percent = Math.round(currentStartIndex / (totalPoints - visiblePoints) * 100)
+        var percent = Math.round(currentStartIndex / (maxStartIndex) * 100)
 
-        if (percent < 0) percent = 0
-        if (percent > 100) percent = 100
+        percent = Math.min(Math.max(percent, 0), 100);
 
         progressSlider.value = percent
         progressLabel.text =  percent + "%"
