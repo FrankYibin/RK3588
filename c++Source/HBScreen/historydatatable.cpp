@@ -209,7 +209,7 @@ bool HistoryDataTable:: exportData(int fileType)
         return false;
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString formattedDateTime = currentDateTime.toString("yyyyMMddHHmmss");
-    QString localAppDirectory = QCoreApplication::applicationDirPath()+ "/output" +
+    QString localAppDirectory = QCoreApplication::applicationDirPath() + "/" +
             formattedDateTime + WellParameter::GetInstance()->WellNumber() + "-";
     QStringList localFiles;
     int filesCount = rows.count() / MAX_RECORDS_IN_ONE_FILE;

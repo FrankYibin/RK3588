@@ -22,7 +22,7 @@ bool ExportWorker::DeleteLocalCSVFiles()
 
     // 设置文件名过滤器
     QStringList filters;
-    filters << "output*.csv";
+    filters << "*.csv";
     dir.setNameFilters(filters);
 
     // 获取匹配的文件列表

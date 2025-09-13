@@ -1584,11 +1584,11 @@ void HBModbusClient::handleParseCoils(const QModbusDataUnit &result)
             break;
         case HQmlEnum::ALARM_TENSION_DELTA_STOP:
             m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop = val ? 1 : 0;
-            qDebug() <<"m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop" << val;
+            // qDebug() <<"m_IO_Value2.bits_Value2.m_AlarmTensionDeltaStop" << val;
             break;
         case HQmlEnum::ALARM_TENSION_CABLE_HEAD_SLOW:
             m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow = val ? 1 : 0;
-              qDebug() <<"m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow" << val;
+              // qDebug() <<"m_IO_Value2.bits_Value2.m_AlarmTensionCableHeadSlow" << val;
             break;
         case HQmlEnum::ALARM_TENSION_CABLE_HEAD_STOP:
             m_IO_Value3.bits_Value3.m_AlarmTensionCableHeadStop = val ? 1 : 0;
