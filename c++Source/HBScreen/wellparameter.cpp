@@ -6,7 +6,8 @@
 #include <QDir>
 
 WellParameter* WellParameter::_ptrWellParameter = nullptr;
-
+QThread *WellParameter::m_ptrImportThread = nullptr;
+ImportPicture *WellParameter::m_ptrImportPicture = nullptr;
 WellParameter::WellParameter(QObject *parent)
     : QObject(parent),m_settings(QCoreApplication::applicationDirPath() + "/wellsettings.ini", QSettings::IniFormat)
 {
@@ -26,6 +27,14 @@ WellParameter::WellParameter(QObject *parent)
     m_WellType = -1;
     m_DepthWell = "";
     m_SlopeAngleWellSetting = "";
+    m_WellOfficalType = "";
+    m_WellModel = "";
+    m_CompleteWellDepth = "";
+    m_SurfaceCasingDepth = "";
+    m_ProductionCasingDepth = "";
+    m_HorizontalLength = "";
+    m_VerticalLength = "";
+    m_KickOffPoint = "";
 
     setWellNumber(m_settings.value("wellParameter/number", "陕50H-30").toString());
     setAreaBlock(m_settings.value("wellParameter/area", "---").toString());
@@ -40,6 +49,33 @@ WellParameter::WellParameter(QObject *parent)
     setWorkType(PERFORATION);
     setDepthWell("99999.99");
     setSlopeAngleWellSetting("0.00");
+    QString OcrAiPath = QCoreApplication::applicationDirPath() + "/OcrAi";
+    QString RapidOcrTablePath = QCoreApplication::applicationDirPath() + "/rapid_ocr_table.py";
+    QString RunOcrShellPath = QCoreApplication::applicationDirPath() + "/run_ocr.sh";
+    if(!QFile::exists(OcrAiPath))
+    {
+        if(!QFile::copy(":/misc/OcrAi", OcrAiPath))
+        {
+            qWarning() << "Failed to copy OcrAi from resources to" << OcrAiPath;
+            return;
+        }
+    }
+    if(!QFile::exists(RapidOcrTablePath))
+    {
+        if(!QFile::copy(":/misc/rapid_ocr_table.py", RapidOcrTablePath))
+        {
+            qWarning() << "Failed to copy rapid_ocr_table.py from resources to" << RapidOcrTablePath;
+            return;
+        }
+    }
+    if(!QFile::exists(RunOcrShellPath))
+    {
+        if(!QFile::copy(":/misc/run_ocr.sh", RunOcrShellPath))
+        {
+            qWarning() << "Failed to copy :/misc/run_ocr.sh from resources to" << RunOcrShellPath;
+            return;
+        }
+    }
 }
 
 WellParameter *WellParameter::GetInstance()
@@ -231,6 +267,106 @@ void WellParameter::setOperatorType(const QString &value)
     }
 }
 
+QString WellParameter::getWellOfficalType() const
+{
+    return m_WellOfficalType;
+}
+void WellParameter::setWellOfficalType(const QString &value)
+{
+    if (m_WellOfficalType != value) 
+    {
+        m_WellOfficalType = value;
+        emit notifyWellOfficalTypeChanged();
+    }
+}
+
+QString WellParameter::getWellModel() const
+{
+    return m_WellModel;
+}
+void WellParameter::setWellModel(const QString &value)
+{
+    if (m_WellModel != value) 
+    {
+        m_WellModel = value;
+        emit notifyWellModelChanged();
+    }
+}
+
+QString WellParameter::getCompleteWellDepth() const
+{
+    return m_CompleteWellDepth;
+}
+void WellParameter::setCompleteWellDepth(const QString &value)
+{
+    if (m_CompleteWellDepth != value) 
+    {
+        m_CompleteWellDepth = value;
+        emit notifyCompleteWellDepthChanged();
+    }
+}
+QString WellParameter::getSurfaceCasingDepth() const
+{
+    return m_SurfaceCasingDepth;
+}
+void WellParameter::setSurfaceCasingDepth(const QString &value)
+{
+    if (m_SurfaceCasingDepth != value) 
+    {
+        m_SurfaceCasingDepth = value;
+        emit notifySurfaceCasingDepthChanged();
+    }
+}
+QString WellParameter::getProductionCasingDepth() const
+{
+    return m_ProductionCasingDepth;
+}
+void WellParameter::setProductionCasingDepth(const QString &value)
+{
+    if (m_ProductionCasingDepth != value) 
+    {
+        m_ProductionCasingDepth = value;
+        emit notifyProductionCasingDepthChanged();
+    }
+}
+QString WellParameter::getHorizontalLength() const
+{
+    return m_HorizontalLength;
+}
+void WellParameter::setHorizontalLength(const QString &value)
+{
+    if (m_HorizontalLength != value) 
+    {
+        m_HorizontalLength = value;
+        emit notifyHorizontalLengthChanged();
+    }
+}
+QString WellParameter::getVerticalLength() const
+{
+    return m_VerticalLength;
+}
+void WellParameter::setVerticalLength(const QString &value)
+{
+    if (m_VerticalLength != value) 
+    {
+        m_VerticalLength = value;
+        emit notifyVerticalLengthChanged();
+    }
+}
+QString WellParameter::getKickOffPoint() const
+{
+    return m_KickOffPoint;
+}
+void WellParameter::setKickOffPoint(const QString &value)
+{
+    if (m_KickOffPoint != value) 
+    {
+        m_KickOffPoint = value;
+        emit notifyKickOffPointChanged();
+    }
+}
+
+
 
 void WellParameter::importFromIniFile()
 {
@@ -245,6 +381,25 @@ void WellParameter::importFromIniFile()
     setUserName(settings.value("wellParameter/userName", "张强").toString());
     setOperatorType(settings.value("wellParameter/operatorType", "操作员").toString());
 #endif
+}
+
+bool WellParameter::importDataFromPicture(QString directory, QString localfile)
+{
+    if(!m_ptrImportThread)
+    {
+        m_ptrImportThread = new QThread(this);
+        m_ptrImportPicture = new ImportPicture(localfile, directory);
+        m_ptrImportPicture->moveToThread(m_ptrImportThread);
+        connect(m_ptrImportThread, &QThread::started, m_ptrImportPicture, &ImportPicture::importToFile);
+        connect(m_ptrImportPicture, &ImportPicture::importPrograss, this, &WellParameter::signalImportPrograss);
+        connect(m_ptrImportPicture, &ImportPicture::importFinished, this, &WellParameter::signalImportCompleted);
+        connect(m_ptrImportThread, &QThread::finished, m_ptrImportPicture, &QObject::deleteLater);
+    }
+    if(!m_ptrImportThread->isRunning())
+    {
+        m_ptrImportThread->start();
+    }
+    return true;
 }
 
 void WellParameter::saveToIniFile()

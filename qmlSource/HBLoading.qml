@@ -5,6 +5,7 @@ import Style 1.0
 Rectangle {
     id: loadingOverlay
     property alias progress: progressBar.value
+    property bool isImport: true
     anchors.fill: parent
     color: "#80000000"
     // visible: false
@@ -27,7 +28,7 @@ Rectangle {
             }
 
             Text {
-                text: "正在导出..."
+                text: isImport === true ? qsTr("正在导入...") : qstr("正在导出...")
                 font.pixelSize: 16
                 font.family: "宋体"
                 anchors.horizontalCenter: parent.horizontalCenter

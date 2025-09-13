@@ -49,9 +49,11 @@ Window{
     property var qmlTextArray: [qmltextTimeMode, qmltextEnergyMode, qmltextPeakPowerMode,
         qmltextGroundDetectMode, qmltextAbsoluteDistanceMode, qmltextCollapseDistanceMode]
     property var currentField: null
+    property bool isUSBAvailable: false
 
     signal signalCurrentLanguageChanged()
     signal signalCurrentScreenChanged(int index)
+    signal notifyFileSelected(string fileName) // <-- 添加信号
 
     function getWeldModeText(modeIdx)
     {
@@ -359,11 +361,17 @@ Window{
         tensionPanel.visible = true
     }
 
-    function showLoading(isShow)
+    function showLoading(isShow, isImport)
     {
+        loadingOverlay.isImport = isImport
         if(isShow === false)
             loadingOverlay.progress = 0.0
         loadingOverlay.visible = isShow;
+    }
+
+    function showPictureList(isShow)
+    {
+        listShowPicture.visible = isShow;
     }
 
 //    MouseArea {
@@ -736,5 +744,26 @@ Window{
         anchors.centerIn: parent
         z: 3
         visible: false
+    }
+
+    ShowPicture{
+        id: listShowPicture
+        width: showWidth / 2
+        height: showHeight * 0.8
+        anchors.centerIn: parent
+        z: 3
+        visible: false
+        onFileSelected: notifyFileSelected(fileName)
+    }
+
+    Timer
+    {
+        id: timer
+        interval: 2000  // 设置间隔为 1000 毫秒 (1 秒)
+        repeat: true    // 设置为重复计时器
+        onTriggered:
+        {
+            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
+        }
     }
 }

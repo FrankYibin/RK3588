@@ -5,6 +5,8 @@
 #include <QString>
 #include <QList>
 #include <QSettings>
+#include <QThread>
+#include "importpicture.h"
 
 //well condition parameter
 class WellParameter : public QObject
@@ -48,6 +50,18 @@ class WellParameter : public QObject
     Q_PROPERTY(QString OperatorType READ OperatorType WRITE setOperatorType NOTIFY OperatorTypeChanged)
     //大斜度井斜度设置
     Q_PROPERTY(QString SlopeAngleWellSetting READ SlopeAngleWellSetting WRITE setSlopeAngleWellSetting NOTIFY SlopeAngleWellSettingChanged)
+    
+    Q_PROPERTY(QString WellOfficalType READ getWellOfficalType WRITE setWellOfficalType NOTIFY notifyWellOfficalTypeChanged) //井别
+    Q_PROPERTY(QString WellModel READ getWellModel WRITE setWellModel NOTIFY notifyWellModelChanged) //井型
+    Q_PROPERTY(QString CompleteWellDepth READ getCompleteWellDepth WRITE setCompleteWellDepth NOTIFY notifyCompleteWellDepthChanged) //完井深度
+    Q_PROPERTY(QString SurfaceCasingDepth READ getSurfaceCasingDepth WRITE setSurfaceCasingDepth NOTIFY notifySurfaceCasingDepthChanged) //表层套管深度
+    Q_PROPERTY(QString ProductionCasingDepth READ getProductionCasingDepth WRITE setProductionCasingDepth NOTIFY notifyProductionCasingDepthChanged) //生产套管深度
+    Q_PROPERTY(QString HorizontalLength READ getHorizontalLength WRITE setHorizontalLength NOTIFY notifyHorizontalLengthChanged) //水平段长度
+    Q_PROPERTY(QString VerticalLength READ getVerticalLength WRITE setVerticalLength NOTIFY notifyVerticalLengthChanged) //垂直段长度
+    Q_PROPERTY(QString KickOffPoint READ getKickOffPoint WRITE setKickOffPoint NOTIFY notifyKickOffPointChanged) //造斜点
+
+
+
 public:
     enum OIL_WELL_TYPE
     {
@@ -111,7 +125,25 @@ public:
     Q_INVOKABLE void setSlopeAngleWellSetting(const QString angle);
 
     Q_INVOKABLE void importFromIniFile();
+    Q_INVOKABLE bool importDataFromPicture(QString directory, QString localfile);
     Q_INVOKABLE void saveToIniFile();
+
+    Q_INVOKABLE QString getWellOfficalType() const;
+    Q_INVOKABLE void setWellOfficalType(const QString &value);
+    Q_INVOKABLE QString getWellModel() const;
+    Q_INVOKABLE void setWellModel(const QString &value);
+    Q_INVOKABLE QString getCompleteWellDepth() const;
+    Q_INVOKABLE void setCompleteWellDepth(const QString &value);
+    Q_INVOKABLE QString getSurfaceCasingDepth() const;
+    Q_INVOKABLE void setSurfaceCasingDepth(const QString &value);
+    Q_INVOKABLE QString getProductionCasingDepth() const;
+    Q_INVOKABLE void setProductionCasingDepth(const QString &value);
+    Q_INVOKABLE QString getHorizontalLength() const;
+    Q_INVOKABLE void setHorizontalLength(const QString &value);
+    Q_INVOKABLE QString getVerticalLength() const;
+    Q_INVOKABLE void setVerticalLength(const QString &value);
+    Q_INVOKABLE QString getKickOffPoint() const;
+    Q_INVOKABLE void setKickOffPoint(const QString &value);
 
     QString findWellSettingsPath();
 
@@ -138,6 +170,17 @@ signals:
     void DepthWellChanged();
     void SlopeAngleWellSettingChanged();
     void WeightEachKilometerCableChanged();
+    void notifyWellOfficalTypeChanged();
+    void notifyWellModelChanged();
+    void notifyCompleteWellDepthChanged();
+    void notifySurfaceCasingDepthChanged();
+    void notifyProductionCasingDepthChanged();
+    void notifyHorizontalLengthChanged();
+    void notifyVerticalLengthChanged();
+    void notifyKickOffPointChanged();
+
+    void signalImportCompleted(bool success, const QString &message);
+    void signalImportPrograss(int current, int total);
 private:
     explicit WellParameter(QObject *parent = nullptr);
 
@@ -160,9 +203,23 @@ private:
     int     m_WorkType;
     int     m_WellType;
     QString m_DepthWell;
+
     QString m_SlopeAngleWellSetting;
 
+    QString m_WellOfficalType;
+    QString m_WellModel;
+    QString m_CompleteWellDepth;
+    QString m_SurfaceCasingDepth;
+    QString m_ProductionCasingDepth;
+    QString m_HorizontalLength;
+    QString m_VerticalLength;
+    QString m_KickOffPoint;
+
     QSettings m_settings;
+
+private:
+    static QThread *m_ptrImportThread;
+    static ImportPicture *m_ptrImportPicture;
 };
 
 #endif // WELLPARAMETER_H

@@ -136,5 +136,6 @@
         <file>qmlSource/HistoryGlobalDefine.qml</file>
         <file>qmlSource/HBTensionPanel.qml</file>
         <file>qmlSource/HBLoading.qml</file>
+        <file>qmlSource/ShowPicture.qml</file>
     </qresource>
 </RCC>

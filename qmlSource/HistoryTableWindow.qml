@@ -14,7 +14,6 @@ Item{
     readonly property int buttonWidth: 100
     readonly property int rowSpacing: 10
     readonly property int componentHeight: 30
-    property bool isUSBAvailable: false
     property var currentComboBox: null
 
     Connections {
@@ -22,7 +21,7 @@ Item{
         function onSignalExportCompleted(success, message)
         {
             console.debug("message", message)
-            mainWindow.showLoading(false)
+            mainWindow.showLoading(false, false)
             if(success === true)
                 mainWindow.showDialogScreen(qsTr("导出数据已完成"), Dialog.Ok, null)
             else
@@ -70,17 +69,6 @@ Item{
         gradient: Gradient {
             GradientStop { position: 0.0; color: Style.backgroundLightColor }
             GradientStop { position: 1.0; color: Style.backgroundDeepColor }
-        }
-    }
-
-    Timer
-    {
-        id: timer
-        interval: 2000  // 设置间隔为 1000 毫秒 (1 秒)
-        repeat: true    // 设置为重复计时器
-        onTriggered:
-        {
-            isUSBAvailable = HistoryDataTable.isAvailaleDiskUSB()
         }
     }
 
@@ -261,14 +249,14 @@ Item{
                     width: Math.round(buttonWidth * Style.scaleHint)
                     height: Math.round(componentHeight * Style.scaleHint)
                     text: qsTr("导出")
-                    enabled: isUSBAvailable
+                    enabled: mainWindow.isUSBAvailable
                     visible: (UserModel.GroupIndex > 0) ? false : true
                     onClicked:
                     {
-                        mainWindow.showLoading(true)
+                        mainWindow.showLoading(true, false)
                         if(HistoryDataTable.exportData(fileFormat.currentIndex) === false)
                         {
-                            mainWindow.showLoading(false)
+                            mainWindow.showLoading(false, false)
                         }
                         else
                         {
@@ -363,7 +351,7 @@ Item{
         Text {
             id: name
             anchors.verticalCenter: parent.verticalCenter
-            text: isUSBAvailable ? qsTr("U盘已插入") : qsTr("U盘未插入")
+            text: mainWindow.isUSBAvailable ? qsTr("U盘已插入") : qsTr("U盘未插入")
             //            visible: !isUSBAvailable
             color: Style.whiteFontColor
             font{

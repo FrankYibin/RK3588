@@ -19,7 +19,7 @@
 #include <QHash>
 #include <cstring>
 #include <QVariant>
-#include <stdio.h>
+// #include <stdio.h>
 
 #ifdef RK3588
 #include <arpa/inet.h>
@@ -1604,6 +1604,7 @@ void HBModbusClient::handleParseCoils(const QModbusDataUnit &result)
             break;
         case HQmlEnum::ALARM_COILS_END:
             m_IO_Value3.bits_Value3.m_AlarmDrowsy = val ? 1 : 0;
+            break;
         case HQmlEnum::ENABLE_SIMAN_CONTROL:
             m_IO_Value4.bits_Value4.m_EnableSimanControl = val ? 1 : 0;
             break;
