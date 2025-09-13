@@ -54,6 +54,7 @@ SOURCES += main.cpp \
     c++Source/HBScreen/history.cpp \
     c++Source/HBScreen/historydatatable.cpp \
     c++Source/HBScreen/historyoperationmodel.cpp \
+    c++Source/HBScreen/importpicture.cpp \
     c++Source/HBScreen/pdfexportworker.cpp \
     c++Source/HBScreen/tensiometer.cpp \
     c++Source/HBScreen/tensiometermanager.cpp \
@@ -117,6 +118,7 @@ HEADERS += \
     c++Source/HBScreen/history.h \
     c++Source/HBScreen/historydatatable.h \
     c++Source/HBScreen/historyoperationmodel.h \
+    c++Source/HBScreen/importpicture.h \
     c++Source/HBScreen/pdfexportworker.h \
     c++Source/HBScreen/tensiometer.h \
     c++Source/HBScreen/tensiometermanager.h \

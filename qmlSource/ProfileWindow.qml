@@ -27,7 +27,7 @@ Item{
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.leftMargin: Math.round(100 * Style.scaleHint)
-        anchors.topMargin: Math.round(50 * Style.scaleHint)
+        anchors.topMargin: Math.round(10 * Style.scaleHint)
         anchors.rightMargin: Math.round(100 * Style.scaleHint)
         anchors.bottomMargin: Math.round(50 * Style.scaleHint)
         spacing: Math.round(10 * Style.scaleHint)
@@ -36,7 +36,7 @@ Item{
             id: leftInfo
             width: Math.round(350 * Style.scaleHint)
             height: Math.round(430 * Style.scaleHint)
-            spacing: Math.round(30 * Style.scaleHint)
+            spacing: Math.round(10 * Style.scaleHint)
             Row
             {
                 id: infoWellNumber
@@ -57,11 +57,39 @@ Item{
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     text: WellParameter.WellNumber
-                    focus: true
                     onActiveFocusChanged:
                     {
                         if(activeFocus)
                             mainWindow.showFullKeyboard(textWellNumber)
+                    }
+                }
+            }
+
+            Row
+            {
+                id: infoWellModel
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleWellModel
+                    width: Math.round(130 * Style.scaleHint)
+                    text: qsTr("井型") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBLineEdit {
+                    id: textWellModel
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    text: WellParameter.WellModel
+                    focus: true
+                    onActiveFocusChanged:
+                    {
+                        if(activeFocus)
+                            mainWindow.showFullKeyboard(textWellModel)
                     }
                 }
 
@@ -98,13 +126,13 @@ Item{
 
             Row
             {
-                id: infoWellType
+                id: infoOilWellType
                 width: parent.width
                 height: Math.round(30 * Style.scaleHint)
                 spacing: Math.round(10 * Style.scaleHint)
                 Text
                 {
-                    id: titleWellType
+                    id: titleOilWellType
                     width: Math.round(130 * Style.scaleHint)
                     text: qsTr("油气井类型") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
@@ -114,7 +142,7 @@ Item{
 
                 HBComboBox
                 {
-                    id: comboWellType
+                    id: comboOilWellType
                     model: ProfileGlobalDefine.wellTypeModel
                     currentIndex: WellParameter.WellType
                     width: Math.round(comboBoxWidthLeft * Style.scaleHint)
@@ -129,28 +157,28 @@ Item{
 
             Row
             {
-                id: infoWellDepth
+                id: infoDesignWellDepth
                 width: parent.width
                 height: Math.round(30 * Style.scaleHint)
                 spacing: Math.round(10 * Style.scaleHint)
                 Text
                 {
-                    id: titleWellDepth
+                    id: titleDesignWellDepth
                     width: Math.round(130 * Style.scaleHint)
-                    text: qsTr("井深") + ":"
+                    text: qsTr("设计井深") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
                 }
                 HBTextField
                 {
-                    id: textWellDepth
+                    id: textDesignWellDepth
                     text: WellParameter.DepthWell
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入井深值"), " ", 3, 0, 999999, textWellDepth.text,textWellDepth,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入设计井深值"), " ", 3, 0, 999999, textDesignWellDepth.text,textDesignWellDepth,function(val) {
                             WellParameter.DepthWell = val;
                             ModbusClient.writeRegister(HQmlEnum.DEPTH_WELL_SETTING_H, val)
                         })
@@ -158,7 +186,87 @@ Item{
                 }
                 Text
                 {
-                    id: unitWellDepth
+                    id: unitDeisgnWellDepth
+                    text: qsTr("m")
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: Style.regular.name
+                    color: Style.whiteFontColor
+                }
+            }
+
+            Row
+            {
+                id: infoSurfaceCasingDepth
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleSurfaceCasingDepth
+                    width: Math.round(130 * Style.scaleHint)
+                    text: qsTr("表层套管下深") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textSurfaceCasingDepth
+                    text: WellParameter.SurfaceCasingDepth
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入表层套管下深值"), " ", 3, 0, 999999,
+                            textSurfaceCasingDepth.text, textSurfaceCasingDepth, function(val)
+                        {
+                            WellParameter.SurfaceCasingDepth = val;
+                        })
+                    }
+                }
+                Text
+                {
+                    id: unitSurfaceCasingDepth
+                    text: qsTr("m")
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: Style.regular.name
+                    color: Style.whiteFontColor
+                }
+            }
+
+            Row
+            {
+                id: infoHorizontalLength
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleHorizontalLength
+                    width: Math.round(130 * Style.scaleHint)
+                    text: qsTr("水平段长度") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textHorizontalLength
+                    text: WellParameter.HorizontalLength
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入水平段长度值"), " ", 3, 0, 999999,
+                            textHorizontalLength.text, textHorizontalLength, function(val)
+                        {
+                            WellParameter.HorizontalLength = val;
+                        })
+                    }
+                }
+                Text
+                {
+                    id: unitHorizontalLength
                     text: qsTr("m")
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: Style.regular.name
@@ -270,13 +378,53 @@ Item{
                     onSignalClickedEvent: {
                         mainWindow.showPrimaryNumpad(qsTr("请输入斜度值"), " ", 2, 0, 90, textSlopeAngle.text, textSlopeAngle, function(val) {
                             WellParameter.SlopeAngleWellSetting = val;
-                            console.log("textSlopeAngle: ",val)
                             ModbusClient.writeRegister(HQmlEnum.SLOPE_ANGLE_WELL_SETTING, val)
-
                         })
                     }
                 }
             }
+
+            Row
+            {
+                id: infoKickoffPoint
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleKickoffPoint
+                    width: Math.round(130 * Style.scaleHint)
+                    text: qsTr("造斜点") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textKickoffPoint
+                    text: WellParameter.KickOffPoint
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入造斜点值"), " ", 3, 0, 999999,
+                            textKickoffPoint.text,
+                            textKickoffPoint, function(val) {
+                            WellParameter.KickOffPoint = val;
+                        })
+                    }
+                }
+                Text
+                {
+                    id: unitKickoffPoint
+                    text: qsTr("m")
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: Style.regular.name
+                    color: Style.whiteFontColor
+                }
+            }
+
+
         }
 
         Column
@@ -284,7 +432,37 @@ Item{
             id: rightInfo
             width: Math.round(350 * Style.scaleHint)
             height: Math.round(430 * Style.scaleHint)
-            spacing: Math.round(30 * Style.scaleHint)
+            spacing: Math.round(10 * Style.scaleHint)
+
+            Row
+            {
+                id: infoWellType
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleWellType
+                    width: Math.round(120 * Style.scaleHint)
+                    text: qsTr("井别") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBLineEdit {
+                    id: textWellType
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    text: WellParameter.WellOfficalType
+                    focus: true
+                    onActiveFocusChanged:
+                    {
+                        if(activeFocus)
+                            mainWindow.showFullKeyboard(textWellType)
+                    }
+                }
+            }
+
             Row
             {
                 id: infoHarnessType
@@ -295,7 +473,7 @@ Item{
                 {
                     id: titleHarnessType
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("电缆规格：")
+                    text: qsTr("电缆规格") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -325,7 +503,7 @@ Item{
                 {
                     id: titleHarnessForce
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("电缆拉断力：")
+                    text: qsTr("电缆拉断力") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -366,7 +544,7 @@ Item{
                 {
                     id: titleTensionUnit
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("拉力棒吨位：")
+                    text: qsTr("拉力棒吨位") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -395,6 +573,126 @@ Item{
                 }
             }
 
+
+            Row
+            {
+                id: infoCompleteWellDepth
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleCompleteWellDepth
+                    width: Math.round(120 * Style.scaleHint)
+                    text: qsTr("完钻井深") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textCompleteWellDepth
+                    text: WellParameter.CompleteWellDepth
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入完钻井深值"), " ", 3, 0, 999999, textCompleteWellDepth.text,textCompleteWellDepth,function(val) {
+                            WellParameter.CompleteWellDepth = val;
+                        })
+                    }
+                }
+                Text
+                {
+                    id: unitCompleteWellDepth
+                    text: qsTr("m")
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: Style.regular.name
+                    color: Style.whiteFontColor
+                }
+            }
+
+            Row
+            {
+                id: infoProductCasingDepth
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleProductCasingDepth
+                    width: Math.round(120 * Style.scaleHint)
+                    text: qsTr("生产套管下深") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textProductCasingDepth
+                    text: WellParameter.ProductionCasingDepth
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入生产套管下深值"), " ", 3, 0, 999999,
+                            textProductCasingDepth.text, textProductCasingDepth, function(val)
+                        {
+                            WellParameter.ProductionCasingDepth = val;
+                        })
+                    }
+                }
+                Text
+                {
+                    id: unitProductCasingDepth
+                    text: qsTr("m")
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: Style.regular.name
+                    color: Style.whiteFontColor
+                }
+            }
+
+            Row
+            {
+                id: infoVerticalLength
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleVerticalLength
+                    width: Math.round(120 * Style.scaleHint)
+                    text: qsTr("垂直段长度") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textVerticalLength
+                    text: WellParameter.DepthWell
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入垂直段长度值"), " ", 3, 0, 999999,
+                            textVerticalLength.text, textVerticalLength, function(val)
+                        {
+                            WellParameter.VerticalLength = val;
+                        })
+                    }
+                }
+                Text
+                {
+                    id: unitVerticalLength
+                    text: qsTr("m")
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: Style.regular.name
+                    color: Style.whiteFontColor
+                }
+            }
+
+
             Row
             {
                 id: infoWorkType
@@ -405,7 +703,7 @@ Item{
                 {
                     id: titleWorkType
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("作业类型：")
+                    text: qsTr("作业类型") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -435,7 +733,7 @@ Item{
                 {
                     id: titleUserName
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("操作员姓名：")
+                    text: qsTr("操作员姓名") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -460,7 +758,7 @@ Item{
                 {
                     id: titleUserLevel
                     width: Math.round(120 * Style.scaleHint)
-                    text: qsTr("操作员工种：")
+                    text: qsTr("操作员工种") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
@@ -481,10 +779,10 @@ Item{
     {
         id: buttons
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: Math.round(20 * Style.scaleHint)
-        width: Math.round(350 * Style.scaleHint)
+        anchors.bottomMargin: Math.round(10 * Style.scaleHint)
+        width: Math.round(500 * Style.scaleHint)
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: Math.round(100 * Style.scaleHint)
+        spacing: Math.round(50 * Style.scaleHint)
 
         HBPrimaryButton
         {
@@ -496,6 +794,26 @@ Item{
             {
                 // controlLimitNumpad.visible = false
                 WellParameter.importFromIniFile()
+
+            }
+        }
+
+        HBPrimaryButton
+        {
+            id: buttonPictureImport
+            width: Math.round(125 * Style.scaleHint)
+            height: Math.round(40 * Style.scaleHint)
+            text: qsTr("图片导入")
+            onClicked:
+            {
+                mainWindow.showLoading(true)
+                if(WellParameter.importDataFromPicture() === true)
+                {
+                    mainWindow.showLoading(false)
+                }
+                else
+                {
+                }
 
             }
         }
