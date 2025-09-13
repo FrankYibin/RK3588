@@ -128,6 +128,7 @@ int AutoTestSpeed::DepthCurrent() const
     return m_RawDepthCurrent;
 }
 
+
 void AutoTestSpeed::setDepthCurrent(int depth)
 {
     m_RawDepthCurrent = depth;
@@ -142,107 +143,107 @@ void AutoTestSpeed::setDepthCurrent(int depth)
             timeout++;
         else
         {
-            if(delta <= 0)
+            if(delta >= 0 && delta < 10)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_0);
                 timeout = MAX_TIMEOUT;
             }
-            else if(delta < 10)
+            else if(delta >=  10 && delta < 20)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_1);
                 timeout = ON;
             }
-            else if(delta < 20)
+            else if(delta >= 20 && delta < 30)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_2);
                 timeout = ON;
             }
-            else if(delta < 30)
+            else if(delta >= 30 && delta < 40)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_3);
                 timeout = ON;
             }
-            else if(delta < 40)
+            else if(delta >= 40 && delta < 50)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_4);
                 timeout = ON;
             }
-            else if(delta < 50)
+            else if(delta >= 50 && delta < 60)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_5);
                 timeout = ON;
             }
-            else if(delta < 60)
+            else if(delta >= 60 && delta < 70)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_6);
                 timeout = ON;
             }
-            else if(delta < 70)
+            else if(delta >= 70 && delta < 80)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_7);
                 timeout = ON;
             }
-            else if(delta < 80)
+            else if(delta >= 80 && delta < 90)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_8);
                 timeout = ON;
             }
-            else if(delta < 90)
+            else if(delta >= 90 && delta < 100)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_0_9);
                 timeout = ON;
             }
-            else if(delta < 100)
+            else if(delta >= 100 && delta < 110)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_0);
                 timeout = ON;
             }
-            else if(delta < 110)
+            else if(delta >= 110 && delta < 120)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_1);
                 timeout = ON;
             }
-            else if(delta < 120)
+            else if(delta >= 120 && delta < 130)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_2);
                 timeout = ON;
             }
-            else if(delta < 130)
+            else if(delta >= 130 && delta < 140)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_3);
                 timeout = ON;
             }
-            else if(delta < 140)
+            else if(delta >= 140 && delta < 150)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_4);
                 timeout = ON;
             }
-            else if(delta < 150)
+            else if(delta >= 150 && delta < 160)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_5);
                 timeout = ON;
             }
-            else if(delta < 160)
+            else if(delta >= 160 && delta < 170)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_6);
                 timeout = ON;
             }
-            else if(delta < 170)
+            else if(delta >= 170 && delta < 180)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_7);
                 timeout = ON;
             }
-            else if(delta < 180)
+            else if(delta >= 180 && delta < 190)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_8);
                 timeout = ON;
             }
-            else if(delta < 190)
+            else if(delta >= 190 && delta < 200)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_1_9);
                 timeout = ON;
             }
-            else if(delta < 200)
+            else if(delta >= 200 &&  delta < 210)
             {
                 HBVoice::GetInstance()->PlayVoice(HBVoice::METER_2_0);
                 timeout = ON;
@@ -268,6 +269,8 @@ void AutoTestSpeed::setDepthCurrent(int depth)
     }
     setDepthDeviationCurrent(str);
 }
+
+
 
 bool AutoTestSpeed::IsDownCountStart() const
 {
