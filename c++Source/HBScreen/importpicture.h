@@ -12,6 +12,7 @@ private:
     QString m_USBDirectory;
     QMap<QString, QString> m_WellInfoList;
     bool parseJson(const QString message, QMap<QString, QString>* _list);
+    bool processData(QMap<QString, QString>* _list);
 public:
     explicit ImportPicture(QObject *parent = nullptr);
     ImportPicture(QString pictureFile, QString directory);

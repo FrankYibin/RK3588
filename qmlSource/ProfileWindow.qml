@@ -23,15 +23,25 @@ Item{
         target: mainWindow
         function onNotifyFileSelected(fileName)
         {
-            console.debug("1111111111111111: ", fileName)
             mainWindow.showLoading(true, true)
-            if(WellParameter.importDataFromPicture("", fileName) === true)
+            var directory = HistoryDataTable.getDiskUSBDirectory();
+            if(WellParameter.importDataFromPicture(directory, fileName) === true)
             {
-                mainWindow.showLoading(false, true)
+                // mainWindow.showLoading(false, true)
             }
             else
             {
             }
+        }
+    }
+
+    Connections
+    {
+        target: WellParameter
+        function onSignalImportCompleted(success, message)
+        {
+            console.debug("Message: ", message)
+            mainWindow.showLoading(false, true)
         }
     }
 
@@ -173,28 +183,28 @@ Item{
 
             Row
             {
-                id: infoDesignWellDepth
+                id: infoCurrentWellDepth
                 width: parent.width
                 height: Math.round(30 * Style.scaleHint)
                 spacing: Math.round(10 * Style.scaleHint)
                 Text
                 {
-                    id: titleDesignWellDepth
+                    id: titleCurrentWellDepth
                     width: Math.round(130 * Style.scaleHint)
-                    text: qsTr("设计井深") + ":"
+                    text: qsTr("井深") + ":"
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: "宋体"
                     color: Style.whiteFontColor
                 }
                 HBTextField
                 {
-                    id: textDesignWellDepth
+                    id: textCurrentWellDepth
                     text: WellParameter.DepthWell
                     width: Math.round(componentWidth * Style.scaleHint)
                     height: Math.round(25 * Style.scaleHint)
                     onlyForNumpad: true
                     onSignalClickedEvent: {
-                        mainWindow.showPrimaryNumpad(qsTr("请输入设计井深值"), " ", 3, 0, 999999, textDesignWellDepth.text,textDesignWellDepth,function(val) {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入井深值"), " ", 3, 0, 999999, textCurrentWellDepth.text,textCurrentWellDepth,function(val) {
                             WellParameter.DepthWell = val;
                             ModbusClient.writeRegister(HQmlEnum.DEPTH_WELL_SETTING_H, val)
                         })
@@ -202,7 +212,7 @@ Item{
                 }
                 Text
                 {
-                    id: unitDeisgnWellDepth
+                    id: unitCurrentWellDepth
                     text: qsTr("m")
                     font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
                     font.family: Style.regular.name
@@ -589,6 +599,44 @@ Item{
                 }
             }
 
+            Row
+            {
+                id: infoDesignWellDepth
+                width: parent.width
+                height: Math.round(30 * Style.scaleHint)
+                spacing: Math.round(10 * Style.scaleHint)
+                Text
+                {
+                    id: titleDesignWellDepth
+                    width: Math.round(120 * Style.scaleHint)
+                    text: qsTr("设计井深") + ":"
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: "宋体"
+                    color: Style.whiteFontColor
+                }
+                HBTextField
+                {
+                    id: textDesignWellDepth
+                    text: WellParameter.DesignWellDepth
+                    width: Math.round(componentWidth * Style.scaleHint)
+                    height: Math.round(25 * Style.scaleHint)
+                    onlyForNumpad: true
+                    onSignalClickedEvent: {
+                        mainWindow.showPrimaryNumpad(qsTr("请输入设计井深值"), " ", 3, 0, 999999, textDesignWellDepth.text,textDesignWellDepth,function(val) {
+                            WellParameter.DesignWellDepth = val;
+                        })
+                    }
+                }
+                Text
+                {
+                    id: unitDeisgnWellDepth
+                    text: qsTr("m")
+                    font.pixelSize: Math.round(Style.style6 * Style.scaleHint)
+                    font.family: Style.regular.name
+                    color: Style.whiteFontColor
+                }
+            }
+
 
             Row
             {
@@ -796,7 +844,7 @@ Item{
         id: buttons
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(10 * Style.scaleHint)
-        width: Math.round(500 * Style.scaleHint)
+        width: mainWindow.isUSBAvailable === true ? Math.round(475 * Style.scaleHint) :  Math.round(300 * Style.scaleHint)
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: Math.round(50 * Style.scaleHint)
 
@@ -820,7 +868,7 @@ Item{
             width: Math.round(125 * Style.scaleHint)
             height: Math.round(40 * Style.scaleHint)
             text: qsTr("图片导入")
-            // visible: mainWindow.isUSBAvailable
+            visible: mainWindow.isUSBAvailable
             onClicked:
             {
                 mainWindow.showPictureList(true)

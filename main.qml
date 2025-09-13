@@ -372,6 +372,7 @@ Window{
     function showPictureList(isShow)
     {
         listShowPicture.visible = isShow;
+        listShowPicture.imgDir = HistoryDataTable.getDiskUSBDirectory();
     }
 
 //    MouseArea {
@@ -468,6 +469,7 @@ Window{
             // rightMenuLoader.source = "qrc:/qmlSource/rightActionMenu.qml"
             leftNavigateMenu.source = ""
             leftNavigateMenu.source = "qrc:/qmlSource/leftNavigateMenu.qml"
+            timer.start()
         }
     }
 

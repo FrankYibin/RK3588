@@ -37,7 +37,6 @@ Item{
         var endStamp   = comboBoxFinishTimeStamp.text + "T23:59:59"
         //        HistoryDataTable.loadFromDatabase(startStamp, endStamp)
         HistoryDataTable.setRange(startStamp,endStamp)
-        timer.start()
     }
 
     HBCalendar{

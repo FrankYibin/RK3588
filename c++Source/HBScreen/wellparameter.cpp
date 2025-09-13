@@ -293,6 +293,19 @@ void WellParameter::setWellModel(const QString &value)
     }
 }
 
+QString WellParameter::getDesignWellDepth() const
+{
+    return m_DesignWellDepth;
+}
+void WellParameter::setDesignWellDepth(const QString &value)
+{
+    if (m_DesignWellDepth != value) 
+    {
+        m_DesignWellDepth = value;
+        emit notifyDesignWellDepthChanged();
+    }
+}
+
 QString WellParameter::getCompleteWellDepth() const
 {
     return m_CompleteWellDepth;

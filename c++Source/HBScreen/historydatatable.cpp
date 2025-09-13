@@ -256,6 +256,11 @@ bool HistoryDataTable:: exportData(int fileType)
     return true ;
 }
 
+QString HistoryDataTable::getDiskUSBDirectory()
+{
+    return m_USBDirectory;
+}
+
 
 bool HistoryDataTable:: ExportToCSV(const QString& filePath, const QStringList& headers, const QList<QStringList>& data)
 {

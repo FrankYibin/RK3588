@@ -56,6 +56,7 @@ public:
 
     Q_INVOKABLE bool isAvailaleDiskUSB();
     Q_INVOKABLE bool exportData(int fileType);
+    Q_INVOKABLE QString getDiskUSBDirectory();
 public slots:
 
 protected:

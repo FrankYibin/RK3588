@@ -3,11 +3,41 @@ import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 import Style 1.0
 import Qt.labs.folderlistmodel 2.1
+import Qt.labs.folderlistmodel 2.15
 Item {
 
     property string imgDir: "C:/Users/jerryw.wang/Documents/MeteringDisplay/RK3588" // 修改为你的图片目录
     property alias currentIndex: pictureList.currentIndex
     signal fileSelected(string fileName) // <-- 声明信号
+    
+    // 监听 imgDir 变化
+    onImgDirChanged: {
+        console.log("imgDir changed to:", imgDir)
+        updateFolderModel()
+    }
+    
+    // 更新 folderModel 的函数
+    function updateFolderModel() {
+        if (imgDir && imgDir.length > 0) {
+            var normalizedPath = imgDir.replace(/\\/g, "/")
+            var folderUrl = ""
+            
+            // 处理不同操作系统的路径
+            if (normalizedPath.startsWith("/")) {
+                // Linux/Unix 路径，以 / 开头
+                folderUrl = "file://" + normalizedPath
+            } else {
+                // Windows 路径，如 C:/...
+                folderUrl = "file:///" + normalizedPath
+            }
+            
+            console.log("Updating folderModel to:", folderUrl)
+            console.log("Original imgDir:", imgDir, "OS: Linux")
+            folderModel.folder = folderUrl
+            // 重置当前选择
+            pictureList.currentIndex = 0
+        }
+    }
     Rectangle
     {
         id: background
@@ -24,9 +54,23 @@ Item {
 
     FolderListModel {
         id: folderModel
-        folder: "file:///" + imgDir.replace(/\\/g, "/")
+        folder: imgDir.startsWith("/") ? "file://" + imgDir.replace(/\\/g, "/") : "file:///" + imgDir.replace(/\\/g, "/")
         nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.bmp", "*.gif", "*.tif", "*.tiff"]
         showDirs: false
+        
+        // 添加状态监听
+        onStatusChanged: {
+            if (status === FolderListModel.Ready) {
+                console.log("FolderListModel ready, found", count, "files")
+            } else if (status === FolderListModel.Loading) {
+                console.log("FolderListModel loading...")
+            }
+        }
+    }
+    
+    // 组件完成时初始化
+    Component.onCompleted: {
+        updateFolderModel()
     }
 
     ScrollView {
