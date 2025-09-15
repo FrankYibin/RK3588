@@ -484,18 +484,43 @@ Item {
             to: 100
             stepSize: 1
 
-            height: 30
+            height: 40
 
             handle: Rectangle {
-                width: 26
-                height: 26
-                radius: 13
+                id: handleRect
+                width: 120
+                height: 25
+                radius: 6
                 color: "#a0cf67"
                 border.color: "#999999"
                 border.width: 1
 
                 x: progressSlider.leftPadding + progressSlider.visualPosition * (progressSlider.availableWidth - width)
                 y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
+
+//                MouseArea {
+//                       anchors.centerIn: parent
+//                       width: parent.width * 2    // 横向扩大
+//                       height: parent.height * 15 // 纵向扩大
+//                       hoverEnabled: true
+//                       cursorShape: Qt.PointingHandCursor
+
+
+//                       onClicked: {
+//                           var pos = (mouse.x + x - progressSlider.leftPadding - handleRect.width / 2) /
+//                                     (progressSlider.availableWidth - handleRect.width)
+//                           pos = Math.max(0, Math.min(1, pos))
+//                           progressSlider.value = progressSlider.from + pos * (progressSlider.to - progressSlider.from)
+//                       }
+
+//                       onPositionChanged: if (pressed) {
+//                           var pos = (mouse.x + x - progressSlider.leftPadding - handleRect.width / 2) /
+//                                     (progressSlider.availableWidth - handleRect.width)
+//                           pos = Math.max(0, Math.min(1, pos))
+//                           progressSlider.value = progressSlider.from + pos * (progressSlider.to - progressSlider.from)
+//                       }
+//                   }
+
             }
 
             onValueChanged: {
@@ -511,16 +536,51 @@ Item {
                 progressLabel.text = value + "%"
             }
         }
+        MouseArea {
+               id: sliderTouchArea
+               // 横向对齐到 slider，两边与 slider 对齐
+               anchors.left: progressSlider.left
+               anchors.right: progressSlider.right
+               anchors.verticalCenter: progressSlider.verticalCenter
 
-        Label {
-            id: progressLabel
-            text: "0%"
-            font.family: "宋体"
-            font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
-            color: "#ffffff"
-            verticalAlignment: Text.AlignVCenter
-            anchors.verticalCenter: progressSlider.verticalCenter
-        }
+               // 这里把高度放大 5 倍（你可以调整）
+               height: progressSlider.height * 5
+               hoverEnabled: true
+               cursorShape: Qt.PointingHandCursor
+
+               function updateValueFromX(mx) {
+                   var denom = progressSlider.availableWidth - handleRect.width
+                   if (denom <= 0) {
+                       progressSlider.value = progressSlider.from
+                       return
+                   }
+                   var desiredHandleLeft = mx - handleRect.width / 2
+                   var pos = (desiredHandleLeft - progressSlider.leftPadding) / denom
+                   pos = Math.max(0, Math.min(1, pos))
+
+                   var rawValue = progressSlider.from + pos * (progressSlider.to - progressSlider.from)
+                   progressSlider.value = Math.round(rawValue)
+               }
+               onPressed: {
+                   updateValueFromX(mouse.x)
+               }
+               onPositionChanged: {
+                   if (pressed) updateValueFromX(mouse.x)
+               }
+               onClicked: {
+                   updateValueFromX(mouse.x)
+               }
+           }
+
+//        Label {
+//            id: progressLabel
+//            text: "0%"
+//            font.family: "宋体"
+//            font.pixelSize: Math.round(Style.style1 * Style.scaleHint)
+//            color: "#ffffff"
+//            verticalAlignment: Text.AlignVCenter
+//            anchors.verticalCenter: progressSlider.verticalCenter
+//        }
     }
 
 }

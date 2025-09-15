@@ -183,6 +183,9 @@ void ImportPicture::importToFile()
         m_WellInfoList.clear();
         bResult = parseJson(output, &m_WellInfoList);
         bResult = processData(&m_WellInfoList);
-        importFinished(bResult, error);
+        emit importFinished(bResult, error);
     }
+
 }
+
+

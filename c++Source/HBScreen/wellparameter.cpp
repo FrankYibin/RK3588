@@ -398,22 +398,31 @@ void WellParameter::importFromIniFile()
 
 bool WellParameter::importDataFromPicture(QString directory, QString localfile)
 {
-    if(!m_ptrImportThread)
-    {
-        m_ptrImportThread = new QThread(this);
-        m_ptrImportPicture = new ImportPicture(localfile, directory);
-        m_ptrImportPicture->moveToThread(m_ptrImportThread);
-        connect(m_ptrImportThread, &QThread::started, m_ptrImportPicture, &ImportPicture::importToFile);
-        connect(m_ptrImportPicture, &ImportPicture::importPrograss, this, &WellParameter::signalImportPrograss);
-        connect(m_ptrImportPicture, &ImportPicture::importFinished, this, &WellParameter::signalImportCompleted);
-        connect(m_ptrImportThread, &QThread::finished, m_ptrImportPicture, &QObject::deleteLater);
-    }
-    if(!m_ptrImportThread->isRunning())
-    {
-        m_ptrImportThread->start();
-    }
+
+    QThread *thread = new QThread(this);
+    ImportPicture *worker = new ImportPicture(localfile, directory);
+
+    worker->moveToThread(thread);
+
+    connect(thread, &QThread::started, worker, &ImportPicture::importToFile);
+
+    // 转发进度和结果
+    connect(worker, &ImportPicture::importPrograss,this, &WellParameter::signalImportPrograss);
+
+    connect(worker, &ImportPicture::importFinished, this, [=](bool ok, QString err) {
+
+        emit signalImportCompleted(ok, err);
+        thread->quit();  // 任务完成 -> 退出线程
+    });
+
+    connect(thread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+
+    thread->start();
     return true;
 }
+
 
 void WellParameter::saveToIniFile()
 {
